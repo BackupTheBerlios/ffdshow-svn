@@ -53,8 +53,8 @@ object Form1: TForm1
     Top = 20
     Width = 45
     Height = 239
-    Max = 40
-    Min = 1
+    Max = 33
+    Min = 3
     Orientation = trVertical
     Frequency = 1
     Position = 10

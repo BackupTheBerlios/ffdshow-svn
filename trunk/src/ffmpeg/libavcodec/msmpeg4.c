@@ -15,10 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *
+ * msmpeg4v2 stuff by Michael Niedermayer <michaelni@gmx.at>
  */
 #include "avcodec.h"
 #include "dsputil.h"
 #include "mpegvideo.h"
+
 
 /*
  * You can also call this codec : MPEG4 with a twist ! 
@@ -179,25 +182,20 @@ static inline int coded_block_pred(MpegEncContext * s, int n, UINT8 **coded_bloc
     return pred;
 }
 
-#if 0
-/* identical to mpeg4 for msmpeg4v3 but not msmpeg4v2 */
-void msmpeg4_dc_scale(MpegEncContext * s)
+/* old ffmpeg msmpeg4v3 mode */
+void ff_old_msmpeg4_dc_scale(MpegEncContext * s)
 {
-    if (s->qscale < 5 || s->msmpeg4_version==2){
+    if (s->qscale < 5){
         s->y_dc_scale = 8;
         s->c_dc_scale = 8;
     }else if (s->qscale < 9){
         s->y_dc_scale = 2 * s->qscale;
         s->c_dc_scale = (s->qscale + 13)>>1;
-    }else if(s->qscale < 25){
+    }else{
         s->y_dc_scale = s->qscale + 8;
         s->c_dc_scale = (s->qscale + 13)>>1;
-    }else{
-        s->y_dc_scale = 2 * s->qscale - 16;
-        s->c_dc_scale = s->qscale - 6;
     }
 }
-#endif
 
 /* dir = 0: left, dir = 1: top prediction */
 static int msmpeg4_pred_dc(MpegEncContext * s, int n, 

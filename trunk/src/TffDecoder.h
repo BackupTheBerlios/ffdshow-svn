@@ -41,16 +41,16 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP GetPages(CAUUID * pPages);
   STDMETHODIMP FreePages(CAUUID * pPages);
 
-  STDMETHODIMP get_Param(int paramID, int* value);
-  STDMETHODIMP get_Param2(int paramID);
-  STDMETHODIMP put_Param(int paramID, int  value);
+  STDMETHODIMP get_Param(unsigned int paramID, int* value);
+  STDMETHODIMP get_Param2(unsigned int paramID);
+  STDMETHODIMP put_Param(unsigned int paramID, int  value);
   STDMETHODIMP get_presetName(unsigned int i,char *buf,unsigned int len);
-  STDMETHODIMP get_numPresets(int *value);
+  STDMETHODIMP get_numPresets(unsigned int *value);
   STDMETHODIMP get_activePresetName(char *buf,unsigned int len);
   STDMETHODIMP get_AVIname(char *buf,unsigned int len);
   STDMETHODIMP get_AVIfourcc(char *buf,unsigned int len);
-  STDMETHODIMP get_AVIdimensions(int *x,int *y);
-  STDMETHODIMP get_AVIfps(int *fps);
+  STDMETHODIMP get_AVIdimensions(unsigned int *x,unsigned int *y);
+  STDMETHODIMP get_AVIfps(unsigned int *fps);
   STDMETHODIMP savePreset(const char *name);
   STDMETHODIMP savePresetToFile(const char *flnm);
   STDMETHODIMP loadPreset(const char *name);
@@ -58,7 +58,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP removePreset(const char *name);
   STDMETHODIMP notifyParamsChanged(void);
   STDMETHODIMP get_avcodec_version(char *buf,unsigned int len);
-  STDMETHODIMP getPPmode(int *ppmode);
+  STDMETHODIMP getPPmode(unsigned int *ppmode);
   STDMETHODIMP getPostProcDescription(char *buf,unsigned int len);
   STDMETHODIMP getPictPropDescription(char *buf,unsigned int len);
   STDMETHODIMP getBlurDescription(char *buf,unsigned int len);
@@ -69,7 +69,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP setFontName(const char *name);
   STDMETHODIMP getSubFlnm(char *buf,unsigned int len);
   STDMETHODIMP loadSubtitles(const char *flnm);
-  STDMETHODIMP getRealCrop(int *left,int *top,int *right,int *bottom);
+  STDMETHODIMP getRealCrop(unsigned int *left,unsigned int *top,unsigned int *right,unsigned int *bottom);
  
  private:
   bool firstFrame;

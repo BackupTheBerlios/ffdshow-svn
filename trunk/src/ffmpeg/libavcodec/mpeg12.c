@@ -820,6 +820,7 @@ static void mpeg_decode_sequence_extension(MpegEncContext *s)
         s->frame_rate = (s->frame_rate * frame_rate_ext_n) / frame_rate_ext_d;
     dprintf("sequence extension\n");
     s->mpeg2 = 1;
+    s->avctx->sub_id = 2; /* indicates mpeg2 found */
 }
 
 static void mpeg_decode_quant_matrix_extension(MpegEncContext *s)
@@ -1037,7 +1038,12 @@ static int mpeg1_decode_sequence(AVCodecContext *avctx,
         s->avctx = avctx;
         avctx->width = width;
         avctx->height = height;
+        if (s->frame_rate_index >= 9) {
+            /* at least give a valid frame rate (some old mpeg1 have this) */
+            avctx->frame_rate = 25 * FRAME_RATE_BASE;
+        } else {
         avctx->frame_rate = frame_rate_tab[s->frame_rate_index];
+        }
         s->frame_rate = avctx->frame_rate;
         avctx->bit_rate = s->bit_rate;
         
@@ -1098,6 +1104,7 @@ static int mpeg1_decode_sequence(AVCodecContext *avctx,
     s->picture_structure = PICT_FRAME;
     s->frame_pred_frame_dct = 1;
     s->mpeg2 = 0;
+    avctx->sub_id = 1; /* indicates mpeg1 */
     return 0;
 }
 

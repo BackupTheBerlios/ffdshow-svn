@@ -1,5 +1,7 @@
+[FileVersion]
+Version=6.0
 [Compiler]
-A=1
+A=8
 B=0
 C=1
 D=1
@@ -44,13 +46,16 @@ UnitOutputDir=
 PackageDLLOutputDir=
 PackageDCPOutputDir=
 SearchPath=$(DELPHI)\Projects\gamma\tpmath;$(DELPHI)\Projects\gamma\tpmath\reg
-Packages=Vcl50;Vclx50;VclSmp50;Vcldb50;vclado50;Vclbde50;vcldbx50;Softip5;SofVCL5
+Packages=vcl;vclx;vclsmp;vcldb;adortl;bdertl
 Conditionals=
 DebugSourceDirs=
-UsePackages=0
+UsePackages=1
 [Parameters]
 RunParams=
 HostApplication=
+Launcher=
+UseLauncher=0
+DebugCWD=
 [Version Info]
 IncludeVerInfo=0
 AutoIncBuild=0
@@ -77,7 +82,34 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 [Excluded Packages]
-$(DELPHI)\vglib\Delphi5\Bpl\vg2DclIb50.bpl=VG Library II VCL Components (InterBase)
+c:\program files\borland\delphi6\Bin\dcldss60.bpl=Borland Decision Cube Components
+C:\Program Files\Borland\ABC6\Delphi6\dclABCxx.bpl=ABC for Delphi - Shared Property Editors
+C:\WINNT\System32\ABC60.bpl=ABC Version 6 Runtime for Delphi 6
+C:\WINNT\System32\ABCDB60.bpl=ABC Version 6 DB Runtime for Delphi 6
+C:\Program Files\Borland\ABC6\Delphi6\dclABC_b.bpl=ABC for Delphi - DB Nav Controls
+C:\Program Files\Borland\ABC6\Delphi6\dclABC_c.bpl=ABC for Delphi - Data Controls
+C:\Program Files\Borland\ABC6\Delphi6\dclABC_d.bpl=ABC for Delphi - Data Access
+C:\Program Files\Borland\ABC6\Delphi6\dclABC_e.bpl=ABC for Delphi - Containers
+C:\Program Files\Borland\ABC6\Delphi6\dclABC_f.bpl=ABC for Delphi - Controls
+C:\Program Files\Borland\ABC6\Delphi6\dclABC_g.bpl=ABC for Delphi - Dialogs
+C:\Program Files\Borland\ABC6\Delphi6\dclABC_h.bpl=ABC for Delphi - Multimedia
+C:\Program Files\Borland\ABC6\Delphi6\dclABC_i.bpl=ABC for Delphi - Buttons
+C:\Program Files\Borland\ABC6\Delphi6\dclABC_j.bpl=ABC for Delphi - Labels
+C:\Program Files\Borland\ABC6\Delphi6\dclABC_k.bpl=ABC for Delphi - Utilities
+C:\Program Files\Borland\ABC6\Delphi6\dclABC_l.bpl=ABC for Delphi - Attached Label Controls
+C:\Program Files\Borland\ABC6\Delphi6\dclABC_m.bpl=ABC for Delphi - DB Attached Label Controls
+C:\Program Files\Borland\ABC6\Delphi6\dclABCad.bpl=ABC for Delphi - ADO Dataset Adapter
+C:\WINNT\System32\ABCDAD60.bpl=ABC Version 6 ADO Runtime for Delphi 6
+C:\Program Files\Borland\ABC6\Delphi6\dclABCbd.bpl=ABC for Delphi - BDE Components
+C:\WINNT\System32\ABCDBD60.bpl=ABC Version 6 BDE Runtime for Delphi 6
+C:\Program Files\Borland\ABC6\Delphi6\dclABCcl.bpl=ABC for Delphi - Client Dataset Adapter
+C:\WINNT\System32\ABCDCL60.bpl=ABC Version 6 MIDAS Runtime for Delphi 6
+C:\Program Files\Borland\ABC6\Delphi6\dclABCdbx.bpl=ABC for Delphi - DBExpress Dataset Adapter
+C:\WINNT\System32\ABCDDBX60.bpl=ABC Version 6 DBExpress Runtime for Delphi 6
+C:\Program Files\Borland\ABC6\Delphi6\dclABCib.bpl=ABC for Delphi - InterBase Dataset Adapter
+C:\WINNT\System32\ABCDIB60.bpl=ABC Version 6 InterBase Runtime for Delphi 6
+C:\Program Files\Borland\Abakus\D6\AbkDBStdD6.bpl=Abakus VCL DB-Enabled components
+C:\Program Files\Borland\ABC6\Delphi6\dclABC_a.bpl=ABC for Delphi - Toolbars & Menus
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;

@@ -2,8 +2,7 @@ program Project1;
 
 uses
   Forms,
-  Unit1 in 'Unit1.pas' {Form1},
-  models in 'tpmath\reg\models.pas';
+  Unit1 in 'Unit1.pas' {Form1};
 
 {$R *.RES}
 

@@ -132,7 +132,7 @@ int TcpuUsage::GetCPUUsage(int Index)
 void TcpuUsage::CollectCPUData(void)
 {
  DWORD BS;
- int i;
+ unsigned int i;
  PPERF_COUNTER_BLOCK    _PCB_Instance;
  PPERF_INSTANCE_DEFINITION    _PID_Instance;
  FILETIME ST;

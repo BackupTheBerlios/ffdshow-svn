@@ -32,7 +32,7 @@ void TresizePage::aspect2dlg(void)
  setCheck(IDC_RBT_ASPECT_KEEP,ra==1);
  setCheck(IDC_RBT_ASPECT_USER,ra==2);
  char pomS[256];
- int dx,dy;
+ unsigned int dx,dy;
  deci->get_AVIdimensions(&dx,&dy);
  __asm emms;
  if (dx!=0 && dy!=0)

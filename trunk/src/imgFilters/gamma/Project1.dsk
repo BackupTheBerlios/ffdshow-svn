@@ -10,30 +10,27 @@ File_7=SourceModule,'C:\PrometeusW5\Install\Herkules\install\readmePnl.pas',0,1,
 File_8=SourceModule,'C:\PrometeusW5\Install\common\jcl\jclfileutils.pas',0,1,1601,60,1624,0,0
 
 [Modules]
-Module0=C:\Program Files\Borland\Delphi5\Projects\gamma\Unit1.pas
-Module1=C:\Program Files\Borland\Delphi5\Projects\gamma\Project1.dpr
-Count=2
+Module0=C:\mydocuments\ffdshow\src\imgFilters\gamma\Unit1.pas
+Count=1
 EditWindowCount=1
 
-[C:\Program Files\Borland\Delphi5\Projects\gamma\Unit1.pas]
+[C:\mydocuments\ffdshow\src\imgFilters\gamma\Unit1.pas]
 ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[C:\Program Files\Borland\Delphi5\Projects\gamma\Project1.dpr]
-ModuleType=SourceModule
+[C:\Program Files\Borland\Delphi6\Projects\ProjectGroup1.bpg]
 FormState=0
 FormOnTop=0
 
-[C:\Program Files\Borland\Delphi5\Projects\ProjectGroup1.bpg]
+[C:\mydocuments\ffdshow\src\imgFilters\gamma\Project1.dpr]
 FormState=0
 FormOnTop=0
 
 [EditWindow0]
-ViewCount=2
-CurrentView=1
+ViewCount=1
+CurrentView=0
 View0=0
-View1=1
 CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
@@ -42,29 +39,22 @@ State=0
 Left=235
 Top=114
 Width=791
-Height=544
+Height=599
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=783
-ClientHeight=520
+ClientHeight=575
 LeftPanelSize=0
 RightPanelSize=0
-BottomPanelSize=52
+BottomPanelSize=109
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400000000000F03000000000000026D000000000000000100000000000000000000000001000000000F0300000000000001000000000F0300000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
-Module=C:\Program Files\Borland\Delphi5\Projects\gamma\Project1.dpr
-CursorX=1
-CursorY=1
-TopLine=1
-LeftCol=1
-
-[View1]
-Module=C:\Program Files\Borland\Delphi5\Projects\gamma\Unit1.pas
-CursorX=29
-CursorY=67
-TopLine=73
+Module=C:\mydocuments\ffdshow\src\imgFilters\gamma\Unit1.pas
+CursorX=32
+CursorY=105
+TopLine=83
 LeftCol=1
 
 [Watches]
@@ -83,13 +73,13 @@ State=2
 Left=0
 Top=0
 Width=1024
-Height=133
+Height=102
 MaxLeft=-1
 MaxTop=-1
 MaxWidth=1032
-MaxHeight=118
+MaxHeight=102
 ClientWidth=1024
-ClientHeight=94
+ClientHeight=78
 
 [ProjectManager]
 Create=1
@@ -98,11 +88,11 @@ State=0
 Left=0
 Top=0
 Width=197
-Height=614
+Height=616
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=197
-ClientHeight=614
+ClientHeight=616
 TBDockHeight=303
 LRDockWidth=438
 Dockable=1
@@ -144,11 +134,11 @@ State=0
 Left=0
 Top=0
 Width=197
-Height=614
+Height=616
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=195
-ClientHeight=612
+ClientWidth=197
+ClientHeight=616
 TBDockHeight=494
 LRDockWidth=190
 Dockable=1
@@ -156,8 +146,7 @@ SplitPos=85
 ArrangeBy=Name
 SelectedItem=Caption
 ExpandedItems=
-HiddenCategories=Locale,Advanced,"File Access",Locale,Legacy
-ShowStatusBar=1
+HiddenCategories=Locale,Legacy
 
 [WatchWindow]
 Create=1
@@ -253,6 +242,22 @@ Column1Width=100
 Column2Width=155
 EntryPointPane=225
 CompUnitPane=104
+
+[ObjectTree]
+Create=1
+Visible=0
+State=0
+Left=0
+Top=102
+Width=190
+Height=264
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=182
+ClientHeight=240
+TBDockHeight=264
+LRDockWidth=190
+Dockable=1
 
 [DebugLogView]
 Create=1
@@ -381,11 +386,11 @@ State=0
 Left=0
 Top=0
 Width=197
-Height=614
+Height=616
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=197
-ClientHeight=614
+ClientHeight=616
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
@@ -397,12 +402,12 @@ State=0
 Left=12
 Top=0
 Width=771
-Height=52
+Height=109
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=771
-ClientHeight=52
-TBDockHeight=52
+ClientHeight=109
+TBDockHeight=109
 LRDockWidth=443
 Dockable=1
 

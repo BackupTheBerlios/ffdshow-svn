@@ -14,9 +14,10 @@ private:
  void saveLM(void);
  static void listPresets(void);
  void loadAutoPresetFromReg(char *AVIname);
+ static std::vector<std::string> *presets;
+ friend class TffDecoder;
 public:
  Tconfig(const char *IpresetName=PRESET_DEFAULT);
- static std::vector<std::string> *presets;
  
  void init(void);
  void done(bool save);
@@ -36,7 +37,7 @@ public:
  static void Tconfig::normalizeName(char *dst,char *src);
  int autoPreset,autoPresetFileFirst;
  void autoPresetLoad(char *AVIname);
- int presetShouldBeSaved;
+ int presetShouldBeSaved,autoloadedfromreg;
  
  int isPostproc;
  int ppqual;

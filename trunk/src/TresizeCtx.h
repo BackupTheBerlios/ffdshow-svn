@@ -22,9 +22,9 @@ public:
    FFdx=IffDx;FFdy=IffDy;
    strideY =(FFdx/16+4)*16;
    strideUV=strideY/2;
-   imgResizeY=(unsigned char*)xvid_malloc(sizeY =strideY *FFdy  ,64);
-   imgResizeU=(unsigned char*)xvid_malloc(sizeUV=strideUV*FFdy/2,64);
-   imgResizeV=(unsigned char*)xvid_malloc(       strideUV*FFdy/2,64);
+   imgResizeY=(unsigned char*)xvid_malloc(sizeY =strideY *(FFdy+8)  ,64);
+   imgResizeU=(unsigned char*)xvid_malloc(sizeUV=strideUV*(FFdy+8)/2,64);
+   imgResizeV=(unsigned char*)xvid_malloc(       strideUV*(FFdy+8)/2,64);
   } 
  ~TresizeCtx()
   {
@@ -55,7 +55,7 @@ public:
    int dstStride[]={strideY,strideUV,strideUV};
    swsc->swScale(swsc,src,srcStride,0,height,dst,dstStride);
   }; 
- bool isResize;    
+ int isResize;    
  bool resizeChanged;
  int FFdx,FFdy;
  int strideY,strideUV;

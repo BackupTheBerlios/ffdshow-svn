@@ -27,7 +27,7 @@ extern "C"
 }
 
 extern "C" void modifyPPmode(PPMode *pp,Tconfig *cfg);
-static void modifyPPmode(PPMode *pp,Tconfig *cfg)
+void modifyPPmode(PPMode *pp,Tconfig *cfg)
 {
  
 }

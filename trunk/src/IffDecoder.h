@@ -19,6 +19,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_autoPresetFileFirst   5  //try to load preset from file 
 #define IDFF_presetShouldBeSaved   6
 #define IDFF_inPlayer              7
+#define IDFF_autoloadedfromreg     8
 
 #define IDFF_isPostproc          106  
 #define IDFF_ppqual              101  //postprocessing quality set by user (active when not autoq)
@@ -104,16 +105,16 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 
 DECLARE_INTERFACE_(IffDecoder, IUnknown)
 {
- STDMETHOD (get_Param)(int paramID, int* value) PURE;
- STDMETHOD (get_Param2)(int paramID) PURE;
- STDMETHOD (put_Param)(int paramID, int  value) PURE;
- STDMETHOD (get_numPresets)(int *value) PURE;
+ STDMETHOD (get_Param)(unsigned int paramID, int* value) PURE;
+ STDMETHOD (get_Param2)(unsigned int paramID) PURE;
+ STDMETHOD (put_Param)(unsigned int paramID, int  value) PURE;
+ STDMETHOD (get_numPresets)(unsigned int *value) PURE;
  STDMETHOD (get_presetName)(unsigned int i,char *buf,unsigned int len) PURE;
  STDMETHOD (get_activePresetName)(char *buf,unsigned int len) PURE;
  STDMETHOD (get_AVIname)(char *buf,unsigned int len) PURE;
  STDMETHOD (get_AVIfourcc)(char *buf,unsigned int len) PURE;
- STDMETHOD (get_AVIdimensions)(int *x,int *y) PURE;
- STDMETHOD (get_AVIfps)(int *fps) PURE;
+ STDMETHOD (get_AVIdimensions)(unsigned int *x,unsigned int *y) PURE;
+ STDMETHOD (get_AVIfps)(unsigned int *fps) PURE;
  STDMETHOD (savePreset)(const char *name) PURE;
  STDMETHOD (savePresetToFile)(const char *flnm) PURE;
  STDMETHOD (loadPreset)(const char *name) PURE;
@@ -121,7 +122,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (removePreset)(const char *name) PURE;
  STDMETHOD (notifyParamsChanged)(void) PURE;
  STDMETHOD (get_avcodec_version)(char *buf,unsigned int len) PURE;
- STDMETHOD (getPPmode)(int *ppmode) PURE;
+ STDMETHOD (getPPmode)(unsigned int *ppmode) PURE;
  STDMETHOD (getPostProcDescription)(char *buf,unsigned int len) PURE;
  STDMETHOD (getPictPropDescription)(char *buf,unsigned int len) PURE;
  STDMETHOD (getNoiseDescription)(char *buf,unsigned int len) PURE;
@@ -132,7 +133,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (setFontName)(const char *name) PURE;
  STDMETHOD (getSubFlnm)(char *buf,unsigned int len) PURE;
  STDMETHOD (loadSubtitles)(const char *flnm) PURE;
- STDMETHOD (getRealCrop)(int *left,int *top,int *right,int *bottom) PURE;
+ STDMETHOD (getRealCrop)(unsigned int *left,unsigned int *top,unsigned int *right,unsigned int *bottom) PURE;
 };
 
 #ifdef __cplusplus

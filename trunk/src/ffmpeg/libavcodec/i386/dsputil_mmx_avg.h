@@ -22,7 +22,8 @@
  */
 
 /* XXX: we use explicit registers to avoid a gcc 2.95.2 register asm
-   clobber bug */
+   clobber bug - now it will work with 2.95.2 and also with -fPIC
+ */
 static void DEF(put_pixels_x2)(UINT8 *block, const UINT8 *pixels, int line_size, int h)
 {
     __asm __volatile(
@@ -50,8 +51,8 @@ static void DEF(put_pixels_x2)(UINT8 *block, const UINT8 *pixels, int line_size,
         "subl $4, %0			\n\t"
         " jnz 1b			\n\t"
 	:"+g"(h)
-        :"b"(pixels), "c"(pixels+line_size), "d" (block), "S" (block+line_size),
-        "D"(line_size<<1)
+        :"D"(pixels), "S"(pixels+line_size), "r" (block), "r" (block+line_size),
+        "g"(line_size<<1)
 	:"%eax", "memory");
   }
  
@@ -88,38 +89,73 @@ static void DEF(put_no_rnd_pixels_x2)(UINT8 *block, const UINT8 *pixels, int lin
         "subl $4, %0			\n\t"
         " jnz 1b			\n\t"
 	:"+g"(h)
-        :"b"(pixels), "c"(pixels+line_size), "d" (block), "S" (block+line_size),
-        "D"(line_size<<1)
+        :"D"(pixels), "S"(pixels+line_size), "r" (block), "r" (block+line_size),
+        "r"(line_size<<1)
 	:"%eax", "memory");
 }
 
 static void DEF(put_pixels_y2)(UINT8 *block, const UINT8 *pixels, int line_size, int h)
 {
+#if 1
+    // Michael - measure me
     __asm __volatile(
+        "lea (%3, %3), %%eax            \n\t"
+        "movq (%1), %%mm0		\n\t"
+        "subl %3, %2			\n\t"
+        ".balign 16			\n\t"
+        "1:				\n\t"
+	"movq (%1, %3), %%mm1		\n\t"
+	"movq (%1, %3, 2), %%mm2	\n\t"
+	PAVGB" %%mm1, %%mm0		\n\t"
+	PAVGB" %%mm2, %%mm1		\n\t"
+        "addl %%eax, %1			\n\t"
+	"movq %%mm0, (%2, %3)		\n\t"
+	"movq %%mm1, (%2, %3, 2)	\n\t"
+	"movq (%1, %3), %%mm1		\n\t"
+	"movq (%1, %3, 2), %%mm0	\n\t"
+	PAVGB" %%mm1, %%mm2		\n\t"
+	PAVGB" %%mm0, %%mm1		\n\t"
+        "addl %%eax, %2			\n\t"
+        "addl %%eax, %1			\n\t"
+	"movq %%mm2, (%2, %3)		\n\t"
+	"movq %%mm1, (%2, %3, 2)	\n\t"
+        "addl %%eax, %2			\n\t"
+        "subl $4, %0			\n\t"
+        "jnz 1b				\n\t"
+	:"+g"(h)
+	:"D"(pixels), "S" (block), "c"(line_size)
+	:"%eax", "memory");
+#else
+   // kabi measure me
+    __asm __volatile(
+	"movq (%2), %%mm0		\n\t"
+        "addl %1, %2			\n\t"
         "xorl %%eax, %%eax		\n\t"
-	"movq (%1), %%mm0		\n\t"
+        "leal (%1, %2), %%edi		\n\t"
+        "leal (%1, %3), %%esi		\n\t"
+        "addl %1, %1			\n\t"
         ".balign 16			\n\t"
         "1:				\n\t"
 	"movq (%2, %%eax), %%mm1	\n\t"
-	"movq (%3, %%eax), %%mm2	\n\t"
+	"movq (%%edi, %%eax), %%mm2	\n\t"
 	PAVGB"  %%mm1, %%mm0\n\t"
 	PAVGB"  %%mm2, %%mm1\n\t"
-	"movq %%mm0, (%4, %%eax)	\n\t"
-	"movq %%mm1, (%5, %%eax)	\n\t"
-        "addl %6, %%eax			\n\t"
+	"movq %%mm0, (%3   , %%eax)	\n\t"
+	"movq %%mm1, (%%esi, %%eax)	\n\t"
+        "addl %1, %%eax			\n\t"
 	"movq (%2, %%eax), %%mm1	\n\t"
-	"movq (%3, %%eax), %%mm0	\n\t"
+	"movq (%%edi, %%eax), %%mm0	\n\t"
 	PAVGB" %%mm1, %%mm2		\n\t"
 	PAVGB" %%mm0, %%mm1		\n\t"
-	"movq %%mm2, (%4, %%eax)	\n\t"
-	"movq %%mm1, (%5, %%eax)	\n\t"
-        "addl %6, %%eax			\n\t"
+	"movq %%mm2, (%3   , %%eax)	\n\t"
+	"movq %%mm1, (%%esi, %%eax)	\n\t"
+        "addl %1, %%eax			\n\t"
         "subl $4, %0			\n\t"
         " jnz 1b			\n\t"
-	:"+g"(h)
-	:"b"(pixels), "c"(pixels+line_size), "d"(pixels+line_size*2), "S" (block), 
-         "D" (block+line_size), "g"(line_size<<1)
-	:"%eax",  "memory");
+	:"+g"(h), "+r"(line_size), "+r"(pixels)
+	: "r" (block)
+	: "%eax", "%esi", "%edi", "memory");
+#endif
   }
 
 /* GL: this function does incorrect rounding if overflow */
@@ -150,8 +186,8 @@ static void DEF(put_no_rnd_pixels_y2)(UINT8 *block, const UINT8 *pixels, int lin
         "subl $4, %0			\n\t"
         " jnz 1b			\n\t"
 	:"+g"(h)
-	:"b"(pixels), "c"(pixels+line_size), "d"(pixels+line_size*2), "S" (block), 
-         "D" (block+line_size), "g"(line_size<<1)
+	:"D"(pixels), "S"(pixels+line_size), "r"(pixels+line_size*2), "r" (block),
+         "r" (block+line_size), "g"(line_size<<1)
 	:"%eax",  "memory");
 }
 
@@ -182,8 +218,8 @@ static void DEF(avg_pixels)(UINT8 *block, const UINT8 *pixels, int line_size, in
         "subl $4, %0			\n\t"
         " jnz 1b			\n\t"
 	:"+g"(h)
-        :"b"(pixels), "c"(pixels+line_size), "d" (block), "S" (block+line_size),
-         "D"(line_size<<1)
+        :"D"(pixels), "S"(pixels+line_size), "r" (block), "r" (block+line_size),
+         "g"(line_size<<1)
 	:"%eax", "memory");
 }
 
@@ -222,8 +258,8 @@ static void DEF(avg_pixels_x2)( UINT8  *block, const UINT8 *pixels, int line_siz
         "subl $4, %0			\n\t"
         " jnz 1b			\n\t"
 	:"+g"(h)
-        :"b"(pixels), "c"(pixels+line_size), "d" (block), "S" (block+line_size),
-         "D"(line_size<<1)
+        :"D"(pixels), "S"(pixels+line_size), "r" (block), "r" (block+line_size),
+         "g"(line_size<<1)
 	:"%eax", "memory");
 }
 
@@ -259,8 +295,8 @@ static void  DEF(avg_pixels_y2)( UINT8  *block, const UINT8 *pixels, int line_si
         "subl $4, %0			\n\t"
         " jnz 1b			\n\t"
 	:"+g"(h)
-	:"b"(pixels), "c"(pixels+line_size), "d"(pixels+line_size*2), "S" (block), 
-         "D" (block+line_size), "g"(line_size<<1)
+	:"D"(pixels), "S"(pixels+line_size), "r"(pixels+line_size*2), "r" (block),
+         "r" (block+line_size), "g"(line_size<<1)
 	:"%eax",  "memory");
 }
 
@@ -309,68 +345,7 @@ static void DEF(avg_pixels_xy2)( UINT8  *block, const UINT8 *pixels, int line_si
         "subl $4, %0			\n\t"
         " jnz 1b			\n\t"
 	:"+g"(h)
-	:"b"(pixels), "c"(pixels+line_size), "d"(pixels+line_size*2), "S" (block), 
-         "D" (block+line_size), "g"(line_size<<1)
+	:"D"(pixels), "S"(pixels+line_size), "r"(pixels+line_size*2), "r" (block),
+         "r" (block+line_size), "g"(line_size<<1)
 	:"%eax",  "memory");
 }
-
-//Note: the sub* functions are no used 
-
-static void DEF(sub_pixels_x2)( DCTELEM  *block, const UINT8 *pixels, int line_size, int h)
-{
-  DCTELEM  *p;
-  const UINT8 *pix;
-  p = block;
-  pix = pixels;
-  __asm __volatile(
-      "pxor	%%mm7, %%mm7":);
-  do {
-    __asm __volatile(
-	"movq	1%1, %%mm2\n\t"
-	"movq	%0, %%mm0\n\t"
-	PAVGB"	%1, %%mm2\n\t"
-	"movq	8%0, %%mm1\n\t"
-	"movq	%%mm2, %%mm3\n\t"
-	"punpcklbw %%mm7, %%mm2\n\t"
-	"punpckhbw %%mm7, %%mm3\n\t"
-	"psubsw %%mm2, %%mm0\n\t"
-	"psubsw %%mm3, %%mm1\n\t"
-	"movq	%%mm0, %0\n\t"
-	"movq	%%mm1, 8%0\n\t"
-	:"+m"(*p)
-	:"m"(*pix)
-	:"memory");
-   pix += line_size;
-   p +=   8;
- } while (--h);
-}
-
-static void DEF(sub_pixels_y2)( DCTELEM  *block, const UINT8 *pixels, int line_size, int h)
-{
-  DCTELEM  *p;
-  const UINT8 *pix;
-  p = block;
-  pix = pixels;
-  __asm __volatile(
-      "pxor	%%mm7, %%mm7":);
-  do {
-    __asm __volatile(
-	"movq	%2, %%mm2\n\t"
-	"movq	%0, %%mm0\n\t"
-	PAVGB"	%1, %%mm2\n\t"
-	"movq	8%0, %%mm1\n\t"
-	"movq	%%mm2, %%mm3\n\t"
-	"punpcklbw %%mm7, %%mm2\n\t"
-	"punpckhbw %%mm7, %%mm3\n\t"
-	"psubsw %%mm2, %%mm0\n\t"
-	"psubsw %%mm3, %%mm1\n\t"
-	"movq	%%mm0, %0\n\t"
-	"movq	%%mm1, 8%0\n\t"
-	:"+m"(*p)
-	:"m"(*pix), "m"(*(pix+line_size))
-	:"memory");
-   pix += line_size;
-   p +=   8;
- } while (--h);
-}
-

@@ -84,11 +84,11 @@ subtitle* Tsubtitles::getSubtitle(unsigned long frame)
      nosub_range_start=subs[current_sub].end;
      nosub_range_end  =subs[current_sub+1].start;
      return oldsub=NULL;
-     // next sub?
-     ++current_sub;
-     oldsub=&subs[current_sub];
-     if (frame>=oldsub->start && frame<=oldsub->end) return oldsub; // OK!
-    }
+    } 
+   // next sub?
+   ++current_sub;
+   oldsub=&subs[current_sub];
+   if (frame>=oldsub->start && frame<=oldsub->end) return oldsub; // OK!
   }
   // use logarithmic search:
  int i=0,j=sub_num-1;

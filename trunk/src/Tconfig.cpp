@@ -67,6 +67,7 @@ void Tconfig::init(void)
    presets=new vector<string>;
    listPresets();
   }; 
+ autoloadedfromreg=0;
 }
 void Tconfig::done(bool isSave)
 {
@@ -132,7 +133,7 @@ bool Tconfig::savePreset(const char *IpresetName)
 
  if (RegCreateKeyEx(HKEY_CURRENT_USER,XVID_REG_PARENT "\\" XVID_REG_CHILD,0,   XVID_REG_CLASS,REG_OPTION_NON_VOLATILE, KEY_WRITE,0,&hKey, &dispo) == ERROR_SUCCESS)
   {
-   REG_SET_S("activePreset",presetName,"");
+   if (!autoloadedfromreg) REG_SET_S("activePreset",presetName,"");
    REG_SET_N("autoPreset",autoPreset,0);
    REG_SET_N("autoPresetFileFirst",autoPresetFileFirst,0);
    REG_SET_N("lastPage",lastPage,0);
@@ -189,7 +190,10 @@ void Tconfig::loadAutoPresetFromReg(char *AVIname)
  sprintf(presetRegStr,XVID_REG_PARENT"\\"XVID_REG_CHILD"\\%s",name2);
  HKEY hKey;
  if (RegOpenKeyEx(HKEY_CURRENT_USER, presetRegStr, 0, KEY_READ, &hKey)==ERROR_SUCCESS)
-  loadPreset(name2);
+  {
+   loadPreset(name2);
+   autoloadedfromreg=1;
+  }; 
  RegCloseKey(hKey);
 }
 

@@ -232,6 +232,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_autoPresetFileFirst]=Tparam(&cfg.autoPresetFileFirst,0,0);
  params[IDFF_presetShouldBeSaved]=Tparam(&cfg.presetShouldBeSaved,0,0);
  params[IDFF_inPlayer           ]=Tparam(&cfg.inPlayer           ,0,0);
+ params[IDFF_autoloadedfromreg  ]=Tparam(&cfg.autoloadedfromreg  ,0,0);
 
  params[IDFF_isPostproc         ]=Tparam(&cfg.isPostproc         ,0,0);
  params[IDFF_ppqual             ]=Tparam(&cfg.ppqual             ,0,6);
@@ -315,7 +316,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_mp41               ]=Tparam(&cfg.mp41               ,0,0);
  params[IDFF_h263               ]=Tparam(&cfg.h263               ,0,0);
 }                                                                      
-STDMETHODIMP TffDecoder::get_Param(int paramID, int* value)
+STDMETHODIMP TffDecoder::get_Param(unsigned int paramID, int* value)
 {
  if (!value) return S_FALSE;
  if (paramID<0 || paramID>=MAX_PARAMID) return S_FALSE;
@@ -323,13 +324,13 @@ STDMETHODIMP TffDecoder::get_Param(int paramID, int* value)
  *value=*params[paramID].val;
  return S_OK;
 }
-STDMETHODIMP TffDecoder::get_Param2(int paramID)
+STDMETHODIMP TffDecoder::get_Param2(unsigned int paramID)
 {
  int val;
  HRESULT res=get_Param(paramID,&val);
  return (res==S_OK)?val:0;
 }
-STDMETHODIMP TffDecoder::put_Param(int paramID, int  value)
+STDMETHODIMP TffDecoder::put_Param(unsigned int paramID, int  value)
 {
  if (paramID<0 || paramID>=MAX_PARAMID) return S_FALSE;
  Tparam &p=params[paramID];
@@ -369,7 +370,7 @@ void TffDecoder::idctChanged(void)
 {
  cfg.idctChanged=true;
 }
-STDMETHODIMP TffDecoder::get_numPresets(int *value)
+STDMETHODIMP TffDecoder::get_numPresets(unsigned int *value)
 {
  *value=0;
  if (!value || !cfg.presets) return E_POINTER;
@@ -405,7 +406,7 @@ STDMETHODIMP TffDecoder::get_AVIfourcc(char *buf,unsigned int len)
  strcpy(buf,AVIfourcc);
  return S_OK;
 }
-STDMETHODIMP TffDecoder::get_AVIfps(int *fps)
+STDMETHODIMP TffDecoder::get_AVIfps(unsigned int *fps)
 {
  if (!fps) return S_FALSE;
  *fps=1000*AVIfps;
@@ -449,14 +450,14 @@ STDMETHODIMP TffDecoder::get_avcodec_version(char *buf,unsigned int len)
  strcpy(buf,vers);
  return S_OK;
 }
-STDMETHODIMP TffDecoder::get_AVIdimensions(int *x,int *y)
+STDMETHODIMP TffDecoder::get_AVIdimensions(unsigned int *x,unsigned int *y)
 {
  *x=*y=0;
  if (!x || !y || AVIdx==0 || AVIdy==0) return S_FALSE;
  *x=AVIdx;*y=AVIdy;
  return S_OK;
 }
-STDMETHODIMP TffDecoder::getPPmode(int *ppmode)
+STDMETHODIMP TffDecoder::getPPmode(unsigned int *ppmode)
 {
  if (!imgFilters || !imgFilters->postproc.ok) 
   { 
@@ -536,7 +537,7 @@ STDMETHODIMP TffDecoder::loadSubtitles(const char *flnm)
  else strcpy(cfg.subFlnm,flnm);  
  return S_OK;
 }
-STDMETHODIMP TffDecoder::getRealCrop(int *left,int *top,int *right,int *bottom)
+STDMETHODIMP TffDecoder::getRealCrop(unsigned int *left,unsigned int *top,unsigned int *right,unsigned int *bottom)
 {
  if (!left || !top || !right || !bottom) return E_POINTER;
  if (!AVIdx || !AVIdy)
@@ -987,6 +988,12 @@ void TffDecoder::loadAVInameAndPreset(void)
 }
 void TffDecoder::calcCrop(void)
 {
+ if (!cfg.isCropNzoom)
+  {
+   cropLeft=cropTop=0;
+   cropDx=AVIdx;cropDy=AVIdy;
+   return;
+  }
  if (cfg.isZoom)
   {
    cropDx=((100-cfg.magnificationX)*AVIdx)/100;
@@ -1231,13 +1238,13 @@ static int refcnt=0;
 STDMETHODIMP_(ULONG) TffDecoder::AddRef()
 {
  refcnt++;
- DEBUGS1("TffDecoder::AddRef",refcnt);
+// DEBUGS1("TffDecoder::AddRef",refcnt);
  return GetOwner()->AddRef();
 }
 STDMETHODIMP_(ULONG) TffDecoder::Release()
 {
  refcnt--;
- DEBUGS1("TffDecoder::Release",refcnt);
+// DEBUGS1("TffDecoder::Release",refcnt);
  return GetOwner()->Release();
 }
 #endif

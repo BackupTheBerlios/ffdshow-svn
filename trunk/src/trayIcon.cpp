@@ -85,15 +85,15 @@ HMENU TtrayIcon::createMenu(void)
 {
  HMENU hm=CreatePopupMenu();
  int ord=0;
- int len;
+ unsigned int len;
  deci->get_numPresets(&len);
  char actPreset[1024];
  deci->get_activePresetName(actPreset,1023);
- for (int i=0;i<len;i++)
+ for (unsigned int i=0;i<len;i++)
   {
    char preset[1024];
    deci->get_presetName(i,preset,1023);
-   insertMenuItem(hm,ord,IDC_FIRST_PRESET+i,preset,strcmp(preset,actPreset)==0);
+   insertMenuItem(hm,ord,IDC_FIRST_PRESET+i,preset,_stricmp(preset,actPreset)==0);
   }
  insertSeparator(hm,ord);
  

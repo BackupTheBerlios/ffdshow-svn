@@ -38,7 +38,7 @@ void TglobalPage::now2dlg(void)
  deci->get_AVIfourcc(AVIfourcc,19); 
  sprintf(pomS,"FourCC: %s",AVIfourcc);
  SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_CODEC,WM_SETTEXT,0,LPARAM(pomS));
- int x,y;
+ unsigned int x,y;
  if (deci->get_AVIdimensions(&x,&y)!=S_OK)
   SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_DIMENSIONS,WM_SETTEXT,0,LPARAM("Dimensions:"));
  else
@@ -108,10 +108,16 @@ void TglobalPage::cfg2dlg(void)
 
 void TglobalPage::listPresets(void)
 {
- int curPreset=SendDlgItemMessage(m_hwnd,IDC_CBX_PRESETS,CB_GETCURSEL,0,0);
+ //int curPreset=SendDlgItemMessage(m_hwnd,IDC_CBX_PRESETS,CB_GETCURSEL,0,0);
  SendDlgItemMessage(m_hwnd,IDC_CBX_PRESETS,CB_RESETCONTENT,0,0);
- for (unsigned int i=0;i<Tconfig::presets->size();i++)
-  SendDlgItemMessage(m_hwnd,IDC_CBX_PRESETS,CB_ADDSTRING,0,LPARAM((*Tconfig::presets)[i].c_str()));
+ unsigned int cnt;
+ deci->get_numPresets(&cnt);
+ for (unsigned int i=0;i<cnt;i++)
+  {
+   char pomS[1024];
+   deci->get_presetName(i,pomS,1024);
+   SendDlgItemMessage(m_hwnd,IDC_CBX_PRESETS,CB_ADDSTRING,0,LPARAM(pomS));
+  }; 
  selectPreset(); 
 }
 
@@ -278,12 +284,14 @@ HRESULT TglobalPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
      
     case IDC_BT_PRESET_LOAD:
      loadPreset();
+     cfgSet(IDFF_autoloadedfromreg,0);
      return TRUE; 
     case IDC_BT_PRESET_SAVE:
      cfgSet(IDFF_presetShouldBeSaved,1);
      savePreset();
      return TRUE; 
     case IDC_BT_PRESET_REMOVE:
+     cfgSet(IDFF_presetShouldBeSaved,1);
      removePreset();
      return TRUE; 
     case IDC_BT_PRESET_FILE_SAVE:

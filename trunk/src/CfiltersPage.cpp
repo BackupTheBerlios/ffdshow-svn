@@ -98,7 +98,7 @@ int TfiltersPage::writeNoiseStrengthChroma(int x)
 }
 void TfiltersPage::setPPchbs(void)
 {
- int ppmode;
+ unsigned int ppmode;
  if (cfgGet(IDFF_ppIsCustom)) 
   {
    enableWindow(IDC_CHB_DEBLOCKV_LUM  ,true);
