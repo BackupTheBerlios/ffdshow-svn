@@ -6,6 +6,9 @@
 static const char PRESET_DEFAULT[]="default";
 #include <vector>
 
+#define MIN_ORDER 1
+#define MAX_ORDER 6
+
 struct subtitle;
 class Tconfig
 {

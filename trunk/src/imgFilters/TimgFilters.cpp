@@ -66,26 +66,27 @@ TimgFilters::~TimgFilters()
 void TimgFilters::process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV,int *quant_store)
 {
  tempY->reset(srcY);tempU->reset(srcU);tempV->reset(srcV);
- if (postproc.ok && cfg->isPostproc)
-  {
-   if (cpus>0 && cfg->autoq && cfg->ppqual /*&& (avctx->frame_number%2)==0*/)
-    {
-     cpu.CollectCPUData();
-     if (cpu.GetCPUUsage(0)>90)
-      {
-       if (cfg->currentq>0)
+ for (int i=MIN_ORDER;i<=MAX_ORDER;i++)
+  if (i==cfg->orderPostproc && postproc.ok && cfg->isPostproc)
+   {
+    if (cpus>0 && cfg->autoq && cfg->ppqual /*&& (avctx->frame_number%2)==0*/)
+     {
+      cpu.CollectCPUData();
+      if (cpu.GetCPUUsage(0)>90)
+       {
+        if (cfg->currentq>0)
         cfg->currentq--;
-      }
-     else
-      {
-       if (cfg->currentq<cfg->ppqual)
-        cfg->currentq++ ;
-      };  
-    };
-   int ppmode=postproc.getPPmode(cfg);
-   if (ppmode)
-    {
-     unsigned char *tempPict1[3]={
+       }
+      else
+       {
+        if (cfg->currentq<cfg->ppqual)
+         cfg->currentq++ ;
+       };  
+     };
+    int ppmode=postproc.getPPmode(cfg);
+    if (ppmode)
+     {
+      unsigned char *tempPict1[3]={
                                   tempY->getTempCur(),//+diffY,
                                   tempU->getTempCur(),//+diffUV,
                                   tempV->getTempCur(),//+diffUV
@@ -95,70 +96,57 @@ void TimgFilters::process(unsigned char *srcY,unsigned char *srcU,unsigned char 
                                   tempU->getTempNext(),//+diffUV,
                                   tempV->getTempNext(),//+diffUV
                                  };
-     postproc.postprocess(tempPict1,strideY/*avpict.linesize[0]*/,
-                          tempPict2,strideY/*avpict.linesize[0]*/,
-                          dxY/*AVIdx*/,dy/*AVIdy*/,
-                          quant_store,MBC+1,ppmode);
-    }
-  }
-  
- if (cfg->isPictProp)
-  {
-   if (cfg->lumGain!=Tconfig::lumGainDef || cfg->lumOffset!=Tconfig::lumOffsetDef || cfg->gammaCorrection!=Tconfig::gammaCorrectionDef)
-    {
-     unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
-     luma.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
-    };
-   if (cfg->hue!=Tconfig::hueDef || cfg->saturation!=Tconfig::saturationDef) 
-    {
-     unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV;
-     unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
-     chroma.process(NULL,srcU,srcV,NULL,dstU,dstV,cfg);
-    }; 
-  };
-
- if (cfg->isBlur)
-  {
-   unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
-   blur.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
-  };
-  
- if (cfg->isSharpen)
-  {
-   unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
-   sharpen.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
-  };
- 
- if (cfg->isNoise)
-  {                           
-   if (cfg->noiseStrength)
-    {  
-     unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
-     noise.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
-     /*
-     if (cfg->noiseMethod==0) noise.noiseY(p1,p2,cfg);
-     else                     noise.noiseAvihY(p1,p2,cfg);
-     */ 
-    }
-   if (cfg->noiseStrengthChroma)
-    {
-     unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV,
-                   *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
-     noise.process(NULL,srcU,srcV,NULL,dstU,dstV,cfg);
-     /*              
-     if (cfg->noiseMethod==0) noise.noiseUV(p1u,p2u,p1v,p2v,cfg);
-     else                     noise.noiseAvihUV(p1u,p2u,p1v,p2v,cfg);
-     */
-    } 
-  } 
-
- if (cfg->isSubtitles && cfg->sub)
-  {
-   unsigned char *srcY=tempY->getTempCur()+diffY ,*dstY=tempY->getTempNext()+diffY ;
-   unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV;
-   unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
-   subtitles.process(srcY,srcU,srcV,dstY,dstU,dstV,cfg);
-  }
+      postproc.postprocess(tempPict1,strideY/*avpict.linesize[0]*/,
+                           tempPict2,strideY/*avpict.linesize[0]*/,
+                           dxY/*AVIdx*/,dy/*AVIdy*/,
+                           quant_store,MBC+1,ppmode);
+     }
+   }
+  else if (i==cfg->orderPictProp && cfg->isPictProp)
+   {
+    if (cfg->lumGain!=Tconfig::lumGainDef || cfg->lumOffset!=Tconfig::lumOffsetDef || cfg->gammaCorrection!=Tconfig::gammaCorrectionDef)
+     {
+      unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
+      luma.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
+     };
+    if (cfg->hue!=Tconfig::hueDef || cfg->saturation!=Tconfig::saturationDef) 
+     {
+      unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV;
+      unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
+      chroma.process(NULL,srcU,srcV,NULL,dstU,dstV,cfg);
+     }; 
+   }
+  else if (i==cfg->orderBlur && cfg->isBlur)
+   {
+    unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
+    blur.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
+   }
+  else if (i==cfg->orderSharpen && cfg->isSharpen)
+   {
+    unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
+    sharpen.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
+   }
+  else if (i==cfg->orderNoise && cfg->isNoise)
+   {                           
+    if (cfg->noiseStrength)
+     {  
+      unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
+      noise.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
+     }
+    if (cfg->noiseStrengthChroma)
+     {
+      unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV,
+                    *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
+      noise.process(NULL,srcU,srcV,NULL,dstU,dstV,cfg);
+     } 
+   } 
+  else if (i==cfg->orderSubtitles && cfg->isSubtitles && cfg->sub)
+   {
+    unsigned char *srcY=tempY->getTempCur()+diffY ,*dstY=tempY->getTempNext()+diffY ;
+    unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV;
+    unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
+    subtitles.process(srcY,srcU,srcV,dstY,dstU,dstV,cfg);
+   }
   
  *dstY=tempY->getTempCur();
  *dstU=tempU->getTempCur();

@@ -95,7 +95,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   #define MAX_PARAMID 1100
   Tparam params[MAX_PARAMID];
   void fillParams(void);
-  void subsChanged(void),resizeChanged(void),trayIconChanged(void),idctChanged(void),orderChanged(void);
+  void subsChanged(void),resizeChanged(void),trayIconChanged(void),idctChanged(void);
   Tlibavcodec libavcodec;
   HRESULT ChangeColorspace(GUID subtype, GUID formattype, void * format);
   

@@ -120,17 +120,21 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  HTREEITEM pagePresets=addTI(tvis,new TpresetsPage(this,m_hwnd,deci));
  tvis.hParent=pagePresets;
  tvis.item.cChildren=0;
- addTI(tvis,new TpostProcPage(this,m_hwnd,deci));
- addTI(tvis,new TpictPropPage(this,m_hwnd,deci));
- addTI(tvis,new TnoisePage(this,m_hwnd,deci));
- addTI(tvis,new TsharpenPage(this,m_hwnd,deci));
- addTI(tvis,new TblurPage(this,m_hwnd,deci));
- tvis.item.cChildren=1;
- HTREEITEM pageSubtitles=addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
- tvis.item.cChildren=0;
- tvis.hParent=pageSubtitles;
- addTI(tvis,new TfontPage(this,m_hwnd,deci));
- TreeView_Expand(htv,pageSubtitles,TVE_EXPAND);
+ for (int i=MIN_ORDER;i<=MAX_ORDER;i++)
+  if      (i==deci->get_Param2(IDFF_orderPostproc))  addTI(tvis,new TpostProcPage(this,m_hwnd,deci));
+  else if (i==deci->get_Param2(IDFF_orderPictProp))  addTI(tvis,new TpictPropPage(this,m_hwnd,deci));
+  else if (i==deci->get_Param2(IDFF_orderNoise))     addTI(tvis,new TnoisePage(this,m_hwnd,deci));
+  else if (i==deci->get_Param2(IDFF_orderSharpen))   addTI(tvis,new TsharpenPage(this,m_hwnd,deci));
+  else if (i==deci->get_Param2(IDFF_orderBlur))      addTI(tvis,new TblurPage(this,m_hwnd,deci));
+  else if (i==deci->get_Param2(IDFF_orderSubtitles))
+   {
+    tvis.item.cChildren=1;
+    HTREEITEM pageSubtitles=addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
+    tvis.item.cChildren=0;
+    tvis.hParent=pageSubtitles;
+    addTI(tvis,new TfontPage(this,m_hwnd,deci));
+    TreeView_Expand(htv,pageSubtitles,TVE_EXPAND);
+   };
  tvis.hParent=pagePresets;
  addTI(tvis,new TresizePage(this,m_hwnd,deci));
  addTI(tvis,new TaspectNcropPage(this,m_hwnd,deci));
