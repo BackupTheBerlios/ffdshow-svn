@@ -66,11 +66,11 @@ int Tpostproc::getPPmode(const TpresetSettings *cfg,int currentq)
     {
      0,
      LUM_H_DEBLOCK,
-     LUM_H_DEBLOCK | LUM_V_DEBLOCK,
-     LUM_H_DEBLOCK | LUM_V_DEBLOCK | CHROM_H_DEBLOCK,
-     LUM_H_DEBLOCK | LUM_V_DEBLOCK | CHROM_H_DEBLOCK | CHROM_V_DEBLOCK,
-     LUM_H_DEBLOCK | LUM_V_DEBLOCK | CHROM_H_DEBLOCK | CHROM_V_DEBLOCK | LUM_DERING,
-     LUM_H_DEBLOCK | LUM_V_DEBLOCK | CHROM_H_DEBLOCK | CHROM_V_DEBLOCK | LUM_DERING | CHROM_DERING
+     LUM_H_DEBLOCK|LUM_V_DEBLOCK,
+     LUM_H_DEBLOCK|LUM_V_DEBLOCK|CHROM_H_DEBLOCK,
+     LUM_H_DEBLOCK|LUM_V_DEBLOCK|CHROM_H_DEBLOCK|CHROM_V_DEBLOCK,
+     LUM_H_DEBLOCK|LUM_V_DEBLOCK|CHROM_H_DEBLOCK|CHROM_V_DEBLOCK|LUM_DERING,
+     LUM_H_DEBLOCK|LUM_V_DEBLOCK|CHROM_H_DEBLOCK|CHROM_V_DEBLOCK|LUM_DERING|CHROM_DERING
     };
    result=ppPresets[ppqual];
   }
@@ -78,6 +78,8 @@ int Tpostproc::getPPmode(const TpresetSettings *cfg,int currentq)
   result=cfg->postproc.custom;  
  if (cfg->postproc.levelFixLum) result|=LUM_LEVEL_FIX;
  if (cfg->postproc.levelFixChrom) result|=CHROM_LEVEL_FIX;
+ if (cfg->postproc.fullYrange) result|=FULL_Y_RANGE;
+ if (cfg->postproc.tempNoiseFilter) result|=TEMP_NOISE_FILTER;
  if (cfg->isDeinterlace) result|=CUBIC_IPOL_DEINT_FILTER;
  return result;
 }

@@ -431,7 +431,7 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
 
 void TimgFilterSharpen::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
- if (cfg->sharpen.xsharpStrength==TpresetSettings::TsharpenSettings::xsharpStrengthDef && cfg->sharpen.unsharpStrength!=TpresetSettings::TsharpenSettings::unsharpStrengthDef) return;
+ if ((cfg->sharpen.method==0 && !cfg->sharpen.xsharpStrength) || (cfg->sharpen.method==1 && !cfg->sharpen.unsharpStrength)) return;
  Trect *r=init(&pict.rect,cfg->fullSharpen);
  switch (cfg->sharpen.method)
   {

@@ -23,17 +23,22 @@
 
 const int TpresetSettings::TsubtitlesSettings::delayDef=0,TpresetSettings::TsubtitlesSettings::speedDef=1000;
 
+TimgFilterSubtitles::TimgFilterSubtitles(void)
+{
+ oldSettings.weight=-1;
+}
+
 void TimgFilterSubtitles::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
- if (deci->getParam2(IDFF_fontChanged))
-  {
-   font.init(cfg);
-   deci->putParam(IDFF_fontChanged,0);
-  }
  subtitle *sub;
  deci->getSubtitle(&sub); 
  if (sub)
-  { 
+  {
+   if (memcmp(&oldSettings,&cfg->font,sizeof(TfontSettings))!=0)
+    {
+     oldSettings=cfg->font;
+     font.init(cfg->font);
+    }
    Trect *r=init(&pict.rect,cfg->fullSubtitles);
    unsigned char *dstY=getCurNextY(pict)+r->diffY ;
    unsigned char *dstU=getCurNextU(pict)+r->diffUV;

@@ -17,7 +17,6 @@
  */
 
 #include "stdafx.h"
-#include "TcpuUsage.h"
 #include "TimgFilterPostproc.h"
 #include "TpresetSettings.h"
 #include "Tpostproc.h"
@@ -27,25 +26,17 @@
 
 const int TpresetSettings::TpostprocSettings::deblockStrengthDef=256;
 
-TimgFilterPostproc::TimgFilterPostproc(void)
-{
- cpu=new TcpuUsage;
- cpus=cpu->GetCPUCount();
-}
-TimgFilterPostproc::~TimgFilterPostproc()
-{
- delete cpu;
-}
+const int TpresetSettings::TdeinterlaceSettings::methodDef=2;
+
 void TimgFilterPostproc::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
  TmovieSource *movie;deci->getMovieSource(&movie);
  Tpostproc *postproc;deci->getPostproc(&postproc);
  if (!postproc->ok) return;
  int currentq=deci->getParam2(IDFF_currentq);
- if (cpus>0 && cfg->postproc.autoq && cfg->postproc.qual)
+ if (cfg->postproc.autoq && cfg->postproc.qual)
   {
-   cpu->CollectCPUData();
-   if (cpu->GetCPUUsage(0)>90)
+   if (deci->getCpuUsage2()>90)
     {
      if (currentq>0) currentq--;
     }
@@ -62,7 +53,7 @@ void TimgFilterPostproc::process(TffPict2 &pict,const TpresetSettings *cfg)
    if (dxY<16 || dyY<16) return;
    const unsigned char *tempPict1[3]={getCurY (pict)+r->diffY,getCurU (pict)+r->diffUV,getCurV (pict)+r->diffUV};
    unsigned char       *tempPict2[3]={getNextY(pict)+r->diffY,getNextU(pict)+r->diffUV,getNextV(pict)+r->diffUV};
-   if (cfg->postproc.deblockStrength!=TpresetSettings::TpostprocSettings::deblockStrengthDef/* || afterResize*/)
+   if (cfg->postproc.deblockStrength!=cfg->postproc.deblockStrengthDef/* || afterResize*/)
     for (unsigned int i=0;i<movie->quantDx*movie->quantDy;i++)
      {
       int q=(/*((afterResize)?16:*/movie->quant[i]/*)*/*cfg->postproc.deblockStrength)/256;

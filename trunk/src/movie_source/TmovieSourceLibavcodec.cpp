@@ -51,6 +51,7 @@ bool TmovieSourceLibavcodec::init(int codecId,unsigned int AVIdx,unsigned int AV
    avctx->width =dx=AVIdx;
    avctx->height=dy=AVIdy;
    avctx->quant_store=quant;avctx->qstride=quantDx;
+   //avctx->error_resilience=1;
    DEBUGS("avcodec_find_decoder_by_name before");
    AVCodec *avcodec=avcodec_find_decoder(codecId);
    if (!avcodec) return false;

@@ -82,8 +82,9 @@ protected:
   }
  unsigned char *getCurNextY(TffPict2 &pict) 
   {
-   if (pict.ro)
+   if (pict.roY)
     {
+     pict.roY=false;
      if (!y) allocY(&pict.rect);
      copyY(y,pict.y,pict.rect.full,pict.rect.stride);
      return pict.y=y;
@@ -92,8 +93,9 @@ protected:
   }
  unsigned char *getCurNextU(TffPict2 &pict) 
   {
-   if (pict.ro)
+   if (pict.roU)
     {
+     pict.roU=false;
      if (!u) allocU(&pict.rect);
      copyUV(u,pict.u,pict.rect.full,pict.rect.stride/2);
      return pict.u=u;
@@ -102,8 +104,9 @@ protected:
   }
  unsigned char *getCurNextV(TffPict2 &pict)
   {
-   if (pict.ro)
+   if (pict.roV)
     {
+     pict.roV=false;
      if (!v) allocV(&pict.rect);
      copyUV(v,pict.v,pict.rect.full,pict.rect.stride/2);
      return pict.v=v;

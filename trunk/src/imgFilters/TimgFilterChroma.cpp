@@ -36,7 +36,7 @@ TimgFilterChroma::TimgFilterChroma(void)
 
 void TimgFilterChroma::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
- if (cfg->pictProp.hue==TpresetSettings::TpictPropSettings::hueDef && cfg->pictProp.saturation==TpresetSettings::TpictPropSettings::saturationDef) return;
+ if (cfg->pictProp.hue==cfg->pictProp.hueDef && cfg->pictProp.saturation==cfg->pictProp.saturationDef) return;
  Trect *r=init(&pict.rect,cfg->fullPictProp);
  const unsigned char *srcU=getCurU(pict)+r->diffUV;unsigned char *dstU=getCurNextU(pict)+r->diffUV;
  const unsigned char *srcV=getCurV(pict)+r->diffUV;unsigned char *dstV=getCurNextV(pict)+r->diffUV;

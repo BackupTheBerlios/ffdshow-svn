@@ -23,6 +23,7 @@
 
 TimgFilterCrop::TimgFilterCrop(void)
 {
+ oldSettings.magnificationX=-1;
  cropDx=-1;
 }
 
@@ -30,8 +31,10 @@ void TimgFilterCrop::calcCrop(const Trect *r,const TpresetSettings *cfg)
 {
  if (cfg->cropNzoom.isZoom)
   {
-   cropDx=((100-cfg->cropNzoom.magnificationX)*r->dx)/100;
-   cropDy=((100-cfg->cropNzoom.magnificationY)*r->dy)/100;
+   int magX=cfg->cropNzoom.magnificationX;
+   int magY=(cfg->cropNzoom.magnificationLocked)?cfg->cropNzoom.magnificationX:cfg->cropNzoom.magnificationY;
+   cropDx=((100-magX)*r->dx)/100;
+   cropDy=((100-magY)*r->dy)/100;
    cropLeft=(r->dx-cropDx)/2;
    cropTop =(r->dy-cropDy)/2;
   }
@@ -52,10 +55,10 @@ void TimgFilterCrop::done(void)
 void TimgFilterCrop::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
  Trect *r=init(&pict.rect,0);
- if (cropDx==-1 || deci->getParam2(IDFF_cropChanged))
+ if (cropDx==-1 || memcmp(&oldSettings,&cfg->cropNzoom,sizeof(TpresetSettings::TcropSettings))!=0)
   {
+   oldSettings=cfg->cropNzoom;
    calcCrop(r,cfg);
-   deci->putParam(IDFF_cropChanged,0);
   }
  r->x=cropLeft;r->y=cropTop;r->dx=cropDx;r->dy=cropDy;r->calcDiff(pict.rect.stride);
 }

@@ -27,6 +27,7 @@ const TpresetSettings::TresizeAspectSettings::methodNone=11;
 
 TimgFilterResize::TimgFilterResize(void)
 {
+ oldSettings.method=-1;
  swsc=NULL;
 }
 void TimgFilterResize::done(void)
@@ -73,9 +74,9 @@ void TimgFilterResize::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
  Trect *r=init(&pict.rect,cfg->fullResize);
  if (r->dx==cfg->resizeAspect.dx && r->dy==cfg->resizeAspect.dy && cfg->resizeAspect.isAspect!=2) return;
- if (!swsc || deci->getParam2(IDFF_resizeChanged))
+ if (!swsc || memcmp(&oldSettings,&cfg->resizeAspect,sizeof(TpresetSettings::TresizeAspectSettings))!=0)
   {
-   deci->putParam(IDFF_resizeChanged,0);
+   oldSettings=cfg->resizeAspect;
    done();
    Tpostproc *postproc;deci->getPostproc(&postproc);if (!postproc->ok) return;
    newRect.stride=(cfg->resizeAspect.dx/16+2)*16;
@@ -83,8 +84,19 @@ void TimgFilterResize::process(TffPict2 &pict,const TpresetSettings *cfg)
    if (cfg->resizeAspect.method!=TpresetSettings::TresizeAspectSettings::methodNone)
     {
      newRect.clip=calcNewClip(cfg,*r,newRect.full);newRect.clip.calcDiff(newRect.stride);
-     __asm emms;
-     swsc=postproc->getSwsContextFromCmdLine(r->dx,r->dy,IMGFMT_YV12,newRect.clip.dx,newRect.clip.dy,IMGFMT_YV12,cfg->resizeAspect.method,cfg->resizeAspect.GblurLum,cfg->resizeAspect.GblurChrom,cfg->resizeAspect.sharpenLum,cfg->resizeAspect.sharpenChrom);
+     int flags=cfg->resizeAspect.method;
+     switch (flags)
+      {
+       //bicubic
+       case 2:flags|=cfg->resizeAspect.bicubicParam<<SWS_PARAM_SHIFT;break;
+       //x
+       case 3:flags|=cfg->resizeAspect.xParam<<SWS_PARAM_SHIFT;break;
+       //gauss
+       case 7:flags|=cfg->resizeAspect.gaussParam<<SWS_PARAM_SHIFT;break;
+       //lanczos
+       case 9:flags|=cfg->resizeAspect.lanczosParam<<SWS_PARAM_SHIFT;break;
+      }
+     swsc=postproc->getSwsContextFromCmdLine(r->dx,r->dy,IMGFMT_YV12,newRect.clip.dx,newRect.clip.dy,IMGFMT_YV12,flags,cfg->resizeAspect.GblurLum,cfg->resizeAspect.GblurChrom,cfg->resizeAspect.sharpenLum,cfg->resizeAspect.sharpenChrom);
     }
    else 
     {
