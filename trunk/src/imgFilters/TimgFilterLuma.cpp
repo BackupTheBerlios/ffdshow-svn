@@ -80,12 +80,12 @@ void TimgFilterLuma::process(unsigned char *srcY,unsigned char *srcU,unsigned ch
      jl          lumconv
     };
   };  
+ __asm emms;
  if (cfg->gammaCorrection!=oldGamma)
   {
-   __asm emms;
-   float gamma=100.0/(oldGamma=cfg->gammaCorrection);
+   double gamma=100.0/(oldGamma=cfg->gammaCorrection);
    for(int i=0;i<256;i++)
-    gammaTab[i]=255.0*pow((i/255.0),gamma);
+    gammaTab[i]=(unsigned char)(255.0*pow((i/255.0),gamma));
   };
  if (cfg->gammaCorrection!=cfg->gammaCorrectionDef)
   for (int y=0;y<dyY;y++)

@@ -15,6 +15,7 @@ public:
    isResize=cfg->isResize;
    resizeChanged=true;
    swsc=NULL;
+   imgResizeY=imgResizeU=imgResizeV=NULL;
   }
  void allocate(int IffDx,int IffDy)
   {

@@ -205,7 +205,7 @@ void TfiltersPage::interDlg(void)
 
 void TfiltersPage::createConfig(void)
 {
- SetTimer(m_hwnd,POSTPROC_TIMER,100,NULL);
+ if (cfgGet(IDFF_inPlayer)) SetTimer(m_hwnd,POSTPROC_TIMER,100,NULL);
  
  SendDlgItemMessage(m_hwnd,IDC_TBR_LUMGAIN,TBM_SETRANGE,TRUE,MAKELPARAM(0,256));
  SendDlgItemMessage(m_hwnd,IDC_TBR_LUMGAIN,TBM_SETLINESIZE,0,1);

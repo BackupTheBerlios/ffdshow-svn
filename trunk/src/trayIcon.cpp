@@ -100,18 +100,14 @@ HMENU TtrayIcon::createMenu(void)
  insertMenuItem(hm,ord,IDC_CHB_GLOBAL_POSTPROC,"Postprocessing",IDFF_isPostproc);
 // insertSubmenu(hm,ord,"Postprocessing settings",createPostProcMenu());
 // insertSeparator(hm,ord);
-
  insertMenuItem(hm,ord,IDC_CHB_GLOBAL_PICTPROP,"Picture properties",IDFF_isPictProp);
 // insertSeparator(hm,ord);
-
  insertMenuItem(hm,ord,IDC_CHB_GLOBAL_NOISE,"Noise",IDFF_isNoise);
 // insertSeparator(hm,ord);
  insertMenuItem(hm,ord,IDC_CHB_GLOBAL_BLUR,"Blur",IDFF_isBlur);
-
  insertMenuItem(hm,ord,IDC_CHB_GLOBAL_SHARPEN,"Sharpen",IDFF_isSharpen);
-
+ insertMenuItem(hm,ord,IDC_CHB_GLOBAL_CROP,"Crop",IDFF_isCropNzoom);
  insertMenuItem(hm,ord,IDC_CHB_FLIP,"Flip",IDFF_flip);
-
  insertMenuItem(hm,ord,IDC_CHB_SUBTITLES,"Subtitles",IDFF_isSubtitles);
  
  return hm;
@@ -166,6 +162,9 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
            case IDC_CHB_GLOBAL_SHARPEN:
             ti->negate_Param(IDFF_isSharpen);
             break; 
+           case IDC_CHB_GLOBAL_CROP:
+            ti->negate_Param(IDFF_isCropNzoom);
+            break; 
            case IDC_CHB_FLIP:
             ti->negate_Param(IDFF_flip);
             break; 
@@ -193,7 +192,6 @@ int TtrayIcon::cfgSet(int i,int val)
  deci->put_Param(i,val);
  return val;
 };
-
 
 TtrayIcon::TtrayIcon(IffDecoder *Ideci,HINSTANCE Ihi):deci(Ideci),hi(Ihi)
 {
@@ -236,7 +234,7 @@ TtrayIcon::TtrayIcon(IffDecoder *Ideci,HINSTANCE Ihi):deci(Ideci),hi(Ihi)
 }
 TtrayIcon::~TtrayIcon()
 {
- hide();
+ Shell_NotifyIcon(NIM_DELETE,&nid);
  DestroyWindow(h);
  UnregisterClass("ffdshow",hi);
 }

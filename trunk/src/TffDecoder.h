@@ -7,8 +7,6 @@
 #include "Tconfig.h"
 #include "imgFilters\TimgFilters.h"
 
-#define TPARAM
-
 class TtrayIcon;
 class TresizeCtx;
 class Tsubtitles;
@@ -62,6 +60,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP setFontName(const char *name);
   STDMETHODIMP getSubFlnm(char *buf,unsigned int len);
   STDMETHODIMP loadSubtitles(const char *flnm);
+  STDMETHODIMP getRealCrop(int *left,int *top,int *right,int *bottom);
  
  private:
   bool firstFrame;
@@ -70,7 +69,6 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   char AVIname[1024],AVIfourcc[10];
   void loadAVInameAndPreset(void);
   int* getIDFFvar(int paramID);
-  #ifdef TPARAM
   struct Tparam
   {
    Tparam(void):val(NULL) {};
@@ -87,7 +85,6 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   #define MAX_PARAMID 1100
   Tparam params[MAX_PARAMID];
   void fillParams(void);
-  #endif
   void subsChanged(void),resizeChanged(void),trayIconChanged(void),idctChanged(void);
   Tlibavcodec libavcodec;
   HRESULT ChangeColorspace(GUID subtype, GUID formattype, void * format);
@@ -106,6 +103,8 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
    
   AVCodecContext *avctx;
   TresizeCtx*resizeCtx;
+  int cropLeft,cropTop,cropDx,cropDy;
+  void calcCrop(void);
   TimgFilters *imgFilters;
   Tsubtitles *sub;
   char *codecName;

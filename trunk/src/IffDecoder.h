@@ -18,6 +18,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_isDlg                 4  //is configuration dialog visible
 #define IDFF_autoPresetFileFirst   5  //try to load preset from file 
 #define IDFF_presetShouldBeSaved   6
+#define IDFF_inPlayer              7
 
 #define IDFF_isPostproc          106  
 #define IDFF_ppqual              101  //postprocessing quality set by user (active when not autoq)
@@ -63,13 +64,14 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_resizeGblurChrom    709 // *100
 #define IDFF_resizeSharpenLum    710 // *100
 #define IDFF_resizeSharpenChrom  711 // *100
-#define IDFF_isCrop              712
-#define IDFF_zoom                713 
-#define IDFF_cropLeft            714
-#define IDFF_cropRight           715
-#define IDFF_cropTop             716
-#define IDFF_cropBottom          717
-#define IDFF_autocrop            718
+#define IDFF_isCropNzoom         712
+#define IDFF_isZoom              713
+#define IDFF_magnification       714 
+#define IDFF_cropLeft            715
+#define IDFF_cropRight           716
+#define IDFF_cropTop             717
+#define IDFF_cropBottom          718
+#define IDFF_autocrop            719
 
 #define IDFF_isSubtitles         801
 #define IDFF_fontCharset         802
@@ -128,6 +130,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (setFontName)(const char *name) PURE;
  STDMETHOD (getSubFlnm)(char *buf,unsigned int len) PURE;
  STDMETHOD (loadSubtitles)(const char *flnm) PURE;
+ STDMETHOD (getRealCrop)(int *left,int *top,int *right,int *bottom) PURE;
 };
 
 #ifdef __cplusplus

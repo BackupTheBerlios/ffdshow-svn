@@ -522,6 +522,12 @@
 				RelativePath="src\imgFilters\TimgFilter.h">
 			</File>
 			<File
+				RelativePath="src\imgFilters\TimgFilterBlur.cpp">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TimgFilterBlur.h">
+			</File>
+			<File
 				RelativePath="src\imgFilters\TimgFilterChroma.cpp">
 			</File>
 			<File

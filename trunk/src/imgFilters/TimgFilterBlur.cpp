@@ -145,4 +145,5 @@ void TimgFilterBlur::process(unsigned char *srcY,unsigned char *srcU,unsigned ch
   };
  memcpy(dstY,tempPict,dx);
  memcpy(dstY+strideY*(dy-1),tempPict+strideY*(dy-1),dx);
+ __asm emms;
 }

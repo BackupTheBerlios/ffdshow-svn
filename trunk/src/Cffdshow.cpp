@@ -170,6 +170,7 @@ void CALLBACK configure(HWND hwnd,HINSTANCE hinst,LPTSTR lpCmdLine,int nCmdShow)
  IffDecoder *iff;
  if (CoInitialize(NULL)!=S_OK) return;
  if (CoCreateInstance(CLSID_FFDSHOW,NULL,CLSCTX_INPROC_SERVER,IID_IffDecoder,(void**)&iff)!=S_OK) return;
+ iff->put_Param(IDFF_inPlayer,0);
  ISpecifyPropertyPages *ispp;
  if (iff->QueryInterface(IID_ISpecifyPropertyPages,(void**)&ispp)==S_OK)
   {

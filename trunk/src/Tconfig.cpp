@@ -49,7 +49,7 @@ vector<string> *Tconfig::presets=NULL;
 Tconfig::Tconfig(const char *IpresetName)
 {
  init();
- isDlg=false;
+ isDlg=0;inPlayer=1;
  sub=NULL;
  strcpy(presetName,IpresetName);
  loadLM();

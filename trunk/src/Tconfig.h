@@ -26,6 +26,7 @@ public:
  int trayIcon;
  int isDlg;
  int lastPage;
+ int inPlayer;
  
  char presetName[256];
  static bool removePreset(const char *name);
@@ -82,8 +83,9 @@ public:
  int resizeMethod;
  int resizeGblurLum,resizeGblurChrom;
  int resizeSharpenLum,resizeSharpenChrom;
- int isCrop;
- int zoom;
+ int isCropNzoom;
+ int isZoom;
+ int magnification;
  int cropTop,cropBottom,cropLeft,cropRight;
  int autocrop;
  void getCropDescription(char *buf);
