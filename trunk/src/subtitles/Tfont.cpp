@@ -29,12 +29,12 @@
 using namespace std;
 
 //========================== Tchar ===========================
-int Tchar::getWidth(HDC hdc,const char *s)
+unsigned int Tchar::getWidth(HDC hdc,const char *s)
 {
  SIZE sz;
  GetTextExtentPoint32(hdc,s,strlen(s),&sz);
- int dxY=(sz.cx/4+2)*4;
- int _dx=dxY/4+4;
+ unsigned int dxY=(sz.cx/4+2)*4;
+ unsigned int _dx=dxY/4+4;
  _dx=(_dx/8+1)*8;
  return dxY=_dx;
 }
@@ -53,7 +53,7 @@ Tchar::Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int co
  BITMAPINFO bmi;
  bmi.bmiHeader.biSize=sizeof(bmi.bmiHeader);
  bmi.bmiHeader.biWidth=dxY;
- bmi.bmiHeader.biHeight=-dyY;
+ bmi.bmiHeader.biHeight=-1*dyY;
  bmi.bmiHeader.biPlanes=1;
  bmi.bmiHeader.biBitCount=24;
  bmi.bmiHeader.biCompression=BI_RGB;
@@ -69,14 +69,14 @@ Tchar::Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int co
  _dx=(_dx/8+1)*8;
  bmpY=(unsigned char*)calloc(_dx,_dy);
  mskY=(unsigned char*)calloc(_dx,_dy);
- int y;
+ unsigned int y;
  for (y=2;y<dyY-2;y+=4)
-  for (int x=2;x<dxY-2;x+=4)
+  for (unsigned int x=2;x<dxY-2;x+=4)
    {
     unsigned char *dst=bmpY+(y/4+2)*_dx+(x/4+2);
     int sum=0;
-    for (int yy=y-2;yy<=y+2;yy++)
-     for (int xx=x-2;xx<=x+2;xx++)
+    for (unsigned int yy=y-2;yy<=y+2;yy++)
+     for (unsigned int xx=x-2;xx<=x+2;xx++)
       sum+=bmp16[(yy*dxY+xx)*3];
     sum/=25;
     *dst=sum;
@@ -88,8 +88,8 @@ Tchar::Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int co
  else
   {
    memcpy(mskY,bmpY,dxY*dyY);
-   for (int y=0;y<dyY;y++)
-    for (int x=0;x<dxY;x++)
+   for (unsigned int y=0;y<dyY;y++)
+    for (unsigned int x=0;x<dxY;x++)
      {
       int s=0,cnt=0;;
       for (int yy=-2;yy<=+2;yy++)
@@ -131,7 +131,7 @@ Tchar::Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int co
     s+=mskYptr[dxY+1];
     *mskUVptr=s/8;
    }
- for (int i=0;i<dxY*dyY;i++) bmpY[i]=(bmpY[i]*colorY)>>8;
+ for (unsigned int i=0;i<dxY*dyY;i++) bmpY[i]=(bmpY[i]*colorY)>>8;
 }
 Tchar::~Tchar()
 {
@@ -182,7 +182,7 @@ void Tfont::done(void)
  DeleteDC(hdc); hdc=NULL;
  oldsub=NULL;
 }
-void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,int dx,int stride,int dy,subtitle *sub,int posX,int posY)
+void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,unsigned int dx,unsigned int stride,unsigned int dy,subtitle *sub,int posX,int posY)
 {
  if (!sub) return;
  if (oldsub!=sub)
@@ -193,7 +193,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
    if (!sub) return;
    for (i=0;i<sub->lines;i++)
     {
-     int lineDx=Tchar::getWidth(hdc,sub->text[i]);
+     unsigned int lineDx=Tchar::getWidth(hdc,sub->text[i]);
      if (lineDx<dx)
       c.push_back(new Tchar(hdc,sub->text[i],(matrix[0][0]==-100)?NULL:matrix,colorY,colorU,colorV));
      else
@@ -204,7 +204,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
   };
  if (c.empty()) return;
  unsigned int i;
- int h=0;
+ unsigned int h=0;
  for (i=0;i<c.size();i++) h+=c[i]->dyY;
  int y=(posY*dy)/100-h/2;if (y<0) y=0;if (y+h>=dy) y=dy-h;
  for (i=0;i<c.size();y+=c[i]->dyY-2,i++)
@@ -212,7 +212,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
    int x=(posX*dx)/100-c[i]->charDx/2;if (x<0) x=0;if (x+c[i]->charDx>=dx) x=dx-c[i]->dxY;
    unsigned char *msk=c[i]->mskY,*bmp=c[i]->bmpY;
    unsigned char *dstLn=dstY+stride*y;
-   int yy;
+   unsigned int yy;
    for (yy=0;yy<c[i]->dyY;yy++,dstLn+=stride)
     {
      unsigned char *dstPix=dstLn+x;

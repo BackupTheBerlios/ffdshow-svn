@@ -7,9 +7,9 @@ class TmovieSource;
 class TimgFilterShowMV :public TimgFilter
 {
 private:
- void line(unsigned char *dst,int x0,int y0,int x1,int y1);
+ void line(unsigned char *dst,unsigned int x0,unsigned int y0,unsigned int x1,unsigned int y1);
 public:
- virtual void process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg);
+ virtual void process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg);
 };
 
 #endif

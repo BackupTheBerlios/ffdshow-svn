@@ -30,6 +30,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "mem_align.h"
 
 void *xvid_malloc(size_t size, uint8_t alignment)

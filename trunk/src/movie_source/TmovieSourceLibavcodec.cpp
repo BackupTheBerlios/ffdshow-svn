@@ -33,7 +33,7 @@ TmovieSourceLibavcodec::TmovieSourceLibavcodec(void)
 {
  dll=NULL;avctx=NULL;
 }
-bool TmovieSourceLibavcodec::init(int codecId,int AVIdx,int AVIdy)
+bool TmovieSourceLibavcodec::init(int codecId,unsigned int AVIdx,unsigned int AVIdy)
 {
  if (!codecId || codecId>=CODEC_ID_YUY2) return false;
  dll=new Tdll(AVCODEC_PATH);
@@ -99,7 +99,7 @@ int TmovieSourceLibavcodec::getFrame(const TglobalSettings *global,const Tpreset
     default:set_ff_idct((void*)1);break;
    };
  avctx->showMV=global->showMV;
- for (int i=0;i<quantDx*quantDy;i++)
+ for (unsigned int i=0;i<quantDx*quantDy;i++)
   quant[i]=10;
  return avcodec_decode_video(avctx,avpict,&got_picture,src,srcLen);
 }

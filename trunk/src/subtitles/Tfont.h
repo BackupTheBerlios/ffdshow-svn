@@ -8,11 +8,11 @@ class Tchar
 {
 public:
  Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int colorV);
- static int getWidth(HDC hdc,const char *s);
+ static unsigned int getWidth(HDC hdc,const char *s);
  ~Tchar();
- int dxY ,dyY ;unsigned char *bmpY ,*mskY ;
- int dxUV,dyUV;unsigned char *bmpU, *bmpV,*mskUV;
- int charDx;
+ unsigned int dxY ,dyY ;unsigned char *bmpY ,*mskY ;
+ unsigned int dxUV,dyUV;unsigned char *bmpU, *bmpV,*mskUV;
+ unsigned int charDx;
 };
 
 struct subtitle;
@@ -30,7 +30,7 @@ public:
  Tfont(void);
  ~Tfont();
  void init(const TpresetSettings *cfg);
- void print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,int dx,int stride,int dy,subtitle *sub,int posX,int posY);
+ void print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,unsigned int dx,unsigned int stride,unsigned int dy,subtitle *sub,int posX,int posY);
  void done(void);
 };
 

@@ -8,7 +8,7 @@ void idct_ref(short * const block)
   double res[8][8];  
   short (*blk)[8] =  (short(*)[8])block;
   static int inited=0;
-  __asm {emms};
+  __asm emms;
   if (!inited)
    {
     int a,b;
@@ -21,7 +21,6 @@ void idct_ref(short * const block)
        coslu[a][b] = tmp * 0.5;
       }
    }   
-  
 
   for (y=0; y<8; y++) {
     for (x=0; x<8; x++) {

@@ -45,6 +45,7 @@
 #include <time.h>
 
 #include "Tconfig.h"
+#include "TpresetSettings.h"
 #include "ffdebug.h"
 #include "ffmpeg\libavcodec\avcodec.h"
 #include "xvid\xvid.h"
@@ -55,8 +56,10 @@
 
 #include "TffdshowPage.h"
 #include "TffDecoder.h"
-#include "TresizeCtx.h"
 #include "TtrayIcon.h"
+#include "TffRect.h"
+#include "TffPict.h"
+#include "TimgFilters.h"
 #include "subtitles\Tsubtitles.h"
 
 #include "ffdshow_mediaguids.h"
@@ -242,10 +245,10 @@ STDMETHODIMP TffDecoder::getAVIfourcc(char *buf,unsigned int len)
  strcpy(buf,AVIfourcc);
  return S_OK;
 }
-STDMETHODIMP TffDecoder::getAVIfps(unsigned int *fps)
+STDMETHODIMP TffDecoder::getAVIfps(unsigned int *fps1000)
 {
- if (!fps || AVIfps==0) return S_FALSE;
- *fps=1000*AVIfps;
+ if (!fps1000 || AVIfps==0) return S_FALSE;
+ *fps1000=1000*AVIfps;
  return S_OK;
 }
 STDMETHODIMP TffDecoder::saveActivePreset(const char *name)
@@ -300,6 +303,13 @@ STDMETHODIMP TffDecoder::getAVIdimensions(unsigned int *x,unsigned int *y)
  *x=*y=0;
  if (!x || !y || AVIdx==0 || AVIdy==0) return S_FALSE;
  *x=AVIdx;*y=AVIdy;
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::getOutputDimensions(unsigned int *x,unsigned int *y)
+{
+ *x=*y=0;
+ if (!x || !y || outDx==0 || outDy==0) return S_FALSE;
+ *x=outDx;*y=outDx;
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getPPmode(unsigned int *ppmode)
@@ -418,9 +428,9 @@ STDMETHODIMP TffDecoder::setOnInfoMsg(HWND wnd,unsigned int msg)
 STDMETHODIMP TffDecoder::showCfgDlg(HWND owner)
 {
  if (cfgDlgHnwd) return S_FALSE;
- CAUUID pages;
  ISpecifyPropertyPages *ispp;
  QueryInterface(IID_ISpecifyPropertyPages,(void**)&ispp);
+ CAUUID pages;
  ispp->GetPages(&pages);
  IUnknown *ifflist[]={ispp};
  OleCreatePropertyFrame(owner,10,10,L"ffdshow",
@@ -444,6 +454,12 @@ STDMETHODIMP TffDecoder::getPostproc(Tpostproc* *postprocPtr)
  *postprocPtr=&postproc;
  return S_OK;
 }
+STDMETHODIMP TffDecoder::getSubtitle(subtitle* *subPtr)
+{
+ if (!subPtr) return S_FALSE;
+ *subPtr=sub;
+ return S_OK;
+}
 
 // constructor
 TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME("CffDecoder"),punk,/*CLSID_XVID*/CLSID_FFDSHOW)
@@ -454,15 +470,13 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  InitCommonControls();
 
  AVIname[0]=AVIfourcc[0]='\0';
- AVIdx=AVIdy=cropLeft=cropTop=cropDx=cropDy=AVIfps=0;
+ AVIdx=AVIdy=outDx=outDy=cropLeft=cropTop=cropDx=cropDy=0;AVIfps=0;
  cfgDlgHnwd=NULL;inPlayer=1;
- movie=NULL;
- resizeCtx=NULL;tray=NULL;subs=NULL;
+ movie=NULL;tray=NULL;subs=NULL;sub=NULL;pict=NULL;imgFilters=NULL;
  onChangeWnd=NULL;onChangeMsg=0;
  onInfoWnd=NULL;onInfoMsg=0;
  codecId=CODEC_ID_NONE;
  lastTime=clock();
- firstFrame=firstTransform=true;
 
  config.init();
  globalSettings.load();
@@ -471,19 +485,15 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  setActivePreset(globalSettings.defaultPreset);
 
  tray=new TtrayIcon(this,g_hInst);
-
- //TODO: prevent creation of imgFilters in cfg dialog only mode
- imgFilters=new TimgFilters(this);
 }
 
 // destructor
 TffDecoder::~TffDecoder()
 {
- __asm {emms};
+ __asm emms;
  DEBUGS("Destructor");
  if (movie) delete movie;movie=NULL;
  if (imgFilters) delete imgFilters;imgFilters=NULL;
- if (resizeCtx) delete resizeCtx;resizeCtx=NULL;
  postproc.done();
  if (subs) delete subs;subs=NULL;
  delete tray;tray=NULL;
@@ -493,13 +503,13 @@ TffDecoder::~TffDecoder()
 HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
 {
  DEBUGS("CheckInputType");
- BITMAPINFOHEADER * hdr;
 
  if (*mtIn->Type() != MEDIATYPE_Video)
   {
    return VFW_E_TYPE_NOT_ACCEPTED;
   }
  const GUID formatType=*mtIn->FormatType();
+ BITMAPINFOHEADER * hdr;
  __asm emms;
  if (formatType == FORMAT_VideoInfo)
   {
@@ -530,7 +540,11 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
  #endif
  else
   return VFW_E_TYPE_NOT_ACCEPTED;
- if (hdr->biHeight<0) DEBUGS("colorspace: inverted input format not supported");
+ if (hdr->biHeight<0)
+  {
+   DEBUGS("colorspace: inverted input format not supported");
+   return VFW_E_TYPE_NOT_ACCEPTED;
+  }; 
 
  //char pomS[5];memcpy(pomS,&hdr->biCompression,4);
  if (hdr->biCompression==0)
@@ -549,17 +563,8 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    AVIdy=hdr->biHeight;
    int cnt=loadAVInameAndPreset();
    if (cnt>1) return VFW_E_TYPE_NOT_ACCEPTED;
-   if (!resizeCtx)
-    {
-     postproc.init();
-     if (!postproc.ok) presetSettings->isResize=false;
-     resizeCtx=new TresizeCtx(presetSettings);
-     if (presetSettings->isResize)
-      resizeCtx->allocate(presetSettings->resizeDx,presetSettings->resizeDy);
-     else
-      resizeCtx->allocate(AVIdx,AVIdy);
-    };
-   if (!subs) subs=new Tsubtitles;
+   isResize=(presetSettings->isResize!=0)&&postproc.ok;
+   outDx=(isResize)?presetSettings->resizeDx:AVIdx;outDy=(isResize)?presetSettings->resizeDy:AVIdy;
    #ifdef FF__MPEG
    if (formatType==FORMAT_MPEGVideo)
     {
@@ -577,18 +582,18 @@ HRESULT TffDecoder::GetMediaType(int iPosition, CMediaType *mtOut)
 {
  DEBUGS("GetMediaType");
 
- if (m_pInput->IsConnected() == FALSE) return E_UNEXPECTED;
+ if (m_pInput->IsConnected()==FALSE) return E_UNEXPECTED;
 
- VIDEOINFOHEADER *vih = (VIDEOINFOHEADER *)mtOut->ReallocFormatBuffer(sizeof(VIDEOINFOHEADER));
- if (vih == NULL) return E_OUTOFMEMORY;
+ VIDEOINFOHEADER *vih=(VIDEOINFOHEADER*)mtOut->ReallocFormatBuffer(sizeof(VIDEOINFOHEADER));
+ if (vih==NULL) return E_OUTOFMEMORY;
 
- ZeroMemory(vih, sizeof (VIDEOINFOHEADER));
- vih->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
- vih->bmiHeader.biWidth  = (presetSettings->isResize)?presetSettings->resizeDx:AVIdx;
- vih->bmiHeader.biHeight = (presetSettings->isResize)?presetSettings->resizeDy:AVIdy;
- vih->bmiHeader.biPlanes = 1;
+ ZeroMemory(vih,sizeof(VIDEOINFOHEADER));
+ vih->bmiHeader.biSize  =sizeof(BITMAPINFOHEADER);
+ vih->bmiHeader.biWidth =outDx;
+ vih->bmiHeader.biHeight=outDy;
+ vih->bmiHeader.biPlanes=1;
 
- if (iPosition < 0) return E_INVALIDARG;
+ if (iPosition<0) return E_INVALIDARG;
 
  switch(iPosition)
   {
@@ -737,21 +742,18 @@ HRESULT TffDecoder::CheckTransform(const CMediaType *mtIn, const CMediaType *mtO
 HRESULT TffDecoder::DecideBufferSize(IMemAllocator *pAlloc, ALLOCATOR_PROPERTIES *ppropInputRequest)
 {
  DEBUGS("DecideBufferSize");
- HRESULT result;
- ALLOCATOR_PROPERTIES ppropActual;
+ if (m_pInput->IsConnected()==FALSE) return E_UNEXPECTED;
 
- if (m_pInput->IsConnected() == FALSE) return E_UNEXPECTED;
-
- ppropInputRequest->cBuffers = 1;
- ppropInputRequest->cbBuffer = (resizeCtx->isResize?resizeCtx->FFdx:AVIdx) * (resizeCtx->isResize?resizeCtx->FFdy:AVIdy) * 4;
+ ppropInputRequest->cBuffers=1;
+ ppropInputRequest->cbBuffer=outDx*outDy*4;
  // cbAlign causes problems with the resize filter */
  // ppropInputRequest->cbAlign = 16;
- ppropInputRequest->cbPrefix = 0;
+ ppropInputRequest->cbPrefix=0;
 
- result = pAlloc->SetProperties(ppropInputRequest, &ppropActual);
- if (result != S_OK)  return result;
- if (ppropActual.cbBuffer < ppropInputRequest->cbBuffer) return E_FAIL;
-
+ ALLOCATOR_PROPERTIES ppropActual;
+ HRESULT result=pAlloc->SetProperties(ppropInputRequest,&ppropActual);
+ if (result!=S_OK) return result;
+ if (ppropActual.cbBuffer<ppropInputRequest->cbBuffer) return E_FAIL;
  return S_OK;
 }
 
@@ -833,10 +835,12 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    lastTime=t;
   };
  //DEBUGS("Transform");
- if (firstTransform)
+ if (!subs)
   {
-   firstTransform=false;
    if (globalSettings.trayIcon) tray->show();
+   if (!subs) subs=new Tsubtitles;
+   if (AVIname[0]=='\0') loadAVInameAndPreset();
+   subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings->subFlnm,subs->flnm);
   };
 
  if (t1==0 && movie)
@@ -851,7 +855,6 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    DEBUGS("creating movie source");
    movie=TmovieSource::initSource(codecId,AVIdx,AVIdy);
    if (!movie) return S_FALSE;
-   firstFrame=true;
   };
 
  AM_MEDIA_TYPE * mtOut;
@@ -879,14 +882,9 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
  if (m_frame.length<10) {m_frame.bitstream=NULL;m_frame.length=0;};
 
  TpresetSettings presetSettings=*this->presetSettings;
+ presetSettings.isResize=isResize;presetSettings.resizeDx=outDx;presetSettings.resizeDy=outDy;
  AVPicture avpict;memset(&avpict,0,sizeof(avpict));
  int got_picture=0;
- if (firstFrame)
-  {
-   firstFrame=false;
-   if (AVIname[0]=='\0') loadAVInameAndPreset();
-   subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings.subFlnm,subs->flnm);
-  }
  int ret=movie->getFrame(&globalSettings,&presetSettings,(unsigned char*)m_frame.bitstream,m_frame.length,&avpict,got_picture);
  //char pomS[256];sprintf(pomS,"framelen:%i ret:%i gotpicture:%i\n",m_frame.length,ret,got_picture);OutputDebugString(pomS);
  if (pIn->IsPreroll()==S_OK)
@@ -913,12 +911,15 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
  OutputDebugString(pomS);
  #endif
  
+ if (!imgFilters) imgFilters=new TimgFilters(this);
  if (presetSettings.isSubtitles)
   {
    int sframe=1000*(int(t1)-presetSettings.subDelay)/presetSettings.subSpeed;
-   imgFilters->setSubtitle((sframe<1)?NULL:subs->getSubtitle(sframe));
+   sub=(sframe<1)?NULL:subs->getSubtitle(sframe);
   }
- else imgFilters->setSubtitle(NULL);  
+ else sub=NULL;  
+ if (!pict) pict=new TffPict(max(avpict.linesize[0]*AVIdy,outDx*outDy));
+ /*
  if (resizeChanged)
   {
    resizeChanged=false;
@@ -972,7 +973,9 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    else
     imgFilters->init(AVIdx,avpict.linesize[0],AVIdy,AVIdy,0,0);
   };
+ */ 
  IMAGE destPict;
+ /*
  if ((resizeCtx->isResize || presetSettings.resizeAspect==2 || presetSettings.isCropNzoom) && postproc.ok)
   {
    int cropDiffY=avpict.linesize[0]*cropTop+cropLeft,cropDiffUV=avpict.linesize[1]*(cropTop/2)+(cropLeft/2);
@@ -1008,15 +1011,19 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
                 m_frame.colorspace^(presetSettings.flip?XVID_CSP_VFLIP:0));
   }
  else
+ */
   {
-   if (m_frame.stride<AVIdx)
+   if (m_frame.stride<outDx)
     {
-     char pomS[256];sprintf(pomS,"there would be an error: stride:%i, AVIdx:%i\n",m_frame.stride,AVIdx);DEBUGS(pomS);
+     char pomS[256];sprintf(pomS,"here would be an error: stride:%i, AVIdx:%i\n",m_frame.stride,AVIdx);DEBUGS(pomS);
      return S_FALSE;
     };
-   imgFilters->process(&globalSettings,&presetSettings,avpict.data[0],avpict.data[1],avpict.data[2],&destPict.y,&destPict.u,&destPict.v);
+   TffRect rect(avpict.linesize[0],0,0,AVIdx,AVIdy);
+   pict->reset(avpict.data[0],avpict.data[1],avpict.data[2]);
+   imgFilters->process(&globalSettings,&presetSettings,pict,rect);
+   destPict.y=(uint8_t*)pict->getCurY();destPict.u=(uint8_t*)pict->getCurU();destPict.v=(uint8_t*)pict->getCurV();
    image_output(&destPict,
-                AVIdx,AVIdy,avpict.linesize[0],
+                rect.full.dx,rect.full.dy,rect.stride,
                 (unsigned char*)m_frame.image,
                 m_frame.stride,
                 m_frame.colorspace^(presetSettings.flip?XVID_CSP_VFLIP:0));

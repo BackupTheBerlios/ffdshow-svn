@@ -26,7 +26,7 @@ const int TpresetSettings::hueDef=0,TpresetSettings::saturationDef=64;
 
 TimgFilterChroma::TimgFilterChroma(void)
 {
- __asm {emms};
+ __asm emms;
  for (int i=-180,ii=0;i<=180;ii++,i++)
   {
    double Hue=(i * 3.1415926) / 180.0;
@@ -35,7 +35,7 @@ TimgFilterChroma::TimgFilterChroma(void)
   }
 }
 
-void TimgFilterChroma::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterChroma::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (cfg->hue==TpresetSettings::hueDef && cfg->saturation==TpresetSettings::saturationDef) return;
  TffRect::Trect *r=init(&rect,0);
@@ -142,5 +142,5 @@ void TimgFilterChroma::process(TtempPictures *pict,TffRect &rect,const TpresetSe
     }
    #endif 
   }; 
- __asm {emms}; 
+ __asm emms; 
 }

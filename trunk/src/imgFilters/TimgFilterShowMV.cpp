@@ -27,25 +27,22 @@
 #include "TmovieSource.h"
 #include "IffDecoder.h"
 
-void TimgFilterShowMV::init(int Idx,int Istride,int Idy)
-{
- TimgFilter::init(Idx,Istride,Idy);
-}
-void TimgFilterShowMV::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterShowMV::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  TmovieSource *movie;
  deci->getMovieSource(&movie);
  TmovieSource::TmotionVectors mv=movie->getMV();
  if (!mv.vectors) return;
- const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
- for (int y=0;y<dyY;y++) memcpy(dstY+y*strideY,srcY+y*strideY,dxY);
- for (int mb_y=0;mb_y<mv.dy;mb_y++)
+ TffRect::Trect *r=init(&rect,0);
+ const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
+ for (unsigned int y=0;y<dyY;y++) memcpy(dstY+y*strideY,srcY+y*strideY,dxY);
+ for (unsigned int mb_y=0;mb_y<mv.dy;mb_y++)
   {
-   int y=mb_y*16+8;
+   unsigned int y=mb_y*16+8;
    if (y>=dyY) break;
-   for (int mb_x=0;mb_x<mv.dx;mb_x++)
+   for (unsigned int mb_x=0;mb_x<mv.dx;mb_x++)
     {
-     int x=mb_x*16+8;
+     unsigned int x=mb_x*16+8;
      if (x>=dxY) break;
      int mx=mv.vectors[2*(mb_y*mv.dx+mb_x)+0]+x;
      int my=mv.vectors[2*(mb_y*mv.dx+mb_x)+1]+y;
@@ -57,7 +54,7 @@ void TimgFilterShowMV::process(TtempPictures *pict,TffRect &rect,const TpresetSe
   }
 }
 
-void TimgFilterShowMV::line(unsigned char *dst,int _x0,int _y0,int _x1,int _y1)
+void TimgFilterShowMV::line(unsigned char *dst,unsigned int _x0,unsigned int _y0,unsigned int _x1,unsigned int _y1)
 {
  if (_x0==_x1 && _y0==_y1)
   {
@@ -73,7 +70,7 @@ void TimgFilterShowMV::line(unsigned char *dst,int _x0,int _y0,int _x1,int _y1)
  if (dy<0)
   {
    dy=-dy;
-   stepy=-strideY;
+   stepy=-1*strideY;
   }
  else
   stepy=strideY;

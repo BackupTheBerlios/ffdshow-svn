@@ -21,24 +21,22 @@
 #include "TpresetSettings.h"
 #include "IffDecoder.h"
 
-TimgFilterSubtitles::TimgFilterSubtitles(void)
-{
- sub=NULL;
-}
-
-void TimgFilterSubtitles::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterSubtitles::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (deci->getParam2(IDFF_fontChanged))
   {
    font.init(cfg);
    deci->putParam(IDFF_fontChanged,0);
   }; 
+ subtitle *sub;
+ deci->getSubtitle(&sub); 
  if (sub)
   { 
-   const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
-   const unsigned char *srcU=pict->getCurU();unsigned char *dstU=pict->getNextU();
-   const unsigned char *srcV=pict->getCurV();unsigned char *dstV=pict->getNextV();
-   int y;
+   TffRect::Trect *r=init(&rect,0);
+   const unsigned char *srcY=pict->getCurY()+r->diffY ;unsigned char *dstY=pict->getNextY()+r->diffY ;
+   const unsigned char *srcU=pict->getCurU()+r->diffUV;unsigned char *dstU=pict->getNextU()+r->diffUV;
+   const unsigned char *srcV=pict->getCurV()+r->diffUV;unsigned char *dstV=pict->getNextV()+r->diffUV;
+   unsigned int y;
    for (y=0;y<dyY;y++)
     memcpy(dstY+y*strideY,srcY+y*strideY,dxY);
    for (y=0;y<dyUV;y++)

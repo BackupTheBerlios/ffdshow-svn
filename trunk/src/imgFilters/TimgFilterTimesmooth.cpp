@@ -61,15 +61,16 @@ TimgFilterTimesmooth::TimgFilterTimesmooth(void)
  framecount=0;
  accumY=accumU=accumV=NULL;
 }
-void TimgFilterTimesmooth::init(int Idx,int Istride,int Idy)
+TffRect::Trect* TimgFilterTimesmooth::init(TffRect *rect,int full)
 {
- TimgFilter::init(Idx,Istride,Idy);
+ TffRect::Trect *r=TimgFilter::init(rect,full);
  if (!accumY)
   {
    accumY=(unsigned char*)xvid_malloc(dxY *dyY *KERNEL,MCACHE_LINE);memset(accumY,  0,dxY *dyY *KERNEL);
    accumU=(unsigned char*)xvid_malloc(dxUV*dyUV*KERNEL,MCACHE_LINE);memset(accumU,128,dxUV*dyUV*KERNEL);
    accumV=(unsigned char*)xvid_malloc(dxUV*dyUV*KERNEL,MCACHE_LINE);memset(accumV,128,dxUV*dyUV*KERNEL);
   }
+ return r;
 }
 void TimgFilterTimesmooth::done(void)
 {
@@ -77,12 +78,13 @@ void TimgFilterTimesmooth::done(void)
  if (accumU) xvid_free(accumU);accumU=NULL;
  if (accumV) xvid_free(accumV);accumV=NULL;
 }
-void TimgFilterTimesmooth::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterTimesmooth::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (!cfg->tempSmooth) return;
- const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
- const unsigned char *srcU=pict->getCurU();unsigned char *dstU=pict->getNextU();
- const unsigned char *srcV=pict->getCurV();unsigned char *dstV=pict->getNextV();
+ TffRect::Trect *r=init(&rect,0);
+ const unsigned char *srcY=pict->getCurY()+r->diffY ;unsigned char *dstY=pict->getNextY()+r->diffY ;
+ const unsigned char *srcU=pict->getCurU()+r->diffUV;unsigned char *dstU=pict->getNextU()+r->diffUV;
+ const unsigned char *srcV=pict->getCurV()+r->diffUV;unsigned char *dstV=pict->getNextV()+r->diffUV;
  if (cfg->tempSmooth!=oldStrength)
   {
    oldStrength=cfg->tempSmooth;
@@ -99,7 +101,7 @@ void TimgFilterTimesmooth::process(TtempPictures *pict,TffRect &rect,const Tpres
  smooth(srcV,dstV,accumV,dxUV,strideUV,dyUV);
  if (++framecount>=KERNEL) framecount=0;
 }
-void TimgFilterTimesmooth::smooth(const unsigned char *src,unsigned char *dst,unsigned char *Iaccum,int dx,int stride,int dy)
+void TimgFilterTimesmooth::smooth(const unsigned char *src,unsigned char *dst,unsigned char *Iaccum,unsigned int dx,unsigned int stride,unsigned int dy)
 {
  int offset1=framecount;
  int offset2=((framecount+KERNEL-(KERNEL/2))%KERNEL);
@@ -123,8 +125,8 @@ void TimgFilterTimesmooth::smooth(const unsigned char *src,unsigned char *dst,un
    */
    accum[0]=accum[1]=accum[2]=accum[3]=accum[4]=accum[5]=accum[6]=src[stride*(dy-1)+(dx-1)];
   }
- int w=dx,x;
- int y=dy;
+ unsigned int w=dx,x;
+ unsigned int y=dy;
  unsigned char *accum=Iaccum;
  
  do

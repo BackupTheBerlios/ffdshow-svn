@@ -9,7 +9,7 @@ private:
  unsigned int gammaTab[256];int oldGamma;
 public:
  TimgFilterLuma(void);
- virtual void process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg);
+ virtual void process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg);
 };
 
 #endif

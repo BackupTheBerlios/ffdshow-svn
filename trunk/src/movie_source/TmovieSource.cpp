@@ -30,7 +30,7 @@
  else                                  \
   delete movie; 
  
-TmovieSource* TmovieSource::initSource(int codecId,int AVIdx,int AVIdy)
+TmovieSource* TmovieSource::initSource(int codecId,unsigned int AVIdx,unsigned int AVIdy)
 {
  TmovieSource *movie;
  bool xvidfirst=false; 

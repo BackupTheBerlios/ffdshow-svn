@@ -398,7 +398,7 @@ uint64_t time= rdtsc();
         avctx->mb_width=s->mb_width;
         if (!avctx->motion_vectors)
          avctx->motion_vectors=(char*)malloc(s->mb_width*s->mb_height*2);
-        s->has_b_frames=1;
+        //s->has_b_frames=1;
         mv=avctx->motion_vectors;
         for(mb_y=0; mb_y<s->mb_height; mb_y++){
           int mb_x;
@@ -406,7 +406,7 @@ uint64_t time= rdtsc();
             int xy= 1 + mb_x*2 + (mb_y*2 + 1)*(s->mb_width*2 + 2);
             mv[0] = (s->motion_val[xy][0]>>1);
             mv[1] = (s->motion_val[xy][1]>>1);
-            s->mbskip_table[mb_x + mb_y*s->mb_width]=0;
+            //s->mbskip_table[mb_x + mb_y*s->mb_width]=0;
           }
         }    
     }

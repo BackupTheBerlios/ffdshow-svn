@@ -125,6 +125,7 @@
 				GenerateMapFile="FALSE"
 				MapLines="FALSE"
 				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
 				EntryPointSymbol="DllEntryPoint@12"
 				ImportLibrary=".\Release/ffdshow.lib"/>
 			<Tool
@@ -584,6 +585,12 @@
 			Name="imgFilters"
 			Filter="">
 			<File
+				RelativePath="src\imgFilters\TffPict.h">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TffRect.h">
+			</File>
+			<File
 				RelativePath="src\imgFilters\TimgFilter.h">
 			</File>
 			<File
@@ -633,6 +640,12 @@
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterPostproc.h">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TimgFilterResize.cpp">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TimgFilterResize.h">
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterSharpen.cpp">
@@ -691,9 +704,6 @@
 			</File>
 			<File
 				RelativePath="src\imgFilters\TresizeCtx.h">
-			</File>
-			<File
-				RelativePath="src\imgFilters\TtempPicture.h">
 			</File>
 			<File
 				RelativePath="src\imgFilters\noise_avih_template.h">
@@ -1031,9 +1041,6 @@
 			</File>
 			<File
 				RelativePath="src\settings\Tpresets.h">
-			</File>
-			<File
-				RelativePath="src\settings\TstatusSettings.h">
 			</File>
 			<File
 				RelativePath="src\ffdshow_params.h">

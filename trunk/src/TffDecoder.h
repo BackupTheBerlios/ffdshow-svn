@@ -1,18 +1,17 @@
-#ifndef _TFFDECODER_H_
+#ifndef _TFFDECOEDR_H_
 #define _TFFDECODER_H_
 
 #include "IffDecoder.h"
 #include "TglobalSettings.h"
 #include "TdialogSettings.h"
-#include "TpresetSettings.h"
 #include "Tpresets.h"
-#include "TimgFilters.h"
 #include "Tpostproc.h"
 
 class TtrayIcon;
-class TresizeCtx;
+struct TffPict;
 class Tsubtitles;
-class TmovieSource;
+class TimgFilters;
+struct TpresetSettings;
 class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpecifyPropertyPages
 {
 public:
@@ -56,7 +55,7 @@ public:
  STDMETHODIMP getAVIname(char *buf,unsigned int len);
  STDMETHODIMP getAVIfourcc(char *buf,unsigned int len);
  STDMETHODIMP getAVIdimensions(unsigned int *x,unsigned int *y);
- STDMETHODIMP getAVIfps(unsigned int *fps);
+ STDMETHODIMP getAVIfps(unsigned int *fps1000);
  STDMETHODIMP saveActivePreset(const char *name);
  STDMETHODIMP saveActivePresetToFile(const char *flnm);
  STDMETHODIMP loadActivePresetFromFile(const char *flnm);
@@ -89,9 +88,10 @@ public:
  STDMETHODIMP showCfgDlg(HWND owner);
  STDMETHODIMP getMovieSource(TmovieSource* *moviePtr);
  STDMETHODIMP getPostproc(Tpostproc* *postprocPtr);
+ STDMETHODIMP getSubtitle(subtitle* *subPtr);
+ STDMETHODIMP getOutputDimensions(unsigned int *x,unsigned int *y);
 
 private:
- bool firstFrame,firstTransform;
  TtrayIcon *tray;
  TpresetSettings *presetSettings;
  TglobalSettings globalSettings;
@@ -108,25 +108,26 @@ private:
  HWND onInfoWnd;unsigned int onInfoMsg;
  void sendOnChange(void);
 
- int AVIdx,AVIdy;double AVIfps;
+ unsigned int AVIdx,AVIdy;double AVIfps;
+ bool isResize;unsigned int outDx,outDy;
+ TffPict *pict;
  struct
   {
    int colorspace;
-   int bpp;
-   int stride;
-   int length;
-   int outLenght;
+   unsigned int bpp;
+   unsigned int stride;
+   unsigned int length;
+   unsigned int outLenght;
    void *bitstream;
    void *image;
   } m_frame;
 
  TmovieSource *movie;
- TresizeCtx *resizeCtx;
  Tpostproc postproc;
- int cropLeft,cropTop,cropDx,cropDy;
+ unsigned int cropLeft,cropTop,cropDx,cropDy;
  void calcCrop(void);
  TimgFilters *imgFilters;
- Tsubtitles *subs;
+ Tsubtitles *subs;subtitle *sub;
  int codecId;
  clock_t lastTime;
 };

@@ -18,74 +18,62 @@
 
 #pragma hdrstop
 #include "TimgFilters.h"
+#include "TimgFilterPostproc.h"
+#include "TimgFilterNoise.h"
+#include "TimgFilterLuma.h"
+#include "TimgFilterChroma.h"
+#include "TimgFilterSharpen.h"
+#include "TimgFilterSubtitles.h"
+#include "TimgFilterBlur.h"
+#include "TimgFilterOffset.h"
+#include "TimgFilterTimesmooth.h"
+#include "TimgFilterShowMV.h"
 #include "TglobalSettings.h"
 #include "TpresetSettings.h"
 
 using namespace std;
 
-void TimgFilters::init(int IdxY,int IstrideY,int Idy,int dyFull,int IdiffX,int IdiffY)
+TimgFilters::TimgFilters(IffDecoder *deci)
 {
- dxY =IdxY  ;strideY =IstrideY  ;
- dxUV=IdxY/2;strideUV=IstrideY/2;
- dy=Idy;
- done();
- tempPict=new TtempPictures(strideY,dyFull,IdiffX,IdiffY);
- #define ADD_FILTER(f) \
-  filters.push_back(&f);f.setDeci(deci);f.init(IdxY,IstrideY,Idy);
- ADD_FILTER(postproc);
- ADD_FILTER(noise);
- ADD_FILTER(luma);
- ADD_FILTER(chroma);
- ADD_FILTER(blur);
- ADD_FILTER(sharpen);
- ADD_FILTER(subtitles);
- ADD_FILTER(offset);
- ADD_FILTER(timesmooth);
- ADD_FILTER(showMV);
- #undef ADD_FILTER
-}
-void TimgFilters::done(void)
-{
- if (tempPict) delete tempPict;tempPict=NULL;
- for (vector<TimgFilter*>::iterator i=filters.begin();i!=filters.end();i++)
-  (*i)->done();
- filters.clear();
+ filters.push_back(postproc=new TimgFilterPostproc);postproc->setDeci(deci);
+ filters.push_back(noise=new TimgFilterNoise);noise->setDeci(deci);
+ filters.push_back(luma=new TimgFilterLuma);luma->setDeci(deci);
+ filters.push_back(chroma=new TimgFilterChroma);chroma->setDeci(deci);
+ filters.push_back(blur=new TimgFilterBlur);blur->setDeci(deci);
+ filters.push_back(sharpen=new TimgFilterSharpen);sharpen->setDeci(deci);
+ filters.push_back(subtitles=new TimgFilterSubtitles);subtitles->setDeci(deci);
+ filters.push_back(offset=new TimgFilterOffset);offset->setDeci(deci);
+ filters.push_back(timesmooth=new TimgFilterTimesmooth);timesmooth->setDeci(deci);
+ filters.push_back(showMV=new TimgFilterShowMV);showMV->setDeci(deci);
 }
 TimgFilters::~TimgFilters()
 {
- done();
+ for (vector<TimgFilter*>::iterator i=filters.begin();i!=filters.end();i++) {(*i)->done();delete *i;};
+ filters.clear();
 }
-void TimgFilters::setSubtitle(subtitle *Isub)
+void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *cfg,TffPict *pict,TffRect &rect)
 {
- subtitles.sub=Isub;
-}
-void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *cfg,unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV)
-{
- tempPict->reset(srcY,srcU,srcV);
  for (int i=cfg->min_order;i<=cfg->max_order;i++)
   if (i==cfg->orderPostproc && cfg->isPostproc)
-   postproc.process(tempPict,cfg);
+   postproc->process(pict,rect,cfg);
   else if (i==cfg->orderPictProp && cfg->isPictProp)
    {
-    luma.process(tempPict,cfg);
-    chroma.process(tempPict,cfg);
+    luma->process(pict,rect,cfg);
+    chroma->process(pict,rect,cfg);
    }
   else if (i==cfg->orderBlur && cfg->isBlur)
    {
-    blur.process(tempPict,cfg);
-    timesmooth.process(tempPict,cfg);
+    blur->process(pict,rect,cfg);
+    timesmooth->process(pict,rect,cfg);
    }
   else if (i==cfg->orderSharpen && cfg->isSharpen)
-   sharpen.process(tempPict,cfg);
+   sharpen->process(pict,rect,cfg);
   else if (i==cfg->orderNoise && cfg->isNoise)
-   noise.process(tempPict,cfg);
+   noise->process(pict,rect,cfg);
   else if (i==cfg->orderSubtitles && cfg->isSubtitles)
-   subtitles.process(tempPict,cfg);
+   subtitles->process(pict,rect,cfg);
   else if (i==cfg->orderOffset && cfg->isOffset)
-   offset.process(tempPict,cfg);
+   offset->process(pict,rect,cfg);
  if (global->showMV)
-  showMV.process(tempPict,cfg);
- *dstY=(unsigned char*)tempPict->getCurY();
- *dstU=(unsigned char*)tempPict->getCurU();
- *dstV=(unsigned char*)tempPict->getCurV();
+  showMV->process(pict,rect,cfg);
 }

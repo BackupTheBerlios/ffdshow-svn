@@ -28,7 +28,7 @@ TmovieSourceUncompressed::TmovieSourceUncompressed(void)
 {
  yuvY=yuvU=yuvV=NULL;
 }
-bool TmovieSourceUncompressed::init(int codecId,int AVIdx,int AVIdy)
+bool TmovieSourceUncompressed::init(int codecId,unsigned int AVIdx,unsigned int AVIdy)
 {
  switch (codecId)
   {
@@ -70,7 +70,7 @@ int TmovieSourceUncompressed::getFrame(const TglobalSettings *global,const Tpres
                         -avpict.linesize[0],-avpict.linesize[1],avctx->width*3);
  */                                     
  got_picture=24; 
- for (int i=0;i<quantDx*quantDy;i++)
+ for (unsigned int i=0;i<quantDx*quantDy;i++)
   quant[i]=10;
  return srcLen;
 }

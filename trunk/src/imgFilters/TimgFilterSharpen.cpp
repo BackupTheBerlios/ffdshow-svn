@@ -31,6 +31,16 @@ TimgFilterSharpen::TimgFilterSharpen(void)
 {
  Ymin=Ymax=NULL;
 }
+TffRect::Trect* TimgFilterSharpen::init(TffRect *rect,int full)
+{
+ TffRect::Trect *r=TimgFilter::init(rect,full);
+ if (!Ymin)
+  {
+   Ymin=(unsigned char*)xvid_malloc(strideY*dyY*2,MCACHE_LINE);
+   Ymax=(unsigned char*)xvid_malloc(strideY*dyY,MCACHE_LINE);
+  };
+ return r;
+}
 void TimgFilterSharpen::done(void)
 {
  if (Ymin)
@@ -43,12 +53,6 @@ void TimgFilterSharpen::done(void)
    xvid_free(Ymax);
    Ymax=NULL;
   } 
-}
-void TimgFilterSharpen::init(int Idx,int Istride,int Idy)
-{
- TimgFilter::init(Idx,Istride,Idy);
- Ymin=(unsigned char*)xvid_malloc(strideY*dyY*2,MCACHE_LINE);
- Ymax=(unsigned char*)xvid_malloc(strideY*dyY,MCACHE_LINE);
 }
 
 void TimgFilterSharpen::xsharpen(const unsigned char *src,unsigned char *dst,const TpresetSettings *cfg)
@@ -258,15 +262,15 @@ void TimgFilterSharpen::xsharpen(const unsigned char *src,unsigned char *dst,con
    *dstL=*srcL;
    *dstR=*srcR;
   }
- __asm {emms}; 
+ __asm emms; 
 }
 
 void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,const TpresetSettings *cfg)
 {
- int dx=dxY,stride=strideY,dy=dyY;
+ unsigned int dx=dxY,stride=strideY,dy=dyY;
  memcpy(dst,src,dx);
  memcpy(dst+stride*(dy-1),src+stride*(dy-1),dx);
- int y;
+ unsigned int y;
  const unsigned char *srcOrig=src;unsigned char *dstOrig=dst;
 
  static const int C_SCALE=32;
@@ -307,7 +311,7 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
 
  unsigned short *YsumLn=Ysum;
  const unsigned char *srcLn=src;
- int x;
+ unsigned int x;
  for (x=1;x<dx-1;x++) YsumLn[x]=(unsigned int)srcLn[x-1]+(unsigned int)srcLn[x]+(unsigned int)srcLn[x+1];
  YsumLn+=stride;
  srcLn+=stride;
@@ -415,7 +419,7 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
      jl unsharpL1
     }
   }
- __asm{emms};
+ __asm emms;
 #endif 
  const unsigned char *srcL=srcOrig+stride,*srcR=srcL+dx-1;unsigned char *dstL=dstOrig+stride,*dstR=dstL+dx-1;
  for (y=1;y<dy-1;srcL+=stride,srcR+=stride,dstL+=stride,dstR+=stride,y++)
@@ -425,18 +429,24 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
   }
 }
 
-void TimgFilterSharpen::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterSharpen::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
- if (cfg->sharpenMethod==0 && config.cpu_flags&XVID_CPU_MMXEXT && cfg->xsharp_strength!=cfg->xsharp_strengthDef)
+ if (cfg->xsharp_strength==cfg->xsharp_strengthDef && cfg->unsharp_strength!=cfg->unsharp_strengthDef) return;
+ TffRect::Trect *r=init(&rect,0);
+ switch (cfg->sharpenMethod)
   {
-   const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
-   xsharpen(srcY,dstY,cfg);
-   return;
+   case 0:
+    if (config.cpu_flags&XVID_CPU_MMXEXT)
+     {
+      const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
+      xsharpen(srcY,dstY,cfg);
+     };
+    return;
+   case 1:
+    {
+     const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
+     unsharpen(srcY,dstY,cfg);
+     return;
+    };
   }
- if (cfg->sharpenMethod==1 && cfg->unsharp_strength!=cfg->unsharp_strengthDef)
-  {
-   const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
-   unsharpen(srcY,dstY,cfg);
-   return;
-  }
-}                                
+}                             

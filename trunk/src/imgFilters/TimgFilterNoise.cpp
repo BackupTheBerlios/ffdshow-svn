@@ -83,14 +83,14 @@ void TimgFilterNoise::noiseUV(const unsigned char *srcU,unsigned char *dstU,cons
  noiseAvihStrengthChroma=0;
 }
 
-void TimgFilterNoise::noise0luma(const unsigned char *src,unsigned char *dst,int stride,int dx,int dy,int noiseStrength,int uniformNoise,short *noiseMask,int noiseCount)
+void TimgFilterNoise::noise0luma(const unsigned char *src,unsigned char *dst,unsigned int stride,unsigned int dx,unsigned int dy,int noiseStrength,int uniformNoise,short *noiseMask,int noiseCount)
 {
  #undef NOISE_CHROMA
  #undef NOISE_AVIH 
  #include "noise_template.h"
 }
 
-void TimgFilterNoise::noise0chroma(const unsigned char *src,unsigned char *dst,int stride,int dx,int dy,int noiseStrength,int uniformNoise,short *noiseMask,int noiseCount)
+void TimgFilterNoise::noise0chroma(const unsigned char *src,unsigned char *dst,unsigned int stride,unsigned int dx,unsigned int dy,int noiseStrength,int uniformNoise,short *noiseMask,int noiseCount)
 {
  #define NOISE_CHROMA
  #undef NOISE_AVIH 
@@ -103,7 +103,7 @@ void TimgFilterNoise::noiseAvihY(const unsigned char *src,unsigned char *dst,con
   {
    noiseAvihStrength=cfg->noiseStrength;
    short *dst1=noiseMaskY,*dst2=dst1+dxY*dyY;
-   for (int i=0;i<dxY*dyY;i++)
+   for (unsigned int i=0;i<dxY*dyY;i++)
     dst1[i]=dst2[i]=(((rand()&255)-128)*noiseAvihStrength)/256;
   }
  #define NOISE_AVIH 
@@ -111,6 +111,7 @@ void TimgFilterNoise::noiseAvihY(const unsigned char *src,unsigned char *dst,con
  int stride=strideY,dx=dxY,dy=dyY;
  short *noiseMaskPtr=noiseMaskY+rand()%(dxY*dyY); 
  #include "noise_avih_template.h"
+ __asm emms;
 }
 void TimgFilterNoise::noiseAvihUV(const unsigned char *srcU,unsigned char *dstU,const unsigned char *srcV,unsigned char *dstV,const TpresetSettings *cfg)
 {
@@ -118,7 +119,7 @@ void TimgFilterNoise::noiseAvihUV(const unsigned char *srcU,unsigned char *dstU,
   {
    noiseAvihStrengthChroma=cfg->noiseStrengthChroma;
    short *dst1=noiseMaskU,*dst2=dst1+dxUV*dyUV;
-   int i;
+   unsigned int i;
    for (i=0;i<dxUV*dyUV;i++)
     dst1[i]=dst2[i]=(((rand()&255)-128)*noiseAvihStrengthChroma)/256;
    dst1=noiseMaskV;dst2=dst1+dxUV*dyUV; 
@@ -140,9 +141,10 @@ void TimgFilterNoise::noiseAvihUV(const unsigned char *srcU,unsigned char *dstU,
  #undef  lineLoop2nu
  #define lineLoop2nu lineLoop2nu2
  #include "noise_avih_template.h"
+ __asm emms;
 }
 
-void TimgFilterNoise::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterNoise::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (!cfg->noiseStrength && !cfg->noiseStrengthChroma) return;
  TffRect::Trect *r=init(&rect,0);

@@ -44,7 +44,7 @@ void TimgFilterBlur::done(void)
    tempPict=NULL;
   };
 }
-void TimgFilterBlur::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterBlur::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (!cfg->blurStrength) return;
  TffRect::Trect *r=init(&rect,0);

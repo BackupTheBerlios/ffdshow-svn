@@ -878,7 +878,7 @@ char * sub_filename(const char* path, const char * fname )
 
 void sub_free( subtitle * subs )
 {
- int i;
+ unsigned int i;
 
  if ( !subs ) return;
 

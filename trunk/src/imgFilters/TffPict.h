@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stddef.h>
 
-struct TtempPictures
+struct TffPict
 {
  struct TtempPicture 
   {
@@ -13,10 +13,10 @@ struct TtempPictures
     unsigned char *temp1,*temp2;
     unsigned char *tempCur;
     unsigned char *av;
-    int c;
+    unsigned char c;
    public: 
-    int size;
-    TtempPicture(int Isize,int Ic):size(Isize),c(Ic)
+    unsigned int size;
+    TtempPicture(unsigned int Isize,unsigned char Ic):size(Isize),c(Ic)
      {
       temp1=temp2=NULL;
       tempCur=NULL;
@@ -61,14 +61,13 @@ struct TtempPictures
      } 
   } *y,*u,*v;
 public:
- TtempPictures(int stride,int dy)
+ TffPict(unsigned int size)
   {
-   dy+=16;
-   y=new TtempPicture( stride   *dy+16,0);
-   u=new TtempPicture((stride/2)*dy/2 ,128);
-   v=new TtempPicture((stride/2)*dy/2 ,128);
+   y=new TtempPicture(size,0);
+   u=new TtempPicture(size/4,128);
+   v=new TtempPicture(size/4,128);
   }
- ~TtempPictures()
+ ~TffPict()
   {
    delete y;delete u;delete v;
   }

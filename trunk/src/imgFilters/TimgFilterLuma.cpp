@@ -30,7 +30,7 @@ TimgFilterLuma::TimgFilterLuma(void)
  oldGamma=-1;
 }
 
-void TimgFilterLuma::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterLuma::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (cfg->lumGain==TpresetSettings::lumGainDef && cfg->lumOffset==TpresetSettings::lumOffsetDef && cfg->gammaCorrection==TpresetSettings::gammaCorrectionDef) return;
  TffRect::Trect *r=init(&rect,0);
@@ -103,7 +103,7 @@ void TimgFilterLuma::process(TtempPictures *pict,TffRect &rect,const TpresetSett
     gammaTab[i]=(unsigned char)(255.0*pow((i/255.0),gamma));
   };
  if (cfg->gammaCorrection!=cfg->gammaCorrectionDef)
-  for (int y=0;y<dyY;y++)
+  for (unsigned int y=0;y<dyY;y++)
    {
     const unsigned char *src;unsigned char *dst,*dstEnd;
     for (src=gammaSrc+strideY*y,dst=gammaDst+strideY*y,dstEnd=dst+dxY;dst<dstEnd;src+=4,dst+=4)

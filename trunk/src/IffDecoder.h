@@ -134,6 +134,7 @@ struct TpresetSettings;
 class Tpresets;
 class TmovieSource;
 class Tpostproc;
+struct subtitle;
 DECLARE_INTERFACE_(IffDecoder, IUnknown)
 {
  STDMETHOD (getParam)(unsigned int paramID, int* value) PURE;
@@ -146,7 +147,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (getAVIname)(char *buf,unsigned int len) PURE;
  STDMETHOD (getAVIfourcc)(char *buf,unsigned int len) PURE;
  STDMETHOD (getAVIdimensions)(unsigned int *x,unsigned int *y) PURE;
- STDMETHOD (getAVIfps)(unsigned int *fps) PURE;
+ STDMETHOD (getAVIfps)(unsigned int *fps1000) PURE;
  STDMETHOD (saveActivePreset)(const char *name) PURE;
  STDMETHOD (saveActivePresetToFile)(const char *flnm) PURE;
  STDMETHOD (loadActivePresetFromFile)(const char *flnm) PURE;
@@ -179,6 +180,8 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (getXvidVersion)(char *buf,unsigned int len) PURE;
  STDMETHOD (getMovieSource)(TmovieSource* *moviePtr) PURE;
  STDMETHOD (getPostproc)(Tpostproc* *postprocPtr) PURE;
+ STDMETHOD (getSubtitle)(subtitle* *subPtr) PURE;
+ STDMETHOD (getOutputDimensions)(unsigned int *x,unsigned int *y) PURE;
 };
 
 #ifdef __cplusplus

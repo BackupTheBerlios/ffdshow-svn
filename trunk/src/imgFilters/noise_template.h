@@ -28,7 +28,7 @@
        mov [noiseMaskPtr],ecx
       }
     }; 
-   __asm {emms}; 
+   __asm emms; 
    return;
   }; 
  short *noiseMaskPtr=noiseMask; 
@@ -52,4 +52,4 @@
     #define lineLoop2 lineLoop2nu
     #include "noise_template_mmx.h"
    }
- __asm {emms};
+ __asm emms;
