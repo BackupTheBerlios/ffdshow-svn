@@ -63,6 +63,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_resizeGblurChrom    709 // *100
 #define IDFF_resizeSharpenLum    710 // *100
 #define IDFF_resizeSharpenChrom  711 // *100
+#define IDFF_isCrop              712
 
 #define IDFF_isSubtitles         801
 #define IDFF_fontCharset         802

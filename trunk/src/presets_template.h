@@ -43,6 +43,7 @@ _REG_OP_N("resizeGblurLum",resizeGblurLum,0);
 _REG_OP_N("resizeGblurChrom",resizeGblurChrom,0);
 _REG_OP_N("resizeSharpenLum",resizeSharpenLum,0);
 _REG_OP_N("resizeSharpenChrom",resizeSharpenChrom,0);
+_REG_OP_N("isCrop",isCrop,0);
 
 _REG_OP_N("isSubtitles",isSubtitles,0);
 _REG_OP_S("fontName",fontName,"Arial");

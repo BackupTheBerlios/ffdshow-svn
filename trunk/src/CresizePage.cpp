@@ -34,9 +34,9 @@ void TresizePage::aspect2dlg(void)
  char pomS[256];
  int dx,dy;
  deci->get_AVIdimensions(&dx,&dy);
+ __asm emms;
  if (dx!=0 && dy!=0)
   {
-   __asm emms;
    sprintf(pomS,"Keep original aspect ratio (%3.2f:1)",float(dx)/dy);
    SendDlgItemMessage(m_hwnd,IDC_RBT_ASPECT_KEEP,WM_SETTEXT,0,LPARAM(pomS));
   };
@@ -47,11 +47,11 @@ void TresizePage::aspect2dlg(void)
 }
 void TresizePage::resize2dlg(void)
 {
- __asm emms;
  setCheck(IDC_CHB_RESIZE,cfgGet(IDFF_isResize));
  char pomS[256];
  SendDlgItemMessage(m_hwnd,IDC_ED_RESIZEDX,WM_SETTEXT,0,LPARAM(_itoa(cfgGet(IDFF_resizeDx),pomS,10)));
  SendDlgItemMessage(m_hwnd,IDC_ED_RESIZEDY,WM_SETTEXT,0,LPARAM(_itoa(cfgGet(IDFF_resizeDy),pomS,10)));
+ __asm emms;
  sprintf(pomS,"Luma gaussian blur:  %3.2f"  ,float(cfgGet(IDFF_resizeGblurLum    )/100.0));SendDlgItemMessage(m_hwnd,IDC_LBL_RESIZE_GBLUR_LUM    ,WM_SETTEXT,0,LPARAM(pomS));
  sprintf(pomS,"Chroma gaussian blur:  %3.2f",float(cfgGet(IDFF_resizeGblurChrom  )/100.0));SendDlgItemMessage(m_hwnd,IDC_LBL_RESIZE_GBLUR_CHROM  ,WM_SETTEXT,0,LPARAM(pomS));
  sprintf(pomS,"Luma sharpen:  %3.2f"        ,float(cfgGet(IDFF_resizeSharpenLum  )/100.0));SendDlgItemMessage(m_hwnd,IDC_LBL_RESIZE_SHARPEN_LUM  ,WM_SETTEXT,0,LPARAM(pomS));
@@ -65,10 +65,15 @@ void TresizePage::resize2dlg(void)
  setCheck(IDC_CHB_RESIZE_FIRST,cfgGet(IDFF_resizeFirst));
  SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_SETCURSEL,cfgGet(IDFF_resizeMethod),0);
 }
+void TresizePage::crop2dlg(void)
+{
+ setCheck(IDC_CHB_CROP,cfgGet(IDFF_isCrop));
+}
 void TresizePage::cfg2dlg(void)
 {
  resize2dlg();
  aspect2dlg();
+ crop2dlg();
 }
 
 bool TresizePage::applyResizeXY(bool checkOnly)
@@ -162,7 +167,6 @@ HRESULT TresizePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     case IDC_CHB_RESIZE:
      cfgSet(IDFF_isResize,getCheck(IDC_CHB_RESIZE));
      return TRUE; 
-     
     case IDC_CHB_RESIZE_FIRST:
      cfgSet(IDFF_resizeFirst,getCheck(IDC_CHB_RESIZE_FIRST));
      return TRUE; 
@@ -198,6 +202,9 @@ HRESULT TresizePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     case IDC_BT_RESIZE_SET:
      applyResizeXY(false);
      return TRUE;
+    case IDC_CHB_CROP:
+     cfgSet(IDFF_isCrop,getCheck(IDC_CHB_CROP));
+     return TRUE; 
    };
    break;
   };

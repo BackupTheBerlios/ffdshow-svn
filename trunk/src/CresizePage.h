@@ -6,7 +6,7 @@
 class TresizePage :public TconfPage
 {
  private:
-  void resize2dlg(void),aspect2dlg(void);
+  void resize2dlg(void),aspect2dlg(void),crop2dlg(void);
   bool applyResizeXY(bool checkOnly);
  public:
   TresizePage(HWND IhwndParent,IffDecoder *Ideci,int dialogId);

@@ -280,6 +280,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_resizeGblurChrom   ]=Tparam(&cfg.resizeGblurChrom   ,0,200,&TffDecoder::resizeChanged);
  params[IDFF_resizeSharpenLum   ]=Tparam(&cfg.resizeSharpenLum   ,0,200,&TffDecoder::resizeChanged);
  params[IDFF_resizeSharpenChrom ]=Tparam(&cfg.resizeSharpenChrom ,0,200,&TffDecoder::resizeChanged);
+ params[IDFF_isCrop             ]=Tparam(&cfg.isCrop             ,0,0,&TffDecoder::resizeChanged);
 
  params[IDFF_isSubtitles        ]=Tparam(&cfg.isSubtitles        ,0,0,&TffDecoder::subsChanged);
  params[IDFF_fontCharset        ]=Tparam(&cfg.fontCharset        ,0,0,&TffDecoder::subsChanged);

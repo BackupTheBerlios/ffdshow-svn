@@ -183,6 +183,7 @@
 #define IDC_CHB_SUB_AUTOFLNM            1133
 #define IDC_CHB_BLUR                    1134
 #define IDC_LBL_BLUR_STRENGTH           1136
+#define IDC_CHB_CROP                    1137
 #define VERSION_RES_CHARSET             1252
 #define IDC_STATIC                      -1
 
@@ -192,7 +193,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        125
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1137
+#define _APS_NEXT_CONTROL_VALUE         1138
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

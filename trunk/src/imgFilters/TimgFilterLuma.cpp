@@ -80,7 +80,6 @@ void TimgFilterLuma::process(unsigned char *srcY,unsigned char *srcU,unsigned ch
      jl          lumconv
     };
   };  
- __asm emms; 
  if (cfg->gammaCorrection!=oldGamma)
   {
    __asm emms;

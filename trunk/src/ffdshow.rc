@@ -66,6 +66,7 @@ BEGIN
         BOTTOMMARGIN, 233
         HORZGUIDE, 39
         HORZGUIDE, 99
+        HORZGUIDE, 151
     END
 
     IDD_SUBTITLES, DIALOG
@@ -281,7 +282,7 @@ END
 IDD_RESIZE DIALOGEX 0, 0, 259, 234
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX        "",IDC_STATIC,0,0,259,39
     CONTROL         "Resize",IDC_CHB_RESIZE,"Button",BS_AUTOCHECKBOX | 
@@ -304,27 +305,30 @@ BEGIN
     CONTROL         "",IDC_TBR_ASPECT_USER,"msctls_trackbar32",TBS_BOTH | 
                     TBS_NOTICKS | WS_TABSTOP,15,83,209,12
     LTEXT           "1:1",IDC_LBL_ASPECT_USER,226,85,27,8
-    GROUPBOX        "Settings",IDC_STATIC,0,99,259,89
+    GROUPBOX        "Settings",IDC_STATIC,0,151,259,80
     CONTROL         "Video is resized before other filters",
                     IDC_CHB_RESIZE_FIRST,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,8,109,127,10
-    LTEXT           "Resize algorithm",IDC_STATIC,8,124,53,8
-    COMBOBOX        IDC_CBX_RESIZE_METHOD,64,123,81,87,CBS_DROPDOWNLIST | 
+                    WS_TABSTOP,8,161,127,10
+    LTEXT           "Resize algorithm",IDC_STATIC,8,176,53,8
+    COMBOBOX        IDC_CBX_RESIZE_METHOD,64,174,81,87,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Luma gaussian blur",IDC_LBL_RESIZE_GBLUR_LUM,7,142,99,8
+    LTEXT           "Luma gaussian blur",IDC_LBL_RESIZE_GBLUR_LUM,7,189,99,8
     CONTROL         "",IDC_TBR_RESIZE_GBLUR_LUM,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,5,153,125,10
-    LTEXT           "Chroma gaussian blur",IDC_LBL_RESIZE_GBLUR_CHROM,7,164,
+                    TBS_NOTICKS | WS_TABSTOP,5,199,125,10
+    LTEXT           "Chroma gaussian blur",IDC_LBL_RESIZE_GBLUR_CHROM,7,209,
                     111,8
     CONTROL         "",IDC_TBR_RESIZE_GBLUR_CHROM,"msctls_trackbar32",
-                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,5,174,125,10
-    LTEXT           "Luma sharpen",IDC_LBL_RESIZE_SHARPEN_LUM,132,142,99,8
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,5,219,125,10
+    LTEXT           "Luma sharpen",IDC_LBL_RESIZE_SHARPEN_LUM,133,189,99,8
     CONTROL         "",IDC_TBR_RESIZE_SHARPEN_LUM,"msctls_trackbar32",
-                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,130,153,125,10
-    LTEXT           "Chroma sharpen",IDC_LBL_RESIZE_SHARPEN_CHROM,132,164,
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,131,199,125,10
+    LTEXT           "Chroma sharpen",IDC_LBL_RESIZE_SHARPEN_CHROM,133,209,
                     111,8
     CONTROL         "",IDC_TBR_RESIZE_SHARPEN_CHROM,"msctls_trackbar32",
-                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,130,174,125,10
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,131,219,125,10
+    GROUPBOX        "",IDC_STATIC,0,99,259,52
+    CONTROL         "Crop && zoom",IDC_CHB_CROP,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,8,99,55,10
 END
 
 IDD_SUBTITLES DIALOGEX 0, 0, 259, 234

@@ -82,6 +82,7 @@ public:
  int resizeMethod;
  int resizeGblurLum,resizeGblurChrom;
  int resizeSharpenLum,resizeSharpenChrom;
+ int isCrop;
 
  int isSubtitles;
  int fontChanged;
