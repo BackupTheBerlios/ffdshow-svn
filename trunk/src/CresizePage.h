@@ -14,6 +14,7 @@ class TresizePage :public TconfPage
   virtual void createConfig(void);
   virtual void cfg2dlg(void);
   virtual void applySettings(void);
+  virtual void interDlg(void);
 };
 
 #endif 

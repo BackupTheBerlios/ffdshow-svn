@@ -47,7 +47,7 @@ BEGIN
     IDD_GLOBAL, DIALOG
     BEGIN
         VERTGUIDE, 5
-        VERTGUIDE, 250
+        VERTGUIDE, 256
         HORZGUIDE, 117
     END
 
@@ -209,17 +209,17 @@ FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX        "Global settings",IDC_STATIC,0,0,259,80
     CONTROL         "Postprocessing",IDC_CHB_GLOBAL_POSTPROC,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,5,9,245,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,9,251,10
     CONTROL         "Picture properties",IDC_CHB_GLOBAL_PICTPROP,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,5,18,245,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,19,251,10
     CONTROL         "Noise",IDC_CHB_GLOBAL_NOISE,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,27,245,10
+                    WS_TABSTOP,5,29,251,10
     CONTROL         "Sharpen",IDC_CHB_GLOBAL_SHARPEN,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,5,45,245,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,49,251,10
     CONTROL         "Subtitles",IDC_CHB_GLOBAL_SUBTITLES,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,5,54,245,10
-    LTEXT           "IDCT",IDC_LBL_IDCT,5,67,17,8
-    COMBOBOX        IDC_CBX_IDCT,27,64,99,55,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,69,251,10
+    LTEXT           "IDCT",IDC_LBL_IDCT,134,218,17,8
+    COMBOBOX        IDC_CBX_IDCT,156,215,99,55,CBS_DROPDOWNLIST | WS_VSCROLL | 
                     WS_TABSTOP
     GROUPBOX        "Supported codecs",IDC_STATIC,0,80,259,34
     CONTROL         "XVID",IDC_CHB_XVID,"Button",BS_AUTOCHECKBOX | 
@@ -263,11 +263,13 @@ BEGIN
     LTEXT           "Codec",IDC_LBL_NOW_CODEC,5,194,249,8
     GROUPBOX        "Miscellaneous",IDC_STATIC,0,206,259,25
     CONTROL         "Tray icon",IDC_CHB_TRAYICON,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,218,45,8
+                    WS_TABSTOP,65,218,45,8
     CONTROL         "Flip video",IDC_CHB_FLIP,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,165,66,68,10
+                    WS_TABSTOP,6,217,45,10
     CONTROL         "Blur",IDC_CHB_GLOBAL_BLUR,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,36,245,10
+                    WS_TABSTOP,5,39,251,10
+    CONTROL         "Crop && zoom",IDC_CHB_GLOBAL_CROP,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,59,251,10
 END
 
 IDD_FFDSHOW DIALOG DISCARDABLE  0, 0, 272, 260

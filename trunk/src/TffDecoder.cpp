@@ -281,6 +281,12 @@ void TffDecoder::fillParams(void)
  params[IDFF_resizeSharpenLum   ]=Tparam(&cfg.resizeSharpenLum   ,0,200,&TffDecoder::resizeChanged);
  params[IDFF_resizeSharpenChrom ]=Tparam(&cfg.resizeSharpenChrom ,0,200,&TffDecoder::resizeChanged);
  params[IDFF_isCrop             ]=Tparam(&cfg.isCrop             ,0,0,&TffDecoder::resizeChanged);
+ params[IDFF_zoom               ]=Tparam(&cfg.zoom               ,0,100,&TffDecoder::resizeChanged);
+ params[IDFF_cropLeft           ]=Tparam(&cfg.cropLeft           ,0,2048,&TffDecoder::resizeChanged);
+ params[IDFF_cropRight          ]=Tparam(&cfg.cropRight          ,0,2048,&TffDecoder::resizeChanged);
+ params[IDFF_cropTop            ]=Tparam(&cfg.cropTop            ,0,2048,&TffDecoder::resizeChanged);
+ params[IDFF_cropBottom         ]=Tparam(&cfg.cropBottom         ,0,2048,&TffDecoder::resizeChanged);
+ params[IDFF_autocrop           ]=Tparam(&cfg.autocrop           ,0,0,&TffDecoder::resizeChanged);
 
  params[IDFF_isSubtitles        ]=Tparam(&cfg.isSubtitles        ,0,0,&TffDecoder::subsChanged);
  params[IDFF_fontCharset        ]=Tparam(&cfg.fontCharset        ,0,0,&TffDecoder::subsChanged);
@@ -597,6 +603,12 @@ STDMETHODIMP TffDecoder::getSharpenDescription(char *buf,unsigned int len)
 {
  if (!buf || len<1000) return S_FALSE;
  cfg.getSharpenDescription(buf);
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::getCropDescription(char *buf,unsigned int len)
+{
+ if (!buf || len<1000) return S_FALSE;
+ cfg.getCropDescription(buf);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getFontName(char *buf,unsigned int len)

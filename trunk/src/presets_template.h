@@ -44,6 +44,12 @@ _REG_OP_N("resizeGblurChrom",resizeGblurChrom,0);
 _REG_OP_N("resizeSharpenLum",resizeSharpenLum,0);
 _REG_OP_N("resizeSharpenChrom",resizeSharpenChrom,0);
 _REG_OP_N("isCrop",isCrop,0);
+_REG_OP_N("zoom",zoom,0);
+_REG_OP_N("cropLeft"  ,cropLeft,0);
+_REG_OP_N("cropRight" ,cropRight ,0);
+_REG_OP_N("cropTop"   ,cropTop   ,0);
+_REG_OP_N("cropBottom",cropBottom,0);
+_REG_OP_N("autocrop",autocrop,0);
 
 _REG_OP_N("isSubtitles",isSubtitles,0);
 _REG_OP_S("fontName",fontName,"Arial");

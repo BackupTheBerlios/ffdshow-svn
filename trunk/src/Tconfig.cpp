@@ -336,3 +336,7 @@ void Tconfig::getSharpenDescription(char *buf)
  sprintf(tstr," threshold: %i",xsharp_threshold);
  sprintf(buf,"Sharpen (method:%s, strength:%i%s)",(sharpenMethod==0)?"xsharpen":"unsharp mask",(sharpenMethod==0)?xsharp_strength:unsharp_strength,(sharpenMethod==0)?tstr:"");
 }
+void Tconfig::getCropDescription(char *buf)
+{
+ sprintf(buf,"Crop && zoom");
+}

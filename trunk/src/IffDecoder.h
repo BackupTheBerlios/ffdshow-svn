@@ -64,6 +64,12 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_resizeSharpenLum    710 // *100
 #define IDFF_resizeSharpenChrom  711 // *100
 #define IDFF_isCrop              712
+#define IDFF_zoom                713 
+#define IDFF_cropLeft            714
+#define IDFF_cropRight           715
+#define IDFF_cropTop             716
+#define IDFF_cropBottom          717
+#define IDFF_autocrop            718
 
 #define IDFF_isSubtitles         801
 #define IDFF_fontCharset         802
@@ -117,6 +123,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (getNoiseDescription)(char *buf,unsigned int len) PURE;
  STDMETHOD (getBlurDescription)(char *buf,unsigned int len) PURE;
  STDMETHOD (getSharpenDescription)(char *buf,unsigned int len) PURE;
+ STDMETHOD (getCropDescription)(char *buf,unsigned int len) PURE;
  STDMETHOD (getFontName)(char *buf,unsigned int len) PURE;
  STDMETHOD (setFontName)(const char *name) PURE;
  STDMETHOD (getSubFlnm)(char *buf,unsigned int len) PURE;

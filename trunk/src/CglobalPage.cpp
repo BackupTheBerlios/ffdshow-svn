@@ -70,6 +70,10 @@ void TglobalPage::interDlg(void)
  deci->getSharpenDescription(pomS,1023);
  SendDlgItemMessage(m_hwnd,IDC_CHB_GLOBAL_SHARPEN,WM_SETTEXT,0,LPARAM(pomS));
 
+ setCheck(IDC_CHB_GLOBAL_CROP,cfgGet(IDFF_isCrop));
+ deci->getCropDescription(pomS,1023);
+ SendDlgItemMessage(m_hwnd,IDC_CHB_GLOBAL_CROP,WM_SETTEXT,0,LPARAM(pomS));
+
  setCheck(IDC_CHB_GLOBAL_SUBTITLES,cfgGet(IDFF_isSubtitles));
 }
 void TglobalPage::cfg2dlg(void)
@@ -239,6 +243,9 @@ HRESULT TglobalPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
      return TRUE;
     case IDC_CHB_GLOBAL_SUBTITLES:
      cfgSet(IDFF_isSubtitles,getCheck(IDC_CHB_GLOBAL_SUBTITLES));
+     return TRUE;
+    case IDC_CHB_GLOBAL_CROP:
+     cfgSet(IDFF_isCrop,getCheck(IDC_CHB_GLOBAL_CROP));
      return TRUE;
     case IDC_CHB_FLIP:
      cfgSet(IDFF_flip,getCheck(IDC_CHB_FLIP));

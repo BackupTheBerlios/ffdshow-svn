@@ -83,6 +83,10 @@ public:
  int resizeGblurLum,resizeGblurChrom;
  int resizeSharpenLum,resizeSharpenChrom;
  int isCrop;
+ int zoom;
+ int cropTop,cropBottom,cropLeft,cropRight;
+ int autocrop;
+ void getCropDescription(char *buf);
 
  int isSubtitles;
  int fontChanged;

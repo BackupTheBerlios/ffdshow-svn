@@ -67,10 +67,14 @@ void TresizePage::resize2dlg(void)
 }
 void TresizePage::crop2dlg(void)
 {
+}
+void TresizePage::interDlg(void)
+{
  setCheck(IDC_CHB_CROP,cfgGet(IDFF_isCrop));
 }
 void TresizePage::cfg2dlg(void)
 {
+ interDlg();
  resize2dlg();
  aspect2dlg();
  crop2dlg();

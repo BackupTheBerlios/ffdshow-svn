@@ -179,6 +179,7 @@
 #define IDC_LBL_FONT_SHADOW_RADIUS      1130
 #define IDC_CHB_GLOBAL_BLUR             1130
 #define IDC_TBR_FONT_SHADOW_RADIUS      1131
+#define IDC_CHB_GLOBAL_CROP             1131
 #define IDC_CHB_SUB_AUTO                1133
 #define IDC_CHB_SUB_AUTOFLNM            1133
 #define IDC_CHB_BLUR                    1134
