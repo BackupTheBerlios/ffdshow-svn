@@ -40,6 +40,7 @@
 #endif
 #include <dvdmedia.h>   // VIDEOINFOHEADER2
 #include <assert.h>
+#include <commctrl.h>
 
 #include "ffdebug.h"
 #define FF_POSTPROCESS
@@ -54,7 +55,7 @@ extern "C"
 }
 #include "xvid\xvid.h"
 
-#include "Cffdshow.h"
+#include "dialog\TffdshowPage.h"
 #include "TffDecoder.h"
 #include "TresizeCtx.h"
 #include "trayIcon.h"
@@ -582,6 +583,8 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  DEBUGS("Constructor");
  ASSERT(phr);
 
+ InitCommonControls();
+ 
  AVIname[0]=AVIfourcc[0]='\0';
  AVIdx=AVIdy=cropLeft=cropTop=cropDx=cropDy=AVIfps=0;
  

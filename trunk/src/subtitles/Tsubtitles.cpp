@@ -30,7 +30,7 @@ Tsubtitles::~Tsubtitles()
  done();
 }
 
-void Tsubtitles::init(const char *aviFlnm,const char *subFlnm,float Ifps)
+void Tsubtitles::init(const char *aviFlnm,const char *subFlnm,double Ifps)
 {
  done();
  if (aviFlnm)

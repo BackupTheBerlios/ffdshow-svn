@@ -2,6 +2,7 @@
 #define _CFFDSHOW_H_
 
 #include <streams.h>
+#include <vector>
 
 struct IffDecoder;
 
@@ -9,28 +10,22 @@ struct IffDecoder;
 DEFINE_GUID(CLSID_TFFDSHOWPAGE, 0x9a98adcc, 0xc6a4, 0x449e, 0xa8, 0xb1, 0x3, 0x63, 0x67, 0x3d, 0x9f, 0x8a);
 
 class TconfPage;
-class TglobalPage;
-class TfiltersPage;
-class TresizePage;
-class TsubtitlesPage;
-class TaboutPage;
 class TffdshowPage : public CBasePropertyPage
 {
  private:
+  HIMAGELIST hil;
+  HWND htv;
+  HTREEITEM addTI(TVINSERTSTRUCT &tvis,TconfPage *page,const char *name);
   IffDecoder *deci;
-  TglobalPage    *globalPage;
-  TfiltersPage   *filtersPage;
-  TresizePage    *resizePage;
-  TsubtitlesPage *subtitlesPage;
-  TaboutPage     *aboutPage;
-  #define NUMPAGES 5
-  TconfPage    *page,*pages[NUMPAGES];
+  TconfPage  *page;
   void selectPage(int i),selectPage(TconfPage *Ipage);
+  std::vector<TconfPage*> *pages;
  public: 
   static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT * phr);
   TffdshowPage(LPUNKNOWN pUnk, HRESULT * phr);
   ~TffdshowPage();
   void applySettings(void);
+  void drawInter(void);
   
   STDMETHODIMP Activate(HWND hwndParent,LPCRECT prect, BOOL fModal);
   STDMETHODIMP Deactivate(void);

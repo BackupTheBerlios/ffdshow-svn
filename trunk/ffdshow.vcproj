@@ -30,7 +30,8 @@
 				BufferSecurityCheck="TRUE"
 				EnableFunctionLevelLinking="TRUE"
 				UsePrecompiledHeader="0"
-				PrecompiledHeaderFile=".\Debug/ffdshow.pch"
+				PrecompiledHeaderThrough=""
+				PrecompiledHeaderFile=""
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
@@ -163,11 +164,54 @@
 				RelativePath="konfiguracia.txt">
 			</File>
 			<File
-				RelativePath=".\src\readme.txt">
+				RelativePath="src\readme.txt">
 			</File>
 			<File
 				RelativePath=".\todo.txt">
 			</File>
+			<Filter
+				Name="help"
+				Filter="">
+				<File
+					RelativePath="src\helpAspectNcrop.txt">
+				</File>
+				<File
+					RelativePath="src\helpBlur.txt">
+				</File>
+				<File
+					RelativePath="src\helpCodecs.txt">
+				</File>
+				<File
+					RelativePath="src\helpFont.txt">
+				</File>
+				<File
+					RelativePath="src\helpInfo.txt">
+				</File>
+				<File
+					RelativePath="src\helpMisc.txt">
+				</File>
+				<File
+					RelativePath="src\helpNoise.txt">
+				</File>
+				<File
+					RelativePath="src\helpPictprop.txt">
+				</File>
+				<File
+					RelativePath="src\helpPostproc.txt">
+				</File>
+				<File
+					RelativePath="src\helpResize.txt">
+				</File>
+				<File
+					RelativePath="src\helpSharpen.txt">
+				</File>
+				<File
+					RelativePath="src\helpSubtitles.txt">
+				</File>
+				<File
+					RelativePath="src\helpTray.txt">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -247,10 +291,19 @@
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 			<File
+				RelativePath="src\checked.bmp">
+			</File>
+			<File
+				RelativePath="src\empty.bmp">
+			</File>
+			<File
 				RelativePath="src\ffdshow.ico">
 			</File>
 			<File
 				RelativePath="src\ffdshow.rc">
+			</File>
+			<File
+				RelativePath="src\mask.bmp">
 			</File>
 			<File
 				RelativePath=".\src\resource.h">
@@ -442,52 +495,6 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="configuration"
-			Filter="">
-			<File
-				RelativePath=".\src\CAboutPage.cpp">
-			</File>
-			<File
-				RelativePath=".\src\CAboutPage.h">
-			</File>
-			<File
-				RelativePath=".\src\CconfPage.cpp">
-			</File>
-			<File
-				RelativePath=".\src\CconfPage.h">
-			</File>
-			<File
-				RelativePath=".\src\Cffdshow.cpp">
-			</File>
-			<File
-				RelativePath=".\src\Cffdshow.h">
-			</File>
-			<File
-				RelativePath=".\src\CfiltersPage.cpp">
-			</File>
-			<File
-				RelativePath=".\src\CfiltersPage.h">
-			</File>
-			<File
-				RelativePath=".\src\CglobalPage.cpp">
-			</File>
-			<File
-				RelativePath=".\src\CglobalPage.h">
-			</File>
-			<File
-				RelativePath="src\CresizePage.cpp">
-			</File>
-			<File
-				RelativePath="src\CresizePage.h">
-			</File>
-			<File
-				RelativePath="src\CsubtitlesPage.cpp">
-			</File>
-			<File
-				RelativePath="src\CsubtitlesPage.h">
-			</File>
-		</Filter>
-		<Filter
 			Name="subtitles"
 			Filter="">
 			<File
@@ -574,6 +581,112 @@
 			</File>
 			<File
 				RelativePath="src\imgFilters\noise_template_mmx.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="dialog"
+			Filter="">
+			<File
+				RelativePath="src\dialog\Cabout.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Cabout.h">
+			</File>
+			<File
+				RelativePath="src\dialog\CaspectNcrop.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\CaspectNcrop.h">
+			</File>
+			<File
+				RelativePath="src\dialog\Cblur.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Cblur.h">
+			</File>
+			<File
+				RelativePath="src\dialog\Ccodecs.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Ccodecs.h">
+			</File>
+			<File
+				RelativePath="src\dialog\Cfont.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Cfont.h">
+			</File>
+			<File
+				RelativePath="src\dialog\Cinfo.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Cinfo.h">
+			</File>
+			<File
+				RelativePath="src\dialog\Cmisc.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Cmisc.h">
+			</File>
+			<File
+				RelativePath="src\dialog\Cnoise.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Cnoise.h">
+			</File>
+			<File
+				RelativePath="src\dialog\CpictProp.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\CpictProp.h">
+			</File>
+			<File
+				RelativePath="src\dialog\CpostProc.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\CpostProc.h">
+			</File>
+			<File
+				RelativePath="src\dialog\Cpresets.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Cpresets.h">
+			</File>
+			<File
+				RelativePath="src\dialog\Cresize.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Cresize.h">
+			</File>
+			<File
+				RelativePath="src\dialog\Csharpen.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Csharpen.h">
+			</File>
+			<File
+				RelativePath="src\dialog\Csubtitles.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Csubtitles.h">
+			</File>
+			<File
+				RelativePath="src\dialog\Ctray.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Ctray.h">
+			</File>
+			<File
+				RelativePath="src\dialog\TconfPage.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\TconfPage.h">
+			</File>
+			<File
+				RelativePath="src\dialog\TffdshowPage.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\TffdshowPage.h">
 			</File>
 		</Filter>
 	</Files>

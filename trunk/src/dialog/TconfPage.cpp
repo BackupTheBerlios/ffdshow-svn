@@ -17,12 +17,12 @@
  */
 
 #include <windows.h>
-#include "CconfPage.h"
-#include "resource.h"
+#include "TconfPage.h"
+#include "..\resource.h"
 #include <commctrl.h>
-#include "Tconfig.h"
+#include "..\Tconfig.h"
 #include <assert.h>
-#include "IffDecoder.h"
+#include "..\IffDecoder.h"
 
 static INT_PTR CALLBACK dlgWndProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {
@@ -50,6 +50,18 @@ void TconfPage::createWindow(int dialogId)
  HINSTANCE hi=(HINSTANCE)GetWindowLong(hwndParent,GWL_HINSTANCE);
  m_hwnd=CreateDialogParam(hi,MAKEINTRESOURCE(dialogId),hwndParent,dlgWndProc,LPARAM(this));
  assert(m_hwnd);
+ if (GetDlgItem(m_hwnd,IDC_ED_HELP))
+  {
+   HMODULE hm=(HMODULE)GetWindowLong(m_hwnd,GWL_HINSTANCE);
+   HRSRC rsrc=FindResource(hm,MAKEINTRESOURCE(dialogId),"TEXT");
+   if (!rsrc) return;
+   HGLOBAL hglb=LoadResource(hm,rsrc);
+   int len=SizeofResource(hm,rsrc);
+   helpStr=(char*)calloc(len+1,1);
+   strncpy(helpStr,(char*)LockResource(hglb),len);
+   SendDlgItemMessage(m_hwnd,IDC_ED_HELP,WM_SETTEXT,0,LPARAM(helpStr));
+   SendDlgItemMessage(m_hwnd,IDC_ED_HELP,EM_SETSEL,0,-1);
+  }
 }
 
 TconfPage::TconfPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci)
@@ -58,24 +70,34 @@ TconfPage::TconfPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci)
  deci=Ideci;
  parent=Iparent;
  hwndParent=IhwndParent;
+ helpStr=NULL;
 }
 
 TconfPage::~TconfPage()
 {
  DestroyWindow(m_hwnd);
+ if (helpStr) free(helpStr);
 }
 
-int TconfPage::cfgGet(int i)
+int TconfPage::cfgGet(unsigned int i)
 {
  int val=0;
  deci->get_Param(i,&val);
  return val;
 };
-int TconfPage::cfgSet(int i,int val)
+int TconfPage::cfgSet(unsigned int i,int val)
 {
  deci->put_Param(i,val);
  return val;
 };
+int TconfPage::cfgInv(unsigned int i)
+{
+ int val=deci->get_Param2(i);
+ if (val==0) val=1; else val=0;
+ deci->put_Param(i,val);
+ interDlg();
+ return val;
+}
 
 void TconfPage::setCheck(int id,int set)
 {

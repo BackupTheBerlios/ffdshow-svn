@@ -98,7 +98,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   Tlibavcodec libavcodec;
   HRESULT ChangeColorspace(GUID subtype, GUID formattype, void * format);
   
-  int AVIdx,AVIdy;float AVIfps;
+  int AVIdx,AVIdy;double AVIfps;
   struct
    {
     int colorspace;

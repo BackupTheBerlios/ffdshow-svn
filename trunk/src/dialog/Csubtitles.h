@@ -1,23 +1,22 @@
 #ifndef _CSUBTITLESPAGE_H_
 #define _CSUBTITLESPAGE_H_
 
-#include "CconfPage.h"
+#include "TconfPage.h"
 
-class TsubtitlesPage :public TconfPage
+class TsubtitlesPage : public TconfPage
 {
  private:
-  void font2dlg(void),sub2dlg(void);
-  void fillCharsets(void);
-  void selectCharset(int ii);
-  COLORREF custColors[16];
+  void sub2dlg(void);
   void loadSubtitles(void);
  public:
-  TsubtitlesPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci,int dialogId);
+  TsubtitlesPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
   virtual void createConfig(void);
   virtual void cfg2dlg(void);
   virtual void interDlg(void);
   virtual void applySettings(void);
+  virtual int getInter(void) {return cfgGet(IDFF_isSubtitles);};
+  virtual int invInter(void) {return cfgInv(IDFF_isSubtitles);};
 };
 
 #endif 

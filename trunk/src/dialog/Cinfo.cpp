@@ -1,0 +1,69 @@
+/*
+ * Copyright (c) 2002 Milan Cutka
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
+#include <windows.h>
+#include "Cinfo.h"
+#include "..\resource.h"
+#include <commctrl.h>
+#include <string.h>
+#include "..\IffDecoder.h"
+#include <stdio.h>
+
+void TinfoPage::createConfig(void)
+{
+ cfg2dlg();
+}
+
+void TinfoPage::cfg2dlg(void)
+{
+ char pomS[1024];
+ char AVIname[1024];
+ deci->get_AVIname(AVIname,1023);
+ sprintf(pomS,"Now playing: %s",AVIname);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_PLAYING,WM_SETTEXT,0,LPARAM(pomS));
+ char AVIfourcc[20];
+ deci->get_AVIfourcc(AVIfourcc,19); 
+ sprintf(pomS,"Codec: %s",AVIfourcc);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_CODEC,WM_SETTEXT,0,LPARAM(pomS));
+ unsigned int x,y;
+ if (deci->get_AVIdimensions(&x,&y)!=S_OK)
+  SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_DIMENSIONS,WM_SETTEXT,0,LPARAM("Dimensions:"));
+ else
+  {
+   sprintf(pomS,"Dimensions: %i x %i",x,y);
+   SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_DIMENSIONS,WM_SETTEXT,0,LPARAM(pomS));
+  } 
+ if (deci->get_AVIfps(&x)!=S_OK)
+  SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_FPS,WM_SETTEXT,0,LPARAM("FPS:"));
+ else
+  {
+   __asm emms;
+   sprintf(pomS,"FPS: %6.2f",float(x/1000.0));
+   SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_FPS,WM_SETTEXT,0,LPARAM(pomS));
+  } 
+}
+
+HRESULT TinfoPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+ return FALSE;
+}
+
+TinfoPage::TinfoPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
+{
+ createWindow(IDD_INFO);
+}

@@ -17,11 +17,11 @@
  */
 
 #include <windows.h>
-#include "CAboutPage.h"
-#include "resource.h"
+#include "Cabout.h"
+#include "..\resource.h"
 #include <commctrl.h>
 #include <string.h>
-#include "IffDecoder.h"
+#include "..\IffDecoder.h"
 
 void TaboutPage::cfg2dlg(void)
 {
@@ -34,12 +34,14 @@ HRESULT TaboutPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void TaboutPage::createConfig(void)
 {
+/*
  HMODULE hm=(HMODULE)GetWindowLong(m_hwnd,GWL_HINSTANCE);
  HRSRC rsrc=FindResource(hm,MAKEINTRESOURCE(IDR_README),"TEXT");
  HGLOBAL hglb=LoadResource(hm,rsrc);
  char *credits=(char*)LockResource(hglb);
  SendDlgItemMessage(m_hwnd,IDC_ED_CREDITS,WM_SETTEXT,0,LPARAM(credits));
  SendDlgItemMessage(m_hwnd,IDC_ED_CREDITS,EM_SETSEL,0,-1);
+*/ 
  char vers[1024];vers[0]='\0';
  deci->get_avcodec_version(vers,1023);
  SendDlgItemMessage(m_hwnd,IDC_LBL_AVVERSION,WM_SETTEXT,0,LPARAM(vers));
@@ -47,7 +49,7 @@ void TaboutPage::createConfig(void)
  SendDlgItemMessage(m_hwnd,IDC_LBL_FFDSHOWVERSION,WM_SETTEXT,0,LPARAM(vers));
 }
 
-TaboutPage::TaboutPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci,int dialogId) :TconfPage(Iparent,IhwndParent,Ideci)
+TaboutPage::TaboutPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(dialogId);
+ createWindow(IDD_ABOUT);
 }

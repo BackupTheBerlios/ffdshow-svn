@@ -5,11 +5,13 @@ struct IffDecoder;
 class TffdshowPage;
 class TconfPage
 {
+ private:
+  char *helpStr;
  protected:
   TffdshowPage *parent;
   IffDecoder *deci;
   void createWindow(int dialogId);
-  int cfgGet(int i),cfgSet(int i,int val);
+  int cfgGet(unsigned int i),cfgSet(unsigned int i,int val),cfgInv(unsigned int i);
   void loadPreset(void);
   void enableWindow(int id,int enable);
   void setCheck(int id,int set);
@@ -22,6 +24,8 @@ class TconfPage
   virtual void createConfig(void)=0;
   virtual void cfg2dlg(void)=0;
   virtual void interDlg(void) {};
+  virtual int getInter(void) {return -1;};
+  virtual int invInter(void) {return -1;};
   virtual void applySettings(void) {};
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)=0;
 };

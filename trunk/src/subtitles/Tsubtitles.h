@@ -8,7 +8,7 @@ class Tsubtitles
 {
 private:
  subtitle *subs;
- float origFps,userFps;
+ double origFps,userFps;
  int delay;
  subtitle *oldsub;
  int current_sub;
@@ -19,9 +19,9 @@ private:
 public:
  Tsubtitles(void);
  ~Tsubtitles();
- void init(const char *aviFlnm,const char *subFlnm,float Ifps);
+ void init(const char *aviFlnm,const char *subFlnm,double Ifps);
  void done(void);
- void setFps(float Ifps),setDelay(int Idelay);
+ void setFps(double Ifps),setDelay(int Idelay);
  subtitle* getSubtitle(unsigned long frame);
  char flnm[1024];
 };

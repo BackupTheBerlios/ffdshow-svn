@@ -1,3 +1,5 @@
+_REG_OP_N("flip",flip,0);
+
 _REG_OP_N("isPostproc",isPostproc,0);
 _REG_OP_N("ppIsCustom",ppIsCustom,0);
 _REG_OP_N("ppqual",ppqual,0);currentq=ppqual;
@@ -12,7 +14,6 @@ _REG_OP_N("lumOffset",lumOffset,lumOffsetDef);
 _REG_OP_N("gammaCorrection",gammaCorrection,gammaCorrectionDef);
 _REG_OP_N("hue",hue,hueDef);
 _REG_OP_N("saturation",saturation,saturationDef);
-_REG_OP_N("flip",flip,0);
 
 _REG_OP_N("isBlur",isBlur,0);
 _REG_OP_N("blurStrength",blurStrength,30);
