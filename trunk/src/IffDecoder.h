@@ -114,6 +114,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (getPostProcDescription)(char *buf,unsigned int len) PURE;
  STDMETHOD (getPictPropDescription)(char *buf,unsigned int len) PURE;
  STDMETHOD (getNoiseDescription)(char *buf,unsigned int len) PURE;
+ STDMETHOD (getBlurDescription)(char *buf,unsigned int len) PURE;
  STDMETHOD (getSharpenDescription)(char *buf,unsigned int len) PURE;
  STDMETHOD (getFontName)(char *buf,unsigned int len) PURE;
  STDMETHOD (setFontName)(const char *name) PURE;

@@ -106,6 +106,7 @@ HMENU TtrayIcon::createMenu(void)
 
  insertMenuItem(hm,ord,IDC_CHB_GLOBAL_NOISE,"Noise",IDFF_isNoise);
 // insertSeparator(hm,ord);
+ insertMenuItem(hm,ord,IDC_CHB_GLOBAL_BLUR,"Blur",IDFF_isBlur);
 
  insertMenuItem(hm,ord,IDC_CHB_GLOBAL_SHARPEN,"Sharpen",IDFF_isSharpen);
 
@@ -158,6 +159,9 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
             break; 
            case IDC_CHB_GLOBAL_NOISE:
             ti->negate_Param(IDFF_isNoise);
+            break; 
+           case IDC_CHB_GLOBAL_BLUR:
+            ti->negate_Param(IDFF_isBlur);
             break; 
            case IDC_CHB_GLOBAL_SHARPEN:
             ti->negate_Param(IDFF_isSharpen);

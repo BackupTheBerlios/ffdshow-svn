@@ -586,6 +586,12 @@ STDMETHODIMP TffDecoder::getNoiseDescription(char *buf,unsigned int len)
  cfg.getNoiseDescription(buf);
  return S_OK;
 }
+STDMETHODIMP TffDecoder::getBlurDescription(char *buf,unsigned int len)
+{
+ if (!buf || len<1000) return S_FALSE;
+ cfg.getBlurDescription(buf);
+ return S_OK;
+}
 STDMETHODIMP TffDecoder::getSharpenDescription(char *buf,unsigned int len)
 {
  if (!buf || len<1000) return S_FALSE;

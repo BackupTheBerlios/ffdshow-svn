@@ -204,7 +204,7 @@ END
 IDD_GLOBAL DIALOGEX 0, 0, 259, 232
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX        "Global settings",IDC_STATIC,0,0,259,80
     CONTROL         "Postprocessing",IDC_CHB_GLOBAL_POSTPROC,"Button",
@@ -214,9 +214,9 @@ BEGIN
     CONTROL         "Noise",IDC_CHB_GLOBAL_NOISE,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,27,245,10
     CONTROL         "Sharpen",IDC_CHB_GLOBAL_SHARPEN,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,5,36,245,10
-    CONTROL         "Subtitles",IDC_CHB_GLOBAL_SUBTITLES,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,5,45,245,10
+    CONTROL         "Subtitles",IDC_CHB_GLOBAL_SUBTITLES,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,54,245,10
     LTEXT           "IDCT",IDC_LBL_IDCT,5,67,17,8
     COMBOBOX        IDC_CBX_IDCT,27,64,99,55,CBS_DROPDOWNLIST | WS_VSCROLL | 
                     WS_TABSTOP
@@ -264,12 +264,14 @@ BEGIN
     CONTROL         "Tray icon",IDC_CHB_TRAYICON,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,218,45,8
     CONTROL         "Flip video",IDC_CHB_FLIP,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,54,245,10
+                    WS_TABSTOP,165,66,68,10
+    CONTROL         "Blur",IDC_CHB_GLOBAL_BLUR,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,36,245,10
 END
 
-IDD_FFDSHOW DIALOGEX 0, 0, 272, 260
+IDD_FFDSHOW DIALOG DISCARDABLE  0, 0, 272, 260
 STYLE DS_CENTER | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_HEADER,"SysTabControl32",TCS_BUTTONS | 
                     TCS_FIXEDWIDTH | WS_TABSTOP,7,3,259,14

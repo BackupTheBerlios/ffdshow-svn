@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2002 Milan Cutka
- * luminance gain and offset Copyright (C) 1999-2000 Donald A. Graft
+ * luminance gain and offset base on DVD2AVI source code
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

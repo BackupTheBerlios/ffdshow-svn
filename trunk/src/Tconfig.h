@@ -58,6 +58,7 @@ public:
 
  int isBlur;
  int blurStrength;
+ void getBlurDescription(char *buf);
  
  int isSharpen,sharpenMethod;
  int xsharp_strength,xsharp_threshold;

@@ -54,6 +54,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP getPPmode(int *ppmode);
   STDMETHODIMP getPostProcDescription(char *buf,unsigned int len);
   STDMETHODIMP getPictPropDescription(char *buf,unsigned int len);
+  STDMETHODIMP getBlurDescription(char *buf,unsigned int len);
   STDMETHODIMP getNoiseDescription(char *buf,unsigned int len);
   STDMETHODIMP getSharpenDescription(char *buf,unsigned int len);
   STDMETHODIMP getFontName(char *buf,unsigned int len);

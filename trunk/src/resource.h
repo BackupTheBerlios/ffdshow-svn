@@ -177,6 +177,7 @@
 #define IDC_ED_SUB_SPEED                1129
 #define IDC_CHB_GLOBAL_SUBTITLES        1129
 #define IDC_LBL_FONT_SHADOW_RADIUS      1130
+#define IDC_CHB_GLOBAL_BLUR             1130
 #define IDC_TBR_FONT_SHADOW_RADIUS      1131
 #define IDC_CHB_SUB_AUTO                1133
 #define IDC_CHB_SUB_AUTOFLNM            1133

@@ -17,7 +17,6 @@ void TimgFilterBlur::init(int Idx,int Istride,int Idy)
 void TimgFilterBlur::done(void)
 {
  if (tempPict) xvid_free(tempPict);
-
 }
 void TimgFilterBlur::process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
                              unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
@@ -94,7 +93,7 @@ void TimgFilterBlur::process(unsigned char *srcY,unsigned char *srcU,unsigned ch
    *dstL=*srcL;
    *dstR=*srcR;
   }
- for (src=tempPict+stride,srcEnd=tempPict+dy*stride,dst=dstY;src<srcEnd;src+=stride,dst+=stride)
+ for (src=tempPict+stride,srcEnd=tempPict+(dy-1)*stride,dst=dstY+stride;src<srcEnd;src+=stride,dst+=stride)
   {
    unsigned char *srcLnEnd=src+dx;
    __asm

@@ -326,6 +326,10 @@ void Tconfig::getNoiseDescription(char *buf)
 {
  sprintf(buf,"Noise (method:%s, %sluma strength:%i, chroma strength:%i)",(noiseMethod==0)?"old":"avih",uniformNoise?"uniform, ":"",noiseStrength,noiseStrengthChroma);
 }
+void Tconfig::getBlurDescription(char *buf)
+{
+ sprintf(buf,"Blur (strength:%i)",blurStrength);
+}
 void Tconfig::getSharpenDescription(char *buf)
 {
  char tstr[256];

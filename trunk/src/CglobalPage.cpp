@@ -61,6 +61,10 @@ void TglobalPage::interDlg(void)
  setCheck(IDC_CHB_GLOBAL_NOISE   ,cfgGet(IDFF_isNoise   ));
  deci->getNoiseDescription(pomS,1023);
  SendDlgItemMessage(m_hwnd,IDC_CHB_GLOBAL_NOISE,WM_SETTEXT,0,LPARAM(pomS));
+
+ setCheck(IDC_CHB_GLOBAL_BLUR    ,cfgGet(IDFF_isBlur    ));
+ deci->getBlurDescription(pomS,1023);
+ SendDlgItemMessage(m_hwnd,IDC_CHB_GLOBAL_BLUR ,WM_SETTEXT,0,LPARAM(pomS));
  
  setCheck(IDC_CHB_GLOBAL_SHARPEN ,cfgGet(IDFF_isSharpen ));
  deci->getSharpenDescription(pomS,1023);
@@ -227,8 +231,14 @@ HRESULT TglobalPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     case IDC_CHB_GLOBAL_NOISE:
      cfgSet(IDFF_isNoise   ,getCheck(IDC_CHB_GLOBAL_NOISE   ));
      return TRUE;
+    case IDC_CHB_GLOBAL_BLUR:
+     cfgSet(IDFF_isBlur    ,getCheck(IDC_CHB_GLOBAL_BLUR    ));
+     return TRUE;
     case IDC_CHB_GLOBAL_SHARPEN:
      cfgSet(IDFF_isSharpen ,getCheck(IDC_CHB_GLOBAL_SHARPEN ));
+     return TRUE;
+    case IDC_CHB_GLOBAL_SUBTITLES:
+     cfgSet(IDFF_isSubtitles,getCheck(IDC_CHB_GLOBAL_SUBTITLES));
      return TRUE;
     case IDC_CHB_FLIP:
      cfgSet(IDFF_flip,getCheck(IDC_CHB_FLIP));
