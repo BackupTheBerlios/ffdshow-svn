@@ -30,9 +30,9 @@ extern "C" {
 #define CODEC_ID_MSMPEG4V3 12
 #define CODEC_ID_MSMPEG4 CODEC_ID_MSMPEG4V3
 #define CODEC_ID_WMV1      13
-#define CODEC_ID_H263P     14
-#define CODEC_ID_H263I     15
-#define CODEC_ID_WMV2      16
+#define CODEC_ID_WMV2      14
+#define CODEC_ID_H263P     15
+#define CODEC_ID_H263I     16
 
 #define CODEC_ID_XVID_MASK 256
 
@@ -290,6 +290,8 @@ extern AVCodec mpeg4_encoder;
 extern AVCodec msmpeg4v1_encoder;
 extern AVCodec msmpeg4v2_encoder;
 extern AVCodec msmpeg4v3_encoder;
+extern AVCodec wmv1_encoder;
+extern AVCodec wmv2_encoder;
 
 extern AVCodec h263_decoder;
 extern AVCodec mpeg4_decoder;
@@ -297,6 +299,7 @@ extern AVCodec msmpeg4v1_decoder;
 extern AVCodec msmpeg4v2_decoder;
 extern AVCodec msmpeg4v3_decoder;
 extern AVCodec wmv1_decoder;
+extern AVCodec wmv2_decoder;
 extern AVCodec mpeg_decoder;
 extern AVCodec h263i_decoder;
 extern AVCodec rv10_decoder;

@@ -41,20 +41,9 @@ static int h263_decode_block(MpegEncContext * s, DCTELEM * block,
 static inline int mpeg4_decode_dc(MpegEncContext * s, int n, int *dir_ptr);
 static inline int mpeg4_decode_block(MpegEncContext * s, DCTELEM * block,
                               int n, int coded);
-static int h263_pred_dc(MpegEncContext * s, int n, UINT16 **dc_val_ptr);
-static inline int mpeg4_pred_dc(MpegEncContext * s, int n, UINT16 **dc_val_ptr, int *dir_ptr);
-static void mpeg4_inv_pred_ac(MpegEncContext * s, INT16 *block, int n,
-                              int dir);
 static void mpeg4_decode_sprite_trajectory(MpegEncContext * s);
 
 extern UINT32 inverse[256];
-
-static UINT16 mv_penalty[MAX_FCODE+1][MAX_MV*2+1];
-static UINT8 fcode_tab[MAX_MV*2+1];
-static UINT8 umv_fcode_tab[MAX_MV*2+1];
-
-static UINT16 uni_DCtab_lum  [512][2];
-static UINT16 uni_DCtab_chrom[512][2];
 
 int h263_get_picture_format(int width, int height)
 {
@@ -254,101 +243,6 @@ INT16 *h263_pred_motion(MpegEncContext * s, int block,
     return mot_val;
 }
 
-
-static void init_mv_penalty_and_fcode(MpegEncContext *s)
-{
-    int f_code;
-    int mv;
-    for(f_code=1; f_code<=MAX_FCODE; f_code++){
-        for(mv=-MAX_MV; mv<=MAX_MV; mv++){
-            int len;
-
-            if(mv==0) len= mvtab[0][1];
-            else{
-                int val, bit_size, range, code;
-
-                bit_size = s->f_code - 1;
-                range = 1 << bit_size;
-
-                val=mv;
-                if (val < 0) 
-                    val = -val;
-                val--;
-                code = (val >> bit_size) + 1;
-                if(code<33){
-                    len= mvtab[code][1] + 1 + bit_size;
-                }else{
-                    len= mvtab[32][1] + 2 + bit_size;
-                }
-            }
-
-            mv_penalty[f_code][mv+MAX_MV]= len;
-        }
-    }
-
-    for(f_code=MAX_FCODE; f_code>0; f_code--){
-        for(mv=-(16<<f_code); mv<(16<<f_code); mv++){
-            fcode_tab[mv+MAX_MV]= f_code;
-        }
-    }
-
-    for(mv=0; mv<MAX_MV*2+1; mv++){
-        umv_fcode_tab[mv]= 1;
-    }
-}
-
-static void init_uni_dc_tab(void)
-{
-    int level, uni_code, uni_len;
-
-    for(level=-256; level<256; level++){
-        int size, v, l;
-        /* find number of bits */
-        size = 0;
-        v = abs(level);
-        while (v) {
-            v >>= 1;
-	    size++;
-        }
-
-        if (level < 0)
-            l= (-level) ^ ((1 << size) - 1);
-        else
-            l= level;
-
-        /* luminance */
-        uni_code= DCtab_lum[size][0];
-        uni_len = DCtab_lum[size][1];
-
-        if (size > 0) {
-            uni_code<<=size; uni_code|=l;
-            uni_len+=size;
-            if (size > 8){
-                uni_code<<=1; uni_code|=1;
-                uni_len++;
-            }
-        }
-        uni_DCtab_lum[level+256][0]= uni_code;
-        uni_DCtab_lum[level+256][1]= uni_len;
-
-        /* chrominance */
-        uni_code= DCtab_chrom[size][0];
-        uni_len = DCtab_chrom[size][1];
-        
-        if (size > 0) {
-            uni_code<<=size; uni_code|=l;
-            uni_len+=size;
-            if (size > 8){
-                uni_code<<=1; uni_code|=1;
-                uni_len++;
-            }
-        }
-        uni_DCtab_chrom[level+256][0]= uni_code;
-        uni_DCtab_chrom[level+256][1]= uni_len;
-
-    }
-}
-
 void ff_mpeg4_stuffing(PutBitContext * pbc)
 {
     int length;
@@ -357,42 +251,13 @@ void ff_mpeg4_stuffing(PutBitContext * pbc)
     if(length) put_bits(pbc, length, (1<<length)-1);
 }
 
-void h263_dc_scale(MpegEncContext * s)
+static void h263_dc_scale(MpegEncContext * s)
 {
-#if 1
-    const static UINT8 y_tab[32]={
-    //  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
-        0, 8, 8, 8, 8,10,12,14,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,34,36,38,40,42,44,46
-    };
-    const static UINT8 c_tab[32]={
-    //  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
-        0, 8, 8, 8, 8, 9, 9,10,10,11,11,12,12,13,13,14,14,15,15,16,16,17,17,18,18,19,20,21,22,23,24,25
-    };
-    s->y_dc_scale = y_tab[s->qscale];
-    s->c_dc_scale = c_tab[s->qscale];
-#else
-    int quant;
-    quant = s->qscale;
-    /* luminance */
-    if (quant < 5)
-	s->y_dc_scale = 8;
-    else if (quant > 4 && quant < 9)
-	s->y_dc_scale = (2 * quant);
-    else if (quant > 8 && quant < 25)
-	s->y_dc_scale = (quant + 8);
-    else
-	s->y_dc_scale = (2 * quant - 16);
-    /* chrominance */
-    if (quant < 5)
-	s->c_dc_scale = 8;
-    else if (quant > 4 && quant < 25)
-	s->c_dc_scale = ((quant + 13) / 2);
-    else
-	s->c_dc_scale = (quant - 6);
-#endif
+    s->y_dc_scale= s->y_dc_scale_table[ s->qscale ];
+    s->c_dc_scale= s->c_dc_scale_table[ s->qscale ];
 }
 
-static inline int mpeg4_pred_dc(MpegEncContext * s, int n, UINT16 **dc_val_ptr, int *dir_ptr)
+inline int ff_mpeg4_pred_dc(MpegEncContext * s, int n, UINT16 **dc_val_ptr, int *dir_ptr)
 {
     int a, b, c, wrap, pred, scale;
     UINT16 *dc_val;
@@ -470,33 +335,6 @@ void mpeg4_pred_ac(MpegEncContext * s, INT16 *block, int n,
     for(i=1;i<8;i++)
         ac_val1[8 + i] = block[block_permute_op(i)];
 }
-
-static void mpeg4_inv_pred_ac(MpegEncContext * s, INT16 *block, int n,
-                              int dir)
-{
-    int i;
-    INT16 *ac_val;
-
-    /* find prediction */
-    ac_val = s->ac_val[0][0] + s->block_index[n] * 16;
- 
-    if (dir == 0) {
-        /* left prediction */
-        ac_val -= 16;
-        for(i=1;i<8;i++) {
-            block[block_permute_op(i*8)] -= ac_val[i];
-        }
-    } else {
-        /* top prediction */
-        ac_val -= 16 * s->block_wrap[n];
-        for(i=1;i<8;i++) {
-            block[block_permute_op(i)] -= ac_val[i + 8];
-        }
-    }
-}
-
-
-
 
 /***********************************************/
 /* decoding */
@@ -1564,10 +1402,6 @@ intra:
             if (s->ac_pred && s->h263_aic)
                 s->h263_aic_dir = get_bits1(&s->gb);
         }
-        if (s->h263_aic) {
-            s->y_dc_scale = 2 * s->qscale;
-            s->c_dc_scale = 2 * s->qscale;
-        }
         cbpy = get_vlc(&s->gb, &cbpy_vlc);
         if(cbpy<0) return -1;
         cbp = (cbpc & 3) | (cbpy << 2);
@@ -1778,7 +1612,7 @@ static inline int mpeg4_decode_dc(MpegEncContext * s, int n, int *dir_ptr)
         }
     }
 
-    pred = mpeg4_pred_dc(s, n, &dc_val, dir_ptr);
+    pred = ff_mpeg4_pred_dc(s, n, &dc_val, dir_ptr);
     level += pred;
     if (level < 0)
         level = 0;
@@ -1867,8 +1701,8 @@ static inline int mpeg4_decode_block(MpegEncContext * s, DCTELEM * block,
 #if 1 
                     {
                         const int abs_level= ABS(level);
-                        int run1;
                         if(abs_level<=MAX_LEVEL && run<=MAX_RUN && s->error_resilience>=0){
+                            const int run1= run - rl->max_run[last][abs_level] - 1;
                             if(abs_level <= rl->max_level[last][run]){
                                 fprintf(stderr, "illegal 3. esc, vlc encoding possible\n");
                                 return DECODING_AC_LOST;
@@ -1877,7 +1711,6 @@ static inline int mpeg4_decode_block(MpegEncContext * s, DCTELEM * block,
                                 fprintf(stderr, "illegal 3. esc, esc 1 encoding possible\n");
                                 return DECODING_AC_LOST;
                             }
-                            run1 = run - rl->max_run[last][abs_level] - 1;
                             if(run1 >= 0 && abs_level <= rl->max_level[last][run1]){
                                 fprintf(stderr, "illegal 3. esc, esc 2 encoding possible\n");
                                 return DECODING_AC_LOST;
@@ -2096,6 +1929,15 @@ int h263_decode_picture_header(MpegEncContext *s)
         skip_bits(&s->gb, 8);
     }
     s->f_code = 1;
+    
+    if(s->h263_aic){
+         s->y_dc_scale_table= 
+         s->c_dc_scale_table= h263_aic_dc_scale_table;
+    }else{
+        s->y_dc_scale_table=
+        s->c_dc_scale_table= ff_mpeg1_dc_scale_table;
+    }
+
     return 0;
 }
 
@@ -2670,6 +2512,9 @@ int mpeg4_decode_picture_header(MpegEncContext * s)
 
      s->picture_number++; // better than pic number==0 allways ;)
 //printf("done\n");
+
+     s->y_dc_scale_table= ff_mpeg4_y_dc_scale_table; //FIXME add short header support 
+     s->c_dc_scale_table= ff_mpeg4_c_dc_scale_table;
 
      return 0;
 }

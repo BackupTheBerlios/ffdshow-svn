@@ -364,85 +364,6 @@ void MPV_frame_end(MpegEncContext *s)
 }
 }
 
-/* reorder input for encoding */
-void reorder_input(MpegEncContext *s, AVPicture *pict)
-{
-    int i, j, index;
-            
-    if(s->max_b_frames > FF_MAX_B_FRAMES) s->max_b_frames= FF_MAX_B_FRAMES;
-
-//        delay= s->max_b_frames+1; (or 0 if no b frames cuz decoder diff)
-
-    for(j=0; j<REORDER_BUFFER_SIZE-1; j++){
-        s->coded_order[j]= s->coded_order[j+1];
-    }
-    s->coded_order[j].picture[0]= s->coded_order[j].picture[1]= s->coded_order[j].picture[2]= NULL; //catch uninitalized buffers
-    s->coded_order[j].pict_type=0;
-
-    switch(s->input_pict_type){
-    default: 
-    case I_TYPE:
-    case S_TYPE:
-    case P_TYPE:
-        index= s->max_b_frames - s->b_frames_since_non_b;
-        s->b_frames_since_non_b=0;
-        break;            
-    case B_TYPE:
-        index= s->max_b_frames + 1;
-        s->b_frames_since_non_b++;
-        break;          
-    }
-//printf("index:%d type:%d strides: %d %d\n", index, s->input_pict_type, pict->linesize[0], s->linesize);
-    if(   (index==0 || (s->flags&CODEC_FLAG_INPUT_PRESERVED))
-       && pict->linesize[0] == s->linesize
-       && pict->linesize[1] == s->linesize>>1
-       && pict->linesize[2] == s->linesize>>1){
-//printf("ptr\n");
-        for(i=0; i<3; i++){
-            s->coded_order[index].picture[i]= pict->data[i];
-        }
-    }else{
-//printf("copy\n");
-        for(i=0; i<3; i++){
-            uint8_t *src = pict->data[i];
-            uint8_t *dest;
-            int src_wrap = pict->linesize[i];
-            int dest_wrap = s->linesize;
-            int w = s->width;
-            int h = s->height;
-
-            if(index==0) dest= s->last_picture[i]+16; //is current_picture indeed but the switch hapens after reordering
-            else         dest= s->picture_buffer[s->picture_buffer_index][i];
-
-            if (i >= 1) {
-                dest_wrap >>= 1;
-                w >>= 1;
-                h >>= 1;
-            }
-
-            s->coded_order[index].picture[i]= dest;
-            for(j=0;j<h;j++) {
-                memcpy(dest, src, w);
-                dest += dest_wrap;
-                src += src_wrap;
-            }
-        }
-        if(index!=0){
-            s->picture_buffer_index++;
-            if(s->picture_buffer_index >= REORDER_BUFFER_SIZE-1) s->picture_buffer_index=0;
-        }
-    }
-    s->coded_order[index].pict_type = s->input_pict_type;
-    s->coded_order[index].qscale    = s->input_qscale;
-    s->coded_order[index].force_type= s->force_input_type;
-    s->coded_order[index].picture_in_gop_number= s->input_picture_in_gop_number;
-    s->coded_order[index].picture_number= s->input_picture_number;
-
-    for(i=0; i<3; i++){
-        s->new_picture[i]= s->coded_order[0].picture[i];
-    }
-}
-
 static inline void gmc1_motion(MpegEncContext *s,
                                UINT8 *dest_y, UINT8 *dest_cb, UINT8 *dest_cr,
                                int dest_offset,
@@ -975,7 +896,6 @@ void MPV_decode_mb(MpegEncContext *s, DCTELEM block[6][64])
 
 void ff_copy_bits(PutBitContext *pb, UINT8 *src, int length)
 {
-#if 1
     int bytes= length>>4;
     int bits= length&15;
     int i;
@@ -984,14 +904,6 @@ void ff_copy_bits(PutBitContext *pb, UINT8 *src, int length)
 
     for(i=0; i<bytes; i++) put_bits(pb, 16, be2me_16(((uint16_t*)src)[i]));
     put_bits(pb, bits, be2me_16(((uint16_t*)src)[i])>>(16-bits));
-#else
-    int bytes= length>>3;
-    int bits= length&7;
-    int i;
-
-    for(i=0; i<bytes; i++) put_bits(pb, 8, src[i]);
-    put_bits(pb, bits, src[i]>>(8-bits));
-#endif
 }
 
 static void dct_unquantize_mpeg1_c(MpegEncContext *s, 

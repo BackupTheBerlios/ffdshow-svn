@@ -44,14 +44,10 @@ static int mpeg2_decode_block_intra(MpegEncContext *s,
                                     int n);
 static int mpeg_decode_motion(MpegEncContext *s, int fcode, int pred);
 
-static UINT16 mv_penalty[MAX_FCODE+1][MAX_MV*2+1];
-static UINT8 fcode_tab[MAX_MV*2+1];
-
-static void put_header(MpegEncContext *s, int header)
+static void common_init(MpegEncContext *s)
 {
-    align_put_bits(&s->pb);
-    put_bits(&s->pb, 16, header>>16);
-    put_bits(&s->pb, 16, header&0xFFFF);
+    s->y_dc_scale_table=
+    s->c_dc_scale_table= ff_mpeg1_dc_scale_table;
 }
 
 /******************************************/
@@ -720,6 +716,8 @@ typedef struct Mpeg1Context {
 static int mpeg_decode_init(AVCodecContext *avctx)
 {
     Mpeg1Context *s = avctx->priv_data;
+
+    common_init(&s->mpeg_enc_ctx);
 
     s->header_state = 0xff;
     s->mpeg_enc_ctx_allocated = 0;

@@ -1,3 +1,4 @@
+#define FF__WMV1
 /*
  * Copyright (c) 2002 Milan Cutka
  * based on CXvidDecoder.cpp from XviD DirectShow filter

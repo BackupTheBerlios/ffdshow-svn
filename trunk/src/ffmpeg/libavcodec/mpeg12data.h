@@ -61,10 +61,6 @@ const unsigned char vlc_dc_chroma_bits[12] = {
     2, 2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10,
 };
 
-/* simple include everything table for dc, first byte is bits number next 3 are code*/
-static UINT32 mpeg1_lum_dc_uni[512];
-static UINT32 mpeg1_chr_dc_uni[512];
-
 static const UINT16 mpeg1_vlc[113][2] = {
  { 0x3, 2 }, { 0x4, 4 }, { 0x5, 5 }, { 0x6, 7 },
  { 0x26, 8 }, { 0x21, 8 }, { 0xa, 10 }, { 0x1d, 12 },
@@ -164,9 +160,6 @@ static const INT8 mpeg1_run[111] = {
  17, 18, 19, 20, 21, 22, 23, 24,
  25, 26, 27, 28, 29, 30, 31,
 };
-
-static UINT8 mpeg1_index_run[2][64];
-static INT8 mpeg1_max_level[2][64];
 
 static RLTable rl_mpeg1 = {
     111,
@@ -402,3 +395,13 @@ static const UINT8 non_linear_qscale[32] = {
     24,28,32,36,40,44,48,52,
     56,64,72,80,88,96,104,112,
 };
+
+UINT8 ff_mpeg1_dc_scale_table[128]={ // MN: mpeg2 really can have such large qscales?
+//  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+    8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+};
+
+
