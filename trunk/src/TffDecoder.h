@@ -98,11 +98,11 @@ private:
  TdialogSettings dialogSettings;
  Tpresets presets;
  int inPlayer;
- int fontChanged,resizeChanged,currentq;
+ int fontChanged,cropChanged,currentq;
  int cfgDlgHnwd;
  char AVIname[1024],AVIfourcc[10];
  int loadAVInameAndPreset(void);
- void onSubsChanged(void),onResizeChanged(void),onTrayIconChanged(void),onFilterOnOff(void);
+ void onSubsChanged(void),onCropChanged(void),onTrayIconChanged(void),onFilterOnOff(void);
  HRESULT ChangeColorspace(GUID subtype,GUID formattype,void * format);
  HWND onChangeWnd;unsigned int onChangeMsg;
  HWND onInfoWnd;unsigned int onInfoMsg1,onInfoMsg2;
@@ -124,8 +124,6 @@ private:
 
  TmovieSource *movie;
  Tpostproc postproc;
- unsigned int cropLeft,cropTop,cropDx,cropDy;
- void calcCrop(void);
  TimgFilters *imgFilters;
  Tsubtitles *subs;subtitle *sub;
  int codecId;

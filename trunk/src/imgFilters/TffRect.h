@@ -22,7 +22,7 @@ struct TffRect
  TffRect(void):stride(0) {}
  TffRect(unsigned int Istride,unsigned int x,unsigned int y,unsigned int dx,unsigned int dy):stride(Istride)
   {
-   full=clip=Trect(x,y,dx,dy);
+   full=clip=Trect(x,y,dx,dy);full.calcDiff(stride);clip.calcDiff(stride);
   }
  unsigned int stride; 
  void clear(unsigned char *y,unsigned char *u,unsigned char *v);

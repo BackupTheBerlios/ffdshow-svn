@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /G6 /MT /GX /O2 /Ob2 /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /I "src\movie_source" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FD /c
+# ADD CPP /nologo /G6 /MT /GX /O2 /Ob2 /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /I "src\movie_source" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /Yu"StdAfx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0xc09 /d "NDEBUG"
@@ -70,7 +70,7 @@ LINK32=xilink6.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /w /W0 /Gm /Gi /GX /ZI /Od /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /I "src\movie_source" /D "DEBUG" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /w /W0 /Gm /Gi /GX /ZI /Od /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /I "src\movie_source" /D "DEBUG" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FR /Yu"StdAfx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0xc09 /d "_DEBUG"
@@ -187,11 +187,19 @@ SOURCE=.\src\xvid\utils\mem_align.c
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
 # ADD CPP /O2
+# SUBTRACT CPP /YX /Yc /Yu
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
+# SUBTRACT CPP /YX /Yc /Yu
+
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\stdafx.cpp
+# ADD CPP /Yc"StdAfx.h"
 # End Source File
 # Begin Source File
 
@@ -258,6 +266,10 @@ SOURCE=.\src\xvid\utils\mem_align.h
 # Begin Source File
 
 SOURCE=.\src\resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\stdafx.h
 # End Source File
 # Begin Source File
 
@@ -371,6 +383,7 @@ SOURCE=.\src\subtitles\Tsubtitles.h
 # Begin Source File
 
 SOURCE=.\src\xvid\image\colorspace.c
+# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -410,6 +423,7 @@ InputName=cpuid
 # Begin Source File
 
 SOURCE=.\src\xvid\utils\emms.c
+# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -418,6 +432,7 @@ SOURCE=.\src\xvid\utils\emms.h
 # Begin Source File
 
 SOURCE=.\src\xvid\dct\idct.c
+# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -457,6 +472,7 @@ InputName=idct_mmx
 # Begin Source File
 
 SOURCE=.\src\xvid\image\image.c
+# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -500,6 +516,7 @@ InputName=rgb_to_yv12_mmx
 # Begin Source File
 
 SOURCE=.\src\xvid\xvid.c
+# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
@@ -711,6 +728,14 @@ SOURCE=.\src\imgFilters\TimgFilterChroma.cpp
 # Begin Source File
 
 SOURCE=.\src\imgFilters\TimgFilterChroma.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\TimgFilterCrop.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\TimgFilterCrop.h
 # End Source File
 # Begin Source File
 
@@ -1244,7 +1269,7 @@ SOURCE=.\src\settings\TpresetSettings.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -1294,6 +1319,7 @@ SOURCE=.\src\movie_source\TmovieSourceXviD.h
 # Begin Source File
 
 SOURCE=.\src\idct\xIdctref.c
+# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # End Group
 # End Target

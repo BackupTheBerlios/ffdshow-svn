@@ -29,6 +29,7 @@
 #include "TimgFilterTimesmooth.h"
 #include "TimgFilterShowMV.h"
 #include "TimgFilterResize.h"
+#include "TimgFilterCrop.h"
 #include "TglobalSettings.h"
 #include "TpresetSettings.h"
 
@@ -36,6 +37,7 @@ using namespace std;
 
 TimgFilters::TimgFilters(IffDecoder *deci)
 {
+ filters.push_back(crop=new TimgFilterCrop);crop->setDeci(deci);
  filters.push_back(postproc=new TimgFilterPostproc);postproc->setDeci(deci);
  filters.push_back(noise=new TimgFilterNoise);noise->setDeci(deci);
  filters.push_back(luma=new TimgFilterLuma);luma->setDeci(deci);
@@ -59,6 +61,7 @@ TimgFilters::~TimgFilters()
 }
 void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *cfg,TffPict *pict,TffRect &rect)
 {
+ crop->process(pict,rect,cfg);
  for (int i=cfg->min_order;i<=cfg->max_order;i++)
   if (i==cfg->orderPostproc && cfg->isPostproc)
    postproc->process(pict,rect,cfg);

@@ -23,6 +23,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_autoPresetFileFirst   5  //try to load preset from file
 #define IDFF_autoLoadedFromFile    6
 #define IDFF_inPlayer              7
+#define IDFF_cropChanged          14 
 
 #define IDFF_isPostproc          106
 #define IDFF_orderPostproc       109

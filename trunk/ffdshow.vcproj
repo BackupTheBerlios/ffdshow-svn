@@ -698,6 +698,12 @@
 				RelativePath="src\imgFilters\TimgFilterChroma.h">
 			</File>
 			<File
+				RelativePath="src\imgFilters\TimgFilterCrop.cpp">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TimgFilterCrop.h">
+			</File>
+			<File
 				RelativePath="src\imgFilters\TimgFilterLuma.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -793,9 +799,6 @@
 			</File>
 			<File
 				RelativePath="src\imgFilters\Tpostproc.h">
-			</File>
-			<File
-				RelativePath="src\imgFilters\TresizeCtx.h">
 			</File>
 			<File
 				RelativePath="src\imgFilters\noise_avih_template.h">
