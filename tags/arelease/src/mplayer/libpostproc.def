@@ -1,0 +1,10 @@
+EXPORTS
+init_mplayer
+postprocess
+getPpModeForQuality
+getPPModeByNameAndQuality
+setModifyPPmode
+
+set_sws_params
+getSwsContextFromCmdLine
+freeSwsContext
