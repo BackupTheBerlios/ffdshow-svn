@@ -17,6 +17,8 @@ public:
  virtual int invInter(void) {return cfgInv(IDFF_isPostproc);}
  virtual int getOrder(void) {return cfgGet(IDFF_orderPostproc);}
  virtual void setOrder(int o) {cfgSet(IDFF_orderPostproc,o);}
+ virtual int  getProcessFull(void) {return cfgGet(IDFF_fullPostproc);}
+ virtual void setProcessFull(int full) {cfgSet(IDFF_fullPostproc,full);} 
  virtual void getTip(char *tipS,int len);
 };
 

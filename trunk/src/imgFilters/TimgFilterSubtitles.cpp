@@ -16,7 +16,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#pragma hdrstop
+#include "stdafx.h"
 #include "TimgFilterSubtitles.h"
 #include "TpresetSettings.h"
 #include "IffDecoder.h"
@@ -32,7 +32,7 @@ void TimgFilterSubtitles::process(TffPict *pict,TffRect &rect,const TpresetSetti
  deci->getSubtitle(&sub); 
  if (sub)
   { 
-   Trect *r=init(&rect,0);
+   Trect *r=init(&rect,cfg->fullSubtitles);
    unsigned char *dstY=pict->getCurNextY(rect.stride,r)+r->diffY ;
    unsigned char *dstU=pict->getCurNextU(rect.stride,r)+r->diffUV;
    unsigned char *dstV=pict->getCurNextV(rect.stride,r)+r->diffUV;

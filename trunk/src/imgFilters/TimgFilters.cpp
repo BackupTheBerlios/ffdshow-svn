@@ -16,7 +16,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#pragma hdrstop
+#include "stdafx.h"
 #include "TimgFilters.h"
 #include "TimgFilterPostproc.h"
 #include "TimgFilterNoise.h"

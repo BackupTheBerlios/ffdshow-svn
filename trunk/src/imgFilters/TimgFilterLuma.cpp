@@ -17,9 +17,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <windows.h>
-#pragma hdrstop
-#include <math.h>
+#include "stdafx.h"
 #include "TimgFilterLuma.h"
 #include "TpresetSettings.h"
 
@@ -33,7 +31,7 @@ TimgFilterLuma::TimgFilterLuma(void)
 void TimgFilterLuma::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (cfg->lumGain==TpresetSettings::lumGainDef && cfg->lumOffset==TpresetSettings::lumOffsetDef && cfg->gammaCorrection==TpresetSettings::gammaCorrectionDef) return;
- Trect *r=init(&rect,0);
+ Trect *r=init(&rect,cfg->fullPictProp);
  const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getCurNextY()+r->diffY;
 
  const unsigned char *gammaSrc;unsigned char *gammaDst;

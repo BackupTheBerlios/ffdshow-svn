@@ -16,9 +16,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <stdlib.h>
-#include <string.h>
-#include <windows.h>
+#include "stdafx.h"
 #include "TmovieSourceLibavcodec.h"
 #include "Tdll.h"
 #include "ffdebug.h"

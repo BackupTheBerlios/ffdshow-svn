@@ -26,6 +26,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 
 #define IDFF_isPostproc          106
 #define IDFF_orderPostproc       109
+#define IDFF_fullPostproc        111
 #define IDFF_ppqual              101  //postprocessing quality set by user (active when not autoq)
 #define IDFF_autoq               102  //is automatic postprocessing control enabled?
 #define IDFF_ppIsCustom          103  //custom postprocessing settings are enabled
@@ -37,6 +38,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 
 #define IDFF_isPictProp          205
 #define IDFF_orderPictProp       207
+#define IDFF_fullPictProp        213
 #define IDFF_lumGain             201  //luminance gain
 #define IDFF_lumOffset           202  //luminance offset
 #define IDFF_gammaCorrection     206  //gamma correction (*100)
@@ -52,6 +54,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 
 #define IDFF_isSharpen           401 //is xshapen filter active?
 #define IDFF_orderSharpen        407
+#define IDFF_fullSharpen         408
 #define IDFF_sharpenMethod       406 //0 - xsharpen, 1 - unsharp
 #define IDFF_xsharp_strength     402 //xsharpen filter strength
 #define IDFF_xsharp_threshold    403 //xsharpen filter threshold
@@ -60,6 +63,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 
 #define IDFF_isNoise             501 //is noising filter active?
 #define IDFF_orderNoise          506
+#define IDFF_fullNoise           507
 #define IDFF_noiseMethod         505 //0 - my noise, 1 - avih noise
 #define IDFF_uniformNoise        502 //is uniform noise active (applies only to luma noise now)?
 #define IDFF_noiseStrength       503 //luma noise strength
@@ -69,6 +73,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 
 #define IDFF_isResize            701 //is resizing active (or will be resizing active)
 #define IDFF_orderResize         722
+#define IDFF_fullResize          723
 #define IDFF_resizeDx            702 //new width
 #define IDFF_resizeDy            703 //new height
 #define IDFF_resizeAspect        704 //0 - no aspect ratio correctio, 1 - keep original aspect, 2 - aspect ration is set in IDFF_aspectRatio
@@ -78,6 +83,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_resizeGblurChrom    709 // *100
 #define IDFF_resizeSharpenLum    710 // *100
 #define IDFF_resizeSharpenChrom  711 // *100
+
 #define IDFF_isCropNzoom         712
 #define IDFF_isZoom              713
 #define IDFF_magnificationX      714
@@ -91,6 +97,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 
 #define IDFF_isSubtitles         801
 #define IDFF_orderSubtitles      815
+#define IDFF_fullSubtitles       817
 #define IDFF_fontCharset         802
 #define IDFF_fontSize            803
 #define IDFF_fontWeight          804
@@ -107,11 +114,13 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 
 #define IDFF_isBlur              901
 #define IDFF_orderBlur           903
+#define IDFF_fullBlur            905
 #define IDFF_blurStrength        902
 #define IDFF_tempSmooth          904
 
 #define IDFF_isOffset           1101
 #define IDFF_orderOffset        1102
+#define IDFF_fullOffset         1109
 #define IDFF_offsetY_X          1103
 #define IDFF_offsetY_Y          1104
 #define IDFF_offsetU_X          1105

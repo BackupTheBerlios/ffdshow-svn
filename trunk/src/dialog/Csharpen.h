@@ -18,6 +18,8 @@ public:
  virtual int invInter(void) {return cfgInv(IDFF_isSharpen);}
  virtual int getOrder(void) {return cfgGet(IDFF_orderSharpen);}
  virtual void setOrder(int o) {cfgSet(IDFF_orderSharpen,o);}
+ virtual int  getProcessFull(void) {return cfgGet(IDFF_fullSharpen);}
+ virtual void setProcessFull(int full) {cfgSet(IDFF_fullSharpen,full);} 
  virtual void getTip(char *tipS,int len);
 };
 

@@ -16,11 +16,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#pragma hdrstop
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <windows.h>
+#include "stdafx.h"
 #include "TimgFilterOffset.h"
 #include "TpresetSettings.h"
 #include "IffDecoder.h"
@@ -58,7 +54,7 @@ void TimgFilterOffset::offset(const unsigned char *src,unsigned char *dst,unsign
 void TimgFilterOffset::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (!cfg->offsetY_X && !cfg->offsetY_Y && !cfg->offsetU_X && !cfg->offsetU_Y && !cfg->offsetV_X && !cfg->offsetV_Y) return;
- Trect *r=init(&rect,0);
+ Trect *r=init(&rect,cfg->fullOffset);
  if (cfg->offsetY_X || cfg->offsetY_Y)
   {
    const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;

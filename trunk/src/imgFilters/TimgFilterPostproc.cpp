@@ -16,9 +16,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#pragma hdrstop
-#include <stdlib.h>
-#include <math.h>
+#include "stdafx.h"
 #include "TcpuUsage.h"
 #include "TimgFilterPostproc.h"
 #include "TpresetSettings.h"
@@ -59,7 +57,7 @@ void TimgFilterPostproc::process(TffPict *pict,TffRect &rect,const TpresetSettin
  int ppmode=postproc->getPPmode(cfg,currentq);
  if (ppmode)
   {
-   Trect *r=init(&rect,0);
+   Trect *r=init(&rect,cfg->fullPostproc);
    const unsigned char *tempPict1[3]={pict->getCurY() +r->diffY,pict->getCurU() +r->diffUV,pict->getCurV() +r->diffUV};
    unsigned char       *tempPict2[3]={pict->getNextY()+r->diffY,pict->getNextU()+r->diffUV,pict->getNextV()+r->diffUV};
    if (cfg->deblockStrength!=TpresetSettings::deblockStrengthDef/* || afterResize*/)

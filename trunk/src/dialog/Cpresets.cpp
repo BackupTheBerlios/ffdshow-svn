@@ -16,11 +16,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <windows.h>
-#include <commctrl.h>
-#include <string.h>
-#include <stdio.h>
-#pragma hdrstop
+#include "stdafx.h"
 #include "IffDecoder.h"
 #include "TffdshowPage.h"
 #include "Cpresets.h"
@@ -273,9 +269,6 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
          }
         return TRUE;
        }
-      case IDC_BT_PRESET_HELP:
-       parent->showHelp("presets.html");
-       return TRUE;
      }
     break;
    case WM_NOTIFY:

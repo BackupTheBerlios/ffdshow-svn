@@ -16,10 +16,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#pragma hdrstop
-#include <windows.h>
-#include <stdlib.h>
-#include <math.h>
+#include "stdafx.h"
 #include "TimgFilterTimesmooth.h"
 #include "TpresetSettings.h"
 #include "xvid\utils\mem_align.h"
@@ -82,7 +79,7 @@ void TimgFilterTimesmooth::done(void)
 void TimgFilterTimesmooth::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (!cfg->tempSmooth) return;
- Trect *r=init(&rect,0);
+ Trect *r=init(&rect,cfg->fullBlur);
  const unsigned char *srcY=pict->getCurY()+r->diffY ;unsigned char *dstY=pict->getNextY()+r->diffY ;
  const unsigned char *srcU=pict->getCurU()+r->diffUV;unsigned char *dstU=pict->getNextU()+r->diffUV;
  const unsigned char *srcV=pict->getCurV()+r->diffUV;unsigned char *dstV=pict->getNextV()+r->diffUV;

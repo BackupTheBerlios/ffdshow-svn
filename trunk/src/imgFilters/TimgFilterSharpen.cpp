@@ -17,7 +17,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#pragma hdrstop
+#include "stdafx.h"
 #include "TimgFilterSharpen.h"
 #include "TpresetSettings.h"
 #include "Tconfig.h"
@@ -432,7 +432,7 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
 void TimgFilterSharpen::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (cfg->xsharp_strength==cfg->xsharp_strengthDef && cfg->unsharp_strength!=cfg->unsharp_strengthDef) return;
- Trect *r=init(&rect,0);
+ Trect *r=init(&rect,cfg->fullSharpen);
  switch (cfg->sharpenMethod)
   {
    case 0:

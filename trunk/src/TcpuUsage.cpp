@@ -61,7 +61,7 @@ end;
 interface
 */
 //uses Windows, SysUtils;
-#include <windows.h>
+#include "stdafx.h"
 #include "TcpuUsage.h"
 
 //------------------------------------------------------------------------------

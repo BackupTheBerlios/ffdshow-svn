@@ -47,14 +47,19 @@ BEGIN
                     SS_CENTERIMAGE
 END
 
-IDD_FFDSHOW DIALOGEX 0, 0, 349, 168
+IDD_FFDSHOW DIALOGEX 0, 0, 348, 185
 STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     CONTROL         "",IDC_TV_TREE,"SysTreeView32",TVS_DISABLEDRAGDROP | 
                     TVS_SHOWSELALWAYS | TVS_FULLROWSELECT | WS_BORDER | 
-                    WS_TABSTOP | 0x800,0,2,90,165,WS_EX_CLIENTEDGE
+                    WS_TABSTOP | 0x800,0,1,90,184,WS_EX_CLIENTEDGE
+    CONTROL         "Process whole image",IDC_CHB_PROCESSFULL,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,97,4,82,10
+    PUSHBUTTON      "Reset",IDC_BT_RESET,244,3,49,12
+    PUSHBUTTON      "Help",IDC_BT_HELP,297,3,49,12
+    CONTROL         "",IDC_TOPLINE,"Static",SS_BLACKRECT,92,17,257,1
 END
 
 IDD_CODECS DIALOGEX 0, 0, 254, 165
@@ -118,7 +123,6 @@ BEGIN
     LTEXT           "Saturation",IDC_LBL_SATURATION,5,91,111,8
     CONTROL         "",IDC_TBR_SATURATION,"msctls_trackbar32",TBS_BOTH | 
                     TBS_NOTICKS | WS_TABSTOP,4,101,244,10
-    PUSHBUTTON      "Reset",IDC_BT_LUMRESET,198,0,46,9
     EDITTEXT        IDC_ED_HELP,0,115,253,49,ES_MULTILINE | ES_READONLY | 
                     NOT WS_BORDER | WS_VSCROLL
 END
@@ -161,7 +165,6 @@ BEGIN
     CONTROL         "Try to load preset from file first",
                     IDC_CHB_AUTOPRESET_FILEFIRST,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,129,153,117,10
-    PUSHBUTTON      "Help",IDC_BT_PRESET_HELP,201,0,46,9
 END
 
 IDD_POSTPROC DIALOGEX 0, 0, 254, 165
@@ -571,6 +574,23 @@ BEGIN
         MENUITEM "Insert file name",            ID_MNI_PRESET_RENAMETOFILE
     END
 END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_FFDSHOW, DIALOG
+    BEGIN
+        RIGHTMARGIN, 347
+        BOTTOMMARGIN, 183
+    END
+END
+#endif    // APSTUDIO_INVOKED
 
 
 /////////////////////////////////////////////////////////////////////////////

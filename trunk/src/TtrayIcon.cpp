@@ -16,11 +16,10 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <windows.h>
+#include "stdafx.h"
 #include <shellapi.h>
 #include "TtrayIcon.h"
 #include "resource.h"
-#include <stdio.h>
 #include "IffDecoder.h"
 
 #define TRAYICON 2999

@@ -16,8 +16,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <stddef.h>
-#include <windows.h>
+#include "stdafx.h"
 #include "Tdll.h"
 #include "TmovieSourceXviD.h"
 #include "xvid\xvid.h"

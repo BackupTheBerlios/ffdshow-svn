@@ -17,8 +17,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#pragma hdrstop
-#include <math.h>
+#include "stdafx.h"
 #include "TimgFilterChroma.h"
 #include "TpresetSettings.h"
 
@@ -38,7 +37,7 @@ TimgFilterChroma::TimgFilterChroma(void)
 void TimgFilterChroma::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (cfg->hue==TpresetSettings::hueDef && cfg->saturation==TpresetSettings::saturationDef) return;
- Trect *r=init(&rect,0);
+ Trect *r=init(&rect,cfg->fullPictProp);
  const unsigned char *srcU=pict->getCurU()+r->diffUV;unsigned char *dstU=pict->getCurNextU()+r->diffUV;
  const unsigned char *srcV=pict->getCurV()+r->diffUV;unsigned char *dstV=pict->getCurNextV()+r->diffUV;
  

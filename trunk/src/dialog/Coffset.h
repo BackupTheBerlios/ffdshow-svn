@@ -17,6 +17,8 @@ public:
  virtual int invInter(void) {return cfgInv(IDFF_isOffset);}
  virtual int getOrder(void) {return cfgGet(IDFF_orderOffset);}
  virtual void setOrder(int o) {cfgSet(IDFF_orderOffset,o);}
+ virtual int  getProcessFull(void) {return cfgGet(IDFF_fullOffset);}
+ virtual void setProcessFull(int full) {cfgSet(IDFF_fullOffset,full);} 
  virtual void getTip(char *tipS,int len);
 };
 

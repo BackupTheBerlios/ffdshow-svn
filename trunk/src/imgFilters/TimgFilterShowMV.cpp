@@ -17,11 +17,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#pragma hdrstop
-#include <windows.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
+#include "stdafx.h"
 #include "TimgFilterShowMV.h"
 #include "TpresetSettings.h"
 #include "TmovieSource.h"

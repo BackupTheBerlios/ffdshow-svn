@@ -16,11 +16,9 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <windows.h>
+#include "stdafx.h"
 #include "Tpostproc.h"
-#include <math.h>
 #include "TpresetSettings.h"
-#include <time.h>
 #include "xvid\utils\mem_align.h"
 
 extern "C" void modifyPPmode(PPMode *pp,Tconfig *cfg);

@@ -29,12 +29,7 @@
     libraries (optional):
     C:\DXVCSDK\samples\Multimedia\DirectShow\BaseClasses\Release
 */
-
-#include <windows.h>
-#include <commctrl.h>
-#include <string.h>
-#include <stdio.h>
-#pragma hdrstop
+#include "stdafx.h"
 #include <streams.h>
 #include <initguid.h>
 #include <olectl.h>
@@ -42,7 +37,6 @@
 #include <olectlid.h>
 #endif
 #include <dvdmedia.h>   // VIDEOINFOHEADER2
-#include <time.h>
 
 #include "Tconfig.h"
 #include "TpresetSettings.h"

@@ -16,10 +16,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#pragma hdrstop
-#include <windows.h>
-#include <stdlib.h>
-#include <math.h>
+#include "stdafx.h"
 #include "TimgFilterResize.h"
 #include "TpresetSettings.h"
 #include "IffDecoder.h"
@@ -75,7 +72,7 @@ Trect TimgFilterResize::calcNewClip(const TpresetSettings *cfg,const Trect &oldC
 }
 void TimgFilterResize::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
- Trect *r=init(&rect,0);
+ Trect *r=init(&rect,cfg->fullResize);
  if (r->dx==cfg->resizeDx && r->dy==cfg->resizeDy && cfg->resizeAspect!=2) return;
  if (!swsc || resizeMethodOld!=cfg->resizeMethod || resizeGblurLumOld!=cfg->resizeGblurLum || resizeGblurChromOld!=cfg->resizeGblurChrom || resizeSharpenLumOld!=cfg->resizeSharpenLum || resizeSharpenChromOld!=cfg->resizeSharpenChrom)
   {

@@ -17,11 +17,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <windows.h>
-#include <commctrl.h>
-#include <string.h>
-#include <stdio.h>
-#pragma hdrstop
+#include "stdafx.h"
 #include "Tconfig.h"
 #include "TffdshowPage.h"
 #include "resource.h"
@@ -77,12 +73,18 @@ void TffdshowPage::selectPage(TconfPage *Ipage)
  page=Ipage;
  RECT rp,rd;
  GetWindowRect(GetDlgItem(m_hwnd,IDC_TV_TREE),&rd);
- GetWindowRect(m_hwnd,&rp);
- OffsetRect(&rd,-rp.left,-rp.top);
- SetWindowPos(page->m_hwnd,GetDlgItem(m_hwnd,IDC_TV_TREE),rd.right+5,rd.top-1,0,0,SWP_NOSIZE);
+ GetWindowRect(m_hwnd,&rp);OffsetRect(&rd,-rp.left,-rp.top);
+ RECT rl;
+ GetWindowRect(GetDlgItem(m_hwnd,IDC_TOPLINE),&rl);OffsetRect(&rl,-rp.left,-rp.top);
+ SetWindowPos(page->m_hwnd,GetDlgItem(m_hwnd,IDC_TV_TREE),rd.right+5,rd.top+rl.bottom,0,0,SWP_NOSIZE);
  page->interDlg();
  ShowWindow(page->m_hwnd,SW_SHOW);
- InvalidateRect(m_hwnd,NULL,TRUE);
+ EnableWindow(GetDlgItem(m_hwnd,IDC_BT_HELP),page->getHelpURL()!=NULL);
+ EnableWindow(GetDlgItem(m_hwnd,IDC_BT_RESET),page->reset(true));
+ int processFull=page->getProcessFull();
+ EnableWindow(GetDlgItem(m_hwnd,IDC_CHB_PROCESSFULL),processFull!=-1);
+ SendDlgItemMessage(m_hwnd,IDC_CHB_PROCESSFULL,BM_SETCHECK,(processFull==1)?BST_CHECKED:BST_UNCHECKED,0);
+ InvalidateRect(m_hwnd,NULL,FALSE);
 }
 HTREEITEM TffdshowPage::addTI(TVINSERTSTRUCT &tvis,TconfPage *page,bool push)
 {
@@ -291,6 +293,27 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
       setChange();
      }
     return TRUE;
+   case WM_COMMAND:
+    switch (LOWORD(wParam))  
+     {
+      case IDC_BT_HELP:
+       {
+        showHelp(page->getHelpURL());
+        return TRUE;
+       }
+      case IDC_BT_RESET:
+       {
+        page->reset(false);
+        return TRUE;
+       } 
+      case IDC_CHB_PROCESSFULL:
+       {
+        int full=page->getProcessFull();
+        page->setProcessFull(1-full);
+        return TRUE;
+       } 
+     }
+    break; 
    case WM_NOTIFY:
     {
      NMHDR *nmhdr=LPNMHDR(lParam);
@@ -346,7 +369,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             //DEBUGS2("tv rect",rr.left,rr.top);
             TconfPage *page=(TconfPage*)tvcd->nmcd.lItemlParam;
             if (page->getInter()!=-1) ImageList_Draw(hil,page->getInter()?ilChecked:ilClear,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+8+rr.left,tvcd->nmcd.rc.top+(rcDy-16)/2,ILD_TRANSPARENT);
-            if (page->getOrder()!=-1 && (tvcd->nmcd.uItemState&CDIS_SELECTED)) 
+            if (page->getOrder()>=deci->getMinOrder2() && page->getOrder()<=deci->getMaxOrder2() && (tvcd->nmcd.uItemState&CDIS_SELECTED)) 
              {
               int img;
               if (page->getOrder()==deci->getMinOrder2()) img=ilArrowD;
@@ -408,6 +431,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           return FALSE;
          }
        }  
+     break;  
     }
   }
  return CBasePropertyPage::OnReceiveMessage(hwnd, uMsg, wParam, lParam);

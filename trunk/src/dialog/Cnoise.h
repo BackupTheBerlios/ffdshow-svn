@@ -18,6 +18,8 @@ public:
  virtual int invInter(void) {return cfgInv(IDFF_isNoise);}
  virtual int getOrder(void) {return cfgGet(IDFF_orderNoise);}
  virtual void setOrder(int o) {cfgSet(IDFF_orderNoise,o);}
+ virtual int  getProcessFull(void) {return cfgGet(IDFF_fullNoise);}
+ virtual void setProcessFull(int full) {cfgSet(IDFF_fullNoise,full);} 
  virtual void getTip(char *tipS,int len);
 };
 

@@ -16,11 +16,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <windows.h>
-#include <commctrl.h>
-#include <string.h>
-#include <stdio.h>
-#pragma hdrstop
+#include "stdafx.h"
 #include "IffDecoder.h"
 #include "TffdshowPage.h"
 #include "CpictProp.h"
@@ -128,13 +124,6 @@ HRESULT TpictPropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        cfgSet(IDFF_isPictProp,getCheck(IDC_CHB_PICTPROP));
        parent->drawInter();
        return TRUE;
-      case IDC_BT_LUMRESET:
-       SendDlgItemMessage(m_hwnd,IDC_TBR_LUMGAIN   ,TBM_SETPOS,TRUE,writeLumGain(cfgSet(IDFF_lumGain,cfgGet(IDFF_lumGainDef))));
-       SendDlgItemMessage(m_hwnd,IDC_TBR_LUMOFFSET ,TBM_SETPOS,TRUE,writeLumOffset(256+(cfgSet(IDFF_lumOffset,cfgGet(IDFF_lumOffsetDef)))));
-       SendDlgItemMessage(m_hwnd,IDC_TBR_GAMMA     ,TBM_SETPOS,TRUE,writeGamma(cfgSet(IDFF_gammaCorrection,cfgGet(IDFF_gammaCorrectionDef))));
-       SendDlgItemMessage(m_hwnd,IDC_TBR_HUE       ,TBM_SETPOS,TRUE,writeHue(cfgSet(IDFF_hue,cfgGet(IDFF_hueDef))));
-       SendDlgItemMessage(m_hwnd,IDC_TBR_SATURATION,TBM_SETPOS,TRUE,writeSaturation(cfgSet(IDFF_saturation,cfgGet(IDFF_saturationDef))));
-       return TRUE;
      }
     break;
   }   
@@ -150,6 +139,17 @@ void TpictPropPage::getTip(char *tipS,int len)
  __asm emms;
  sprintf(tipS,"luma gain:%i, luma offset:%i, gamma:%5.2f, hue:%i, saturation:%i",cfgGet(IDFF_lumGain),cfgGet(IDFF_lumOffset),float(cfgGet(IDFF_gammaCorrection)/100.0),cfgGet(IDFF_hue),cfgGet(IDFF_saturation));
 }
+bool TpictPropPage::reset(bool testOnly)
+{
+ if (testOnly) return true;
+ SendDlgItemMessage(m_hwnd,IDC_TBR_LUMGAIN   ,TBM_SETPOS,TRUE,writeLumGain(cfgSet(IDFF_lumGain,cfgGet(IDFF_lumGainDef))));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_LUMOFFSET ,TBM_SETPOS,TRUE,writeLumOffset(256+(cfgSet(IDFF_lumOffset,cfgGet(IDFF_lumOffsetDef)))));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_GAMMA     ,TBM_SETPOS,TRUE,writeGamma(cfgSet(IDFF_gammaCorrection,cfgGet(IDFF_gammaCorrectionDef))));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_HUE       ,TBM_SETPOS,TRUE,writeHue(cfgSet(IDFF_hue,cfgGet(IDFF_hueDef))));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_SATURATION,TBM_SETPOS,TRUE,writeSaturation(cfgSet(IDFF_saturation,cfgGet(IDFF_saturationDef))));
+ return true;
+}
+
 TpictPropPage::TpictPropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
  createWindow(IDD_PICTPROP);

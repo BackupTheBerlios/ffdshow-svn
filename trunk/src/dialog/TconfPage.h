@@ -29,6 +29,10 @@ public:
  virtual int  invInter(void) {return -1;}
  virtual int  getOrder(void) {return -1;}
  virtual void getTip(char *tipS,int len) {tipS[0]='\0';}
+ virtual const char* getHelpURL(void) {return NULL;}
+ virtual bool reset(bool testOnly) {return false;}
+ virtual int  getProcessFull(void) {return -1;}
+ virtual void setProcessFull(int full) {} 
  virtual void setOrder(int o) {}
  virtual void applySettings(void) {}
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)=0;

@@ -17,6 +17,8 @@ public:
  virtual void cfg2dlg(void);
  virtual int getOrder(void) {return cfgGet(IDFF_orderResize);}
  virtual void setOrder(int o) {cfgSet(IDFF_orderResize,o);}
+ virtual int  getProcessFull(void) {return cfgGet(IDFF_fullResize);}
+ virtual void setProcessFull(int full) {cfgSet(IDFF_fullResize,full);} 
 };
 
 #endif 

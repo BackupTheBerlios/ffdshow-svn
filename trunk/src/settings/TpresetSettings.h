@@ -28,6 +28,7 @@ public:
  char presetName[260];
  int isPostproc,orderPostproc;
  static const int orderPostprocDef;
+ int fullPostproc;
  int ppqual;
  int autoq;
  int ppIsCustom,ppcustom;
@@ -37,6 +38,7 @@ public:
   
  int isPictProp,orderPictProp; 
  static const int orderPictPropDef;
+ int fullPictProp;
  int lumGain,lumOffset,gammaCorrection;
  static const int lumGainDef,lumOffsetDef,gammaCorrectionDef;
  int hue,saturation;
@@ -46,10 +48,12 @@ public:
 
  int isBlur,orderBlur;
  static const int orderBlurDef;
+ int fullBlur;
  int blurStrength,tempSmooth;
  
  int isSharpen,orderSharpen;
  static const int orderSharpenDef;
+ int fullSharpen;
  int sharpenMethod;
  int xsharp_strength,xsharp_threshold;
  static const int xsharp_strengthDef,xsharp_thresholdDef;
@@ -58,6 +62,7 @@ public:
  
  int isNoise,orderNoise;
  static const int orderNoiseDef;
+ int fullNoise;
  int noiseMethod,uniformNoise;
  int noiseStrength,noiseStrengthChroma;
  static const int noiseStrengthDef,noiseStrengthChromaDef;
@@ -66,6 +71,7 @@ public:
  
  int isResize,orderResize;
  static const int orderResizeDef;
+ int fullResize;
  int resizeDx,resizeDy;
  int resizeAspect;
  int aspectRatio;
@@ -73,6 +79,7 @@ public:
  static const int resizeMethodNone;
  int resizeGblurLum,resizeGblurChrom;
  int resizeSharpenLum,resizeSharpenChrom;
+ 
  int isCropNzoom;
  int isZoom;
  int magnificationX,magnificationY,magnificationLocked;
@@ -81,6 +88,7 @@ public:
 
  int isSubtitles,orderSubtitles;
  static const int orderSubtitlesDef;
+ int fullSubtitles;
  char fontName[256];
  int fontCharset,fontSize,fontSpacing,fontWeight,fontColor,fontShadowStrength,fontShadowRadius;
  int subPosX,subPosY,subDelay,subSpeed;
@@ -89,6 +97,7 @@ public:
 
  int isOffset,orderOffset;
  static const int orderOffsetDef;
+ int fullOffset;
  int offsetY_X,offsetY_Y,offsetU_X,offsetU_Y,offsetV_X,offsetV_Y;
  
  int orderShowMV;

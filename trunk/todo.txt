@@ -50,3 +50,4 @@ hardware overlay
 check and write xvid version [DISPLAYING DONE]
 subtitles
 better changeOrder COM functions
+full keyboard control in cfg dialog

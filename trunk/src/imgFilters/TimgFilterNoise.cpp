@@ -17,8 +17,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#pragma hdrstop
-#include <stdlib.h>
+#include "stdafx.h"
 #include "TimgFilterNoise.h" 
 #include "xvid\utils\mem_align.h"
 #include "TpresetSettings.h"
@@ -147,7 +146,7 @@ void TimgFilterNoise::noiseAvihUV(const unsigned char *srcU,unsigned char *dstU,
 void TimgFilterNoise::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (!cfg->noiseStrength && !cfg->noiseStrengthChroma) return;
- Trect *r=init(&rect,0);
+ Trect *r=init(&rect,cfg->fullNoise);
  if (cfg->noiseStrength)
   {  
    const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getCurNextY()+r->diffY;

@@ -6,10 +6,7 @@
  * dunnowhat sub format by szabi
  */
 
-#pragma hdrstop
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "stdafx.h"
 #define strncasecmp _strnicmp
 #define strdup _strdup
 #define _CTYPE_DISABLE_MACROS

@@ -16,10 +16,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#pragma hdrstop
-#include <windows.h>
-#include <stdlib.h>
-#include <math.h>
+#include "stdafx.h"
 #include "TimgFilterBlur.h"
 #include "TpresetSettings.h"
 #include "xvid\utils\mem_align.h"
@@ -47,7 +44,7 @@ void TimgFilterBlur::done(void)
 void TimgFilterBlur::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (!cfg->blurStrength) return;
- Trect *r=init(&rect,0);
+ Trect *r=init(&rect,cfg->fullBlur);
  const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
 
  if (oldStrength!=cfg->blurStrength)

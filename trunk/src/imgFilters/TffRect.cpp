@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "TffRect.h"
 #include "TffPict.h"
 

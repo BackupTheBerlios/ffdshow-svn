@@ -16,10 +16,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <windows.h>
-#include <stdio.h>
-#include <string.h>
-#pragma hdrstop
+#include "stdafx.h"
 #include "Tpresets.h"
 #include "reg.h"
 
