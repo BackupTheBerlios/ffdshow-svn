@@ -97,6 +97,7 @@ HMENU TtrayIcon::createMenu(void)
   }
  insertSeparator(hm,ord);
 
+ insertMenuItem(hm,ord,IDC_CHB_CROP,"Crop",IDFF_isCropNzoom);
  for (i=deci->getMinOrder2();i<=deci->getMaxOrder2();i++)
   if      (i==cfgGet(IDFF_orderPostproc )) insertMenuItem(hm,ord,IDC_CHB_POSTPROC,"Postprocessing",IDFF_isPostproc);
    // insertSubmenu(hm,ord,"Postprocessing settings",createPostProcMenu());
@@ -109,11 +110,10 @@ HMENU TtrayIcon::createMenu(void)
   else if (i==cfgGet(IDFF_orderSharpen  )) insertMenuItem(hm,ord,IDC_CHB_SHARPEN,"Sharpen",IDFF_isSharpen);
   else if (i==cfgGet(IDFF_orderSubtitles)) insertMenuItem(hm,ord,IDC_CHB_SUBTITLES,"Subtitles",IDFF_isSubtitles);
   else if (i==cfgGet(IDFF_orderOffset   )) insertMenuItem(hm,ord,IDC_CHB_OFFSET,"Offset",IDFF_isOffset);
-
- insertMenuItem(hm,ord,IDC_CHB_CROP,"Crop",IDFF_isCropNzoom);
- insertMenuItem(hm,ord,IDC_CHB_FLIP,"Flip",IDFF_flip);
+  else if (i==cfgGet(IDFF_orderShowMV   )) insertMenuItem(hm,ord,IDC_CHB_SHOWMV,"Show motion vectors",IDFF_isShowMV);
  insertSeparator(hm,ord);
- insertMenuItem(hm,ord,IDC_CHB_SHOWMV,"Show motion vectors",IDFF_isShowMV);
+ insertMenuItem(hm,ord,IDC_CHB_FLIP,"Flip",IDFF_flip);
+
  return hm;
 }
 

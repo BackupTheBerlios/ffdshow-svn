@@ -92,8 +92,8 @@ BEGIN
                     WS_TABSTOP,5,60,35,10
     CONTROL         "MP42",IDC_CHB_MP42,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,70,35,10
-    CONTROL         "MP41",IDC_CHB_MP41,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,80,35,10
+    CONTROL         "MP41, MPG4",IDC_CHB_MP41,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,80,59,10
     CONTROL         "WMV1",IDC_CHB_WMV1,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,90,38,10
     CONTROL         "H.263+",IDC_CHB_H263,"Button",BS_AUTOCHECKBOX | 
@@ -504,11 +504,11 @@ END
 IDD_RESIZESETTINGS DIALOGEX 0, 0, 254, 165
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX        "Resize settings",-1,0,0,253,68
     LTEXT           "Resize algorithm",-1,8,13,53,8
-    COMBOBOX        IDC_CBX_RESIZE_METHOD,64,11,81,87,CBS_DROPDOWNLIST | 
+    COMBOBOX        IDC_CBX_RESIZE_METHOD,64,11,81,140,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
     LTEXT           "Luma gaussian blur",IDC_LBL_RESIZE_GBLUR_LUM,7,26,99,8
     CONTROL         "",IDC_TBR_RESIZE_GBLUR_LUM,"msctls_trackbar32",TBS_BOTH | 

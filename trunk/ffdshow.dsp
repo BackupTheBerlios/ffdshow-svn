@@ -101,10 +101,6 @@ SOURCE=.\src\helpBlur.txt
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\helpCodecs.txt
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\helpCrop.txt
 # End Source File
 # Begin Source File

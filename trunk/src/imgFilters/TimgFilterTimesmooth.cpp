@@ -94,9 +94,9 @@ void TimgFilterTimesmooth::process(TffPict *pict,TffRect &rect,const TpresetSett
      square_table[i]=sqerr;
     } 
   }
- smooth(srcY,dstY,accumY,dxY ,strideY ,dyY );
- smooth(srcU,dstU,accumU,dxUV,strideUV,dyUV);
- smooth(srcV,dstV,accumV,dxUV,strideUV,dyUV);
+ smooth(srcY,dstY,accumY,dxY ,strideY ,dyY );dstY[0]=srcY[0];dstY[1]=srcY[1];
+ smooth(srcU,dstU,accumU,dxUV,strideUV,dyUV);dstU[0]=srcU[0];dstU[1]=srcU[1];
+ smooth(srcV,dstV,accumV,dxUV,strideUV,dyUV);dstV[0]=srcV[0];dstV[1]=srcV[1];
  if (++framecount>=KERNEL) framecount=0;
 }
 void TimgFilterTimesmooth::smooth(const unsigned char *src,unsigned char *dst,unsigned char *Iaccum,unsigned int dx,unsigned int stride,unsigned int dy)

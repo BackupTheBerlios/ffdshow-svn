@@ -300,12 +300,8 @@ STDMETHODIMP TffDecoder::getOutputDimensions(unsigned int *x,unsigned int *y)
 }
 STDMETHODIMP TffDecoder::getPPmode(unsigned int *ppmode)
 {
- if (!imgFilters || !postproc.ok)
-  {
-   *ppmode=0;
-   return S_FALSE;
-  }
- *ppmode=Tpostproc::getPPmode(presetSettings,currentq);
+ if (!imgFilters) return S_FALSE;
+ *ppmode=(postproc.ok)?Tpostproc::getPPmode(presetSettings,currentq):0;
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getFontName(char *buf,unsigned int len)
@@ -519,16 +515,17 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
   }
 
  //char pomS[5];memcpy(pomS,&hdr->biCompression,4);
- if (hdr->biCompression==0)
+ DWORD biCompression=hdr->biCompression;
+ if (biCompression==0)
   switch (hdr->biBitCount)
    {
-    case 32:hdr->biCompression=FOURCC_RGB3;break;
-    case 24:hdr->biCompression=FOURCC_RGB2;break;
-    case 16:hdr->biCompression=FOURCC_RGB6;break;
-    case 15:hdr->biCompression=FOURCC_RGB5;break;
+    case 32:biCompression=FOURCC_RGB3;break;
+    case 24:biCompression=FOURCC_RGB2;break;
+    case 16:biCompression=FOURCC_RGB6;break;
+    case 15:biCompression=FOURCC_RGB5;break;
    }
  if (codecId==CODEC_ID_NONE)
-  codecId=globalSettings.codecSupported(hdr->biCompression,AVIfourcc);
+  codecId=globalSettings.codecSupported(biCompression,AVIfourcc);
  if (codecId!=CODEC_ID_NONE)
   {
    AVIdx=hdr->biWidth;
