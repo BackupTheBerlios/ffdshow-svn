@@ -22,6 +22,7 @@ class TconfPage
   
   HWND m_hwnd,hwndParent;
   int dialogId;
+  char dialogName[256];
   virtual void createConfig(void)=0;
   virtual void cfg2dlg(void)=0;
   virtual void interDlg(void) {};

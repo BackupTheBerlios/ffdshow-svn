@@ -80,10 +80,10 @@ void TffdshowPage::selectPage(TconfPage *Ipage)
  InvalidateRect(m_hwnd,NULL,TRUE);
 }
 
-HTREEITEM TffdshowPage::addTI(TVINSERTSTRUCT &tvis,TconfPage *page,const char *name)
+HTREEITEM TffdshowPage::addTI(TVINSERTSTRUCT &tvis,TconfPage *page)
 {
  tvis.item.lParam=(LPARAM)page;pages->push_back(page);
- tvis.item.pszText=LPSTR(name);
+ tvis.item.pszText=page->dialogName;;
  HTREEITEM hti=TreeView_InsertItem(htv,&tvis);
  return hti;
 }
@@ -112,31 +112,31 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  tvis.hParent=NULL;
  tvis.hInsertAfter=TVI_LAST;
  tvis.item.mask=TVIF_PARAM|TVIF_TEXT;
- addTI(tvis,new TcodecsPage(this,m_hwnd,deci),"Codecs");
- addTI(tvis,new TinfoPage(this,m_hwnd,deci),"Info");
- addTI(tvis,new TtrayPage(this,m_hwnd,deci),"Tray icon");
+ addTI(tvis,new TcodecsPage(this,m_hwnd,deci));
+ addTI(tvis,new TinfoPage(this,m_hwnd,deci));
+ addTI(tvis,new TtrayPage(this,m_hwnd,deci));
  tvis.item.mask|=TVIF_CHILDREN;
  tvis.item.cChildren=1;
- HTREEITEM pagePresets=addTI(tvis,new TpresetsPage(this,m_hwnd,deci),"Image settings");
+ HTREEITEM pagePresets=addTI(tvis,new TpresetsPage(this,m_hwnd,deci));
  tvis.hParent=pagePresets;
  tvis.item.cChildren=0;
- addTI(tvis,new TpostProcPage(this,m_hwnd,deci),"Postprocessing");
- addTI(tvis,new TpictPropPage(this,m_hwnd,deci),"Picture properties");
- addTI(tvis,new TnoisePage(this,m_hwnd,deci),"Noise");
- addTI(tvis,new TsharpenPage(this,m_hwnd,deci),"Sharpen");
- addTI(tvis,new TblurPage(this,m_hwnd,deci),"Blur");
+ addTI(tvis,new TpostProcPage(this,m_hwnd,deci));
+ addTI(tvis,new TpictPropPage(this,m_hwnd,deci));
+ addTI(tvis,new TnoisePage(this,m_hwnd,deci));
+ addTI(tvis,new TsharpenPage(this,m_hwnd,deci));
+ addTI(tvis,new TblurPage(this,m_hwnd,deci));
  tvis.item.cChildren=1;
- HTREEITEM pageSubtitles=addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci),"Subtitles");
+ HTREEITEM pageSubtitles=addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
  tvis.item.cChildren=0;
  tvis.hParent=pageSubtitles;
- addTI(tvis,new TfontPage(this,m_hwnd,deci),"Font");
+ addTI(tvis,new TfontPage(this,m_hwnd,deci));
  TreeView_Expand(htv,pageSubtitles,TVE_EXPAND);
  tvis.hParent=pagePresets;
- addTI(tvis,new TresizePage(this,m_hwnd,deci),"Resize");
- addTI(tvis,new TaspectNcropPage(this,m_hwnd,deci),"Aspect & crop");
- addTI(tvis,new TmiscPage(this,m_hwnd,deci),"Miscellaneous");
+ addTI(tvis,new TresizePage(this,m_hwnd,deci));
+ addTI(tvis,new TaspectNcropPage(this,m_hwnd,deci));
+ addTI(tvis,new TmiscPage(this,m_hwnd,deci));
  tvis.hParent=NULL;
- addTI(tvis,new TaboutPage(this,m_hwnd,deci),"About");
+ addTI(tvis,new TaboutPage(this,m_hwnd,deci));
  TreeView_SetIndent(htv,24);
  TreeView_SetItemHeight(htv,16);
  TreeView_Expand(htv,pagePresets,TVE_EXPAND);

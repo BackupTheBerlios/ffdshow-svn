@@ -50,6 +50,8 @@ void TconfPage::createWindow(int IdialogId)
  dialogId=IdialogId;
  HINSTANCE hi=(HINSTANCE)GetWindowLong(hwndParent,GWL_HINSTANCE);
  m_hwnd=CreateDialogParam(hi,MAKEINTRESOURCE(dialogId),hwndParent,dlgWndProc,LPARAM(this));
+ dialogName[0]='\0';
+ LoadString(hi,dialogId,dialogName,255);
  assert(m_hwnd);
  if (GetDlgItem(m_hwnd,IDC_ED_HELP))
   {

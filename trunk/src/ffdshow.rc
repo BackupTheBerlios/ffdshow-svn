@@ -554,6 +554,33 @@ BEGIN
     IDS_FFDSHOW             "Configuration"
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDD_ABOUT               "About"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDD_BLUR                "Blur"
+    IDD_FONT                "Font"
+    IDD_RESIZE              "Resize"
+    IDD_ASPECTNCROP         "Aspect & crop"
+    IDD_TRAY                "Tray"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDD_SUBTITLES           "Subtitles"
+    IDD_CODECS              "Codecs"
+    IDD_INFO                "Info"
+    IDD_MISC                "Miscellaneous"
+    IDD_PRESETS             "Image settings"
+    IDD_POSTPROC            "Postprocessing"
+    IDD_PICTPROP            "Picture properties"
+    IDD_NOISE               "Noise"
+    IDD_SHARPEN             "Sharpen"
+END
+
 #endif    // Neutral resources
 /////////////////////////////////////////////////////////////////////////////
 

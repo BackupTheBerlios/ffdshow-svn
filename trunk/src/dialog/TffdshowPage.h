@@ -15,7 +15,7 @@ class TffdshowPage : public CBasePropertyPage
  private:
   HIMAGELIST hil;
   HWND htv;
-  HTREEITEM addTI(TVINSERTSTRUCT &tvis,TconfPage *page,const char *name);
+  HTREEITEM addTI(TVINSERTSTRUCT &tvis,TconfPage *page);
   IffDecoder *deci;
   TconfPage  *page;
   void selectPage(int i),selectPage(TconfPage *Ipage);
