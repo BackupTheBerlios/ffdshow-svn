@@ -167,7 +167,7 @@ END
 IDD_POSTPROC DIALOGEX 0, 0, 254, 165
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX        "",IDC_STATIC,0,0,253,96
     CONTROL         "Postprocessing",IDC_CHB_POSTPROC,"Button",
@@ -200,8 +200,9 @@ BEGIN
     LTEXT           "Level fix",IDC_STATIC,5,63,40,9
     CONTROL         "Luminance",IDC_CHB_LEVELFIX_LUM,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,11,73,56,8
-    CONTROL         "Chroma",IDC_CHB_LEVELFIX_CHROM,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,11,83,53,8
+    CONTROL         "Chroma (not implemented yet)",IDC_CHB_LEVELFIX_CHROM,
+                    "Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,11,
+                    83,109,8
     EDITTEXT        IDC_ED_HELP,0,96,253,68,ES_MULTILINE | ES_READONLY | NOT 
                     WS_BORDER | WS_VSCROLL
     LTEXT           "Processing strength",IDC_LBL_DEBLOCKSTRENGTH,132,73,109,

@@ -8,7 +8,7 @@ _REG_OP_N("autoq",autoq,0);
 _REG_OP_N("ppcustom",ppcustom,0);
 _REG_OP_N("deblockStrength",deblockStrength,deblockStrengthDef);
 _REG_OP_N("levelFixLum",levelFixLum,0);
-_REG_OP_N("levelFixChrom",levelFixChrom,0);
+_REG_OP_N("levelFixChrom",levelFixChrom,0);levelFixChrom=0;
 
 _REG_OP_N("isPictProp",isPictProp,0);
 _REG_OP_N("orderPictProp",orderPictProp,orderPictPropDef);
