@@ -43,6 +43,7 @@
 #include "CaspectNcrop.h"
 #include "Cmisc.h"
 #include "Cabout.h"
+#include "Coffset.h"
 
 using namespace std;
 
@@ -61,12 +62,10 @@ TffdshowPage::TffdshowPage(LPUNKNOWN pUnk, HRESULT * phr):CBasePropertyPage(NAME
  deci=NULL;
  page=NULL;
 }
-
 TffdshowPage::~TffdshowPage()
 {
  ImageList_Destroy(hil);
 }
-
 void TffdshowPage::selectPage(TconfPage *Ipage)
 {
  if (page) ShowWindow(page->m_hwnd,SW_HIDE);
@@ -80,10 +79,9 @@ void TffdshowPage::selectPage(TconfPage *Ipage)
  ShowWindow(page->m_hwnd,SW_SHOW);
  InvalidateRect(m_hwnd,NULL,TRUE);
 }
-
-HTREEITEM TffdshowPage::addTI(TVINSERTSTRUCT &tvis,TconfPage *page)
+HTREEITEM TffdshowPage::addTI(TVINSERTSTRUCT &tvis,TconfPage *page,bool push)
 {
- tvis.item.lParam=(LPARAM)page;pages.push_back(page);
+ tvis.item.lParam=(LPARAM)page;if (push) pages.push_back(page);
  tvis.item.pszText=page->dialogName;;
  HTREEITEM hti=TreeView_InsertItem(htv,&tvis);
  return hti;
@@ -102,7 +100,7 @@ void TffdshowPage::presetChanged(void)
   pages[i]->cfg2dlg();
  InvalidateRect(htv,NULL,FALSE);
  sortOrder();
- if (dlg)
+ if (IsWindow(dlg))
   {
    char capt[260],presetName[260];
    deci->getActivePresetName(presetName,260);
@@ -113,7 +111,7 @@ void TffdshowPage::presetChanged(void)
 static int CALLBACK orderCompareFunc(LPARAM lParam1, LPARAM lParam2,LPARAM lParamSort)
 {
  int o1=((TconfPage*)lParam1)->getOrder(),o2=((TconfPage*)lParam2)->getOrder();
- DEBUGS2("sort",o1,o2);
+ //DEBUGS2("sort",o1,o2);
  if (o1==-1 && o2==-1) return 0;
  if (o1==-1) return 1;
  if (o2==-1) return -1;
@@ -122,7 +120,7 @@ static int CALLBACK orderCompareFunc(LPARAM lParam1, LPARAM lParam2,LPARAM lPara
 void TffdshowPage::sortOrder(void)
 {
  TVSORTCB tvs;
- tvs.hParent=pagePresets;
+ tvs.hParent=htiPresets;
  tvs.lpfnCompare=orderCompareFunc;
  tvs.lParam=0;
  TreeView_SortChildrenCB(htv,&tvs,0);
@@ -139,7 +137,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  CBasePropertyPage::Activate(hwndParent,prect,fModal);
  if (!m_hwnd) return ERROR;
  dlg=findParentDlg();
- if (dlg)
+ if (IsWindow(dlg))
   {
    GetWindowText(dlg,caption,255);
    if (deci->getParam2(IDFF_dlgRestorePos))
@@ -173,14 +171,16 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  addTI(tvis,new TdlgMiscPage(this,m_hwnd,deci));
  tvis.item.mask|=TVIF_CHILDREN;
  tvis.item.cChildren=1;
- pagePresets=addTI(tvis,new TpresetsPage(this,m_hwnd,deci));
- tvis.hParent=pagePresets;
+ TconfPage *pagePresets;//presets page must be the last in pages vector
+ htiPresets=addTI(tvis,pagePresets=new TpresetsPage(this,m_hwnd,deci),false);
+ tvis.hParent=htiPresets;
  tvis.item.cChildren=0;
  addTI(tvis,new TpostProcPage(this,m_hwnd,deci)); 
  addTI(tvis,new TpictPropPage(this,m_hwnd,deci)); 
  addTI(tvis,new TnoisePage(this,m_hwnd,deci));    
  addTI(tvis,new TsharpenPage(this,m_hwnd,deci));  
  addTI(tvis,new TblurPage(this,m_hwnd,deci));     
+ addTI(tvis,new ToffsetPage(this,m_hwnd,deci));     
  //addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
  //addTI(tvis,new TfontPage(this,m_hwnd,deci));
  tvis.item.cChildren=1;
@@ -189,16 +189,17 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  tvis.hParent=pageSubtitles;
  addTI(tvis,new TfontPage(this,m_hwnd,deci));
  TreeView_Expand(htv,pageSubtitles,TVE_EXPAND);
- tvis.hParent=pagePresets;
+ tvis.hParent=htiPresets;
  sortOrder();
  addTI(tvis,new TresizePage(this,m_hwnd,deci));
  addTI(tvis,new TaspectNcropPage(this,m_hwnd,deci));
  addTI(tvis,new TmiscPage(this,m_hwnd,deci));
  tvis.hParent=NULL;
  addTI(tvis,new TaboutPage(this,m_hwnd,deci));
+ pages.push_back(pagePresets);
  TreeView_SetIndent(htv,24);
  //TreeView_SetItemHeight(htv,26);
- TreeView_Expand(htv,pagePresets,TVE_EXPAND);
+ TreeView_Expand(htv,htiPresets,TVE_EXPAND);
  int lastPage=deci->getParam2(IDFF_lastPage);
  for (HTREEITEM hti=TreeView_GetRoot(htv);hti;hti=TreeView_GetNextVisible(htv,hti))
   {
@@ -213,7 +214,14 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  m_bDirty=true;
  return NOERROR;
 }
-
+HRESULT TffdshowPage::OnApplyChanges(void)
+{
+ applySettings();
+ //deci->put_Param(IDFF_presetShouldBeSaved,1);
+// globalPage->savePreset();
+ deci->saveGlobalSettings();
+ return CBasePropertyPage::OnApplyChanges();
+}
 STDMETHODIMP TffdshowPage::Deactivate(void)
 {
  //cfg->save();
@@ -230,19 +238,11 @@ STDMETHODIMP TffdshowPage::Deactivate(void)
    GetWindowPlacement(dlg,&wpl);
    deci->putParam(IDFF_dlgPosX,wpl.rcNormalPosition.left);
    deci->putParam(IDFF_dlgPosY,wpl.rcNormalPosition.top);
+   SendMessage(dlg,WM_SETTEXT,0,LPARAM(caption));
   };
  deci->saveDialogSettings();
  deci->putParam(IDFF_isDlg,0);
  return res;
-}
-
-HRESULT TffdshowPage::OnApplyChanges(void)
-{
- applySettings();
- //deci->put_Param(IDFF_presetShouldBeSaved,1);
-// globalPage->savePreset();
- deci->saveGlobalSettings();
- return CBasePropertyPage::OnApplyChanges();
 }
 
 HRESULT TffdshowPage::OnConnect(IUnknown *pUnk)
@@ -255,16 +255,13 @@ HRESULT TffdshowPage::OnConnect(IUnknown *pUnk)
  DEBUGS("On connect 2");
  return S_OK;
 }
-
 HRESULT TffdshowPage::OnDisconnect(void)
 {
  DEBUGS("On disconnect 1");
- if (deci==NULL) 
-  return E_UNEXPECTED;
+ if (deci==NULL) return E_UNEXPECTED;
  deci->Release();
  DEBUGS("On disconnect 2");
  deci=NULL;
- //cfg=NULL;
  return S_OK;
 }
 
@@ -361,6 +358,8 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             TconfPage *page=hti2page(hti);
             page->invInter();
             InvalidateRect(htv,&r,FALSE);
+            SetWindowLong(m_hwnd,DWL_MSGRESULT,TRUE);
+            return TRUE;
            }
           else if (ps.x>=2 && ps.x<=7 && TreeView_GetSelection(htv)==tvhti.hItem)
            {
@@ -391,26 +390,6 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
   }
  return CBasePropertyPage::OnReceiveMessage(hwnd, uMsg, wParam, lParam);
 }
-/*
-void TffdshowPage::swap(HTREEITEM hti1,HTREEITEM hti2)
-{
- char str1[256],str2[256];
- TVITEM tvi1;
- tvi1.mask=TVIF_CHILDREN|TVIF_HANDLE|TVIF_PARAM|TVIF_STATE|TVIF_TEXT;
- tvi1.cchTextMax=255;
- TVITEM tvi2=tvi1;
- tvi1.hItem=hti1;tvi2.hItem=hti2;
- tvi1.pszText=str1;tvi2.pszText=str2;
- TreeView_GetItem(htv,&tvi1);TreeView_GetItem(htv,&tvi2);
- tvi1.hItem=hti2;tvi2.hItem=hti1;
- TreeView_SetItem(htv,&tvi1);TreeView_SetItem(htv,&tvi2);
- //HTREEITEM htic1=TreeView_GetChild(htv,hti1),htic2=TreeView_GetChild(htv,hti2);
- TreeView_SelectItem(htv,hti2);
- int o1=hti2page(hti1)->getOrder(),o2=hti2page(hti2)->getOrder();
- hti2page(hti1)->setOrder(o2);hti2page(hti2)->setOrder(o1);
- InvalidateRect(htv,NULL,FALSE);
-}
-*/
 void TffdshowPage::applySettings(void)
 {
  for (unsigned int i=0;i<pages.size();i++) pages[i]->applySettings();

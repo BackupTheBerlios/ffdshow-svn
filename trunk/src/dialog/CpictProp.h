@@ -18,7 +18,7 @@ class TpictPropPage : public TconfPage
   virtual int invInter(void) {return cfgInv(IDFF_isPictProp);};
   virtual int getOrder(void) {return cfgGet(IDFF_orderPictProp);};
   virtual void setOrder(int o) {cfgSet(IDFF_orderPictProp,o);};
-  virtual void getTip(char *tipS,int len) {deci->getPictPropDescription(tipS,len);};
+  virtual void getTip(char *tipS,int len);
 };
 
 #endif 

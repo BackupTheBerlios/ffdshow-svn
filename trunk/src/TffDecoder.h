@@ -62,12 +62,6 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP notifyParamsChanged(void);
   STDMETHODIMP getAVcodecVersion(char *buf,unsigned int len);
   STDMETHODIMP getPPmode(unsigned int *ppmode);
-  STDMETHODIMP getPostProcDescription(char *buf,unsigned int len);
-  STDMETHODIMP getPictPropDescription(char *buf,unsigned int len);
-  STDMETHODIMP getBlurDescription(char *buf,unsigned int len);
-  STDMETHODIMP getNoiseDescription(char *buf,unsigned int len);
-  STDMETHODIMP getSharpenDescription(char *buf,unsigned int len);
-  STDMETHODIMP getCropDescription(char *buf,unsigned int len);
   STDMETHODIMP getFontName(char *buf,unsigned int len);
   STDMETHODIMP setFontName(const char *name);
   STDMETHODIMP getSubFlnm(char *buf,unsigned int len);
@@ -79,9 +73,13 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP loadGlobalSettings(void);
   STDMETHODIMP saveDialogSettings(void);
   STDMETHODIMP loadDialogSettings(void);
-  STDMETHODIMP getPreset(unsigned int i,TpresetSettings **preset);
-  STDMETHODIMP setPreset(TpresetSettings *preset);
- 
+  //STDMETHODIMP getPreset(unsigned int i,TpresetSettings **preset);
+  STDMETHODIMP getPresets(Tpresets *presets2);
+  STDMETHODIMP setPresets(Tpresets *presets2);
+  STDMETHODIMP savePresets(void);
+  STDMETHODIMP setPresetPtr(TpresetSettings *preset);
+  STDMETHODIMP renameActivePreset(const char *newName);
+  
  private:
   bool firstFrame;
   TtrayIcon *tray;

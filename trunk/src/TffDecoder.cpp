@@ -32,6 +32,10 @@
 //#define FF__MPEG
 
 #include <windows.h>
+#include <commctrl.h>
+#include <string.h>
+#include <stdio.h>
+#pragma hdrstop
 #include <streams.h>
 #include <initguid.h>
 #include <olectl.h>
@@ -40,7 +44,7 @@
 #endif
 #include <dvdmedia.h>   // VIDEOINFOHEADER2
 #include <assert.h>
-#include <commctrl.h>
+#include <time.h>
 
 #include "Tconfig.h"
 #include "ffdebug.h"
@@ -63,6 +67,7 @@ extern "C"
 #include "trayIcon.h"
 #include "subtitles\Tsubtitles.h"
 
+#include "ffdshow_mediaguids.h"
 #include "ffdshow_dshowreg.h"
 
 // create instance 
@@ -82,11 +87,6 @@ CUnknown * WINAPI TffDecoder::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 STDMETHODIMP TffDecoder::getParam(unsigned int paramID, int* value)
 {
  if (!value) return S_FALSE;
- /*
- if (paramID<0 || paramID>=MAX_PARAMID) return S_FALSE;
- if (!params[paramID].getVal()) return S_FALSE;
- *value=*params[paramID].val;
- */
  int val; 
  switch (paramID)
   {
@@ -100,11 +100,6 @@ STDMETHODIMP TffDecoder::getParam(unsigned int paramID, int* value)
 }
 STDMETHODIMP TffDecoder::getParam2(unsigned int paramID)
 {
-/*
- if (paramID<0 || paramID>=MAX_PARAMID) return 0;
- if (!params[paramID].getVal()) return 0;
- return *params[paramID].val;
-*/ 
  int val; 
  switch (paramID)
   {
@@ -117,19 +112,6 @@ STDMETHODIMP TffDecoder::getParam2(unsigned int paramID)
 }
 STDMETHODIMP TffDecoder::putParam(unsigned int paramID, int  val)
 {
-/*
- if (paramID<0 || paramID>=MAX_PARAMID) return S_FALSE;
- Tparam &p=params[paramID];
- if (!p.val || (p.min==-1 && p.max==-1)) return S_FALSE;
- if (p.min || p.max)
-  {
-   if (value<p.min) value=p.min;
-   if (value>p.max) value=p.max;
-  };
- *p.val=value;
- if (p.onNotify) (this->*p.onNotify)();
- return S_OK;
-*/ 
  switch (paramID)
   {
    #undef PARAM
@@ -176,13 +158,28 @@ STDMETHODIMP TffDecoder::getPresetName(unsigned int i,char *buf,unsigned int len
  strcpy(buf,presets[i]->presetName);
  return S_OK;
 }
-STDMETHODIMP TffDecoder::getPreset(unsigned int i,TpresetSettings **preset)
+STDMETHODIMP TffDecoder::getPresets(Tpresets *presets2)
 {
- if (!preset) return E_POINTER;
- *preset=presets[i];
+ if (!presets2) return E_POINTER;
+ presets2->done();
+ for (Tpresets::iterator i=presets.begin();i!=presets.end();i++)
+  presets2->push_back(new TpresetSettings(**i));
+ return S_OK;       
+}
+STDMETHODIMP TffDecoder::setPresets(Tpresets *presets2)
+{
+ if (!presets2) return E_POINTER;
+ presets.done();
+ for (Tpresets::iterator i=presets2->begin();i!=presets2->end();i++)
+  presets.push_back(new TpresetSettings(**i));
+ return S_OK;       
+}
+STDMETHODIMP TffDecoder::savePresets(void)
+{
+ presets.saveRegAll();
  return S_OK;
 }
-STDMETHODIMP TffDecoder::setPreset(TpresetSettings *preset)
+STDMETHODIMP TffDecoder::setPresetPtr(TpresetSettings *preset)
 {
  if (!preset) return E_POINTER;
  presetSettings=preset;
@@ -274,42 +271,6 @@ STDMETHODIMP TffDecoder::getPPmode(unsigned int *ppmode)
  *ppmode=Tpostproc::getPPmode(presetSettings);  
  return S_OK;
 }
-STDMETHODIMP TffDecoder::getPostProcDescription(char *buf,unsigned int len)
-{
- if (!buf || len<1000) return S_FALSE;
- presetSettings->getPostProcDescription(buf);
- return S_OK;
-}
-STDMETHODIMP TffDecoder::getPictPropDescription(char *buf,unsigned int len)
-{
- if (!buf || len<1000) return S_FALSE;
- presetSettings->getPictPropDescription(buf);
- return S_OK;
-}
-STDMETHODIMP TffDecoder::getNoiseDescription(char *buf,unsigned int len)
-{
- if (!buf || len<1000) return S_FALSE;
- presetSettings->getNoiseDescription(buf);
- return S_OK;
-}
-STDMETHODIMP TffDecoder::getBlurDescription(char *buf,unsigned int len)
-{
- if (!buf || len<1000) return S_FALSE;
- presetSettings->getBlurDescription(buf);
- return S_OK;
-}
-STDMETHODIMP TffDecoder::getSharpenDescription(char *buf,unsigned int len)
-{
- if (!buf || len<1000) return S_FALSE;
- presetSettings->getSharpenDescription(buf);
- return S_OK;
-}
-STDMETHODIMP TffDecoder::getCropDescription(char *buf,unsigned int len)
-{
- if (!buf || len<1000) return S_FALSE;
- presetSettings->getCropDescription(buf);
- return S_OK;
-}
 STDMETHODIMP TffDecoder::getFontName(char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
@@ -386,6 +347,13 @@ STDMETHODIMP TffDecoder::loadDialogSettings(void)
  dialogSettings.load();
  return S_OK;
 }
+STDMETHODIMP TffDecoder::renameActivePreset(const char *newName)
+{
+ if (!newName) return E_POINTER;
+ if (strlen(newName)>260) return E_OUTOFMEMORY;
+ strcpy(presetSettings->presetName,newName);
+ return S_OK;
+}
 
 // query interfaces 
 STDMETHODIMP TffDecoder::NonDelegatingQueryInterface(REFIID riid, void **ppv)
@@ -412,6 +380,7 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  ASSERT(phr);
 
  InitCommonControls();
+ srand(time(NULL));
  
  AVIname[0]=AVIfourcc[0]='\0';
  AVIdx=AVIdy=cropLeft=cropTop=cropDx=cropDy=AVIfps=0;
@@ -419,12 +388,9 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  avctx=NULL;resizeCtx=NULL;tray=NULL;
  
  presets.init();
- //fillParams();
  config.init();
  loadPreset(globalSettings.activePreset);
 // presetSettings->fontChanged=true;
- //TODO: load active preset
- //cfg.loadActivePreset();
  
  tray=new TtrayIcon(this,g_hInst);
  
@@ -513,85 +479,84 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
  codecName="";AVIfourcc[0]='\0';
  switch(hdr->biCompression)
   {
-  case FOURCC_XVID:
-  case FOURCC_xvid:
-   if (globalSettings.xvid) 
-    {
-     codecName="mpeg4";strcpy(AVIfourcc,"XVID");
-     return S_OK;
-    }
-   break;
-  case FOURCC_DIVX:
-  case FOURCC_divx:
-   if (globalSettings.divx) 
-    {
-     codecName="mpeg4";strcpy(AVIfourcc,"DIVX");
-     return S_OK;
-    } 
-   break;
-  case FOURCC_DX50:
-  case FOURCC_dx50:
-   if (globalSettings.dx50) 
-    {
-     codecName="mpeg4";strcpy(AVIfourcc,"DX50");
-     return S_OK;
-    }
-   break;
-  case FOURCC_DIV3:
-  case FOURCC_div3:
-   if (globalSettings.div3) 
-    {
-     codecName="msmpeg4";strcpy(AVIfourcc,"DIV3");
-     return S_OK;
-    } 
-   break;
-  case FOURCC_MP43:
-  case FOURCC_mp43:
-   if (globalSettings.mp43)
-    {
-     codecName="msmpeg4";strcpy(AVIfourcc,"MP43");
-     return S_OK;
-    } 
-   break;
-  case FOURCC_MP42:
-  case FOURCC_mp42:
-   if (globalSettings.mp42)
-    {
-     codecName="msmpeg4v2";strcpy(AVIfourcc,"MP42");
-     return S_OK;
-    } 
-   break;
-  case FOURCC_MP41:
-  case FOURCC_mp41:
-   if (globalSettings.mp41)
-    {
-     codecName="msmpeg4v1";strcpy(AVIfourcc,"MP41");
-     return S_OK;
-    } 
-   break;
-  case FOURCC_H263:
-  case FOURCC_h263:
-   if (globalSettings.h263)
-    {
-     codecName="h263";strcpy(AVIfourcc,"H263");
-     return S_OK;
-    } 
-   break;
-  #ifdef FF__WMV1 
-  case FOURCC_WMV1:
-  case FOURCC_wmv1:
-   if (cfg.wmv1)
-    {
-     codecName="wmv1";strcpy(AVIfourcc,"WMV1");
-     simpleIdct=true;
-     return S_OK;
-    } 
-   break;
-  #endif
+   case FOURCC_XVID:
+   case FOURCC_xvid:
+    if (globalSettings.xvid) 
+     {
+      codecName="mpeg4";strcpy(AVIfourcc,"XVID");
+      break;
+     }
+    else return VFW_E_TYPE_NOT_ACCEPTED;
+   case FOURCC_DIVX:
+   case FOURCC_divx:
+    if (globalSettings.divx) 
+     {
+      codecName="mpeg4";strcpy(AVIfourcc,"DIVX");
+      break;
+     } 
+    else return VFW_E_TYPE_NOT_ACCEPTED;
+   case FOURCC_DX50:
+   case FOURCC_dx50:
+    if (globalSettings.dx50) 
+     {
+      codecName="mpeg4";strcpy(AVIfourcc,"DX50");
+      break;
+     }
+    else return VFW_E_TYPE_NOT_ACCEPTED;
+   case FOURCC_DIV3:
+   case FOURCC_div3:
+    if (globalSettings.div3) 
+     {
+      codecName="msmpeg4";strcpy(AVIfourcc,"DIV3");
+      break;
+     } 
+    else return VFW_E_TYPE_NOT_ACCEPTED;
+   case FOURCC_MP43:
+   case FOURCC_mp43:
+    if (globalSettings.mp43)
+     {
+      codecName="msmpeg4";strcpy(AVIfourcc,"MP43");
+      break;
+     } 
+    else return VFW_E_TYPE_NOT_ACCEPTED;
+   case FOURCC_MP42:
+   case FOURCC_mp42:
+    if (globalSettings.mp42)
+     {
+      codecName="msmpeg4v2";strcpy(AVIfourcc,"MP42");
+      break;
+     } 
+    else return VFW_E_TYPE_NOT_ACCEPTED;
+   case FOURCC_MP41:
+   case FOURCC_mp41:
+    if (globalSettings.mp41)
+     {
+      codecName="msmpeg4v1";strcpy(AVIfourcc,"MP41");
+      break;
+     } 
+    else return VFW_E_TYPE_NOT_ACCEPTED;
+   case FOURCC_H263:
+   case FOURCC_h263:
+    if (globalSettings.h263)
+     {
+      codecName="h263";strcpy(AVIfourcc,"H263");
+      break;
+     } 
+    else return VFW_E_TYPE_NOT_ACCEPTED;
+   #ifdef FF__WMV1 
+   case FOURCC_WMV1:
+   case FOURCC_wmv1:
+    if (cfg.wmv1)
+     {
+      codecName="wmv1";strcpy(AVIfourcc,"WMV1");
+      break;
+     } 
+    else return VFW_E_TYPE_NOT_ACCEPTED;
+   #endif
+   default:return VFW_E_TYPE_NOT_ACCEPTED;
   }
- return VFW_E_TYPE_NOT_ACCEPTED;
+ return S_OK;
 }
-
 
 // get list of supported output colorspaces 
 HRESULT TffDecoder::GetMediaType(int iPosition, CMediaType *mtOut)

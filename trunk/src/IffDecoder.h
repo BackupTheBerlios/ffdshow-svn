@@ -105,8 +105,17 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_subAutoFlnm         814
 
 #define IDFF_isBlur              901
-#define IDFF_blurStrength        902
 #define IDFF_orderBlur           903
+#define IDFF_blurStrength        902
+
+#define IDFF_isOffset           1101
+#define IDFF_orderOffset        1102
+#define IDFF_offsetY_X          1103
+#define IDFF_offsetY_Y          1104
+#define IDFF_offsetU_X          1105
+#define IDFF_offsetU_Y          1106
+#define IDFF_offsetV_X          1107
+#define IDFF_offsetV_Y          1108
               
 #define IDFF_xvid               1001 //are AVIs with this FOURCC played by ffdshow?
 #define IDFF_div3               1002
@@ -118,6 +127,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_h263               1008
 
 struct TpresetSettings;
+class Tpresets;
 DECLARE_INTERFACE_(IffDecoder, IUnknown)
 {
  STDMETHOD (getParam)(unsigned int paramID, int* value) PURE;
@@ -138,12 +148,6 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (notifyParamsChanged)(void) PURE;
  STDMETHOD (getAVcodecVersion)(char *buf,unsigned int len) PURE;
  STDMETHOD (getPPmode)(unsigned int *ppmode) PURE;
- STDMETHOD (getPostProcDescription)(char *buf,unsigned int len) PURE;
- STDMETHOD (getPictPropDescription)(char *buf,unsigned int len) PURE;
- STDMETHOD (getNoiseDescription)(char *buf,unsigned int len) PURE;
- STDMETHOD (getBlurDescription)(char *buf,unsigned int len) PURE;
- STDMETHOD (getSharpenDescription)(char *buf,unsigned int len) PURE;
- STDMETHOD (getCropDescription)(char *buf,unsigned int len) PURE;
  STDMETHOD (getFontName)(char *buf,unsigned int len) PURE;
  STDMETHOD (setFontName)(const char *name) PURE;
  STDMETHOD (getSubFlnm)(char *buf,unsigned int len) PURE;
@@ -155,8 +159,12 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (loadGlobalSettings)(void) PURE;
  STDMETHOD (saveDialogSettings)(void) PURE;
  STDMETHOD (loadDialogSettings)(void) PURE;
- STDMETHOD (getPreset)(unsigned int i,TpresetSettings **preset) PURE;
- STDMETHOD (setPreset)(TpresetSettings *preset) PURE;
+ //STDMETHOD (getPreset)(unsigned int i,TpresetSettings **preset) PURE;
+ STDMETHOD (getPresets)(Tpresets *presets2) PURE;
+ STDMETHOD (setPresets)(Tpresets *presets2) PURE;
+ STDMETHOD (savePresets)(void) PURE;
+ STDMETHOD (setPresetPtr)(TpresetSettings *preset) PURE;
+ STDMETHOD (renameActivePreset)(const char *newName) PURE;
 };
 
 #ifdef __cplusplus

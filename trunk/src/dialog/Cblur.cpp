@@ -77,7 +77,10 @@ void TblurPage::interDlg(void)
 {
  setCheck(IDC_CHB_BLUR,cfgGet(IDFF_isBlur));
 }
-
+void TblurPage::getTip(char *tipS,int len)
+{
+ sprintf(tipS,"Blur (strength:%i)",cfgGet(IDFF_blurStrength));
+}
 TblurPage::TblurPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
  createWindow(IDD_BLUR);

@@ -28,20 +28,38 @@
 #include "TpresetSettings.h"
 #include "ffdebug.h"
 
-#define ID_TOOLBAR 1998
-
+static LRESULT CALLBACK lvWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam) 
+{ 
+ TpresetsPage *presetsPage=(TpresetsPage*)GetWindowLong(hwnd,GWL_USERDATA);
+ switch (msg) 
+  { 
+   case WM_KEYDOWN: 
+    switch (wParam) 
+     { 
+      case VK_F2: 
+       ListView_EditLabel(presetsPage->hlv,ListView_GetNextItem(presetsPage->hlv,-1,LVNI_SELECTED)); 
+       return 0; 
+     } 
+    break; 
+   case WM_KEYUP: 
+   case WM_CHAR: 
+    switch (wParam) 
+     { 
+      case VK_F2:return 0; 
+     } 
+    break; 
+  } 
+ return CallWindowProc(presetsPage->lvOldWndProc,hwnd,msg,wParam,lParam); 
+} 
 void TpresetsPage::init(void)
 {
  hlv=GetDlgItem(m_hwnd,IDC_LV_PRESETS); 
- ncol=0;
+ SetWindowLong(hlv,GWL_USERDATA,LONG(this));
+ lvOldWndProc=(WNDPROC)SetWindowLong(hlv,GWL_WNDPROC,LONG(lvWndProc));
+ ncol=0;fileDlgFlnm[0]='\0';
 
- unsigned int len;deci->getNumPresets(&len);
- for (unsigned int i=0;i<len;i++) 
-  {
-   TpresetSettings *preset;
-   deci->getPreset(i,&preset);
-   localPresets.storePreset(new TpresetSettings(*preset));
-  }
+ deci->getPresets(&localPresets);
+
  ListView_SetExtendedListViewStyleEx(hlv,LVS_EX_FULLROWSELECT,LVS_EX_FULLROWSELECT);
  addCol(300,"preset name",false);
  ListView_SetItemCountEx(hlv,localPresets.size(),0);
@@ -51,12 +69,14 @@ void TpresetsPage::init(void)
 }
 void TpresetsPage::lvSelectPreset(const char *presetName)
 {
- for (int i=0;i<localPresets.size();i++)
+ for (unsigned int i=0;i<localPresets.size();i++)
   if (_stricmp(presetName,localPresets[i]->presetName)==0)
    {
     ListView_SetItemState(hlv,i,LVIS_SELECTED,LVIS_SELECTED);
-    deci->setPreset(localPresets[i]);
+    deci->setPresetPtr(localPresets[i]);
     parent->presetChanged();
+    enableWindow(IDC_BT_PRESET_REMOVE,i);
+    ListView_EnsureVisible(hlv,i,FALSE);
     return;
    }
 }
@@ -81,6 +101,7 @@ void TpresetsPage::cfg2dlg(void)
 
 HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+ int menuCmd=0;
  switch (uMsg)
   {
    case WM_COMMAND:
@@ -93,12 +114,76 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       case IDC_CHB_AUTOPRESET_FILEFIRST:
        cfgSet(IDFF_autoPresetFileFirst,getCheck(IDC_CHB_AUTOPRESET_FILEFIRST));
        return TRUE;
+      case IDC_BT_PRESET_NEW:
       case IDC_BT_PRESET_NEW_MENU:
-       HMENU hmn=LoadMenu(hi,MAKEINTRESOURCE(IDR_MENU_PRESET_NEW)),hmn2=GetSubMenu(hmn,0) ;
-       POINT p;GetCursorPos(&p);
-       int cmd=TrackPopupMenu(hmn2,TPM_LEFTALIGN|TPM_TOPALIGN|TPM_RETURNCMD,p.x,p.y+2,0,m_hwnd,0);
-       DestroyMenu(hmn);
-       return TRUE;
+       {
+        if (LOWORD(wParam)==IDC_BT_PRESET_NEW)
+         menuCmd=ID_MNI_PRESET_NEWFROMDEFAULT;
+        else
+         {
+          HMENU hmn=LoadMenu(hi,MAKEINTRESOURCE(IDR_MENU_PRESET_NEW)),hmn2=GetSubMenu(hmn,0) ;
+          RECT r;
+          GetWindowRect(GetDlgItem(m_hwnd,IDC_BT_PRESET_NEW_MENU),&r);
+          menuCmd=TrackPopupMenu(hmn2,TPM_LEFTALIGN|TPM_TOPALIGN|TPM_RETURNCMD,r.left-1,r.bottom,0,m_hwnd,0);
+          DestroyMenu(hmn);
+         } 
+        TpresetSettings *newPreset=NULL;
+        switch (menuCmd)
+         {
+          case ID_MNI_PRESET_NEWFROMDEFAULT:
+           {
+            newPreset=new TpresetSettings(*localPresets[0]);
+            break;
+           }
+          case ID_MNI_PRESET_NEWFROMSELECTED:
+           {
+            newPreset=new TpresetSettings(*localPresets[ListView_GetNextItem(hlv,-1,LVNI_SELECTED)]);
+            break;
+           }
+          case ID_MNI_PRESET_NEW_FROMFILE:
+           {
+            OPENFILENAME ofn;
+            memset(&ofn,0,sizeof(ofn));
+            ofn.lStructSize    =sizeof(OPENFILENAME);
+            ofn.hwndOwner      =m_hwnd;
+            ofn.lpstrFilter    ="ffdshow preset (*."FFPRESET_EXT")\0*."FFPRESET_EXT"\0All files (*.*)\0*.*\0\0";
+            ofn.lpstrInitialDir=".";
+            ofn.lpstrFile      =fileDlgFlnm;
+            ofn.lpstrTitle     ="Load ffdshow preset";
+            ofn.lpstrDefExt    =FFPRESET_EXT;  
+            ofn.nMaxFile       =MAX_PATH;
+            ofn.Flags          =OFN_PATHMUSTEXIST|OFN_FILEMUSTEXIST|OFN_ENABLESIZING;
+            if (GetOpenFileName(&ofn))
+             {
+              newPreset=new TpresetSettings;
+              newPreset->loadFile(fileDlgFlnm);
+             }
+            break; 
+           } 
+         }
+        if (newPreset)
+         {
+          localPresets.nextUniqueName(newPreset);
+          localPresets.storePreset(newPreset); 
+          ListView_SetItemCountEx(hlv,localPresets.size(),0);
+          lvSelectPreset(newPreset->presetName);
+          //SetActiveWindow(hlv);
+          //PostMessage(hlv,LVM_EDITLABEL,ListView_GetNextItem(hlv,-1,LVNI_SELECTED),0); 
+         } 
+        return TRUE;
+       }; 
+      case IDC_BT_PRESET_REMOVE:
+       int i=ListView_GetNextItem(hlv,-1,LVNI_SELECTED);
+       if (i!=0 && MessageBox(m_hwnd,"Do you realy want to remove selected preset?","Removing preset",MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2)==IDYES)
+        {
+         char presetName[1024];
+         ListView_GetItemText(hlv,i,0,presetName,1023);
+         localPresets.removePreset(presetName);
+         ListView_SetItemCountEx(hlv,localPresets.size(),0);
+         ListView_GetItemText(hlv,0,0,presetName,1023);
+         lvSelectPreset(presetName);
+        }
+       return TRUE; 
      }
     break;
    case WM_NOTIFY:
@@ -127,8 +212,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           DEBUGS1("activate",nmlv->iItem);
           char presetName[1024];
           ListView_GetItemText(hlv,nmlv->iItem,0,presetName,1023);
-          deci->setPreset(localPresets.getPreset(presetName));
-          parent->presetChanged();
+          lvSelectPreset(presetName);
           return TRUE;
          }
         case NM_DBLCLK:
@@ -145,18 +229,33 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
            }
           return TRUE;
          }
+        case LVN_ENDLABELEDIT:
+         {
+          NMLVDISPINFO *nmdi=(NMLVDISPINFO*)(lParam);
+          if (!nmdi->item.pszText) return FALSE;
+          if (localPresets.getPreset(nmdi->item.pszText)==NULL && TpresetSettings::isValidPresetName(nmdi->item.pszText))
+           {
+            char presetName[260];
+            TpresetSettings::normalizePresetName(presetName,nmdi->item.pszText);
+            deci->renameActivePreset(presetName);
+            SetWindowLong(m_hwnd,DWL_MSGRESULT,TRUE);
+            parent->presetChanged();
+           }
+          else
+           SetWindowLong(m_hwnd,DWL_MSGRESULT,FALSE);
+         } 
        }
      break; 
     }
   };
  return FALSE;
 }
-
 void TpresetsPage::applySettings(void)
 {
+ deci->setPresets(&localPresets);
+ deci->savePresets();
  strcpy(oldActivePresetName,localPresets[ListView_GetNextItem(hlv,-1,LVNI_SELECTED)]->presetName);
 }
-
 TpresetsPage::~TpresetsPage()
 {
  deci->loadPreset(oldActivePresetName);
@@ -166,7 +265,3 @@ TpresetsPage::TpresetsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Id
 {
  createWindow(IDD_PRESETS);
 }
-
-
-
-

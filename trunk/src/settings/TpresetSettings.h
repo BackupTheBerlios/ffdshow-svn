@@ -5,8 +5,8 @@
 
 struct TpresetSettings
 {
-private:
- static void normalizePresetName(char *dst,char *src)
+public:
+ static void normalizePresetName(char *dst,const char *src)
   {
    char c;
    do
@@ -16,6 +16,7 @@ private:
     *(dst++)=c;
    } while (c);
   }
+ static bool isValidPresetName(const char *presetName);
 public:
  TpresetSettings(void);
  TpresetSettings(const char *IpresetName);
@@ -26,39 +27,39 @@ public:
 
  char presetName[260];
  int isPostproc,orderPostproc;
+ static const int orderPostprocDef;
  int ppqual;
  int autoq;int currentq;
  int ppIsCustom,ppcustom;
  //int ppsetting;
  int levelFixLum,levelFixChrom;
- void getPostProcDescription(char *buf);
   
  int isPictProp,orderPictProp; 
+ static const int orderPictPropDef;
  int lumGain,lumOffset,gammaCorrection;
  static const int lumGainDef,lumOffsetDef,gammaCorrectionDef;
  int hue,saturation;
  static const int hueDef,saturationDef;
- void getPictPropDescription(char *buf);
  
  int flip;
 
  int isBlur,orderBlur;
+ static const int orderBlurDef;
  int blurStrength;
- void getBlurDescription(char *buf);
  
  int isSharpen,orderSharpen;
+ static const int orderSharpenDef;
  int sharpenMethod;
  int xsharp_strength,xsharp_threshold;
  static const int xsharp_strengthDef,xsharp_thresholdDef;
  int unsharp_strength,unsharp_threshold;
  static const int unsharp_strengthDef,unsharp_thresholdDef;
- void getSharpenDescription(char *buf);
  
  int isNoise,orderNoise;
+ static const int orderNoiseDef;
  int noiseMethod,uniformNoise;
  int noiseStrength,noiseStrengthChroma;
  static const int noiseStrengthDef,noiseStrengthChromaDef;
- void getNoiseDescription(char *buf);
  
  int idct;
  static const int idctDef;
@@ -75,9 +76,9 @@ public:
  int magnificationX,magnificationY,magnificationLocked;
  int cropTop,cropBottom,cropLeft,cropRight;
  int autocrop;
- void getCropDescription(char *buf);
 
  int isSubtitles,orderSubtitles;
+ static const int orderSubtitlesDef;
  int fontChanged;
  char fontName[256];
  int fontCharset,fontSize,fontSpacing,fontWeight,fontColor,fontShadowStrength,fontShadowRadius;
@@ -86,7 +87,11 @@ public:
  int subAutoFlnm;
  char subFlnm[260];
 
- static int min_order,max_order;
+ int isOffset,orderOffset;
+ static const int orderOffsetDef;
+ int offsetY_X,offsetY_Y,offsetU_X,offsetU_Y,offsetV_X,offsetV_Y;
+
+ static const int min_order,max_order;
 };
 
 #endif

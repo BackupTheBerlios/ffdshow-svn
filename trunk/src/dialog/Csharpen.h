@@ -18,7 +18,7 @@ class TsharpenPage : public TconfPage
   virtual int invInter(void) {return cfgInv(IDFF_isSharpen);};
   virtual int getOrder(void) {return cfgGet(IDFF_orderSharpen);};
   virtual void setOrder(int o) {cfgSet(IDFF_orderSharpen,o);};
-  virtual void getTip(char *tipS,int len) {deci->getSharpenDescription(tipS,len);};
+  virtual void getTip(char *tipS,int len);
 };
 
 #endif 

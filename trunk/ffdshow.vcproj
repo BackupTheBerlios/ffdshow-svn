@@ -194,6 +194,9 @@
 					RelativePath="src\helpNoise.txt">
 				</File>
 				<File
+					RelativePath="src\helpOffset.txt">
+				</File>
+				<File
 					RelativePath="src\helpPictprop.txt">
 				</File>
 				<File
@@ -289,6 +292,9 @@
 			</File>
 			<File
 				RelativePath="src\ffdshow_dshowreg.h">
+			</File>
+			<File
+				RelativePath="src\ffdshow_mediaguids.h">
 			</File>
 			<File
 				RelativePath="src\ffdshow_params.h">
@@ -594,6 +600,12 @@
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterLuma.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AssemblerOutput="4"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterLuma.h">
@@ -603,6 +615,12 @@
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterNoise.h">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TimgFilterOffset.cpp">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TimgFilterOffset.h">
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterSharpen.cpp">
@@ -688,6 +706,12 @@
 			</File>
 			<File
 				RelativePath="src\dialog\Cnoise.h">
+			</File>
+			<File
+				RelativePath="src\dialog\Coffset.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Coffset.h">
 			</File>
 			<File
 				RelativePath="src\dialog\CpictProp.cpp">

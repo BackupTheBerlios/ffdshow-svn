@@ -17,7 +17,7 @@ class TpostProcPage : public TconfPage
   virtual int invInter(void) {return cfgInv(IDFF_isPostproc);};
   virtual int getOrder(void) {return cfgGet(IDFF_orderPostproc);};
   virtual void setOrder(int o) {cfgSet(IDFF_orderPostproc,o);};
-  virtual void getTip(char *tipS,int len) {deci->getPostProcDescription(tipS,len);};
+  virtual void getTip(char *tipS,int len);
 };
 
 #endif 

@@ -13,6 +13,9 @@ class TpresetsPage : public TconfPage
   void addCol(int w,const char *txt,bool right);
   void lvSelectPreset(const char *presetName);
   HWND hlv;
+  WNDPROC lvOldWndProc;
+  friend static LRESULT CALLBACK lvWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam) ;
+  char fileDlgFlnm[MAX_PATH];
  public:
   TpresetsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
   virtual ~TpresetsPage();

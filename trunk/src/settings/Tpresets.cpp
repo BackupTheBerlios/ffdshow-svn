@@ -25,8 +25,7 @@
 
 Tpresets::~Tpresets()
 {
- for (iterator i=begin();i!=end();i++)
-  delete *i;
+ done();
 }
 void Tpresets::init(void)
 {
@@ -50,7 +49,7 @@ void Tpresets::init(void)
                           NULL, 
                           &ftLastWriteTime
                          ); 
-   if (retCode==ERROR_SUCCESS) 
+   if (retCode==ERROR_SUCCESS && findPreset(keyName)==end()) 
     {
      TpresetSettings *preset=new TpresetSettings(keyName);
      preset->loadReg();
@@ -62,7 +61,12 @@ void Tpresets::init(void)
  if (i==0)
   (*begin())->saveReg();
 }
-
+void Tpresets::done(void)
+{
+ for (iterator i=begin();i!=end();i++)
+  delete *i;
+ clear(); 
+}
 Tpresets::iterator Tpresets::findPreset(const char *presetName)
 {
  for (iterator i=begin();i!=end();i++)
@@ -97,4 +101,31 @@ void Tpresets::savePreset(TpresetSettings *preset,const char *presetName)
 
 void Tpresets::removePreset(const char *presetName)
 {
+ iterator i=findPreset(presetName);
+ if (i!=begin())
+  {
+   delete *i;
+   erase(i);
+  }
+}
+
+void Tpresets::nextUniqueName(TpresetSettings *preset)
+{
+ iterator i=findPreset(preset->presetName);
+ if (i==end()) return;
+ for (int ii=1;;ii++)
+  {
+   char pomS[260];
+   sprintf(pomS,"%s %i",preset->presetName,ii);
+   if (findPreset(pomS)==end())
+    {
+     strcpy(preset->presetName,pomS);
+     return;
+    }
+  }
+}
+void Tpresets::saveRegAll(void)
+{
+ for (iterator i=begin();i!=end();i++)
+  (*i)->saveReg();
 }

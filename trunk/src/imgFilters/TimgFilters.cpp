@@ -52,6 +52,7 @@ void TimgFilters::init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY)
  blur.init(IdxY,IstrideY,Idy);
  sharpen.init(IdxY,IstrideY,Idy);
  subtitles.init(IdxY,IstrideY,Idy);
+ offset.init(IdxY,IstrideY,Idy);
 }
 void TimgFilters::done(void)
 {
@@ -152,6 +153,13 @@ void TimgFilters::process(TpresetSettings *cfg,unsigned char *srcY,unsigned char
     unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
     subtitles.process(srcY,srcU,srcV,dstY,dstU,dstV,cfg);
    }
+  else if (i==cfg->orderOffset && cfg->isOffset)
+   {
+    unsigned char *srcY=tempY->getTempCur()+diffY ,*dstY=tempY->getTempNext()+diffY ;
+    unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV;
+    unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
+    offset.process(srcY,srcU,srcV,dstY,dstU,dstV,cfg);
+   } 
   
  *dstY=tempY->getTempCur();
  *dstU=tempU->getTempCur();

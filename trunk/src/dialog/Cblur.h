@@ -17,7 +17,7 @@ class TblurPage : public TconfPage
   virtual int invInter(void) {return cfgInv(IDFF_isBlur);};
   virtual int getOrder(void) {return cfgGet(IDFF_orderBlur);};
   virtual void setOrder(int o) {cfgSet(IDFF_orderBlur,o);};
-  virtual void getTip(char *tipS,int len) {deci->getBlurDescription(tipS,len);};
+  virtual void getTip(char *tipS,int len);
 };
 
 #endif 

@@ -11,6 +11,7 @@
 #include "TimgFilterSharpen.h"
 #include "TimgFilterSubtitles.h"
 #include "TimgFilterBlur.h"
+#include "TimgFilterOffset.h"
 
 struct TpresetSettings;
 struct subtitle;
@@ -29,6 +30,7 @@ private:
  TimgFilterBlur blur;
  TimgFilterSharpen sharpen;
  TimgFilterSubtitles subtitles;
+ TimgFilterOffset offset;
 public:
  TimgFilters(void);
  ~TimgFilters();

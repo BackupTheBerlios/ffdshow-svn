@@ -1,14 +1,13 @@
-#ifndef _TIMGFILTERLUMA_H_
-#define _TIMGFILTERLUMA_H_
+#ifndef _TIMGFILTEROFFSET_H_
+#define _TIMGFILTEROFFSET_H_
 
 #include "TimgFilter.h"
 
-class TimgFilterLuma :public TimgFilter
+class TimgFilterOffset :public TimgFilter
 {
-private:
- unsigned int gammaTab[256];int oldGamma;
 public:
- TimgFilterLuma(void);
+ TimgFilterOffset(void);
+ virtual void init(int Idx,int Istride,int Idy);
  virtual void process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
                       unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
                       TpresetSettings *cfg);

@@ -154,7 +154,19 @@ HRESULT TaspectNcropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
   }   
  return FALSE;
 }
-
+void TaspectNcropPage::getTip(char *tipS,int len)
+{
+ strcpy(tipS,"Crop & zoom (");
+ char pomS[256];
+ if (cfgGet(IDFF_isZoom))
+  if (cfgGet(IDFF_magnificationLocked))
+   sprintf(pomS,"zoom: %i%%)",cfgGet(IDFF_magnificationX));
+  else
+   sprintf(pomS,"horizontal zoom: %i%%, vertical zoom: %i%%)",cfgGet(IDFF_magnificationX),cfgGet(IDFF_magnificationY));
+ else
+  sprintf(pomS,"crop: left:%i, top:%i, right:%i, bottom:%i)",cfgGet(IDFF_cropLeft),cfgGet(IDFF_cropTop),cfgGet(IDFF_cropRight),cfgGet(IDFF_cropBottom));
+ strcat(tipS,pomS);
+}
 TaspectNcropPage::TaspectNcropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
  createWindow(IDD_ASPECTNCROP);

@@ -85,54 +85,12 @@ void TimgFilterLuma::process(unsigned char *srcY,unsigned char *,unsigned char *
  if (cfg->gammaCorrection!=oldGamma)
   {
    oldGamma=cfg->gammaCorrection;
-   //calc123(oldGamma);
    double gamma=100.0/(oldGamma);
    for(int i=0;i<256;i++)
     gammaTab[i]=(unsigned char)(255.0*pow((i/255.0),gamma));
   };
  if (cfg->gammaCorrection!=cfg->gammaCorrectionDef)
   for (int y=0;y<dyY;y++)
-   for (unsigned char *dst=dstY+strideY*y,*dstEnd=dst+dxY;dst<dstEnd;dst++)
-    *dst=gammaTab[*dst];
-/*    
-    { 
-     float c=*dst/255.0;
-     c=c3*c*c*c+c2*c*c+c1*c;
-     if (c<0) c=0;if (c>1) c=1;
-     *dst=c*255;
-    }; 
-*/     
+   for (unsigned char *dst=dstY+strideY*y,*dstEnd=dst+dxY;dst<dstEnd;dst+=4)
+    *(unsigned int*)dst=(gammaTab[dst[3]]<<24)|(gammaTab[dst[2]]<<16)|(gammaTab[dst[1]]<<8)|gammaTab[dst[0]];
 };
-void TimgFilterLuma::calc123(int Ig0)
-{
- __asm emms;
- float g0=Ig0/100.0;
- float g=(g0<1)?1/g0:g0;
- unsigned int i;
- float x[256],exp[256];
- for (i=0;i<256;i++)
-  exp[i]=pow(i/255.0,g);
-
- float s0=0,s1=0,t0=0,s2=0,s3=0,s4=0,s5=0,s6=0,t1=0,t2=0,t3=0;
- for (i=0;i<256;i++)
-  {
-   s0=s0+i; //i
-   float xx=i/255.0;
-   s1=s1+xx; //x
-   float yy=exp[i];
-   t0=t0+yy; //y
-   s2=s2+xx*xx;
-   s3=s3+xx*xx*xx;
-   s4=s4+xx*xx*xx*xx;
-   s5=s5+xx*xx*xx*xx*xx;
-   s6=s6+xx*xx*xx*xx*xx*xx;
-   t1=t1+yy*xx;
-   t2=t2+yy*xx*xx;
-   t3=t3+yy*xx*xx*xx;
-  };
- float a11=s1-s3,a12=s2-s3,a13=s3-t0;
- float a21=s2-s4,a22=s3-s4,a23=s4-t1;
- float _c2=(a11*a23-a13*a21)/(a12*a21-a11*a22);
- float _c1=-(a22*c2+a23)/a21;
- float _c3=1-(c1+c2);
-}

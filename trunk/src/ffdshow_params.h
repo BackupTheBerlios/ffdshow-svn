@@ -124,3 +124,12 @@ PARAM(IDFF_subPosY            ,presetSettings->,subPosY            ,0,100,&TffDe
 PARAM(IDFF_subDelay           ,presetSettings->,subDelay           ,0,0,&TffDecoder::subsChanged)
 PARAM(IDFF_subSpeed           ,presetSettings->,subSpeed           ,0,0,&TffDecoder::subsChanged)
 PARAM(IDFF_subAutoFlnm        ,presetSettings->,subAutoFlnm        ,0,0,NULL)
+
+PARAM(IDFF_isOffset           ,presetSettings->,isOffset           ,0,0,NULL);
+PARAM(IDFF_orderOffset        ,presetSettings->,orderOffset        ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)
+PARAM(IDFF_offsetY_X          ,presetSettings->,offsetY_X          ,-32,32,NULL);
+PARAM(IDFF_offsetY_Y          ,presetSettings->,offsetY_Y          ,-32,32,NULL);
+PARAM(IDFF_offsetU_X          ,presetSettings->,offsetU_X          ,-32,32,NULL);
+PARAM(IDFF_offsetU_Y          ,presetSettings->,offsetU_Y          ,-32,32,NULL);
+PARAM(IDFF_offsetV_X          ,presetSettings->,offsetV_X          ,-32,32,NULL);
+PARAM(IDFF_offsetV_Y          ,presetSettings->,offsetV_Y          ,-32,32,NULL);

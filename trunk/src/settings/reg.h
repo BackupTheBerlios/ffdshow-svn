@@ -14,8 +14,8 @@
 #define REG_GET_S_FILE(X, Y, Z) {GetPrivateProfileString(sections,X,Z,propS,255,flnm);strcpy(Y,propS);}
 
 #define REG_SET_N(X, Y, Z) RegSetValueEx(hKey, X, 0, REG_DWORD, (LPBYTE)&Y, sizeof(int))
-#define REG_SET_N_FILE(X, Y, Z) WritePrivateProfileString(presetName,X,_itoa(Y,pomS,10),flnm)
+#define REG_SET_N_FILE(X, Y, Z) WritePrivateProfileString("presetSettings",X,_itoa(Y,pomS,10),flnm)
 #define REG_SET_S(X, Y ,Z) RegSetValueEx(hKey, X, 0, REG_SZ, (unsigned char*)(Y), lstrlen(Y)+1)
-#define REG_SET_S_FILE(X, Y, Z) WritePrivateProfileString(presetName,X,Y,flnm)
+#define REG_SET_S_FILE(X, Y, Z) WritePrivateProfileString("presetSettings",X,Y,flnm)
 
 #endif

@@ -23,7 +23,15 @@
 #include "reg.h"
 #include "TpresetSettings.h"
 
-int TpresetSettings::min_order=1,TpresetSettings::max_order=6;
+const int TpresetSettings::min_order=1;
+const int TpresetSettings::orderPostprocDef=1;
+const int TpresetSettings::orderPictPropDef=2;
+const int TpresetSettings::orderOffsetDef=3;
+const int TpresetSettings::orderBlurDef=4;
+const int TpresetSettings::orderSharpenDef=5;
+const int TpresetSettings::orderNoiseDef=6;
+const int TpresetSettings::orderSubtitlesDef=7;
+const int TpresetSettings::max_order=7;
 
 TpresetSettings::TpresetSettings(void)
 {
@@ -73,7 +81,7 @@ void TpresetSettings::loadFile(const char *flnm)
  char sections[4096]="";
  GetPrivateProfileSectionNames(sections,4095,flnm);
  if (sections[0]=='\0') return;
- normalizePresetName(presetName,sections);
+ normalizePresetName(presetName,flnm);
  char pomS[256],propS[256];
  #undef _REG_OP_N
  #undef _REG_OP_S
@@ -92,54 +100,10 @@ void TpresetSettings::saveFile(const char *flnm)
  #include "presets_template.h"
 }
 
-// descriptions
-
-void TpresetSettings::getPostProcDescription(char *buf)
+bool TpresetSettings::isValidPresetName(const char *presetName)
 {
- char pomS[256];
- strcpy(buf,"Postprocessing (");
- if (ppIsCustom)
-  {
-   strcat(buf,"custom");
-  }
- else
-  {
-   strcat(buf,"presets: ");
-   sprintf(pomS,"strength %i",ppqual);strcat(buf,pomS);
-   if (autoq) strcat(buf," automatic");
-  } 
- if (levelFixChrom || levelFixLum) strcat(buf,", level fix"); 
- strcat(buf,")");
-}
-void TpresetSettings::getPictPropDescription(char *buf)
-{
- __asm emms;
- sprintf(buf,"Picture properties (lum gain:%i, lum offset:%i, gamma:%5.2f, hue:%i, saturation:%i)",lumGain,lumOffset,float(gammaCorrection/100.0),hue,saturation);
-}
-void TpresetSettings::getNoiseDescription(char *buf)
-{
- sprintf(buf,"Noise (method:%s, %sluma strength:%i, chroma strength:%i)",(noiseMethod==0)?"old":"avih",uniformNoise?"uniform, ":"",noiseStrength,noiseStrengthChroma);
-}
-void TpresetSettings::getBlurDescription(char *buf)
-{
- sprintf(buf,"Blur (strength:%i)",blurStrength);
-}
-void TpresetSettings::getSharpenDescription(char *buf)
-{
- char tstr[256];
- sprintf(tstr," threshold: %i",xsharp_threshold);
- sprintf(buf,"Sharpen (method:%s, strength:%i%s)",(sharpenMethod==0)?"xsharpen":"unsharp mask",(sharpenMethod==0)?xsharp_strength:unsharp_strength,(sharpenMethod==0)?tstr:"");
-}
-void TpresetSettings::getCropDescription(char *buf)
-{
- strcpy(buf,"Crop & zoom (");
- char pomS[256];
- if (isZoom)
-  if (magnificationLocked) 
-   sprintf(pomS,"zoom: %i%%)",magnificationX);
-  else
-   sprintf(pomS,"horizontal zoom: %i%%, vertical zoom: %i%%)",magnificationX,magnificationY);
- else
-  sprintf(pomS,"crop: left:%i, top:%i, right:%i, bottom:%i)",cropLeft,cropTop,cropRight,cropBottom);
- strcat(buf,pomS);
+ if (presetName[0]=='\0') return false;
+ for (unsigned int i=0;i<strlen(presetName);i++)
+  if (presetName[i]=='*' || presetName[i]=='?') return false;
+ return true; 
 }

@@ -163,7 +163,23 @@ void TpostProcPage::interDlg(void)
 {
  setCheck(IDC_CHB_POSTPROC,cfgGet(IDFF_isPostproc));
 }
-
+void TpostProcPage::getTip(char *tipS,int len)
+{
+ char pomS[256];
+ strcpy(tipS,"Postprocessing (");
+ if (cfgGet(IDFF_ppIsCustom))
+  {
+   strcat(tipS,"custom");
+  }
+ else
+  {
+   strcat(tipS,"presets: ");
+   sprintf(pomS,"strength %i",cfgGet(IDFF_ppqual));strcat(tipS,pomS);
+   if (cfgGet(IDFF_autoq)) strcat(tipS," automatic");
+  } 
+ if (cfgGet(IDFF_levelFixChrom) || cfgGet(IDFF_levelFixLum)) strcat(tipS,", level fix"); 
+ strcat(tipS,")");
+}
 TpostProcPage::TpostProcPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
  createWindow(IDD_POSTPROC);

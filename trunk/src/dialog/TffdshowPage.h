@@ -16,10 +16,10 @@ class TffdshowPage : public CBasePropertyPage
   HIMAGELIST hil;
   int ilClear,ilChecked,ilArrowUD,ilArrowU,ilArrowD;
   HWND htv;
-  HTREEITEM pagePresets;
+  HTREEITEM htiPresets;
   HWND findParentDlg(void);
   HWND dlg;char caption[256];
-  HTREEITEM addTI(TVINSERTSTRUCT &tvis,TconfPage *page);
+  HTREEITEM addTI(TVINSERTSTRUCT &tvis,TconfPage *page,bool push=true);
   void presetTree(void);
   IffDecoder *deci;
   TconfPage  *page;
