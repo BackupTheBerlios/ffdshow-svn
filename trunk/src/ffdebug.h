@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#if 1
+#if 0
 static inline void DEBUGS(const char *s)
 {
  char pomS[1024];strcpy(pomS,s);strcat(pomS,"\n");

@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /G6 /MT /GX /O2 /Ob2 /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FD /c
+# ADD CPP /nologo /G6 /MT /GX /O2 /Ob2 /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /I "src\movie_source" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -71,7 +71,7 @@ LINK32=xilink6.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /w /W0 /Gm /Gi /GX /ZI /Od /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /D "DEBUG" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /w /W0 /Gm /Gi /GX /ZI /Od /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /I "src\movie_source" /D "DEBUG" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FR /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0xc09 /d "_DEBUG"
@@ -751,6 +751,23 @@ SOURCE=.\src\imgFilters\TimgFilterSharpen.cpp
 # Begin Source File
 
 SOURCE=.\src\imgFilters\TimgFilterSharpen.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\TimgFilterShowMV.cpp
+
+!IF  "$(CFG)" == "ffdshow - Win32 Release"
+
+# ADD CPP /FAs
+
+!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\TimgFilterShowMV.h
 # End Source File
 # Begin Source File
 

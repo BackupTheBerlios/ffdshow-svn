@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2002 Milan Cutka
+ * line drawing routine found at http://www.cs.unc.edu/~mcmillan/comp136/Lecture6/Lines.html
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,6 +54,9 @@ void TimgFilterShowMV::process(const unsigned char *srcY,const unsigned char *,c
      if (my<0) my=0;
      if (mx>=dxY) mx= dxY-1;
      if (my>=dyY) my= dyY-1;
+     line(dstY,x,y,mx,my);
+     //line(dstY,0,0,50,5);
+     /*
      int max= abs(mx-x);
      if (abs(my-y) > max) max= abs(my-y);
      // the ugliest linedrawing routine ... 
@@ -62,7 +66,228 @@ void TimgFilterShowMV::process(const unsigned char *srcY,const unsigned char *,c
        int y1= y + (my-y)*i/max;
        dstY[y1*strideY+x1]+=100;
       }
+     */
      dstY[y*strideY+x]+=100;
     }
   }
 }
+
+void TimgFilterShowMV::line(unsigned char *dst,int _x0,int _y0,int _x1,int _y1)
+{
+ if (_x0==_x1 && _y0==_y1)
+  { 
+   dst[_y0*strideY+_x0]+=100;
+   return;
+  };
+  #define SET_PIXEL(adr,a1,a2) (a1),(a2),*adr+=100
+        int dy = _y1 - _y0;
+        int dx = _x1 - _x0;
+        int stepx, stepy;
+
+        if (dy < 0) { dy = -dy;  stepy = -strideY; } else { stepy = strideY; }
+        if (dx < 0) { dx = -dx;  stepx = -1; } else { stepx = 1; }
+        unsigned char *adr0=dst+_y0*strideY+_x0,*adr1=dst+_y1*strideY+_x1;
+        #define x0 adr0
+        #define y0 adr0
+        #define x1 adr1
+        #define y1 adr1
+        SET_PIXEL(adr0,x0,y0);
+        SET_PIXEL(adr1,x1,y1);
+        if (dx > dy) {
+            int length = (dx - 1) >> 2;
+            int extras = (dx - 1) & 3;
+            int incr2 = (dy << 2) - (dx << 1);
+            if (incr2 < 0) {
+                int c = dy << 1;
+                int incr1 = c << 1;
+                int d =  incr1 - dx;
+                for (int i = 0; i < length; i++) {
+                    x0 += stepx;
+                    x1 -= stepx;
+                    if (d < 0) {						// Pattern:
+                        SET_PIXEL(adr0,x0, y0);			//
+                        SET_PIXEL(adr0,x0 += stepx, y0);	//  x o o
+                        SET_PIXEL(adr1,x1, y1);			//
+                        SET_PIXEL(adr1,x1 -= stepx, y1);
+                        d += incr1;
+                    } else {
+                        if (d < c) {							// Pattern:
+                            SET_PIXEL(adr0,x0, y0);				//      o
+                            SET_PIXEL(adr0,x0 += stepx, y0 += stepy);		//  x o
+                            SET_PIXEL(adr1,x1, y1);				//
+                            SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+                        } else {
+                            SET_PIXEL(adr0,x0, y0 += stepy);			// Pattern:
+                            SET_PIXEL(adr0,x0 += stepx, y0);			//    o o 
+                            SET_PIXEL(adr1,x1, y1 -= stepy);			//  x
+                            SET_PIXEL(adr1,x1 -= stepx, y1);			//
+                        }
+                        d += incr2;
+                    }
+                }
+                if (extras > 0) {
+                    if (d < 0) {
+                        SET_PIXEL(adr0,x0 += stepx, y0);
+                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0);
+                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1);
+                    } else
+                    if (d < c) {
+                        SET_PIXEL(adr0,x0 += stepx, y0);
+                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1);
+                    } else {
+                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0);
+                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+                    }
+                }
+            } else {
+                int c = (dy - dx) << 1;
+                int incr1 = c << 1;
+                int d =  incr1 + dx;
+                for (int i = 0; i < length; i++) {
+                    x0 += stepx;
+                    x1 -= stepx;
+                    if (d > 0) {
+                        SET_PIXEL(adr0,x0, y0 += stepy);			// Pattern:
+                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);		//      o
+                        SET_PIXEL(adr1,x1, y1 -= stepy);			//    o
+                        SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);		//  x
+                        d += incr1;
+                    } else {
+                        if (d < c) {
+                            SET_PIXEL(adr0,x0, y0);				// Pattern:
+                            SET_PIXEL(adr0,x0 += stepx, y0 += stepy);       //      o
+                            SET_PIXEL(adr1,x1, y1);                         //  x o
+                            SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);       //
+                        } else {
+                            SET_PIXEL(adr0,x0, y0 += stepy);			// Pattern:
+                            SET_PIXEL(adr0,x0 += stepx, y0);			//    o o
+                            SET_PIXEL(adr1,x1, y1 -= stepy);			//  x
+                            SET_PIXEL(adr1,x1 -= stepx, y1);			//
+                        }
+                        d += incr2;
+                    }
+                }
+                if (extras > 0) {
+                    if (d > 0) {
+                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+                    } else
+                    if (d < c) {
+                        SET_PIXEL(adr0,x0 += stepx, y0);
+                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1);
+                    } else {
+                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0);
+                        if (extras > 2) {
+                            if (d > c)
+                                SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+                            else
+                                SET_PIXEL(adr1,x1 -= stepx, y1);
+                        }
+                    }
+                }
+            }
+        } else {
+            int length = (dy - 1) >> 2;
+            int extras = (dy - 1) & 3;
+            int incr2 = (dx << 2) - (dy << 1);
+            if (incr2 < 0) {
+                int c = dx << 1;
+                int incr1 = c << 1;
+                int d =  incr1 - dy;
+                for (int i = 0; i < length; i++) {
+                    y0 += stepy;
+                    y1 -= stepy;
+                    if (d < 0) {
+                        SET_PIXEL(adr0,x0, y0);
+                        SET_PIXEL(adr0,x0, y0 += stepy);
+                        SET_PIXEL(adr1,x1, y1);
+                        SET_PIXEL(adr1,x1, y1 -= stepy);
+                        d += incr1;
+                    } else {
+                        if (d < c) {
+                            SET_PIXEL(adr0,x0, y0);
+                            SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                            SET_PIXEL(adr1,x1, y1);
+                            SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+                        } else {
+                            SET_PIXEL(adr0,x0 += stepx, y0);
+                            SET_PIXEL(adr0,x0, y0 += stepy);
+                            SET_PIXEL(adr1,x1 -= stepx, y1);
+                            SET_PIXEL(adr1,x1, y1 -= stepy);
+                        }
+                        d += incr2;
+                    }
+                }
+                if (extras > 0) {
+                    if (d < 0) {
+                        SET_PIXEL(adr0,x0, y0 += stepy);
+                        if (extras > 1) SET_PIXEL(adr0,x0, y0 += stepy);
+                        if (extras > 2) SET_PIXEL(adr1,x1, y1 -= stepy);
+                    } else
+                    if (d < c) {
+                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        if (extras > 2) SET_PIXEL(adr1,x1, y1 -= stepy);
+                    } else {
+                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        if (extras > 1) SET_PIXEL(adr0,x0, y0 += stepy);
+                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+                    }
+                }
+            } else {
+                int c = (dx - dy) << 1;
+                int incr1 = c << 1;
+                int d =  incr1 + dy;
+                for (int i = 0; i < length; i++) {
+                    y0 += stepy;
+                    y1 -= stepy;
+                    if (d > 0) {
+                        SET_PIXEL(adr0,x0 += stepx, y0);
+                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        SET_PIXEL(adr1,x1 -= stepy, y1);
+                        SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+                        d += incr1;
+                    } else {
+                        if (d < c) {
+                            SET_PIXEL(adr0,x0, y0);
+                            SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                            SET_PIXEL(adr1,x1, y1);
+                            SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+                        } else {
+                            SET_PIXEL(adr0,x0 += stepx, y0);
+                            SET_PIXEL(adr0,x0, y0 += stepy);
+                            SET_PIXEL(adr1,x1 -= stepx, y1);
+                            SET_PIXEL(adr1,x1, y1 -= stepy);
+                        }
+                        d += incr2;
+                    }
+                }
+                if (extras > 0) {
+                    if (d > 0) {
+                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+                    } else
+                    if (d < c) {
+                        SET_PIXEL(adr0,x0, y0 += stepy);
+                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        if (extras > 2) SET_PIXEL(adr1,x1, y1 -= stepy);
+                    } else {
+                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+                        if (extras > 1) SET_PIXEL(adr0,x0, y0 += stepy);
+                        if (extras > 2) {
+                            if (d > c)
+                                SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+                            else
+                                SET_PIXEL(adr1,x1, y1 -= stepy);
+                        }
+                    }
+                }
+            }
+        }
+    }

@@ -4,16 +4,16 @@
  case id:                                                     \
   {                                                           \
    if (min==-1 && max==-1) break;                             \
-   int &dst=int(settingsClass##valName);                      \
-   int oldVal=dst;                                            \
-   dst=val;                                                   \
+   int *dst=(int*)&settingsClass##valName;                    \
+   int oldVal=*dst;                                           \
+   *dst=val;                                                  \
    if (min || max)                                            \
     {                                                         \
-     if (dst<min) dst=min;                                    \
-     if (dst>max) dst=max;                                    \
+     if (*dst<min) *dst=min;                                  \
+     if (*dst>max) *dst=max;                                  \
     }                                                         \
    void (TffDecoder::*onNotify)(void)=_onNotify;              \
-   if (onNotify && oldVal!=dst) (this->*onNotify)();          \
+   if (onNotify && oldVal!=*dst) (this->*onNotify)();         \
   }                                                           \
   break;
 #pragma warning (once:4127)

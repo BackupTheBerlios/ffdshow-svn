@@ -106,7 +106,7 @@ void ToffsetPage::interDlg(void)
 }
 void ToffsetPage::getTip(char *tipS,int len)
 {
- sprintf(tipS,"Offset (luma:[%i,%i] chroma:[%i,%i])",cfgGet(IDFF_offsetY_X),cfgGet(IDFF_offsetY_Y),cfgGet(IDFF_offsetU_X),cfgGet(IDFF_offsetU_Y),cfgGet(IDFF_offsetV_X),cfgGet(IDFF_offsetV_Y));
+ sprintf(tipS,"Offset (luma:[%i,%i] chroma:[%i,%i])",cfgGet(IDFF_offsetY_X),cfgGet(IDFF_offsetY_Y),cfgGet(IDFF_offsetU_X),cfgGet(IDFF_offsetU_Y));
 }
 ToffsetPage::ToffsetPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {

@@ -455,7 +455,7 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  
  tray=new TtrayIcon(this,g_hInst);
  
- //TODO: prevent creation of imgFilters and sub in cfg dialog only mode
+ //TODO: prevent creation of imgFilters in cfg dialog only mode
  imgFilters=new TimgFilters;
 }
 
@@ -463,9 +463,7 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
 TffDecoder::~TffDecoder()
 {
  __asm {emms};
- if (cfgDlgHnwd)
-  //DestroyWindow(HWND(cfgDlgHnwd));
-  SendMessage(HWND(cfgDlgHnwd),WM_CLOSE,0,0);
+ //if (cfgDlgHnwd) SendMessage(HWND(cfgDlgHnwd),WM_CLOSE,0,0);
  DEBUGS("Destructor");
  if (movie)
   {
