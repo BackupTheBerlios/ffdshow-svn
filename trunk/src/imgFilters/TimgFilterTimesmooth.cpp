@@ -64,15 +64,15 @@ TimgFilterTimesmooth::TimgFilterTimesmooth(void)
 void TimgFilterTimesmooth::init(int Idx,int Istride,int Idy)
 {
  TimgFilter::init(Idx,Istride,Idy);
- accumY=(unsigned char*)malloc(dxY *dyY *KERNEL);memset(accumY,  0,dxY *dyY *KERNEL);
- accumU=(unsigned char*)malloc(dxUV*dyUV*KERNEL);memset(accumU,128,dxUV*dyUV*KERNEL);
- accumV=(unsigned char*)malloc(dxUV*dyUV*KERNEL);memset(accumV,128,dxUV*dyUV*KERNEL);
+ accumY=(unsigned char*)xvid_malloc(dxY *dyY *KERNEL,MCACHE_LINE);memset(accumY,  0,dxY *dyY *KERNEL);
+ accumU=(unsigned char*)xvid_malloc(dxUV*dyUV*KERNEL,MCACHE_LINE);memset(accumU,128,dxUV*dyUV*KERNEL);
+ accumV=(unsigned char*)xvid_malloc(dxUV*dyUV*KERNEL,MCACHE_LINE);memset(accumV,128,dxUV*dyUV*KERNEL);
 }
 void TimgFilterTimesmooth::done(void)
 {
- if (accumY) free(accumY);accumY=NULL;
- if (accumU) free(accumU);accumU=NULL;
- if (accumV) free(accumV);accumV=NULL;
+ if (accumY) xvid_free(accumY);accumY=NULL;
+ if (accumU) xvid_free(accumU);accumU=NULL;
+ if (accumV) xvid_free(accumV);accumV=NULL;
 }
 void TimgFilterTimesmooth::process(const unsigned char *srcY,const unsigned char *srcU,const unsigned char *srcV,
                                    unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,

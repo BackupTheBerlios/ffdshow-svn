@@ -38,8 +38,8 @@ wishes
 - statically linked
 
 =======================================================================
-emms
 priorities
 dscaler
 add black borders
 compilation instructions
+better noise

@@ -261,6 +261,10 @@ SOURCE=.\src\trayIcon.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\Txvid.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\idct\xIdctref.c
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
@@ -327,6 +331,10 @@ SOURCE=.\src\Tpostproc.h
 # Begin Source File
 
 SOURCE=.\src\trayIcon.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\Txvid.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"

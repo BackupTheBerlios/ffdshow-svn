@@ -23,12 +23,14 @@
 #define FF_POSTPROCESS 1
 #include "ffmpeg\libavcodec\avcodec.h"
 
+#define AVCODEC_PATH "C:\\mydocuments\\ffdshow\\src\\ffmpeg\\libavcodec\\libavcodec.dll"
+
 const int TpresetSettings::idctDef=0;
 
 void Tlibavcodec::init(void)
 {
  inited=true;
- avcodec_dll=new Tdll("C:\\mydocuments\\ffdshow\\src\\ffmpeg\\libavcodec\\libavcodec.dll");
+ avcodec_dll=new Tdll(AVCODEC_PATH);
  avcodec_dll->loadFunction((void**)&libavcodec_init,"libavcodec_init");
  avcodec_dll->loadFunction((void**)&avcodec_find_decoder,"avcodec_find_decoder");
  avcodec_dll->loadFunction((void**)&avcodec_open,"avcodec_open");
@@ -76,7 +78,7 @@ void Tlibavcodec::getVersion(char **vers)
   avcodec_dll->loadFunction((void**)&av_getVersion,"getVersion");
  else
   {  
-   dl=new Tdll("C:\\mydocuments\\ffdshow\\src\\ffmpeg\\libavcodec\\libavcodec.dll");
+   dl=new Tdll(AVCODEC_PATH);
    dl->loadFunction((void**)&av_getVersion,"getVersion");
   };
  if (av_getVersion) 
@@ -87,5 +89,3 @@ void Tlibavcodec::getVersion(char **vers)
   };
  if (dl) delete dl;  
 }
-
-
