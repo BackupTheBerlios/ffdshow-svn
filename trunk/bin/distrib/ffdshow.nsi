@@ -9,10 +9,12 @@ Caption "ffdshow"
 
 ;InstType Typical
 
-; The file to write
-OutFile "ffdshow.exe"
+!define FFDATE "20020520"
 
-BrandingText "ffdshow build 020510"
+; The file to write
+OutFile "ffdshow-${FFDATE}.exe"
+
+BrandingText "ffdshow build ${FFDATE}"
 
 LicenseText "This will install ffdshow MPEG4 decoder. Please read the license terms below before installing."
 LicenseData "..\..\copying.txt"
