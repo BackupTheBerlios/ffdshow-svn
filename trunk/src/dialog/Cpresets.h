@@ -19,7 +19,6 @@ class TpresetsPage : public TconfPage
   virtual void init(void);
   virtual void cfg2dlg(void);
   virtual void applySettings(void);
-  virtual void getTip(char *tipS,int len);
 };
 
 #endif 

@@ -22,7 +22,7 @@ public:
  void loadDefault(void);
  void loadReg(void),saveReg(void);
  void loadFile(const char *flnm),saveFile(const char *flnm);
- int presetShouldBeSaved,autoloadedfromreg;
+ int autoLoadedFromFile,autoLoadedFromReg;
 
  char presetName[260];
  int isPostproc,orderPostproc;

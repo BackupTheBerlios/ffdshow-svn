@@ -169,6 +169,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  addTI(tvis,new TsharpenPage(this,m_hwnd,deci));  
  addTI(tvis,new TblurPage(this,m_hwnd,deci));     
  //addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
+ //addTI(tvis,new TfontPage(this,m_hwnd,deci));
  tvis.item.cChildren=1;
  HTREEITEM pageSubtitles=addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
  tvis.item.cChildren=0;
@@ -177,7 +178,6 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  TreeView_Expand(htv,pageSubtitles,TVE_EXPAND);
  tvis.hParent=pagePresets;
  sortOrder();
- addTI(tvis,new TfontPage(this,m_hwnd,deci));
  addTI(tvis,new TresizePage(this,m_hwnd,deci));
  addTI(tvis,new TaspectNcropPage(this,m_hwnd,deci));
  addTI(tvis,new TmiscPage(this,m_hwnd,deci));
@@ -204,8 +204,8 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
 STDMETHODIMP TffdshowPage::Deactivate(void)
 {
  //cfg->save();
- int beSaved=deci->getParam2(IDFF_presetShouldBeSaved);
- if (beSaved) deci->loadPreset(NULL);
+ //int beSaved=deci->getParam2(IDFF_presetShouldBeSaved);
+ //if (beSaved) deci->loadPreset(NULL);
  //loadPreset();
  HRESULT res=CBasePropertyPage::Deactivate();
  for (vector<TconfPage*>::iterator i=pages.begin();i!=pages.end();i++)

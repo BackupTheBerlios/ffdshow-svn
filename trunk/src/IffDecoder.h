@@ -17,9 +17,9 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_trayIcon              3  //is tray icon visible
 #define IDFF_isDlg                 4  //is configuration dialog visible
 #define IDFF_autoPresetFileFirst   5  //try to load preset from file 
-#define IDFF_presetShouldBeSaved   6
+#define IDFF_autoLoadedFromFile    6
 #define IDFF_inPlayer              7
-#define IDFF_autoloadedfromreg     8
+#define IDFF_autoLoadedFromReg     8
 
 #define IDFF_isPostproc          106  
 #define IDFF_orderPostproc       109

@@ -89,7 +89,8 @@ HMENU TtrayIcon::createMenu(void)
  deci->getNumPresets(&len);
  char actPreset[1024];
  deci->getActivePresetName(actPreset,1023);
- for (unsigned int i=0;i<len;i++)
+ int i;
+ for (i=0;i<len;i++)
   {
    char preset[1024];
    deci->getPresetName(i,preset,1023);
@@ -97,18 +98,21 @@ HMENU TtrayIcon::createMenu(void)
   }
  insertSeparator(hm,ord);
  
- insertMenuItem(hm,ord,IDC_CHB_GLOBAL_POSTPROC,"Postprocessing",IDFF_isPostproc);
-// insertSubmenu(hm,ord,"Postprocessing settings",createPostProcMenu());
-// insertSeparator(hm,ord);
- insertMenuItem(hm,ord,IDC_CHB_GLOBAL_PICTPROP,"Picture properties",IDFF_isPictProp);
-// insertSeparator(hm,ord);
- insertMenuItem(hm,ord,IDC_CHB_GLOBAL_NOISE,"Noise",IDFF_isNoise);
-// insertSeparator(hm,ord);
- insertMenuItem(hm,ord,IDC_CHB_GLOBAL_BLUR,"Blur",IDFF_isBlur);
- insertMenuItem(hm,ord,IDC_CHB_GLOBAL_SHARPEN,"Sharpen",IDFF_isSharpen);
+ for (i=deci->getMinOrder2();i<=deci->getMaxOrder2();i++)
+  if      (i==cfgGet(IDFF_orderPostproc )) insertMenuItem(hm,ord,IDC_CHB_GLOBAL_POSTPROC,"Postprocessing",IDFF_isPostproc);
+   // insertSubmenu(hm,ord,"Postprocessing settings",createPostProcMenu());
+   // insertSeparator(hm,ord);
+  else if (i==cfgGet(IDFF_orderPictProp )) insertMenuItem(hm,ord,IDC_CHB_GLOBAL_PICTPROP,"Picture properties",IDFF_isPictProp);
+   // insertSeparator(hm,ord);
+  else if (i==cfgGet(IDFF_orderNoise    )) insertMenuItem(hm,ord,IDC_CHB_GLOBAL_NOISE,"Noise",IDFF_isNoise);
+   // insertSeparator(hm,ord);
+  else if (i==cfgGet(IDFF_orderBlur     )) insertMenuItem(hm,ord,IDC_CHB_GLOBAL_BLUR,"Blur",IDFF_isBlur);
+  else if (i==cfgGet(IDFF_orderSharpen  )) insertMenuItem(hm,ord,IDC_CHB_GLOBAL_SHARPEN,"Sharpen",IDFF_isSharpen);
+  else if (i==cfgGet(IDFF_orderSubtitles)) insertMenuItem(hm,ord,IDC_CHB_SUBTITLES,"Subtitles",IDFF_isSubtitles);
+
+ insertSeparator(hm,ord);
  insertMenuItem(hm,ord,IDC_CHB_GLOBAL_CROP,"Crop",IDFF_isCropNzoom);
  insertMenuItem(hm,ord,IDC_CHB_FLIP,"Flip",IDFF_flip);
- insertMenuItem(hm,ord,IDC_CHB_SUBTITLES,"Subtitles",IDFF_isSubtitles);
  
  return hm;
 }

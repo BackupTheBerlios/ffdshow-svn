@@ -35,8 +35,8 @@ PARAM(IDFF_mp42               ,globalSettings.,mp42               ,0,0,NULL)
 PARAM(IDFF_mp41               ,globalSettings.,mp41               ,0,0,NULL)
 PARAM(IDFF_h263               ,globalSettings.,h263               ,0,0,NULL)
 
-PARAM(IDFF_presetShouldBeSaved,presetSettings->,presetShouldBeSaved,0,0,NULL)
-PARAM(IDFF_autoloadedfromreg  ,presetSettings->,autoloadedfromreg  ,0,0,NULL)
+PARAM(IDFF_autoLoadedFromFile ,presetSettings->,autoLoadedFromFile ,0,0,NULL)
+PARAM(IDFF_autoLoadedFromReg  ,presetSettings->,autoLoadedFromReg  ,0,0,NULL)
 
 PARAM(IDFF_isPostproc         ,presetSettings->,isPostproc         ,0,0,NULL)
 PARAM(IDFF_orderPostproc      ,presetSettings->,orderPostproc      ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)
