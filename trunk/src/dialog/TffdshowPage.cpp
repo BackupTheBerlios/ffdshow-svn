@@ -101,8 +101,24 @@ void TffdshowPage::presetChanged(void)
  for (unsigned int i=0;i<pages.size();i++)
   pages[i]->cfg2dlg();
  InvalidateRect(htv,NULL,FALSE);
+ sortOrder();
 }
-
+static int CALLBACK orderCompareFunc(LPARAM lParam1, LPARAM lParam2,LPARAM lParamSort)
+{
+ int o1=((TconfPage*)lParam1)->getOrder(),o2=((TconfPage*)lParam2)->getOrder();
+ if (o1==-1 && o2==-1) return 0;
+ if (o1==-1) return 1;
+ if (o2==-1) return -1;
+ return o1-o2;
+}
+void TffdshowPage::sortOrder(void)
+{
+ TVSORTCB tvs;
+ tvs.hParent=pagePresets;
+ tvs.lpfnCompare=orderCompareFunc;
+ tvs.lParam=0;
+ TreeView_SortChildrenCB(htv,&tvs,0);
+}
 HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
 {
  CBasePropertyPage::Activate(hwndParent,prect,fModal);
@@ -125,27 +141,23 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  addTI(tvis,new TtrayPage(this,m_hwnd,deci));
  tvis.item.mask|=TVIF_CHILDREN;
  tvis.item.cChildren=1;
- HTREEITEM pagePresets=addTI(tvis,new TpresetsPage(this,m_hwnd,deci));
+ pagePresets=addTI(tvis,new TpresetsPage(this,m_hwnd,deci));
  tvis.hParent=pagePresets;
  tvis.item.cChildren=0;
- for (int i=deci->getMinOrder2();i<=deci->getMaxOrder2();i++)
-  if      (i==deci->getParam2(IDFF_orderPostproc))  addTI(tvis,new TpostProcPage(this,m_hwnd,deci));
-  else if (i==deci->getParam2(IDFF_orderPictProp))  addTI(tvis,new TpictPropPage(this,m_hwnd,deci));
-  else if (i==deci->getParam2(IDFF_orderNoise))     addTI(tvis,new TnoisePage(this,m_hwnd,deci));
-  else if (i==deci->getParam2(IDFF_orderSharpen))   addTI(tvis,new TsharpenPage(this,m_hwnd,deci));
-  else if (i==deci->getParam2(IDFF_orderBlur))      addTI(tvis,new TblurPage(this,m_hwnd,deci));
-  else if (i==deci->getParam2(IDFF_orderSubtitles)) addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
-  /*
-   {
-    tvis.item.cChildren=1;
-    HTREEITEM pageSubtitles=addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
-    tvis.item.cChildren=0;
-    tvis.hParent=pageSubtitles;
-    addTI(tvis,new TfontPage(this,m_hwnd,deci));
-    TreeView_Expand(htv,pageSubtitles,TVE_EXPAND);
-    tvis.hParent=pagePresets;
-   };
- */
+ addTI(tvis,new TpostProcPage(this,m_hwnd,deci)); 
+ addTI(tvis,new TpictPropPage(this,m_hwnd,deci)); 
+ addTI(tvis,new TnoisePage(this,m_hwnd,deci));    
+ addTI(tvis,new TsharpenPage(this,m_hwnd,deci));  
+ addTI(tvis,new TblurPage(this,m_hwnd,deci));     
+ //addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
+ tvis.item.cChildren=1;
+ HTREEITEM pageSubtitles=addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
+ tvis.item.cChildren=0;
+ tvis.hParent=pageSubtitles;
+ addTI(tvis,new TfontPage(this,m_hwnd,deci));
+ TreeView_Expand(htv,pageSubtitles,TVE_EXPAND);
+ tvis.hParent=pagePresets;
+ sortOrder();
  addTI(tvis,new TfontPage(this,m_hwnd,deci));
  addTI(tvis,new TresizePage(this,m_hwnd,deci));
  addTI(tvis,new TaspectNcropPage(this,m_hwnd,deci));
@@ -316,14 +328,18 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             if (ps.y>center-6 && ps.y<center-1 && page->getOrder()>deci->getMinOrder2())
              {
               HTREEITEM hti0=TreeView_GetPrevSibling(htv,hti);
-              swap(hti,hti0);
+              int o1=hti2page(hti0)->getOrder(),o2=hti2page(hti)->getOrder();
+              hti2page(hti0)->setOrder(o2);hti2page(hti)->setOrder(o1);
+              sortOrder(); //swap(hti,hti0);
               SetWindowLong(m_hwnd,DWL_MSGRESULT,TRUE);
               return TRUE;
              }
             else if (ps.y>center+1 && ps.y<center+6 && page->getOrder()<deci->getMaxOrder2())
              {
               HTREEITEM hti0=TreeView_GetNextSibling(htv,hti);
-              swap(hti,hti0);
+              int o1=hti2page(hti0)->getOrder(),o2=hti2page(hti)->getOrder();
+              hti2page(hti0)->setOrder(o2);hti2page(hti)->setOrder(o1);
+              sortOrder();//swap(hti,hti0);
               SetWindowLong(m_hwnd,DWL_MSGRESULT,TRUE);
               return TRUE;
              }
@@ -335,6 +351,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
   }
  return CBasePropertyPage::OnReceiveMessage(hwnd, uMsg, wParam, lParam);
 }
+/*
 void TffdshowPage::swap(HTREEITEM hti1,HTREEITEM hti2)
 {
  char str1[256],str2[256];
@@ -353,6 +370,7 @@ void TffdshowPage::swap(HTREEITEM hti1,HTREEITEM hti2)
  hti2page(hti1)->setOrder(o2);hti2page(hti2)->setOrder(o1);
  InvalidateRect(htv,NULL,FALSE);
 }
+*/
 void TffdshowPage::applySettings(void)
 {
  for (unsigned int i=0;i<pages.size();i++) pages[i]->applySettings();

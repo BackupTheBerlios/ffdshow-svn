@@ -16,13 +16,16 @@ class TffdshowPage : public CBasePropertyPage
   HIMAGELIST hil;
   int ilClear,ilChecked,ilArrowUD,ilArrowU,ilArrowD;
   HWND htv;
+  HTREEITEM pagePresets;
   HTREEITEM addTI(TVINSERTSTRUCT &tvis,TconfPage *page);
+  void presetTree(void);
   IffDecoder *deci;
   TconfPage  *page;
+  void sortOrder(void);
   void selectPage(int i),selectPage(TconfPage *Ipage);
   std::vector<TconfPage*> pages;
   TconfPage* hti2page(HTREEITEM hti);
-  void swap(HTREEITEM hti1,HTREEITEM hti2);
+  //void swap(HTREEITEM hti1,HTREEITEM hti2);
   void presetChanged(void);
   friend class TpresetsPage;
  public: 
