@@ -101,7 +101,7 @@ static int h263_decode_init(AVCodecContext *avctx)
 static int h263_decode_end(AVCodecContext *avctx)
 {
     MpegEncContext *s = avctx->priv_data;
-
+    if (avctx->motion_vectors) {free(avctx->motion_vectors);avctx->motion_vectors=NULL;};
     MPV_common_end(s);
     return 0;
 }
@@ -282,9 +282,25 @@ uint64_t time= rdtsc();
     }
   
     MPV_frame_end(s);
+    //===================== showMV ====================
     if (s->showMV) {  //dirty show MVs, we should export the MV tables and write a filter to show them
-        int mb_y;
+        int mb_y;char *mv;
+        avctx->mb_height=s->mb_height;
+        avctx->mb_width=s->mb_width;
+        if (!avctx->motion_vectors)
+         avctx->motion_vectors=(char*)malloc(s->mb_width*s->mb_height*2);
         s->has_b_frames=1;
+        mv=avctx->motion_vectors;
+        for(mb_y=0; mb_y<s->mb_height; mb_y++){
+          int mb_x;
+          for(mb_x=0; mb_x<s->mb_width; mb_x++,mv+=2){
+            int xy= 1 + mb_x*2 + (mb_y*2 + 1)*(s->mb_width*2 + 2);
+            mv[0] = (s->motion_val[xy][0]>>1);
+            mv[1] = (s->motion_val[xy][1]>>1);
+            s->mbskip_table[mb_x + mb_y*s->mb_width]=0;
+          }
+        }    
+        /*
         for(mb_y=0; mb_y<s->mb_height; mb_y++){
           int mb_x;
           int y= mb_y*16 + 8;
@@ -303,7 +319,7 @@ uint64_t time= rdtsc();
             if(my>=s->height) my= s->height-1;
             max= ABS(mx-x);
             if(ABS(my-y) > max) max= ABS(my-y);
-            /* the ugliest linedrawing routine ... */
+            // the ugliest linedrawing routine ... 
             for(i=0; i<max; i++){
               int x1= x + (mx-x)*i/max;
               int y1= y + (my-y)*i/max;
@@ -313,6 +329,7 @@ uint64_t time= rdtsc();
             s->mbskip_table[mb_x + mb_y*s->mb_width]=0;
           }
         }
+        */ 
     }
     if(s->pict_type==B_TYPE || (!s->has_b_frames)){
         pict->data[0] = s->current_picture[0];

@@ -19,7 +19,7 @@
 #pragma warning (once:4127)
 //state variables
 _PARAM_OP(IDFF_inPlayer           ,this->,inPlayer          ,0,0,NULL)
-_PARAM_OP(IDFF_isDlg              ,this->,isDlg             ,0,0,NULL)
+_PARAM_OP(IDFF_cfgDlgHnwd         ,this->,cfgDlgHnwd        ,0,0,NULL)
 //dialog settings
 _PARAM_OP(IDFF_lastPage           ,dialogSettings.,lastPage     ,0,0,NULL)
 _PARAM_OP(IDFF_dlgRestorePos      ,dialogSettings.,dlgRestorePos,0,0,NULL)
@@ -121,7 +121,6 @@ _PARAM_OP(IDFF_fontWeight         ,presetSettings->,fontWeight         ,0,1000,&
 _PARAM_OP(IDFF_fontColor          ,presetSettings->,fontColor          ,0,0,&TffDecoder::subsChanged)
 _PARAM_OP(IDFF_fontShadowStrength ,presetSettings->,fontShadowStrength ,0,100,&TffDecoder::subsChanged)
 _PARAM_OP(IDFF_fontShadowRadius   ,presetSettings->,fontShadowRadius   ,1,100,&TffDecoder::subsChanged)
-_PARAM_OP(IDFF_fontAutosize       ,presetSettings->,fontAutosize       ,0,0,&TffDecoder::subsChanged)
 _PARAM_OP(IDFF_fontSpacing        ,presetSettings->,fontSpacing        ,-10,10,&TffDecoder::subsChanged)
 _PARAM_OP(IDFF_subPosX            ,presetSettings->,subPosX            ,0,100,&TffDecoder::subsChanged)
 _PARAM_OP(IDFF_subPosY            ,presetSettings->,subPosY            ,0,100,&TffDecoder::subsChanged)

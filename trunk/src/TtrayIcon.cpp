@@ -127,12 +127,12 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
     switch (lprm)
      {                      
       case WM_LBUTTONDBLCLK:
-       //ti->deci->showCfgDlg();
+       //ti->deci->showCfgDlg(hwnd);
        break;
       case WM_RBUTTONUP:
       case WM_CONTEXTMENU:
        {
-        if (ti->cfgGet(IDFF_isDlg)) break;
+        if (ti->cfgGet(IDFF_cfgDlgHnwd)) break;
         POINT p;
         GetCursorPos(&p);
         SetForegroundWindow(hwnd);

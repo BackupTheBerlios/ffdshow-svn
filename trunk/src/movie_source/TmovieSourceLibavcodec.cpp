@@ -102,6 +102,14 @@ int TmovieSourceLibavcodec::getFrame(const TglobalSettings *global,const Tpreset
  avctx->showMV=global->showMV;
  return avcodec_decode_video(avctx,avpict,&got_picture,src,srcLen);
 }
+TmovieSource::TmotionVectors TmovieSourceLibavcodec::getMV(void)
+{
+ TmotionVectors mv;
+ mv.dx=avctx->mb_width;
+ mv.dy=avctx->mb_height;
+ mv.vectors=avctx->motion_vectors;
+ return mv;
+}
 
 bool TmovieSourceLibavcodec::getVersion(char **vers)
 {

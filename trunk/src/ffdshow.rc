@@ -329,8 +329,6 @@ BEGIN
     LTEXT           "Size",IDC_LBL_FONT_SIZE,8,23,111,8
     CONTROL         "",IDC_TBR_FONT_SIZE,"msctls_trackbar32",TBS_BOTH | 
                     TBS_NOTICKS | WS_TABSTOP,8,33,118,10
-    CONTROL         "Automatically reduce font size",IDC_CHB_FONT_AUTOSIZE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,46,112,10
     LTEXT           "Spacing",IDC_LBL_FONT_SPACING,8,59,111,8
     CONTROL         "",IDC_TBR_FONT_SPACING,"msctls_trackbar32",TBS_BOTH | 
                     TBS_NOTICKS | WS_TABSTOP,8,69,118,10

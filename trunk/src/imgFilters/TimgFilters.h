@@ -14,8 +14,11 @@
 #include "TimgFilterBlur.h"
 #include "TimgFilterOffset.h"
 #include "TimgFilterTimesmooth.h"
+#include "TimgFilterShowMV.h"
 
+struct TglobalSettings;
 struct TpresetSettings;
+class TmovieSource;
 struct subtitle;
 class TimgFilters
 {
@@ -24,6 +27,7 @@ private:
  int dxUV,diffUV,strideUV;
  int dy;
  int _dx,_dy;
+ bool afterResize;
  TcpuUsage cpu;int cpus;
  TtempPicture *tempY,*tempU,*tempV;
  std::vector<TimgFilter*> filters;
@@ -35,16 +39,16 @@ private:
  TimgFilterSubtitles subtitles;
  TimgFilterOffset offset;
  TimgFilterTimesmooth timesmooth;
+ TimgFilterShowMV showMV;
 public:
  TimgFilters(void);
  ~TimgFilters();
- void init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY);
+ void init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY,bool IafterResize);
  void done(void);
  void setSubtitle(subtitle *Isub);
- void process(TpresetSettings *cfg,
+ void process(TglobalSettings *global,TpresetSettings *cfg,TmovieSource *movie,
               unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
-              unsigned char**dstY,unsigned char**dstU,unsigned char**dstV,
-              int *quant_store);
+              unsigned char**dstY,unsigned char**dstU,unsigned char**dstV);
  Tpostproc postproc;
 };
 

@@ -29,6 +29,16 @@
 using namespace std;
 
 //========================== Tchar ===========================
+int Tchar::getWidth(HDC hdc,const char *s)
+{
+ SIZE sz;
+ GetTextExtentPoint32(hdc,s,strlen(s),&sz);
+ int dxY=(sz.cx/4+2)*4;
+ int _dx=dxY/4+4;
+ _dx=(_dx/8+1)*8;
+ return dxY=_dx;
+}
+
 Tchar::Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int colorV)
 {
  SIZE sz;
@@ -162,7 +172,6 @@ void Tfont::init(const TpresetSettings *cfg)
      {
       double d=8-(x*x+y*y);
       matrix[y+2][x+2]=2.55*cfg->fontShadowStrength*pow(d/8,2-cfg->fontShadowRadius/50.0);
-      //matrix[y+2][x+2]=5*cfg->fontShadowStrength*exp(-d/den);
      }; 
   }
  else matrix[0][0]=-100;
@@ -183,7 +192,15 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
    for (i=0;i<c.size();i++) delete c[i];c.clear();
    if (!sub) return;
    for (i=0;i<sub->lines;i++)
-    c.push_back(new Tchar(hdc,sub->text[i],(matrix[0][0]==-100)?NULL:matrix,colorY,colorU,colorV));
+    {
+     int lineDx=Tchar::getWidth(hdc,sub->text[i]);
+     if (lineDx<dx)
+      c.push_back(new Tchar(hdc,sub->text[i],(matrix[0][0]==-100)?NULL:matrix,colorY,colorU,colorV));
+     else 
+      {
+       char line[1024];strcpy(line,sub->text[i]);
+      } 
+    }; 
   }; 
  if (c.empty()) return;
  unsigned int i;
@@ -278,7 +295,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
        
        movq    mm6,[ebx] //mm6 - mask
        pxor    mm7,mm7
-       pcmpgtb mm7,mm0   //mm7 - co treba znegovat
+       pcmpgtb mm7,mm0   //mm7 - what to be negated
        movq    mm3,mm0
        paddusb mm3,mm6 
        movq    mm4,mm0
@@ -291,7 +308,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
 
        movq    mm6,[ebx] //mm6 - mask
        pxor    mm7,mm7
-       pcmpgtb mm7,mm1   //mm7 - co treba znegovat
+       pcmpgtb mm7,mm1   //mm7 - what to be negated
        movq    mm3,mm1
        paddusb mm3,mm6 
        movq    mm4,mm1

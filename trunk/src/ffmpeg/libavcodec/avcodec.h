@@ -186,6 +186,8 @@ typedef struct AVCodecContext {
     int hurry_up;     /* when set to 1 during decoding, b frames will be skiped
                          when set to 2 idct/dequant will be skipped too */
     int showMV;
+    int mb_width,mb_height;
+    char *motion_vectors;
     
     struct AVCodec *codec;
     void *priv_data;

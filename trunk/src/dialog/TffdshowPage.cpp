@@ -214,7 +214,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
      break;
     }
   }
- deci->putParam(IDFF_isDlg,1);
+ deci->putParam(IDFF_cfgDlgHnwd,int(m_hwnd));
  m_bDirty=true;//m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
  deci->setOnChangeMsg(m_hwnd,WM_FFONCHANGE);
  return NOERROR;
@@ -249,7 +249,7 @@ STDMETHODIMP TffdshowPage::Deactivate(void)
    SendMessage(dlg,WM_SETTEXT,0,LPARAM(caption));
   };
  deci->saveDialogSettings();
- deci->putParam(IDFF_isDlg,0);
+ deci->putParam(IDFF_cfgDlgHnwd,0);
  return res;
 }
 

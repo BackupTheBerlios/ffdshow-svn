@@ -14,6 +14,13 @@ public:
  virtual void done(void)=0;
  virtual int  getFrame(const TglobalSettings *global,const TpresetSettings *preset,const unsigned char *src,unsigned int srcLen, AVPicture *avpict,int &got_picture)=0;
  virtual int* getQuant(void) {return 0;};
+ struct TmotionVectors
+  {
+   TmotionVectors(void):dx(0),dy(0),vectors(0) {};
+   int dx,dy;
+   char *vectors;
+  };
+ virtual TmotionVectors getMV(void) {TmotionVectors v;return v;};  
 };
 
 #endif

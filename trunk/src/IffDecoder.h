@@ -20,7 +20,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_lvWidth0             12
 #define IDFF_showMV                8
 #define IDFF_trayIcon              3  //is tray icon visible
-#define IDFF_isDlg                 4  //is configuration dialog visible
+#define IDFF_cfgDlgHnwd            4  //handle to configuration dialog
 #define IDFF_autoPresetFileFirst   5  //try to load preset from file 
 #define IDFF_autoLoadedFromFile    6
 #define IDFF_inPlayer              7
@@ -96,7 +96,6 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_fontWeight          804
 #define IDFF_fontShadowStrength  805  //shadow strength (0..100) 100 - subtitles aren't transparent
 #define IDFF_fontShadowRadius    806  //shadow radius  
-#define IDFF_fontAutosize        807
 #define IDFF_fontSpacing         808
 #define IDFF_fontColor           809
 #define IDFF_subPosX             810

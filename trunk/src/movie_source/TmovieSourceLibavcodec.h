@@ -30,6 +30,7 @@ public:
  virtual int  getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen, AVPicture *avpict,int &got_picture);
  static  bool getVersion(char **vers);
  virtual int* getQuant(void) {return quant_store;};
+ virtual TmotionVectors getMV(void);
 };
 
 #endif

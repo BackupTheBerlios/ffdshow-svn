@@ -81,7 +81,6 @@ public:
  int fontChanged;
  char fontName[256];
  int fontCharset,fontSize,fontSpacing,fontWeight,fontColor,fontShadowStrength,fontShadowRadius;
- int fontAutosize;
  int subPosX,subPosY,subDelay,subSpeed;
  int subAutoFlnm;
  char subFlnm[260];

@@ -128,7 +128,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
          menuCmd=ID_MNI_PRESET_NEWFROMDEFAULT;
         else
          {
-          HMENU hmn=LoadMenu(hi,MAKEINTRESOURCE(IDR_MENU_PRESET_NEW)),hmn2=GetSubMenu(hmn,0) ;
+          HMENU hmn=LoadMenu(hi,MAKEINTRESOURCE(IDR_MENU_PRESET)),hmn2=GetSubMenu(hmn,0) ;
           RECT r;
           GetWindowRect(GetDlgItem(m_hwnd,IDC_BT_PRESET_NEW_MENU),&r);
           menuCmd=TrackPopupMenu(hmn2,TPM_LEFTALIGN|TPM_TOPALIGN|TPM_RETURNCMD,r.left-1,r.bottom,0,m_hwnd,0);

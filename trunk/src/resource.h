@@ -31,7 +31,6 @@
 #define IDB_ARROWS                      145
 #define IDB_ARROWS_MASK_UD              146
 #define IDB_ARROWS_MASK_U               147
-#define IDR_MENU_PRESET_NEW             147
 #define IDR_MENU_PRESET                 147
 #define IDB_ARROWS_MASK_D               148
 #define ID_MNI_PRESET_RENAME            149
@@ -148,7 +147,6 @@
 #define IDC_CBX_FONT_NAME               1112
 #define IDC_CBX_FONT_CHARSET            1113
 #define IDC_LBL_FONT_CHARSET            1114
-#define IDC_CHB_FONT_AUTOSIZE           1115
 #define IDC_LBL_FONT_SPACING            1116
 #define IDC_TBR_FONT_SPACING            1117
 #define IDC_LBL_FONT_SHADOW_STRENGTH    1118
@@ -192,8 +190,6 @@
 #define ID_MNI_PRESET_NEWFROMDEFAULT    40004
 #define ID_MNI_PRESET_NEWFROMSELECTED   40005
 #define ID_MNI_PRESET_NEW_FROMFILE      40006
-#define ID_SAVE_STORE                   40007
-#define ID_SAVE_SAVETOFILE              40008
 #define IDC_STATIC                      -1
 
 // Next default values for new objects

@@ -165,7 +165,6 @@ void TfontPage::cfg2dlg(void)
 
 void TfontPage::font2dlg(void)
 {
- setCheck(IDC_CHB_FONT_AUTOSIZE,cfgGet(IDFF_fontAutosize));
  char s[256];int x;
  x=cfgGet(IDFF_fontSize);
  sprintf(s,"Size:  %i",x);
@@ -219,9 +218,6 @@ HRESULT TfontPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
    case WM_COMMAND:
     switch (LOWORD(wParam))  
      {
-      case IDC_CHB_FONT_AUTOSIZE:
-       cfgSet(IDFF_fontAutosize,getCheck(IDC_CHB_FONT_AUTOSIZE));
-       return TRUE;
       case IDC_CBX_FONT_WEIGHT:
        if (HIWORD(wParam)==CBN_SELCHANGE)
         {

@@ -21,8 +21,8 @@
 #include "xvid\xvid.h"
 #include <stdlib.h>
 #include "settings\reg.h"
-#include "movie_source\TmovieSourceLibavcodec.h"
-#include "movie_source\TmovieSourceXviD.h"
+#include "TmovieSourceLibavcodec.h"
+#include "TmovieSourceXviD.h"
 
 Tconfig config;
 

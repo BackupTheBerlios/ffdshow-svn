@@ -8,6 +8,7 @@ class Tchar
 {
 public:
  Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int colorV);
+ static int getWidth(HDC hdc,const char *s);
  ~Tchar();
  int dxY ,dyY ;unsigned char *bmpY ,*mskY ;
  int dxUV,dyUV;unsigned char *bmpU, *bmpV,*mskUV;

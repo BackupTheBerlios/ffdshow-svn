@@ -20,7 +20,9 @@
 #include <assert.h>
 #include "ffmpeg\libavcodec\avcodec.h"
 #include "TimgFilters.h"
+#include "TglobalSettings.h"
 #include "TpresetSettings.h"
+#include "TmovieSource.h"
 
 using namespace std;
 
@@ -30,13 +32,14 @@ TimgFilters::TimgFilters(void)
  postproc.init();
  tempY=tempU=tempV=NULL;
 }
-void TimgFilters::init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY)
+void TimgFilters::init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY,bool IafterResize)
 {
  dxY =IdxY  ;strideY =IstrideY  ;
  dxUV=IdxY/2;strideUV=IstrideY/2;
  dy=Idy;
  diffY=IdiffY*strideY+IdiffX;
  diffUV=(IdiffY/2)*strideUV+(IdiffX/2);
+ afterResize=IafterResize;
  done();
  tempY=new TtempPicture(strideY*dy+16,0);
  tempU=new TtempPicture(strideUV*dy/2,128);
@@ -51,6 +54,7 @@ void TimgFilters::init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY)
  filters.push_back(&subtitles);subtitles.init(IdxY,IstrideY,Idy);
  filters.push_back(&offset);offset.init(IdxY,IstrideY,Idy);
  filters.push_back(&timesmooth);timesmooth.init(IdxY,IstrideY,Idy);
+ filters.push_back(&showMV);showMV.init(IdxY,IstrideY,Idy);
 }
 void TimgFilters::done(void)
 {
@@ -70,7 +74,7 @@ void TimgFilters::setSubtitle(subtitle *Isub)
 {
  subtitles.sub=Isub;
 }
-void TimgFilters::process(TpresetSettings *cfg,unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV,int *quant_store)
+void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSource *movie,unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV)
 {
  tempY->reset(srcY);tempU->reset(srcU);tempV->reset(srcV);
  for (int i=cfg->min_order;i<=cfg->max_order;i++)
@@ -106,7 +110,7 @@ void TimgFilters::process(TpresetSettings *cfg,unsigned char *srcY,unsigned char
       postproc.postprocess(tempPict1,strideY,
                            tempPict2,strideY,
                            dxY,dy,
-                           quant_store,MBC+1,ppmode);
+                           (afterResize)?NULL:movie->getQuant(),MBC+1,ppmode);
      }
    }
   else if (i==cfg->orderPictProp && cfg->isPictProp)
@@ -173,6 +177,17 @@ void TimgFilters::process(TpresetSettings *cfg,unsigned char *srcY,unsigned char
     unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
     offset.process(srcY,srcU,srcV,dstY,dstU,dstV,cfg);
    } 
+ if (global->showMV && !afterResize)
+  {
+   unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY ;
+   if (showMV.firsttime)
+    {
+     showMV.firsttime=false;
+     TmovieSource::TmotionVectors mv=movie->getMV();
+     showMV.setMV(mv.dx,mv.dy,mv.vectors);
+    }; 
+   showMV.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
+  }
  *dstY=tempY->getTempCur();
  *dstU=tempU->getTempCur();
  *dstV=tempV->getTempCur();
