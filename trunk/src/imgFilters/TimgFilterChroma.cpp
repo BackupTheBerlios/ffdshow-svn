@@ -35,8 +35,8 @@ TimgFilterChroma::TimgFilterChroma(void)
   }
 }
 
-void TimgFilterChroma::process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
-                               unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
+void TimgFilterChroma::process(unsigned char *,unsigned char *srcU,unsigned char *srcV,
+                               unsigned char *,unsigned char *dstU,unsigned char *dstV,
                                Tconfig *cfg)
 {
  int hue=cfg->hue;          //-180 ... 0 ... 180

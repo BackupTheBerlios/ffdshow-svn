@@ -29,8 +29,8 @@ TimgFilterLuma::TimgFilterLuma(void)
  oldGamma=-1;
 }
 
-void TimgFilterLuma::process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
-                             unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
+void TimgFilterLuma::process(unsigned char *srcY,unsigned char *,unsigned char *,
+                             unsigned char *dstY,unsigned char *,unsigned char *,
                              Tconfig *cfg)
 {
  __declspec(align(8)) static __int64 lumGainMask;

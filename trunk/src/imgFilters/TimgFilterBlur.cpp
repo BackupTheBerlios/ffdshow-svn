@@ -18,8 +18,8 @@ void TimgFilterBlur::done(void)
 {
  if (tempPict) xvid_free(tempPict);
 }
-void TimgFilterBlur::process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
-                             unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
+void TimgFilterBlur::process(unsigned char *srcY,unsigned char *,unsigned char *,
+                             unsigned char *dstY,unsigned char *,unsigned char *,
                              Tconfig *cfg)
 {
  if (oldStrength!=cfg->blurStrength)

@@ -591,7 +591,6 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  cfg.loadActivePreset();
  
  tray=new TtrayIcon(this,g_hInst);
- if (cfg.trayIcon) tray->show();
  
  avctx=NULL;
 
@@ -1016,7 +1015,11 @@ void TffDecoder::calcCrop(void)
 HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
 {
  //DEBUGS("Transform");
- if (!libavcodec.inited) libavcodec.init(&cfg);
+ if (!libavcodec.inited) 
+  {
+   libavcodec.init(&cfg);
+   if (cfg.trayIcon) tray->show();
+  }; 
   
  LONGLONG t1,t2;pIn->GetMediaTime(&t1,&t2);
  if (t1==0 && avctx) 
@@ -1217,6 +1220,8 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
 STDMETHODIMP TffDecoder::GetPages(CAUUID * pPages)
 {
  DEBUGS("GetPages");
+ 
+ if (cfg.trayIcon) tray->show();
 
  pPages->cElems = 1;
  pPages->pElems = (GUID *)CoTaskMemAlloc(pPages->cElems * sizeof(GUID));

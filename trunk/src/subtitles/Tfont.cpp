@@ -154,7 +154,6 @@ void Tfont::init(Tconfig *cfg/*const char *fontName,int charset,int size,int wei
  SetTextCharacterExtra(hdc,cfg->fontSpacing);
  if (cfg->fontShadowStrength<100)
   {
-   double den=2*3.14159*cfg->fontShadowRadius/100.0;
    for (int y=-2;y<=2;y++)
     for (int x=-2;x<=2;x++)
      {

@@ -425,8 +425,8 @@ void TimgFilterSharpen::unsharpen(unsigned char *src,unsigned char *dst,Tconfig 
   }
 }
 
-void TimgFilterSharpen::process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
-                                unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
+void TimgFilterSharpen::process(unsigned char *srcY,unsigned char *,unsigned char *,
+                                unsigned char *dstY,unsigned char *,unsigned char *,
                                 Tconfig *cfg)
 {
  if (cfg->sharpenMethod==0)

@@ -36,7 +36,7 @@ void TglobalPage::now2dlg(void)
  SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_PLAYING,WM_SETTEXT,0,LPARAM(pomS));
  char AVIfourcc[20];
  deci->get_AVIfourcc(AVIfourcc,19); 
- sprintf(pomS,"FourCC: %s",AVIfourcc);
+ sprintf(pomS,"Codec: %s",AVIfourcc);
  SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_CODEC,WM_SETTEXT,0,LPARAM(pomS));
  unsigned int x,y;
  if (deci->get_AVIdimensions(&x,&y)!=S_OK)
