@@ -187,13 +187,13 @@ void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSou
     unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
     offset.process(srcY,srcU,srcV,dstY,dstU,dstV,cfg);
    } 
- if (global->showMV && !afterResize)
+ TmovieSource::TmotionVectors mv=movie->getMV();
+ if (mv.vectors && global->showMV && !afterResize)
   {
    unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY ;
    if (showMV.firsttime)
     {
      showMV.firsttime=false;
-     TmovieSource::TmotionVectors mv=movie->getMV();
      showMV.setMV(mv.dx,mv.dy,mv.vectors);
     }; 
    showMV.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);

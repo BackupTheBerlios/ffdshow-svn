@@ -60,6 +60,7 @@ bool TmovieSourceLibavcodec::init(int codecId,int AVIdx,int AVIdy)
    DEBUGS("avcodec_find_decoder_by_name after");
    DEBUGS("avcodec_open before");
    if (avcodec_open(avctx,avcodec)<0) return false;
+   DEBUGS("avcodec_open after");
    idctOld=-1;
    return true;
   }

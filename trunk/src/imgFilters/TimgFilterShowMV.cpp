@@ -42,7 +42,6 @@ void TimgFilterShowMV::process(const unsigned char *srcY,const unsigned char *,c
                                const TpresetSettings *cfg)
 {
  for (int y=0;y<dyY;y++) memcpy(dstY+y*strideY,srcY+y*strideY,dxY);
- if (!mv) return;
  for(int mb_y=0;mb_y<mv_dy;mb_y++)
   {
    int y=mb_y*16+8;
