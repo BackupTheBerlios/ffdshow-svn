@@ -467,7 +467,6 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
 TffDecoder::~TffDecoder()
 {
  __asm {emms};
- //if (cfgDlgHnwd) SendMessage(HWND(cfgDlgHnwd),WM_CLOSE,0,0);
  DEBUGS("Destructor");
  if (movie)
   {
@@ -476,6 +475,7 @@ TffDecoder::~TffDecoder()
   };
  if (imgFilters) delete imgFilters;
  if (resizeCtx) delete resizeCtx;
+ postproc.done();
  if (subs) delete subs;
  delete tray;
 }

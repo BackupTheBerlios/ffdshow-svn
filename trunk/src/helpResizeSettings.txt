@@ -7,4 +7,4 @@ Resize algorithms:
   Point - fastest, ugliest
   Area - 
 Gaussian blur - during resizing, image can be slightly blurred - independend on blur filter
-Sharpen - sharpens image during resizing, independend on sharpening filters  
+Sharpen - sharpens image during resizing, independend on sharpening filters

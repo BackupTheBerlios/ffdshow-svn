@@ -170,13 +170,13 @@
 				Name="help"
 				Filter="">
 				<File
-					RelativePath="src\helpAspectNcrop.txt">
-				</File>
-				<File
 					RelativePath="src\helpBlur.txt">
 				</File>
 				<File
 					RelativePath="src\helpCodecs.txt">
+				</File>
+				<File
+					RelativePath="src\helpCrop.txt">
 				</File>
 				<File
 					RelativePath="src\helpFont.txt">
@@ -200,7 +200,10 @@
 					RelativePath="src\helpPostproc.txt">
 				</File>
 				<File
-					RelativePath="src\helpResize.txt">
+					RelativePath="src\helpResizeAspect.txt">
+				</File>
+				<File
+					RelativePath="src\helpResizeSettings.txt">
 				</File>
 				<File
 					RelativePath="src\helpSharpen.txt">
@@ -626,6 +629,12 @@
 				RelativePath="src\imgFilters\TimgFilterOffset.h">
 			</File>
 			<File
+				RelativePath="src\imgFilters\TimgFilterPostproc.cpp">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TimgFilterPostproc.h">
+			</File>
+			<File
 				RelativePath="src\imgFilters\TimgFilterSharpen.cpp">
 			</File>
 			<File
@@ -709,21 +718,6 @@
 				RelativePath="src\dialog\Cabout.h">
 			</File>
 			<File
-				RelativePath="src\dialog\CaspectNcrop.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						InlineFunctionExpansion="2"
-						EnableIntrinsicFunctions="FALSE"
-						FavorSizeOrSpeed="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="src\dialog\CaspectNcrop.h">
-			</File>
-			<File
 				RelativePath="src\dialog\Cblur.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -752,6 +746,12 @@
 			</File>
 			<File
 				RelativePath="src\dialog\Ccodecs.h">
+			</File>
+			<File
+				RelativePath="src\dialog\Ccrop.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Ccrop.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Cfont.cpp">
@@ -874,19 +874,16 @@
 				RelativePath="src\dialog\Cpresets.h">
 			</File>
 			<File
-				RelativePath="src\dialog\Cresize.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						InlineFunctionExpansion="2"
-						EnableIntrinsicFunctions="FALSE"
-						FavorSizeOrSpeed="2"/>
-				</FileConfiguration>
+				RelativePath="src\dialog\CresizeAspect.cpp">
 			</File>
 			<File
-				RelativePath="src\dialog\Cresize.h">
+				RelativePath="src\dialog\CresizeAspect.h">
+			</File>
+			<File
+				RelativePath="src\dialog\CresizeSettings.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\CresizeSettings.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Csharpen.cpp">

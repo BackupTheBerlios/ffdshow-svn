@@ -56,7 +56,6 @@ void TimgFilters::done(void)
 TimgFilters::~TimgFilters()
 {
  done();
- postproc.done();
 }
 void TimgFilters::setSubtitle(subtitle *Isub)
 {

@@ -61,13 +61,13 @@ int TmovieSourceUncompressed::getFrame(const TglobalSettings *global,const Tpres
  image_input(&img,dx,dy,avpict->linesize[0],src,csp);
  /*
  if (codecId==CODEC_ID_YUY2)
-  imgFilters->postproc.yuy2toyv12((const unsigned char*)m_frame.bitstream,avpict.data[0],avpict.data[1],avpict.data[2],
-                                  avctx->width,avctx->height,
-                                  avpict.linesize[0],avpict.linesize[1],avctx->width*2);
+  postproc.yuy2toyv12((const unsigned char*)m_frame.bitstream,avpict.data[0],avpict.data[1],avpict.data[2],
+                       avctx->width,avctx->height,
+                       avpict.linesize[0],avpict.linesize[1],avctx->width*2);
  else if (codecId==CODEC_ID_RGB2)
-  imgFilters->postproc.rgb24toyv12((const unsigned char*)m_frame.bitstream,avpict.data[0]+avpict.linesize[0]*(avctx->height-1),avpict.data[1]+avpict.linesize[1]*(avctx->height-2)/2,avpict.data[2]+avpict.linesize[2]*(avctx->height-2)/2,
-                                   avctx->width,avctx->height,
-                                   -avpict.linesize[0],-avpict.linesize[1],avctx->width*3);
+  postproc.rgb24toyv12((const unsigned char*)m_frame.bitstream,avpict.data[0]+avpict.linesize[0]*(avctx->height-1),avpict.data[1]+avpict.linesize[1]*(avctx->height-2)/2,avpict.data[2]+avpict.linesize[2]*(avctx->height-2)/2,
+                        avctx->width,avctx->height,
+                        -avpict.linesize[0],-avpict.linesize[1],avctx->width*3);
  */                                     
  got_picture=24; 
  for (int i=0;i<quantDx*quantDy;i++)
