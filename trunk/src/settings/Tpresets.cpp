@@ -110,15 +110,22 @@ void Tpresets::savePreset(TpresetSettings *preset,const char *presetName)
  preset->saveReg();
  storePreset(preset);
 }
+void  Tpresets::savePresetFile(TpresetSettings *preset,const char *flnm)
+{
+ preset->saveFile(flnm);
+ storePreset(preset);
+}
 
-void Tpresets::removePreset(const char *presetName)
+bool Tpresets::removePreset(const char *presetName)
 {
  iterator i=findPreset(presetName);
  if (i!=begin() && i!=end())
   {
    delete *i;
    erase(i);
+   return true;
   }
+ else return false;
 }
 
 void Tpresets::nextUniqueName(TpresetSettings *preset)

@@ -77,7 +77,8 @@ void TsubtitlesPage::sub2dlg(void)
 
 void TsubtitlesPage::applySettings(void)
 {
- loadSubtitles();
+ if (cfgGet(IDFF_inPlayer))
+  loadSubtitles();
 }
 
 void TsubtitlesPage::loadSubtitles(void)

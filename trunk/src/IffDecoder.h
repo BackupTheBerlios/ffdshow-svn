@@ -139,12 +139,13 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (getNumPresets)(unsigned int *value) PURE;
  STDMETHOD (getPresetName)(unsigned int i,char *buf,unsigned int len) PURE;
  STDMETHOD (getActivePresetName)(char *buf,unsigned int len) PURE;
+ STDMETHOD (setActivePresetName)(const char *name) PURE;
  STDMETHOD (getAVIname)(char *buf,unsigned int len) PURE;
  STDMETHOD (getAVIfourcc)(char *buf,unsigned int len) PURE;
  STDMETHOD (getAVIdimensions)(unsigned int *x,unsigned int *y) PURE;
  STDMETHOD (getAVIfps)(unsigned int *fps) PURE;
- STDMETHOD (savePreset)(const char *name) PURE;
- STDMETHOD (savePresetToFile)(const char *flnm) PURE;
+ STDMETHOD (saveActivePreset)(const char *name) PURE;
+ STDMETHOD (saveActivePresetToFile)(const char *flnm) PURE;
  STDMETHOD (loadPreset)(const char *name) PURE;
  STDMETHOD (loadPresetFromFile)(const char *flnm) PURE;
  STDMETHOD (removePreset)(const char *name) PURE;
@@ -162,7 +163,6 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (loadGlobalSettings)(void) PURE;
  STDMETHOD (saveDialogSettings)(void) PURE;
  STDMETHOD (loadDialogSettings)(void) PURE;
- //STDMETHOD (getPreset)(unsigned int i,TpresetSettings **preset) PURE;
  STDMETHOD (getPresets)(Tpresets *presets2) PURE;
  STDMETHOD (setPresets)(const Tpresets *presets2) PURE;
  STDMETHOD (savePresets)(void) PURE;
@@ -173,7 +173,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (getDefaultPresetName)(char *buf,unsigned int len) PURE;
  STDMETHOD (setDefaultPresetName)(const char *presetName) PURE;
  STDMETHOD (isDefaultPreset)(const char *presetName) PURE;
- STDMETHOD (showCfgDlg)(void) PURE;
+ STDMETHOD (showCfgDlg)(HWND owner) PURE;
 };
 
 #ifdef __cplusplus

@@ -1,7 +1,7 @@
 urgent
 
 - fix beginnig of playing and sometimes corrupted seeking [mostly fixed]
-- correct one frame shift
+- correct one frame shift [done when no b-frames]
 
 todo
 
@@ -41,6 +41,9 @@ wishes
 priorities
 dscaler
 add black borders
+documentation
 compilation instructions
 better noise
 less memory
+config dialog on tray icon doubleclick
+hardware overlay

@@ -138,7 +138,6 @@ void TffDecoder::trayIconChanged(void)
 }
 STDMETHODIMP TffDecoder::getNumPresets(unsigned int *value)
 {
- *value=0;
  if (!value) return E_POINTER;
  *value=presets.size();
  return S_OK;
@@ -185,9 +184,21 @@ STDMETHODIMP TffDecoder::setPresetPtr(TpresetSettings *preset)
 STDMETHODIMP TffDecoder::getActivePresetName(char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
+ if (!presetSettings) return S_FALSE;
  if (len<strlen(presetSettings->presetName)+1) return E_OUTOFMEMORY;
  strcpy(buf,presetSettings->presetName);
  return S_OK;
+}
+STDMETHODIMP TffDecoder::setActivePresetName(const char *name)
+{
+ if (!name) return S_FALSE;
+ TpresetSettings *preset=presets.getPreset(name);
+ if (preset)
+  {
+   setPresetPtr(preset); 
+   return S_OK;
+  }
+ else return S_FALSE;
 }
 STDMETHODIMP TffDecoder::getDefaultPresetName(char *buf,unsigned int len)
 {
@@ -233,22 +244,24 @@ STDMETHODIMP TffDecoder::loadPreset(const char *name)
  notifyParamsChanged();
  return S_OK;
 }
-STDMETHODIMP TffDecoder::savePreset(const char *name)
+STDMETHODIMP TffDecoder::saveActivePreset(const char *name)
 {
+ if (!presetSettings) return S_FALSE;
  presets.savePreset(presetSettings,name);
  return S_OK;
 }
-STDMETHODIMP TffDecoder::savePresetToFile(const char *flnm)
+STDMETHODIMP TffDecoder::saveActivePresetToFile(const char *flnm)
 {
  //TODO: check save success
- if (!flnm) return S_FALSE;
- presetSettings->saveFile(flnm);
+ if (!flnm || !presetSettings) return S_FALSE;
+ presets.savePresetFile(presetSettings,flnm);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::loadPresetFromFile(const char *flnm)
 {
  //TODO: check load success
  if (!flnm) return S_FALSE;
+ if (!presetSettings) presetSettings=new TpresetSettings;
  presetSettings->loadFile(flnm);
  presets.storePreset(presetSettings);
  notifyParamsChanged();
@@ -258,8 +271,7 @@ STDMETHODIMP TffDecoder::removePreset(const char *name)
 {
  if (_stricmp(presetSettings->presetName,globalSettings.defaultPreset)==0)
   setDefaultPresetName(presets[0]->presetName);
- presets.removePreset(name);
- return S_OK;
+ return presets.removePreset(name)?S_OK:S_FALSE;
 }
 STDMETHODIMP TffDecoder::getAVcodecVersion(char *buf,unsigned int len)
 {
@@ -390,14 +402,14 @@ STDMETHODIMP TffDecoder::setOnInfoMsg(HWND wnd,unsigned int msg)
  onInfoWnd=wnd;onInfoMsg=msg;
  return S_OK;
 }
-STDMETHODIMP TffDecoder::showCfgDlg(void)
+STDMETHODIMP TffDecoder::showCfgDlg(HWND owner)
 {
  CAUUID pages;
  ISpecifyPropertyPages *ispp;
  QueryInterface(IID_ISpecifyPropertyPages,(void**)&ispp);
  ispp->GetPages(&pages);
  IUnknown *ifflist[]={ispp};
- OleCreatePropertyFrame(NULL,10,10,L"ffdshow",
+ OleCreatePropertyFrame(owner,10,10,L"ffdshow",
                         1,ifflist,
                         pages.cElems,pages.pElems,
                         LOCALE_SYSTEM_DEFAULT,
@@ -428,7 +440,7 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  AVIdx=AVIdy=cropLeft=cropTop=cropDx=cropDy=AVIfps=0;
  isDlg=0;inPlayer=1;
  movie=NULL;
- resizeCtx=NULL;tray=NULL;
+ resizeCtx=NULL;tray=NULL;subs=NULL;
  onChangeWnd=NULL;onChangeMsg=0;
  onInfoWnd=NULL;onInfoMsg=0;
  codecId=CODEC_ID_NONE;
@@ -445,7 +457,6 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  
  //TODO: prevent creation of imgFilters and sub in cfg dialog only mode
  imgFilters=new TimgFilters;
- subs=new Tsubtitles;
 }
 
 // destructor 
@@ -528,7 +539,8 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
       resizeCtx->allocate(presetSettings->resizeDx,presetSettings->resizeDy);
      else
       resizeCtx->allocate(AVIdx,AVIdy);
-    };  
+    };
+   if (!subs) subs=new Tsubtitles;
    #ifdef FF__MPEG
    if (formatType==FORMAT_MPEGVideo)
     {
@@ -690,10 +702,8 @@ HRESULT TffDecoder::ChangeColorspace(GUID subtype, GUID formattype, void * forma
 HRESULT TffDecoder::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
 {
  DEBUGS("SetMediaType");
-
  if (direction == PINDIR_OUTPUT)
   return ChangeColorspace(*pmt->Subtype(), *pmt->FormatType(), pmt->Format());
-
  return S_OK;
 }
 

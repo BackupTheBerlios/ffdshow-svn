@@ -49,13 +49,14 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP putParam(unsigned int paramID, int  value);
   STDMETHODIMP getPresetName(unsigned int i,char *buf,unsigned int len);
   STDMETHODIMP getNumPresets(unsigned int *value);
+  STDMETHODIMP setActivePresetName(const char *name);
   STDMETHODIMP getActivePresetName(char *buf,unsigned int len);
   STDMETHODIMP getAVIname(char *buf,unsigned int len);
   STDMETHODIMP getAVIfourcc(char *buf,unsigned int len);
   STDMETHODIMP getAVIdimensions(unsigned int *x,unsigned int *y);
   STDMETHODIMP getAVIfps(unsigned int *fps);
-  STDMETHODIMP savePreset(const char *name);
-  STDMETHODIMP savePresetToFile(const char *flnm);
+  STDMETHODIMP saveActivePreset(const char *name);
+  STDMETHODIMP saveActivePresetToFile(const char *flnm);
   STDMETHODIMP loadPreset(const char *name);
   STDMETHODIMP loadPresetFromFile(const char *flnm);
   STDMETHODIMP removePreset(const char *name);
@@ -84,7 +85,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP getDefaultPresetName(char *buf,unsigned int len);
   STDMETHODIMP setDefaultPresetName(const char *presetName);
   STDMETHODIMP isDefaultPreset(const char *presetName);
-  STDMETHODIMP showCfgDlg(void);
+  STDMETHODIMP showCfgDlg(HWND owner);
   
  private:
   bool firstFrame,firstTransform;

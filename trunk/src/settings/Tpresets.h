@@ -16,9 +16,9 @@ public:
  void done(void);
  TpresetSettings* getPreset(const char *presetName);
  TpresetSettings* getAutoPreset(const char *flnm,bool filefirst);
- void savePreset(TpresetSettings *preset,const char *presetName);
+ void savePreset(TpresetSettings *preset,const char *presetName),savePresetFile(TpresetSettings *preset,const char *flnm);
  void storePreset(TpresetSettings *preset);
- void removePreset(const char *presetName);
+ bool removePreset(const char *presetName);
  void saveRegAll(void);
  void nextUniqueName(TpresetSettings *preset),nextUniqueName(char *presetName); 
 };

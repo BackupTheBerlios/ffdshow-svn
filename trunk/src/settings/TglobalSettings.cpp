@@ -80,7 +80,11 @@ void TglobalSettings::save(void)
  case FOURCC_##fourCC2:                                     \
   if (testVar)                                              \
    {                                                        \
-    if (AVIfourCC) strcpy(AVIfourCC,#fourCC1);              \
+    if (AVIfourCC)                                          \
+     {                                                      \
+      strcpy(AVIfourCC,#fourCC1);                           \
+      if (testVar==2) strcat(AVIfourCC," (xvid)");          \
+     }                                                      \
     return (testVar==2)?codecId+CODEC_ID_XVID_MASK:codecId; \
    }                                                        \
   else return CODEC_ID_NONE;
