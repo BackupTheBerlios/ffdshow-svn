@@ -32,14 +32,17 @@ extern "C" {
 #define SWS_X        8
 #define SWS_POINT    0x10
 #define SWS_AREA     0x20
+#define SWS_BICUBLIN 0x40
+
+#define SWS_SRC_V_CHR_DROP_MASK		0x300
+#define SWS_SRC_V_CHR_DROP_SHIFT	8
 
 //the following 4 flags are not completly implemented
 //internal chrominace subsamling info
-#define SWS_FULL_CHR_V          0x100
-#define SWS_FULL_CHR_H_INT      0x200
+#define SWS_FULL_CHR_H_INT	0x2000
 //input subsampling info
-#define SWS_FULL_CHR_H_INP      0x400
-#define SWS_DIRECT_BGR          0x800
+#define SWS_FULL_CHR_H_INP	0x4000
+#define SWS_DIRECT_BGR		0x8000
 
 #define SWS_PRINT_INFO 0x1000
 
@@ -53,6 +56,10 @@ typedef struct SwsContext{
         int lumXInc, chrXInc;
         int lumYInc, chrYInc;
         int dstFormat, srcFormat;
+	int chrSrcHSubSample, chrSrcVSubSample;
+	int chrIntHSubSample, chrIntVSubSample;
+	int chrDstHSubSample, chrDstVSubSample;
+	int vChrDrop;
 
         int16_t **lumPixBuf;
         int16_t **chrPixBuf;
@@ -92,6 +99,12 @@ typedef struct SwsContext{
         int chrBufIndex;
         int dstY;
         int flags;
+	void * yuvTable;
+	void * table_rV[256];
+	void * table_gU[256];
+	int    table_gV[256];
+	void * table_bU[256];
+
 } SwsContext;
 //FIXME check init (where 0)
 
@@ -130,6 +143,8 @@ SwsContext *getSwsContextFromCmdLine(int srcW, int srcH, int srcFormat, int dstW
                                      int sws_flags,int Isws_lum_gblur,int Isws_chr_gblur,int Isws_lum_sharpen,int Isws_chr_sharpen);
 SwsContext *getSwsContext(int srcW, int srcH, int srcFormat, int dstW, int dstH, int dstFormat, int flags,
                          SwsFilter *srcFilter, SwsFilter *dstFilter);
+void swsGetFlagsAndFilterFromCmdLine(int *flags, SwsFilter **srcFilterParam, SwsFilter **dstFilterParam,
+                                     int sws_flags,int Isws_lum_gblur,int Isws_chr_gblur,int Isws_lum_sharpen,int Isws_chr_sharpen);
 
 SwsVector *getGaussianVec(double variance, double quality);
 SwsVector *getConstVec(double c, int length);

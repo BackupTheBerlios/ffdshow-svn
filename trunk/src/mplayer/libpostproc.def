@@ -1,10 +1,6 @@
 EXPORTS
 init_mplayer
 postprocess
-setModifyPPmode
 
 getSwsContextFromCmdLine
 freeSwsContext
-
-rgb24toyv12
-yuy2toyv12

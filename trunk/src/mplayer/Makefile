@@ -5,7 +5,7 @@ LIBNAME= libpostproc.lib
 SOLIBNAME = libpostproc.dll
 
 SRCS=   \
-	postproc/postprocess.c postproc/swscale.c postproc/rgb2rgb.c postproc/yuv2rgb.c \
+	postproc/postprocess.c postproc/swscale.c \
 	mplayer.c cpudetect.c mem_align.c
 OBJS=$(SRCS:.c=.o)
 

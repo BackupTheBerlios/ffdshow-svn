@@ -858,16 +858,6 @@ void  postprocess(unsigned char * src[], int src_stride,
         ppMode.maxAllowedY= 234;
         ppMode.minAllowedY= 16;
         ppMode.maxDcDiff= 1;
-        //ppMode.hFlatnessThreshold=hFlatnessThreshold;
-        //ppMode.vFlatnessThreshold=vFlatnessThreshold;
-
-        {
-         extern void (*modifyPPmodeFnc)(struct PPMode *ppmode,void *param);
-         extern void *modifyPPmodeParam;
-         if (modifyPPmodeFnc) modifyPPmodeFnc(&ppMode,modifyPPmodeParam);
-        };
-        //hFlatnessThreshold=ppMode.hFlatnessThreshold;
-        //vFlatnessThreshold=ppMode.vFlatnessThreshold;
 
 #ifdef HAVE_ODIVX_POSTPROCESS
 // Note: I could make this shit outside of this file, but it would mean one
@@ -877,6 +867,7 @@ void  postprocess(unsigned char * src[], int src_stride,
             return;
         }
 #endif
+
         postProcess(src[0], src_stride, dst[0], dst_stride,
                 horizontal_size, vertical_size, QP_store, QP_stride, 0, &ppMode);
 
