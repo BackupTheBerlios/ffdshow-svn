@@ -52,6 +52,11 @@ struct TtempPictures
       tempCur=NULL;
       av=Iav;
      }; 
+    void clear(void)
+     {
+      if (temp1) memset(temp1,c,size);
+      if (temp2) memset(temp2,c,size);
+     } 
   } *y,*u,*v;
  int diffY,diffUV;
 public:
@@ -73,6 +78,10 @@ public:
    u->reset(Iu);
    v->reset(Iv);
   }
+ void clear(void)
+  {
+   y->clear();u->clear();v->clear();
+  } 
  const unsigned char *getCurY(void)
   {
    return y->getTempCur()+diffY;

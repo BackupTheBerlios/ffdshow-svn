@@ -63,12 +63,12 @@ void Tpostproc::done(void)
  ok=false;
 };
 
-int Tpostproc::getPPmode(const TpresetSettings *cfg)
+int Tpostproc::getPPmode(const TpresetSettings *cfg,int currentq)
 {
  int result=0;
  if (!cfg->ppIsCustom)
   {
-   int ppqual=cfg->autoq?cfg->currentq:cfg->ppqual;
+   int ppqual=cfg->autoq?currentq:cfg->ppqual;
    if (ppqual<0) ppqual=0;
    if (ppqual>GET_PP_QUALITY_MAX) ppqual=GET_PP_QUALITY_MAX;
    static const int ppPresets[1+GET_PP_QUALITY_MAX]=

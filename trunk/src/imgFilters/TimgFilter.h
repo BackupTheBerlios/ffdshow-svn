@@ -4,12 +4,16 @@
 #include "TtempPicture.h"
 
 struct TpresetSettings;
+struct IffDecoder;
 class TimgFilter
 {
 protected:
  int dxY,strideY,dyY;
  int dxUV,strideUV,dyUV;
+ IffDecoder *deci;
 public:
+ TimgFilter(void) {deci=NULL;};
+ void setDeci(IffDecoder *Ideci) {deci=Ideci;};
  virtual void init(int Idx,int Istride,int Idy)
   {
    done();

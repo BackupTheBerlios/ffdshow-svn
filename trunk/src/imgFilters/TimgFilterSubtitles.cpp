@@ -19,6 +19,7 @@
 #pragma hdrstop
 #include "TimgFilterSubtitles.h"
 #include "TpresetSettings.h"
+#include "IffDecoder.h"
 
 TimgFilterSubtitles::TimgFilterSubtitles(void)
 {
@@ -27,8 +28,11 @@ TimgFilterSubtitles::TimgFilterSubtitles(void)
 
 void TimgFilterSubtitles::process(TtempPictures *pict,const TpresetSettings *cfg)
 {
- if (cfg->fontChanged)
-  font.init(cfg);
+ if (deci->getParam2(IDFF_fontChanged))
+  {
+   font.init(cfg);
+   deci->putParam(IDFF_fontChanged,0);
+  }; 
  if (sub)
   { 
    const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();

@@ -29,7 +29,7 @@ public:
  int isPostproc,orderPostproc;
  static const int orderPostprocDef;
  int ppqual;
- int autoq;int currentq;
+ int autoq;
  int ppIsCustom,ppcustom;
  int deblockStrength;
  static const int deblockStrengthDef;
@@ -79,7 +79,6 @@ public:
 
  int isSubtitles,orderSubtitles;
  static const int orderSubtitlesDef;
- int fontChanged;
  char fontName[256];
  int fontCharset,fontSize,fontSpacing,fontWeight,fontColor,fontShadowStrength,fontShadowRadius;
  int subPosX,subPosY,subDelay,subSpeed;

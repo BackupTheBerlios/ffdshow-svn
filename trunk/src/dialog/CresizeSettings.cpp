@@ -107,6 +107,8 @@ HRESULT TresizeSettingsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
    case WM_COMMAND:
     switch (LOWORD(wParam))  
      {
+      case IDC_CHB_RESIZE:
+       cfgSet(IDFF_isResize,getCheck(IDC_CHB_RESIZE));
        return TRUE; 
       case IDC_CHB_RESIZE_FIRST:
        cfgSet(IDFF_resizeFirst,getCheck(IDC_CHB_RESIZE_FIRST));

@@ -24,6 +24,7 @@
 #include "TpresetSettings.h"
 #include "Tpostproc.h"
 #include "TmovieSource.h"
+#include "IffDecoder.h"
 
 const int TpresetSettings::deblockStrengthDef=256;
 
@@ -40,21 +41,21 @@ TimgFilterPostproc::~TimgFilterPostproc()
 void TimgFilterPostproc::process(TtempPictures *pict,TpresetSettings *cfg,bool afterResize,TmovieSource *movie,Tpostproc *postproc)
 {
  if (!postproc->ok || dxY<16 || dyY<16) return;
+ int currentq=deci->getParam2(IDFF_currentq);
  if (cpus>0 && cfg->autoq && cfg->ppqual)
   {
    cpu->CollectCPUData();
    if (cpu->GetCPUUsage(0)>90)
     {
-     if (cfg->currentq>0)
-      cfg->currentq--;
+     if (currentq>0) currentq--;
     }
    else
     {
-     if (cfg->currentq<cfg->ppqual)
-      cfg->currentq++ ;
+     if (currentq<cfg->ppqual) currentq++ ;
     };  
+   deci->putParam(IDFF_currentq,currentq); 
   };
- int ppmode=postproc->getPPmode(cfg);
+ int ppmode=postproc->getPPmode(cfg,currentq);
  if (ppmode)
   {
    const unsigned char *tempPict1[3]={pict->getCurY() ,pict->getCurU() ,pict->getCurV() };

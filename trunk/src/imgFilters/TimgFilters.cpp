@@ -23,10 +23,6 @@
 
 using namespace std;
 
-TimgFilters::TimgFilters(void)
-{
- tempPict=NULL;
-}
 void TimgFilters::init(int IdxY,int IstrideY,int Idy,int dyFull,int IdiffX,int IdiffY,bool IafterResize)
 {
  dxY =IdxY  ;strideY =IstrideY  ;
@@ -35,16 +31,19 @@ void TimgFilters::init(int IdxY,int IstrideY,int Idy,int dyFull,int IdiffX,int I
  afterResize=IafterResize;
  done();
  tempPict=new TtempPictures(strideY,dyFull,IdiffX,IdiffY);
- filters.push_back(&postproc);postproc.init(IdxY,IstrideY,Idy);
- filters.push_back(&noise);noise.init(IdxY,IstrideY,Idy);
- filters.push_back(&luma);luma.init(IdxY,IstrideY,Idy);
- filters.push_back(&chroma);chroma.init(IdxY,IstrideY,Idy);
- filters.push_back(&blur);blur.init(IdxY,IstrideY,Idy);
- filters.push_back(&sharpen);sharpen.init(IdxY,IstrideY,Idy);
- filters.push_back(&subtitles);subtitles.init(IdxY,IstrideY,Idy);
- filters.push_back(&offset);offset.init(IdxY,IstrideY,Idy);
- filters.push_back(&timesmooth);timesmooth.init(IdxY,IstrideY,Idy);
- filters.push_back(&showMV);showMV.init(IdxY,IstrideY,Idy);
+ #define ADD_FILTER(f) \
+  filters.push_back(&f);f.setDeci(deci);f.init(IdxY,IstrideY,Idy);
+ ADD_FILTER(postproc);
+ ADD_FILTER(noise);
+ ADD_FILTER(luma);
+ ADD_FILTER(chroma);
+ ADD_FILTER(blur);
+ ADD_FILTER(sharpen);
+ ADD_FILTER(subtitles);
+ ADD_FILTER(offset);
+ ADD_FILTER(timesmooth);
+ ADD_FILTER(showMV);
+ #undef ADD_FILTER
 }
 void TimgFilters::done(void)
 {
@@ -64,6 +63,7 @@ void TimgFilters::setSubtitle(subtitle *Isub)
 void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSource *movie,Tpostproc *pp,unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV)
 {
  tempPict->reset(srcY,srcU,srcV);
+ //if (deci->getParam2(IDFF_isClear)) tempPict->clear();
  for (int i=cfg->min_order;i<=cfg->max_order;i++)
   if (i==cfg->orderPostproc && cfg->isPostproc)
    postproc.process(tempPict,cfg,afterResize,movie,pp);
@@ -82,10 +82,7 @@ void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSou
   else if (i==cfg->orderNoise && cfg->isNoise)
    noise.process(tempPict,cfg);
   else if (i==cfg->orderSubtitles && cfg->isSubtitles)
-   {
-    subtitles.process(tempPict,cfg);
-    cfg->fontChanged=false;
-   }
+   subtitles.process(tempPict,cfg);
   else if (i==cfg->orderOffset && cfg->isOffset)
    offset.process(tempPict,cfg);
  if (global->showMV && !afterResize)

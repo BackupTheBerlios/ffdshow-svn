@@ -96,10 +96,11 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   TdialogSettings dialogSettings;
   Tpresets presets;
   int inPlayer;
+  int fontChanged,resizeChanged,currentq;
   int cfgDlgHnwd; //realy it is a HWND
   char AVIname[1024],AVIfourcc[10];
   int loadAVInameAndPreset(void);
-  void subsChanged(void),resizeChanged(void),trayIconChanged(void);
+  void onSubsChanged(void),onResizeChanged(void),onTrayIconChanged(void),onFilterOnOff(void);
   HRESULT ChangeColorspace(GUID subtype,GUID formattype,void * format);
   HWND onChangeWnd;unsigned int onChangeMsg;
   HWND onInfoWnd;unsigned int onInfoMsg;

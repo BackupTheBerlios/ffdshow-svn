@@ -22,7 +22,7 @@ public:
  void init(void);
  void done(void);
  void (*init_mplayer)(void);
- static int getPPmode(const TpresetSettings *cfg);
+ static int getPPmode(const TpresetSettings *cfg,int currentq);
  void (*postprocess)(const unsigned char * src[], int src_stride,
                      unsigned char * dst[], int dst_stride,
                      int horizontal_size,   int vertical_size,

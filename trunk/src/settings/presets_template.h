@@ -3,7 +3,7 @@ _REG_OP_N("flip",flip,0);
 _REG_OP_N("isPostproc",isPostproc,0);
 _REG_OP_N("orderPostproc",orderPostproc,orderPostprocDef);
 _REG_OP_N("ppIsCustom",ppIsCustom,0);
-_REG_OP_N("ppqual",ppqual,0);currentq=ppqual;
+_REG_OP_N("ppqual",ppqual,0);
 _REG_OP_N("autoq",autoq,0);
 _REG_OP_N("ppcustom",ppcustom,0);
 _REG_OP_N("deblockStrength",deblockStrength,deblockStrengthDef);

@@ -14,7 +14,6 @@ public:
  TresizeCtx(TpresetSettings *cfg)
   {
    isResize=cfg->isResize;
-   resizeChanged=true;
    swsc=NULL;
    imgResizeY=imgResizeU=imgResizeV=NULL;
   }
@@ -57,7 +56,6 @@ public:
    swsc->swScale(swsc,src,srcStride,0,height,dst,dstStride);
   }; 
  int isResize;    
- bool resizeChanged;
  int FFdx,FFdy;
  int strideY,strideUV;
  int imgDx,imgDy;

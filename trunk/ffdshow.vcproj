@@ -654,6 +654,12 @@
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterSubtitles.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AssemblerOutput="4"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterSubtitles.h">
@@ -1025,6 +1031,9 @@
 			</File>
 			<File
 				RelativePath="src\settings\Tpresets.h">
+			</File>
+			<File
+				RelativePath="src\settings\TstatusSettings.h">
 			</File>
 			<File
 				RelativePath="src\ffdshow_params.h">

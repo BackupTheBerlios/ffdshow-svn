@@ -19,6 +19,7 @@ struct TpresetSettings;
 class TmovieSource;
 struct subtitle;
 struct TtempPictures;
+struct IffDecoder;
 class TimgFilters
 {
 private:
@@ -27,6 +28,7 @@ private:
  int dy;
  bool afterResize;
  TtempPictures *tempPict;
+ IffDecoder *deci;
  std::vector<TimgFilter*> filters;
  TimgFilterPostproc postproc;
  TimgFilterNoise noise;
@@ -39,7 +41,7 @@ private:
  TimgFilterTimesmooth timesmooth;
  TimgFilterShowMV showMV;
 public:
- TimgFilters(void);
+ TimgFilters(IffDecoder *Ideci):deci(Ideci),tempPict(NULL) {};
  ~TimgFilters();
  void init(int IdxY,int IstrideY,int Idy,int dyFull,int IdiffX,int IdiffY,bool IafterResize);
  void done(void);
