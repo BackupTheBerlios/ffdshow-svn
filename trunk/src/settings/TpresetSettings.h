@@ -1,5 +1,5 @@
-#ifndef _TPRESET_H_
-#define _TPRESET_H_
+#ifndef _TPRESETSETTINGS_H_
+#define _TPRESETSETTINGS_H_
 
 #define FFPRESET_EXT "ffpreset"
 
@@ -18,7 +18,7 @@ private:
   }
 public:
  TpresetSettings(void);
- TpresetSettings(const char *IpresetName) {strcpy(presetName,IpresetName);};
+ TpresetSettings(const char *IpresetName);
  void loadDefault(void);
  void loadReg(void),saveReg(void);
  void loadFile(const char *flnm),saveFile(const char *flnm);

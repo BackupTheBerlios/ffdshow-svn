@@ -86,13 +86,13 @@ HMENU TtrayIcon::createMenu(void)
  HMENU hm=CreatePopupMenu();
  int ord=0;
  unsigned int len;
- deci->get_numPresets(&len);
+ deci->getNumPresets(&len);
  char actPreset[1024];
- deci->get_activePresetName(actPreset,1023);
+ deci->getActivePresetName(actPreset,1023);
  for (unsigned int i=0;i<len;i++)
   {
    char preset[1024];
-   deci->get_presetName(i,preset,1023);
+   deci->getPresetName(i,preset,1023);
    insertMenuItem(hm,ord,IDC_FIRST_PRESET+i,preset,_stricmp(preset,actPreset)==0);
   }
  insertSeparator(hm,ord);
@@ -183,13 +183,11 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
 
 int TtrayIcon::cfgGet(int i)
 {
- int val=0;
- deci->get_Param(i,&val);
- return val;
+ return deci->getParam2(i);
 };
 int TtrayIcon::cfgSet(int i,int val)
 {
- deci->put_Param(i,val);
+ deci->putParam(i,val);
  return val;
 };
 
@@ -257,10 +255,9 @@ void TtrayIcon::hide(void)
 
 int TtrayIcon::negate_Param(int id)
 {
- int oldVal;
- deci->get_Param(id,&oldVal);
+ int oldVal=deci->getParam2(id);
  oldVal=1-oldVal;
- deci->put_Param(id,oldVal);
+ deci->putParam(id,oldVal);
  deci->savePreset(NULL);
  return oldVal;
 }

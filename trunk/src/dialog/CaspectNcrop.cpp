@@ -17,15 +17,16 @@
  */
 
 #include <windows.h>
-#include "IffDecoder.h"
-#include "CaspectNcrop.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
 #include <stdio.h>
+#pragma hdrstop
+#include "IffDecoder.h"
+#include "CaspectNcrop.h"
+#include "resource.h"
 #include "TffdshowPage.h"
 
-void TaspectNcropPage::createConfig(void)
+void TaspectNcropPage::init(void)
 {
  SendDlgItemMessage(m_hwnd,IDC_TBR_ASPECT_USER,TBM_SETRANGE,TRUE,MAKELPARAM(0.1*256,5*256));
  SendDlgItemMessage(m_hwnd,IDC_TBR_ASPECT_USER,TBM_SETLINESIZE,0,0.1*256);
@@ -56,7 +57,7 @@ void TaspectNcropPage::aspect2dlg(void)
  setCheck(IDC_RBT_ASPECT_USER,ra==2);
  char pomS[256];
  unsigned int dx,dy;
- deci->get_AVIdimensions(&dx,&dy);
+ deci->getAVIdimensions(&dx,&dy);
  __asm emms;
  if (dx!=0 && dy!=0)
   {

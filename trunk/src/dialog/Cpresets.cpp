@@ -17,16 +17,43 @@
  */
 
 #include <windows.h>
-#include "Cpresets.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
+#include <stdio.h>
+#pragma hdrstop
+#include "Cpresets.h"
+#include "resource.h"
 #include "IffDecoder.h"
+#include "TpresetSettings.h"
 
-void TpresetsPage::createConfig(void)
+void TpresetsPage::init(void)
 {
+ ncol=0;
+ unsigned int len;deci->getNumPresets(&len);
+ for (unsigned int i=0;i<len;i++) 
+  {
+   TpresetSettings preset;
+   deci->getPreset(i,&preset);
+   localPresets.storePreset(preset);
+  }
+ hlv=GetDlgItem(m_hwnd,IDC_LV_PRESETS); 
+ ListView_SetExtendedListViewStyleEx(hlv,LVS_EX_FULLROWSELECT,LVS_EX_FULLROWSELECT);
+ addCol(300,"preset name",false);
+ ListView_SetItemCountEx(hlv,localPresets.size(),0);
  cfg2dlg();
 }
+
+void TpresetsPage::addCol(int w,const char *txt,bool right)
+{
+ LVCOLUMN lvc;
+ lvc.mask=LVCF_FMT|LVCF_WIDTH|LVCF_TEXT|LVCF_SUBITEM; 
+ lvc.iSubItem=ncol;
+ lvc.pszText=LPSTR(txt);    
+ lvc.cx=w; 
+ lvc.fmt=(right)?LVCFMT_RIGHT:LVCFMT_LEFT;
+ ListView_InsertColumn(hlv,ncol,&lvc);
+ ncol++;
+};
 
 void TpresetsPage::cfg2dlg(void)
 {
@@ -50,9 +77,36 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        cfgSet(IDFF_autoPresetFileFirst,getCheck(IDC_CHB_AUTOPRESET_FILEFIRST));
        return TRUE;
      }
-   break;
+    break;
+   case WM_NOTIFY:
+    {
+     NMHDR *nmhdr=LPNMHDR(lParam);
+     if (nmhdr->hwndFrom==hlv && nmhdr->idFrom==IDC_LV_PRESETS)
+      switch (nmhdr->code)
+       {
+        case LVN_GETDISPINFO:
+         {
+          NMLVDISPINFO *di=(NMLVDISPINFO*)(lParam);
+          int i=di->item.iItem;
+          if (i==-1) break;
+          //if (di->item.mask&LVIF_STATE) di->item.state|=0;
+          //if (di->item.mask&LVIF_IMAGE) di->item.iImage=items[i]->getImageIndex();
+          if (di->item.mask&LVIF_TEXT)
+           {
+            strcpy(di->item.pszText,localPresets[i].presetName);
+           }
+         };
+        break;
+       }
+     break; 
+    } 
   };
  return FALSE;
+}
+
+void TpresetsPage::getTip(char *tipS,int len)
+{
+ sprintf(tipS,"preset name");
 }
 
 TpresetsPage::TpresetsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)

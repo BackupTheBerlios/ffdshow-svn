@@ -1,4 +1,5 @@
 #include <windows.h>
+#pragma hdrstop
 #include "reg.h"
 #include "TdialogSettings.h"
 

@@ -17,15 +17,16 @@
  */
 
 #include <windows.h>
-#include "IffDecoder.h"
-#include "CpictProp.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
 #include <stdio.h>
+#pragma hdrstop
+#include "IffDecoder.h"
+#include "CpictProp.h"
+#include "resource.h"
 #include "TffdshowPage.h"
 
-void TpictPropPage::createConfig(void)
+void TpictPropPage::init(void)
 {
  SendDlgItemMessage(m_hwnd,IDC_TBR_LUMGAIN,TBM_SETRANGE,TRUE,MAKELPARAM(0,256));
  SendDlgItemMessage(m_hwnd,IDC_TBR_LUMGAIN,TBM_SETLINESIZE,0,1);

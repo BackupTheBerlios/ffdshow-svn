@@ -17,17 +17,19 @@
  */
 
 #include <windows.h>
+#include <commctrl.h>
+#include <string.h>
+#include <stdio.h>
+#pragma hdrstop
 #include "IffDecoder.h"
 #include "CpostProc.h"
 #include "resource.h"
-#include <commctrl.h>
-#include <string.h>
 #include "Tpostproc.h"
 #include "TffdshowPage.h"
 
 #define POSTPROC_TIMER 1999
 
-void TpostProcPage::createConfig(void)
+void TpostProcPage::init(void)
 {
  if (cfgGet(IDFF_inPlayer)) SetTimer(m_hwnd,POSTPROC_TIMER,100,NULL);
  SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_SETRANGE,TRUE,MAKELONG(0,6));

@@ -17,10 +17,13 @@
  */
 
 #include <windows.h>
-#include "Tfont.h"
-#include <stdlib.h>
-#include "subreader.h"
+#include <commctrl.h>
+#include <string.h>
+#include <stdio.h>
+#pragma hdrstop
 #include <math.h>
+#include "Tfont.h"
+#include "subreader.h"
 #include "TpresetSettings.h"
 
 using namespace std;
@@ -176,7 +179,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
  if (oldsub!=sub)
   {
    oldsub=sub;
-   int i;
+   unsigned int i;
    for (i=0;i<c.size();i++) delete c[i];c.clear();
    if (!sub) return;
    for (i=0;i<sub->lines;i++)

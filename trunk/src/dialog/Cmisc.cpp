@@ -17,13 +17,15 @@
  */
 
 #include <windows.h>
-#include "Cmisc.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
+#include <stdio.h>
+#pragma hdrstop
+#include "Cmisc.h"
+#include "resource.h"
 #include "IffDecoder.h"
 
-void TmiscPage::createConfig(void)
+void TmiscPage::init(void)
 {
  SendDlgItemMessage(m_hwnd,IDC_CBX_IDCT,CB_RESETCONTENT,0,0);
  SendDlgItemMessage(m_hwnd,IDC_CBX_IDCT,CB_ADDSTRING,0,LPARAM("simple (16383)"));

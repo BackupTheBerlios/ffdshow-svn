@@ -17,10 +17,12 @@
  */
 
 #include <windows.h>
-#include "Cfont.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
+#include <stdio.h>
+#pragma hdrstop
+#include "Cfont.h"
+#include "resource.h"
 #include "IffDecoder.h"
 #include <vector>
 #include <string>
@@ -52,7 +54,7 @@ static int CALLBACK EnumFamCallBackFonts(CONST LOGFONT *lpelf,CONST TEXTMETRIC *
  return 1;
 };
 
-void TfontPage::createConfig(void)
+void TfontPage::init(void)
 {
  unsigned int i;
  for (i=0;i<16;i++) custColors[i]=RGB(i*16,i*16,i*16);

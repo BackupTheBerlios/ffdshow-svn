@@ -5,7 +5,7 @@
  * Some code cleanup & realloc() by A'rpi/ESP-team
  * dunnowhat sub format by szabi
  */
-
+#pragma hdrstop
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -831,53 +831,6 @@ void list_sub_file(subtitle* subs){
     printf ("Subtitle format %s time.\n", sub_uses_time?"uses":"doesn't use");
     printf ("Read %i subtitles, %i errors.\n", sub_num, sub_errs);
 
-}
-
-void dump_mpsub(subtitle* subs, float fps){
-	int i,j;
-	FILE *fd;
-	float a,b;
-
-	mpsub_position=sub_uses_time?(sub_delay*100):(sub_delay*fps);
-	if (sub_fps==0) sub_fps=fps;
-
-	fd=fopen ("dump.mpsub", "w");
-	if (!fd) {
-		perror ("dump_mpsub: fopen");
-		return;
-	}
-	
-
-	if (sub_uses_time) fprintf (fd,"FORMAT=TIME\n\n");
-	else fprintf (fd, "FORMAT=%5.2f\n\n", fps);
-
-	for(j=0;j<sub_num;j++){
-		subtitle* egysub=&subs[j];
-		if (sub_uses_time) {
-			a=((egysub->start-mpsub_position)/100.0);
-			b=((egysub->end-egysub->start)/100.0);
-			if ( (float)((int)a) == a)
-			fprintf (fd, "%.0f",a);
-			else
-			fprintf (fd, "%.2f",a);
-			    
-			if ( (float)((int)b) == b)
-			fprintf (fd, " %.0f\n",b);
-			else
-			fprintf (fd, " %.2f\n",b);
-		} else {
-			fprintf (fd, "%ld %ld\n", (long)((egysub->start*(fps/sub_fps))-((mpsub_position*(fps/sub_fps)))),
-					(long)(((egysub->end)-(egysub->start))*(fps/sub_fps)));
-		}
-
-		mpsub_position = egysub->end;
-		for (i=0; i<egysub->lines; i++) {
-			fprintf (fd, "%s\n",egysub->text[i]);
-		}
-		fprintf (fd, "\n");
-	}
-	fclose (fd);
-	printf ("SUB: Subtitles dumped in \'dump.mpsub\'.\n");
 }
 
 void sub_free( subtitle * subs )

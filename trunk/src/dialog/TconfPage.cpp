@@ -17,9 +17,12 @@
  */
 
 #include <windows.h>
+#include <commctrl.h>
+#include <string.h>
+#include <stdio.h>
+#pragma hdrstop
 #include "TconfPage.h"
 #include "resource.h"
-#include <commctrl.h>
 #include <assert.h>
 #include "IffDecoder.h"
 
@@ -32,7 +35,7 @@ static INT_PTR CALLBACK dlgWndProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lPar
      TconfPage *cfgDlg=(TconfPage*)lParam;
      SetWindowLong(hwnd,GWL_USERDATA,LONG(cfgDlg));
      cfgDlg->m_hwnd=hwnd;
-     cfgDlg->createConfig();
+     cfgDlg->init();
      return TRUE;
     };
    default:
@@ -83,18 +86,18 @@ TconfPage::~TconfPage()
 
 int TconfPage::cfgGet(unsigned int i)
 {
- return deci->get_Param2(i);
+ return deci->getParam2(i);
 };
 int TconfPage::cfgSet(unsigned int i,int val)
 {
- deci->put_Param(i,val);
+ deci->putParam(i,val);
  return val;
 };
 int TconfPage::cfgInv(unsigned int i)
 {
- int val=deci->get_Param2(i);
+ int val=deci->getParam2(i);
  if (val==0) val=1; else val=0;
- deci->put_Param(i,val);
+ deci->putParam(i,val);
  interDlg();
  return val;
 }

@@ -17,13 +17,15 @@
  */
 
 #include <windows.h>
-#include "Ccodecs.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
+#include <stdio.h>
+#pragma hdrstop
+#include "Ccodecs.h"
+#include "resource.h"
 #include "IffDecoder.h"
 
-void TcodecsPage::createConfig(void)
+void TcodecsPage::init(void)
 {
  cfg2dlg();
 }

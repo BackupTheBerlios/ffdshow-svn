@@ -17,10 +17,12 @@
  */
 
 #include <windows.h>
-#include "Cabout.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
+#include <stdio.h>
+#pragma hdrstop
+#include "Cabout.h"
+#include "resource.h"
 #include "IffDecoder.h"
 
 void TaboutPage::cfg2dlg(void)
@@ -32,7 +34,7 @@ HRESULT TaboutPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
-void TaboutPage::createConfig(void)
+void TaboutPage::init(void)
 {
 /*
  HMODULE hm=(HMODULE)GetWindowLong(m_hwnd,GWL_HINSTANCE);
@@ -43,7 +45,7 @@ void TaboutPage::createConfig(void)
  SendDlgItemMessage(m_hwnd,IDC_ED_CREDITS,EM_SETSEL,0,-1);
 */ 
  char vers[1024];vers[0]='\0';
- deci->get_avcodec_version(vers,1023);
+ deci->getAVcodecVersion(vers,1023);
  SendDlgItemMessage(m_hwnd,IDC_LBL_AVVERSION,WM_SETTEXT,0,LPARAM(vers));
  strcpy(vers,"DirectShow filter build date: "__DATE__" , "__TIME__);
  SendDlgItemMessage(m_hwnd,IDC_LBL_FFDSHOWVERSION,WM_SETTEXT,0,LPARAM(vers));

@@ -1,13 +1,19 @@
 #include <windows.h>
+#include <stdio.h>
+#include <string.h>
+#pragma hdrstop
 #include "reg.h"
 #include "TpresetSettings.h"
-#include <stdio.h>
 
 int TpresetSettings::min_order=1,TpresetSettings::max_order=6;
 
 TpresetSettings::TpresetSettings(void)
 {
  strcpy(presetName,FFPRESET_DEFAULT);
+};
+TpresetSettings::TpresetSettings(const char *IpresetName) 
+{
+ strcpy(presetName,IpresetName);
 };
 void TpresetSettings::loadDefault(void)
 {
@@ -108,7 +114,7 @@ void TpresetSettings::getSharpenDescription(char *buf)
 }
 void TpresetSettings::getCropDescription(char *buf)
 {
- strcpy(buf,"Crop && zoom (");
+ strcpy(buf,"Crop & zoom (");
  char pomS[256];
  if (isZoom)
   if (magnificationLocked) 

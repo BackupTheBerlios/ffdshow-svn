@@ -17,13 +17,15 @@
  */
 
 #include <windows.h>
-#include "Ctray.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
+#include <stdio.h>
+#pragma hdrstop
+#include "Ctray.h"
+#include "resource.h"
 #include "IffDecoder.h"
 
-void TtrayPage::createConfig(void)
+void TtrayPage::init(void)
 {
  cfg2dlg();
 }

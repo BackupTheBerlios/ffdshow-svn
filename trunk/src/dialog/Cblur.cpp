@@ -17,15 +17,16 @@
  */
 
 #include <windows.h>
-#include "IffDecoder.h"
-#include "Cblur.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
 #include <stdio.h>
+#pragma hdrstop
+#include "IffDecoder.h"
+#include "Cblur.h"
+#include "resource.h"
 #include "TffdshowPage.h"
 
-void TblurPage::createConfig(void)
+void TblurPage::init(void)
 {
  SendDlgItemMessage(m_hwnd,IDC_TBR_BLUR_STRENGTH,TBM_SETRANGE,TRUE,MAKELPARAM(1,255));
  SendDlgItemMessage(m_hwnd,IDC_TBR_BLUR_STRENGTH,TBM_SETLINESIZE,0,1);

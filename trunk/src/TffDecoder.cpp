@@ -63,155 +63,7 @@ extern "C"
 #include "trayIcon.h"
 #include "subtitles\Tsubtitles.h"
 
-// --- fourcc --- 
-#define FOURCC_XVID mmioFOURCC('X','V','I','D') 
-#define FOURCC_xvid mmioFOURCC('x','v','i','d')
-#define FOURCC_DIVX mmioFOURCC('D','I','V','X') 
-#define FOURCC_divx mmioFOURCC('d','i','v','x')
-#define FOURCC_DIV3 mmioFOURCC('D','I','V','3') 
-#define FOURCC_div3 mmioFOURCC('d','i','v','3')
-#define FOURCC_DX50 mmioFOURCC('D','X','5','0') 
-#define FOURCC_dx50 mmioFOURCC('d','x','5','0')
-#define FOURCC_MP41 mmioFOURCC('M','P','4','1') 
-#define FOURCC_mp41 mmioFOURCC('m','p','4','1')
-#define FOURCC_MP42 mmioFOURCC('M','P','4','2') 
-#define FOURCC_mp42 mmioFOURCC('m','p','4','2')
-#define FOURCC_MP43 mmioFOURCC('M','P','4','3') 
-#define FOURCC_mp43 mmioFOURCC('m','p','4','3')
-#define FOURCC_H263 mmioFOURCC('H','2','6','3') 
-#define FOURCC_h263 mmioFOURCC('h','2','6','3')
-#define FOURCC_WMV1 mmioFOURCC('W','M','V','1') 
-#define FOURCC_wmv1 mmioFOURCC('w','m','v','1')
-
-// --- media uids --- 
-DEFINE_GUID(CLSID_xvid, 0x64697678, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_XVID, 0x44495658, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_divx, 0x78766964, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_DIVX, 0x58564944, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_div3, 0x33766964, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_DIV3, 0x33564944, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_dx50, 0x30357864, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_DX50, 0x30355844, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_mp43, 0x3334706D, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_MP43, 0x3334504D, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_mp42, 0x3234706D, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_MP42, 0x3234504D, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_mp41, 0x3134706D, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_MP41, 0x3134504D, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_h263, 0x33363268, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_H263, 0x33363248, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_wmv1, 0x31766d77, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-DEFINE_GUID(CLSID_WMV1, 0x31564d57, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
-
-DEFINE_GUID(CLSID_MPEG1Packet,
-                           0xe436eb80, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70); 
-DEFINE_GUID(CLSID_MPEG1Payload,
-                           0xe436eb81, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70); 
-
-const AMOVIESETUP_MEDIATYPE sudInputPinTypes[] =
- {
-  { &MEDIATYPE_Video, &CLSID_xvid },
-  { &MEDIATYPE_Video, &CLSID_XVID },
-  { &MEDIATYPE_Video, &CLSID_divx },
-  { &MEDIATYPE_Video, &CLSID_DIVX },
-  { &MEDIATYPE_Video, &CLSID_div3 },
-  { &MEDIATYPE_Video, &CLSID_DIV3 },
-  { &MEDIATYPE_Video, &CLSID_dx50 },
-  { &MEDIATYPE_Video, &CLSID_DX50 },
-  { &MEDIATYPE_Video, &CLSID_mp43 },
-  { &MEDIATYPE_Video, &CLSID_MP43 },
-  { &MEDIATYPE_Video, &CLSID_mp42 },
-  { &MEDIATYPE_Video, &CLSID_MP42 },
-  { &MEDIATYPE_Video, &CLSID_mp41 },
-  { &MEDIATYPE_Video, &CLSID_MP41 },
-  { &MEDIATYPE_Video, &CLSID_h263 },
-  { &MEDIATYPE_Video, &CLSID_H263 },
-#ifdef FF__WMV1  
-  { &MEDIATYPE_Video, &CLSID_wmv1 },
-  { &MEDIATYPE_Video, &CLSID_WMV1 },
-#endif  
-#ifdef FF__MPEG
-  { &MEDIATYPE_Video, &CLSID_MPEG1Packet },  
-  { &MEDIATYPE_Video, &CLSID_MPEG1Payload }
-#endif  
- };
-
-const AMOVIESETUP_MEDIATYPE sudOutputPinTypes[] =
- {
-  {
-   &MEDIATYPE_Video, &MEDIASUBTYPE_NULL
-  }
- };
-
-const AMOVIESETUP_PIN psudPins[] =
- {
-  {
-   L"Input",           // String pin name
-   FALSE,              // Is it rendered
-   FALSE,              // Is it an output
-   FALSE,              // Allowed none
-   FALSE,              // Allowed many
-   &CLSID_NULL,        // Connects to filter
-   L"Output",          // Connects to pin
-   sizeof(sudInputPinTypes) / sizeof(AMOVIESETUP_MEDIATYPE), // Number of types
-   &sudInputPinTypes[0]    // The pin details
-  },
-  {
-   L"Output",          // String pin name
-   FALSE,              // Is it rendered
-   TRUE,               // Is it an output
-   FALSE,              // Allowed none
-   FALSE,              // Allowed many
-   &CLSID_NULL,        // Connects to filter
-   L"Input",           // Connects to pin
-   sizeof(sudOutputPinTypes) / sizeof(AMOVIESETUP_MEDIATYPE),  // Number of types
-   sudOutputPinTypes   // The pin details
-  }
- };
-
-const AMOVIESETUP_FILTER sudXvidDecoder =
- {
-  &CLSID_FFDSHOW,            // Filter CLSID
-  FFDSHOW_NAME_L,            // Filter name
-  #ifdef  FF__MPEG
-   0x40000002,
-  #else
-   MERIT_PREFERRED+1+1,    // Its merit - stupid hack, but Windows Media filters use it too
-  #endif 
-  sizeof(psudPins) / sizeof(AMOVIESETUP_PIN), // Number of pins
-  psudPins                // Pin details
- };
-
-// List of class IDs and creator functions for the class factory. This
-// provides the link between the OLE entry point in the DLL and an object
-// being created. The class factory will call the static CreateInstance
-CFactoryTemplate g_Templates[] =
- {
-  {
-   FFDSHOW_NAME_L,
-   &CLSID_FFDSHOW,
-   TffDecoder::CreateInstance,
-   NULL,
-   &sudXvidDecoder
-  },
-  {
-   FFDSHOW_NAME_L L"ffdshow",
-   &CLSID_TFFDSHOWPAGE,
-   TffdshowPage::CreateInstance
-  }
- };
-
-int g_cTemplates = sizeof(g_Templates) / sizeof(CFactoryTemplate);
-
-STDAPI DllRegisterServer()
-{
- return AMovieDllRegisterServer2( TRUE );
-}
-
-STDAPI DllUnregisterServer()
-{
- return AMovieDllRegisterServer2( FALSE );
-}
+#include "ffdshow_dshowreg.h"
 
 // create instance 
 CUnknown * WINAPI TffDecoder::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
@@ -226,114 +78,12 @@ CUnknown * WINAPI TffDecoder::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
   }
  return pNewObject;
 }
+
 void TffDecoder::fillParams(void)
 {
- //state variables
- params[IDFF_inPlayer           ]=Tparam(&inPlayer               ,0,0);
- params[IDFF_isDlg              ]=Tparam(&isDlg                  ,0,0);
- //dialog settings
- params[IDFF_lastPage           ]=Tparam(&dialogSettings.lastPage,0,0);
- //global settings
- params[IDFF_autoPreset         ]=Tparam(&globalSettings.autoPreset         ,0,0);
- params[IDFF_trayIcon           ]=Tparam(&globalSettings.trayIcon           ,0,0,&TffDecoder::trayIconChanged);
- params[IDFF_autoPresetFileFirst]=Tparam(&globalSettings.autoPresetFileFirst,0,0);
- params[IDFF_xvid               ]=Tparam(&globalSettings.xvid               ,0,0);
- params[IDFF_div3               ]=Tparam(&globalSettings.div3               ,0,0);
- params[IDFF_divx               ]=Tparam(&globalSettings.divx               ,0,0);
- params[IDFF_dx50               ]=Tparam(&globalSettings.dx50               ,0,0);
- params[IDFF_mp43               ]=Tparam(&globalSettings.mp43               ,0,0);
- params[IDFF_mp42               ]=Tparam(&globalSettings.mp42               ,0,0);
- params[IDFF_mp41               ]=Tparam(&globalSettings.mp41               ,0,0);
- params[IDFF_h263               ]=Tparam(&globalSettings.h263               ,0,0);
-
- params[IDFF_presetShouldBeSaved]=Tparam(&presetSettings.presetShouldBeSaved,0,0);
- params[IDFF_autoloadedfromreg  ]=Tparam(&presetSettings.autoloadedfromreg  ,0,0);
-
- params[IDFF_isPostproc         ]=Tparam(&presetSettings.isPostproc         ,0,0);
- params[IDFF_orderPostproc      ]=Tparam(&presetSettings.orderPostproc      ,TpresetSettings::min_order,TpresetSettings::max_order);
- params[IDFF_ppqual             ]=Tparam(&presetSettings.ppqual             ,0,6);
- params[IDFF_autoq              ]=Tparam(&presetSettings.autoq              ,0,0);
- params[IDFF_ppIsCustom         ]=Tparam(&presetSettings.ppIsCustom         ,0,0);
- params[IDFF_ppcustom           ]=Tparam(&presetSettings.ppcustom           ,0,0);
- params[IDFF_currentq           ]=Tparam(&presetSettings.currentq           ,0,6);
- params[IDFF_levelFixLum        ]=Tparam(&presetSettings.levelFixLum        ,0,0);
- params[IDFF_levelFixChrom      ]=Tparam(&presetSettings.levelFixChrom      ,0,0);
-
- params[IDFF_isPictProp         ]=Tparam(&presetSettings.isPictProp         ,0,0);
- params[IDFF_orderPictProp      ]=Tparam(&presetSettings.orderPictProp      ,TpresetSettings::min_order,TpresetSettings::max_order);
- params[IDFF_lumGain            ]=Tparam(&presetSettings.lumGain            ,0,256);
- params[IDFF_lumOffset          ]=Tparam(&presetSettings.lumOffset          ,-256,256);
- params[IDFF_gammaCorrection    ]=Tparam(&presetSettings.gammaCorrection    ,1,400);
- params[IDFF_hue                ]=Tparam(&presetSettings.hue                ,-180,180);
- params[IDFF_saturation         ]=Tparam(&presetSettings.saturation         ,0,128);
- params[IDFF_lumGainDef         ]=Tparam(&TpresetSettings::lumGainDef);
- params[IDFF_lumOffsetDef       ]=Tparam(&TpresetSettings::lumOffsetDef);
- params[IDFF_gammaCorrectionDef ]=Tparam(&TpresetSettings::gammaCorrectionDef);
- params[IDFF_hueDef             ]=Tparam(&TpresetSettings::hueDef);
- params[IDFF_saturationDef      ]=Tparam(&TpresetSettings::saturationDef);
-                                                         
- params[IDFF_flip               ]=Tparam(&presetSettings.flip               ,0,0);
-
- params[IDFF_isBlur             ]=Tparam(&presetSettings.isBlur             ,0,0);
- params[IDFF_orderBlur          ]=Tparam(&presetSettings.orderBlur          ,TpresetSettings::min_order,TpresetSettings::max_order);
- params[IDFF_blurStrength       ]=Tparam(&presetSettings.blurStrength       ,1,255);
-
- params[IDFF_isSharpen          ]=Tparam(&presetSettings.isSharpen          ,0,0);
- params[IDFF_orderSharpen       ]=Tparam(&presetSettings.orderSharpen       ,TpresetSettings::min_order,TpresetSettings::max_order);
- params[IDFF_sharpenMethod      ]=Tparam(&presetSettings.sharpenMethod      ,0,1);
- params[IDFF_xsharp_strength    ]=Tparam(&presetSettings.xsharp_strength    ,1,127);
- params[IDFF_xsharp_threshold   ]=Tparam(&presetSettings.xsharp_threshold   ,0,255);
- params[IDFF_unsharp_strength   ]=Tparam(&presetSettings.unsharp_strength   ,1,127);
- params[IDFF_unsharp_threshold  ]=Tparam(&presetSettings.unsharp_threshold  ,0,255);
-                                                         
- params[IDFF_isNoise            ]=Tparam(&presetSettings.isNoise            ,0,0);
- params[IDFF_orderNoise         ]=Tparam(&presetSettings.orderNoise         ,TpresetSettings::min_order,TpresetSettings::max_order);
- params[IDFF_noiseMethod        ]=Tparam(&presetSettings.noiseMethod        ,0,1);
- params[IDFF_uniformNoise       ]=Tparam(&presetSettings.uniformNoise       ,0,0);
- params[IDFF_noiseStrength      ]=Tparam(&presetSettings.noiseStrength      ,0,255);
- params[IDFF_noiseStrengthChroma]=Tparam(&presetSettings.noiseStrengthChroma,0,127);
-                                                         
- params[IDFF_idct               ]=Tparam(&presetSettings.idct               ,0,4);
-                                                         
- params[IDFF_isResize           ]=Tparam(&presetSettings.isResize           ,0,0);
- params[IDFF_resizeDx           ]=Tparam(&presetSettings.resizeDx           ,8,2048);
- params[IDFF_resizeDy           ]=Tparam(&presetSettings.resizeDy           ,8,2048);
- params[IDFF_resizeAspect       ]=Tparam(&presetSettings.resizeAspect       ,0,0,&TffDecoder::resizeChanged);
- params[IDFF_resizeFirst        ]=Tparam(&presetSettings.resizeFirst        ,0,0,&TffDecoder::resizeChanged);
- params[IDFF_resizeMethod       ]=Tparam(&presetSettings.resizeMethod       ,0,5,&TffDecoder::resizeChanged);
- params[IDFF_aspectRatio        ]=Tparam(&presetSettings.aspectRatio        ,0,0,&TffDecoder::resizeChanged);
- params[IDFF_resizeGblurLum     ]=Tparam(&presetSettings.resizeGblurLum     ,0,200,&TffDecoder::resizeChanged);
- params[IDFF_resizeGblurChrom   ]=Tparam(&presetSettings.resizeGblurChrom   ,0,200,&TffDecoder::resizeChanged);
- params[IDFF_resizeSharpenLum   ]=Tparam(&presetSettings.resizeSharpenLum   ,0,200,&TffDecoder::resizeChanged);
- params[IDFF_resizeSharpenChrom ]=Tparam(&presetSettings.resizeSharpenChrom ,0,200,&TffDecoder::resizeChanged);
- params[IDFF_isCropNzoom        ]=Tparam(&presetSettings.isCropNzoom        ,0,0,&TffDecoder::resizeChanged);
- params[IDFF_isZoom             ]=Tparam(&presetSettings.isZoom             ,0,0,&TffDecoder::resizeChanged);
- params[IDFF_magnificationX     ]=Tparam(&presetSettings.magnificationX     ,0,100,&TffDecoder::resizeChanged);
- params[IDFF_magnificationY     ]=Tparam(&presetSettings.magnificationY     ,0,100,&TffDecoder::resizeChanged);
- params[IDFF_magnificationLocked]=Tparam(&presetSettings.magnificationLocked,0,0,&TffDecoder::resizeChanged);
- params[IDFF_cropLeft           ]=Tparam(&presetSettings.cropLeft           ,0,2048,&TffDecoder::resizeChanged);
- params[IDFF_cropRight          ]=Tparam(&presetSettings.cropRight          ,0,2048,&TffDecoder::resizeChanged);
- params[IDFF_cropTop            ]=Tparam(&presetSettings.cropTop            ,0,2048,&TffDecoder::resizeChanged);
- params[IDFF_cropBottom         ]=Tparam(&presetSettings.cropBottom         ,0,2048,&TffDecoder::resizeChanged);
- params[IDFF_autocrop           ]=Tparam(&presetSettings.autocrop           ,0,0,&TffDecoder::resizeChanged);
-
- params[IDFF_isSubtitles        ]=Tparam(&presetSettings.isSubtitles        ,0,0,&TffDecoder::subsChanged);
- params[IDFF_orderSubtitles     ]=Tparam(&presetSettings.orderSubtitles     ,TpresetSettings::min_order,TpresetSettings::max_order);
- params[IDFF_fontCharset        ]=Tparam(&presetSettings.fontCharset        ,0,0,&TffDecoder::subsChanged);
- params[IDFF_fontSize           ]=Tparam(&presetSettings.fontSize           ,2,255,&TffDecoder::subsChanged);
- params[IDFF_fontWeight         ]=Tparam(&presetSettings.fontWeight         ,0,1000,&TffDecoder::subsChanged);
- params[IDFF_fontColor          ]=Tparam(&presetSettings.fontColor          ,0,0,&TffDecoder::subsChanged);
- params[IDFF_fontShadowStrength ]=Tparam(&presetSettings.fontShadowStrength ,0,100,&TffDecoder::subsChanged);
- params[IDFF_fontShadowRadius   ]=Tparam(&presetSettings.fontShadowRadius   ,1,100,&TffDecoder::subsChanged);
- params[IDFF_fontAutosize       ]=Tparam(&presetSettings.fontAutosize       ,0,0,&TffDecoder::subsChanged);
- params[IDFF_fontSpacing        ]=Tparam(&presetSettings.fontSpacing        ,-10,10,&TffDecoder::subsChanged);
- params[IDFF_subPosX            ]=Tparam(&presetSettings.subPosX            ,0,100,&TffDecoder::subsChanged);
- params[IDFF_subPosY            ]=Tparam(&presetSettings.subPosY            ,0,100,&TffDecoder::subsChanged);
- params[IDFF_subDelay           ]=Tparam(&presetSettings.subDelay           ,0,0,&TffDecoder::subsChanged);
- params[IDFF_subSpeed           ]=Tparam(&presetSettings.subSpeed           ,0,0,&TffDecoder::subsChanged);
- params[IDFF_subAutoFlnm        ]=Tparam(&presetSettings.subAutoFlnm        ,0,0);
+#include "ffdshow_params.h"
 }                                                                      
-STDMETHODIMP TffDecoder::get_Param(unsigned int paramID, int* value)
+STDMETHODIMP TffDecoder::getParam(unsigned int paramID, int* value)
 {
  if (!value) return S_FALSE;
  if (paramID<0 || paramID>=MAX_PARAMID) return S_FALSE;
@@ -341,13 +91,13 @@ STDMETHODIMP TffDecoder::get_Param(unsigned int paramID, int* value)
  *value=*params[paramID].val;
  return S_OK;
 }
-STDMETHODIMP TffDecoder::get_Param2(unsigned int paramID)
+STDMETHODIMP TffDecoder::getParam2(unsigned int paramID)
 {
  if (paramID<0 || paramID>=MAX_PARAMID) return 0;
  if (!params[paramID].val) return 0;
  return *params[paramID].val;
 }
-STDMETHODIMP TffDecoder::put_Param(unsigned int paramID, int  value)
+STDMETHODIMP TffDecoder::putParam(unsigned int paramID, int  value)
 {
  if (paramID<0 || paramID>=MAX_PARAMID) return S_FALSE;
  Tparam &p=params[paramID];
@@ -383,14 +133,14 @@ void TffDecoder::trayIconChanged(void)
  if (!tray) return;
  if (globalSettings.trayIcon) tray->show(); else tray->hide();
 }
-STDMETHODIMP TffDecoder::get_numPresets(unsigned int *value)
+STDMETHODIMP TffDecoder::getNumPresets(unsigned int *value)
 {
  *value=0;
  if (!value) return E_POINTER;
  *value=presets.size();
  return S_OK;
 }
-STDMETHODIMP TffDecoder::get_presetName(unsigned int i,char *buf,unsigned int len)
+STDMETHODIMP TffDecoder::getPresetName(unsigned int i,char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
  if (i>=presets.size()) return S_FALSE;
@@ -398,28 +148,34 @@ STDMETHODIMP TffDecoder::get_presetName(unsigned int i,char *buf,unsigned int le
  strcpy(buf,presets[i].presetName);
  return S_OK;
 }
-STDMETHODIMP TffDecoder::get_activePresetName(char *buf,unsigned int len)
+STDMETHODIMP TffDecoder::getPreset(unsigned int i,void *buf)
+{
+ if (!buf) return E_POINTER;
+ *((TpresetSettings*)buf)=presets[i];
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::getActivePresetName(char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
  if (len<strlen(presetSettings.presetName)+1) return E_OUTOFMEMORY;
  strcpy(buf,presetSettings.presetName);
  return S_OK;
 }
-STDMETHODIMP TffDecoder::get_AVIname(char *buf,unsigned int len)
+STDMETHODIMP TffDecoder::getAVIname(char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
  if (len<strlen(AVIname)+1) return E_OUTOFMEMORY;
  strcpy(buf,AVIname);
  return S_OK;
 }
-STDMETHODIMP TffDecoder::get_AVIfourcc(char *buf,unsigned int len)
+STDMETHODIMP TffDecoder::getAVIfourcc(char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
  if (len<strlen(AVIfourcc)+1) return E_OUTOFMEMORY;
  strcpy(buf,AVIfourcc);
  return S_OK;
 }
-STDMETHODIMP TffDecoder::get_AVIfps(unsigned int *fps)
+STDMETHODIMP TffDecoder::getAVIfps(unsigned int *fps)
 {
  if (!fps || AVIfps==0) return S_FALSE;
  *fps=1000*AVIfps;
@@ -457,7 +213,7 @@ STDMETHODIMP TffDecoder::removePreset(const char *name)
  presets.removePreset(name);
  return S_OK;
 }
-STDMETHODIMP TffDecoder::get_avcodec_version(char *buf,unsigned int len)
+STDMETHODIMP TffDecoder::getAVcodecVersion(char *buf,unsigned int len)
 {
  char *vers;
  libavcodec.getVersion(&vers);
@@ -466,7 +222,7 @@ STDMETHODIMP TffDecoder::get_avcodec_version(char *buf,unsigned int len)
  strcpy(buf,vers);
  return S_OK;
 }
-STDMETHODIMP TffDecoder::get_AVIdimensions(unsigned int *x,unsigned int *y)
+STDMETHODIMP TffDecoder::getAVIdimensions(unsigned int *x,unsigned int *y)
 {
  *x=*y=0;
  if (!x || !y || AVIdx==0 || AVIdy==0) return S_FALSE;
@@ -682,13 +438,13 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
  if (formatType == FORMAT_VideoInfo)
   {
    VIDEOINFOHEADER * vih = (VIDEOINFOHEADER *) mtIn->Format();
-   AVIfps=10000000.0/vih->AvgTimePerFrame;
+   AVIfps=(vih->AvgTimePerFrame)?10000000.0/vih->AvgTimePerFrame:0;
    hdr = &vih->bmiHeader;
   }
  else if (formatType == FORMAT_VideoInfo2)
   {
    VIDEOINFOHEADER2 * vih2 = (VIDEOINFOHEADER2 *) mtIn->Format();
-   AVIfps=10000000.0/vih2->AvgTimePerFrame;
+   AVIfps=(vih2->AvgTimePerFrame)?10000000.0/vih2->AvgTimePerFrame:0;
    hdr = &vih2->bmiHeader;
   }
  #ifdef  FF__MPEG
@@ -696,11 +452,6 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
   {
    MPEG1VIDEOINFO *mpeg1info=(MPEG1VIDEOINFO*)mtIn->Format();
    hdr = &mpeg1info->hdr.bmiHeader;
-   AVIdx = hdr->biWidth;
-   AVIdy = hdr->biHeight;
-   codecName="mpegvideo";strcpy(AVIfourcc,"mpeg1");
-   mpegBuf=new TmpegBuffer(10000000);
-   return S_OK;
   } 
  #endif 
  else
@@ -708,10 +459,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    return VFW_E_TYPE_NOT_ACCEPTED;
   }
 
- if (hdr->biHeight < 0)
-  {
-   DEBUGS("colorspace: inverted input format not supported");
-  }
+ if (hdr->biHeight<0) DEBUGS("colorspace: inverted input format not supported");
 
  AVIdx=hdr->biWidth;
  AVIdy=hdr->biHeight;
@@ -725,6 +473,13 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    else
     resizeCtx->allocate(AVIdx,AVIdy);
   };  
+ #ifdef FF__MPEG
+ if (formatType==FORMAT_MPEGVideo)
+  {
+   codecName="mpegvideo";strcpy(AVIfourcc,"mpeg1");
+   return S_OK;
+  }; 
+ #endif 
  
  codecName="";AVIfourcc[0]='\0';
  switch(hdr->biCompression)
@@ -793,7 +548,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
      return S_OK;
     } 
    break;
-  /*
+  #ifdef FF__WMV1 
   case FOURCC_WMV1:
   case FOURCC_wmv1:
    if (cfg.wmv1)
@@ -803,9 +558,8 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
      return S_OK;
     } 
    break;
-  */
+  #endif
   }
-
  return VFW_E_TYPE_NOT_ACCEPTED;
 }
 
@@ -1127,7 +881,6 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
  m_frame.length   =pIn ->GetActualDataLength();//GetSize();
 
  #ifdef FF__MPEG
- mpegBuf->push(m_frame.bitstream,m_frame.length);
  firstFrame=false;
  static int count=0,mpeglen=0;
  char pomS[256];sprintf(pomS,"%i : m_frame.length:%i, %i\n",count++,m_frame.length,mpeglen+=m_frame.length);
@@ -1136,7 +889,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
  
  if (m_frame.length<10) {m_frame.bitstream=NULL;m_frame.length=0;}; 
 
- AVPicture avpict;
+ AVPicture avpict;memset(&avpict,0,sizeof(avpict));
  int got_picture=0;
  if (firstFrame)
   {
@@ -1152,6 +905,10 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   };
  if (m_frame.length==0 && ret<0) return S_OK;
  if (ret<0 || !got_picture) 
+#ifdef FF__MPEG
+  if (!avpict.data[0]) return S_FALSE;
+  else
+#endif 
   {
    memset(avpict.data[0],0,avpict.linesize[0]*AVIdy);
    memset(avpict.data[1],128,avpict.linesize[1]*AVIdy/2);

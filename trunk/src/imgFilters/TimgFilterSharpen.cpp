@@ -17,6 +17,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#pragma hdrstop
 #include "TimgFilterSharpen.h"
 #include "TpresetSettings.h"
 #include "Tconfig.h"

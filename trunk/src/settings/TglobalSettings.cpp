@@ -1,4 +1,5 @@
 #include <windows.h>
+#pragma hdrstop
 #include "TglobalSettings.h"
 #include "reg.h"
 
@@ -43,7 +44,7 @@ void TglobalSettings::save(void)
    REG_SET_N("autoPreset",autoPreset,0);
    REG_SET_N("autoPresetFileFirst",autoPresetFileFirst,0);
    REG_SET_N("trayIcon",trayIcon,0);
-   REG_SET_S("activePreset",activePreset);
+   REG_SET_S("activePreset",activePreset,"");
    RegCloseKey(hKey);
   }; 
 }

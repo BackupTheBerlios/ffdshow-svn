@@ -17,14 +17,15 @@
  */
 
 #include <windows.h>
-#include "Cinfo.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
-#include "IffDecoder.h"
 #include <stdio.h>
+#pragma hdrstop
+#include "Cinfo.h"
+#include "resource.h"
+#include "IffDecoder.h"
 
-void TinfoPage::createConfig(void)
+void TinfoPage::init(void)
 {
  cfg2dlg();
 }
@@ -33,22 +34,22 @@ void TinfoPage::cfg2dlg(void)
 {
  char pomS[1024];
  char AVIname[1024];
- deci->get_AVIname(AVIname,1023);
+ deci->getAVIname(AVIname,1023);
  sprintf(pomS,"Now playing: %s",AVIname);
  SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_PLAYING,WM_SETTEXT,0,LPARAM(pomS));
  char AVIfourcc[20];
- deci->get_AVIfourcc(AVIfourcc,19); 
+ deci->getAVIfourcc(AVIfourcc,19); 
  sprintf(pomS,"Codec: %s",AVIfourcc);
  SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_CODEC,WM_SETTEXT,0,LPARAM(pomS));
  unsigned int x,y;
- if (deci->get_AVIdimensions(&x,&y)!=S_OK)
+ if (deci->getAVIdimensions(&x,&y)!=S_OK)
   SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_DIMENSIONS,WM_SETTEXT,0,LPARAM("Dimensions:"));
  else
   {
    sprintf(pomS,"Dimensions: %i x %i",x,y);
    SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_DIMENSIONS,WM_SETTEXT,0,LPARAM(pomS));
   } 
- if (deci->get_AVIfps(&x)!=S_OK)
+ if (deci->getAVIfps(&x)!=S_OK)
   SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_FPS,WM_SETTEXT,0,LPARAM("FPS:"));
  else
   {

@@ -17,8 +17,9 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include "TimgFilterNoise.h" 
+#pragma hdrstop
 #include <stdlib.h>
+#include "TimgFilterNoise.h" 
 #include "xvid\utils\mem_align.h"
 #include "TpresetSettings.h"
 #include <time.h>

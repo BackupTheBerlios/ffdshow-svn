@@ -17,14 +17,15 @@
  */
 
 #include <windows.h>
-#include "Cresize.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
-#include "IffDecoder.h"
 #include <stdio.h>
+#pragma hdrstop
+#include "Cresize.h"
+#include "resource.h"
+#include "IffDecoder.h"
 
-void TresizePage::createConfig(void)
+void TresizePage::init(void)
 {
  SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("FAST_BILINEAR"));
  SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("BILINEAR"));

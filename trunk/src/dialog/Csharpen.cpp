@@ -17,15 +17,16 @@
  */
 
 #include <windows.h>
-#include "IffDecoder.h"
-#include "Csharpen.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
 #include <stdio.h>
+#pragma hdrstop
+#include "IffDecoder.h"
+#include "Csharpen.h"
+#include "resource.h"
 #include "TffdshowPage.h"
 
-void TsharpenPage::createConfig(void)
+void TsharpenPage::init(void)
 {
  SendDlgItemMessage(m_hwnd,IDC_TBR_XSHARPENSTRENGTH,TBM_SETRANGE,TRUE,MAKELPARAM(1,127));
  SendDlgItemMessage(m_hwnd,IDC_TBR_XSHARPENSTRENGTH,TBM_SETLINESIZE,0,1);

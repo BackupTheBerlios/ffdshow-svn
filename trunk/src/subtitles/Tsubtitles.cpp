@@ -18,6 +18,10 @@
  */
 
 #include <windows.h>
+#include <commctrl.h>
+#include <string.h>
+#include <stdio.h>
+#pragma hdrstop
 #include "Tsubtitles.h"
 
 Tsubtitles::Tsubtitles(void)

@@ -17,15 +17,16 @@
  */
 
 #include <windows.h>
-#include "IffDecoder.h"
-#include "Csubtitles.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
 #include <stdio.h>
+#pragma hdrstop
+#include "IffDecoder.h"
+#include "Csubtitles.h"
+#include "resource.h"
 #include "TffdshowPage.h"
 
-void TsubtitlesPage::createConfig(void)
+void TsubtitlesPage::init(void)
 {
  SendDlgItemMessage(m_hwnd,IDC_CBX_SUB_FLNM,CB_LIMITTEXT,1023,0);
  

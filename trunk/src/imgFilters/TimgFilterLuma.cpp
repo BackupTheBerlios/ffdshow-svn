@@ -17,9 +17,10 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#pragma hdrstop
+#include <math.h>
 #include "TimgFilterLuma.h"
 #include "TpresetSettings.h"
-#include <math.h>
 
 __declspec(align(8)) static const __int64 m64 =0x0040004000400040;
 const int TpresetSettings::lumGainDef=128,TpresetSettings::lumOffsetDef=0,TpresetSettings::gammaCorrectionDef=100;

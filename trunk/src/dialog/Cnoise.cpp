@@ -17,15 +17,16 @@
  */
 
 #include <windows.h>
-#include "IffDecoder.h"
-#include "Cnoise.h"
-#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
 #include <stdio.h>
+#pragma hdrstop
+#include "IffDecoder.h"
+#include "Cnoise.h"
+#include "resource.h"
 #include "TffdshowPage.h"
 
-void TnoisePage::createConfig(void)
+void TnoisePage::init(void)
 {
  SendDlgItemMessage(m_hwnd,IDC_TBR_NOISESTRENGTH,TBM_SETRANGE,TRUE,MAKELPARAM(0,255));
  SendDlgItemMessage(m_hwnd,IDC_TBR_NOISESTRENGTH,TBM_SETLINESIZE,0,1);

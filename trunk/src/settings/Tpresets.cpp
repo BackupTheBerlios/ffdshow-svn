@@ -1,6 +1,8 @@
-#include "Tpresets.h"
-#include <string.h>
 #include <windows.h>
+#include <stdio.h>
+#include <string.h>
+#pragma hdrstop
+#include "Tpresets.h"
 #include "reg.h"
 
 void Tpresets::init(void)

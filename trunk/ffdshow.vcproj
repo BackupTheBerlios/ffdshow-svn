@@ -29,7 +29,7 @@
 				RuntimeLibrary="1"
 				BufferSecurityCheck="TRUE"
 				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough=""
 				PrecompiledHeaderFile=""
 				AssemblerListingLocation=".\Debug/"
@@ -278,6 +278,12 @@
 				RelativePath="src\ffdebug.h">
 			</File>
 			<File
+				RelativePath="src\ffdshow_dshowreg.h">
+			</File>
+			<File
+				RelativePath="src\ffdshow_params.h">
+			</File>
+			<File
 				RelativePath=".\src\xvid\utils\mem_align.h">
 			</File>
 			<File
@@ -287,6 +293,18 @@
 		<Filter
 			Name="Resource Files"
 			Filter="ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			<File
+				RelativePath="src\arrows.bmp">
+			</File>
+			<File
+				RelativePath="src\arrows_mask_d.bmp">
+			</File>
+			<File
+				RelativePath="src\arrows_mask_u.bmp">
+			</File>
+			<File
+				RelativePath="src\arrows_mask_ud.bmp">
+			</File>
 			<File
 				RelativePath="src\checked.bmp">
 			</File>
@@ -348,6 +366,33 @@
 			</File>
 			<File
 				RelativePath=".\src\xvid\utils\emms.h">
+			</File>
+			<File
+				RelativePath="src\xvid\dct\idct.c">
+			</File>
+			<File
+				RelativePath="src\xvid\dct\idct.h">
+			</File>
+			<File
+				RelativePath="src\xvid\dct\x86_asm\idct_mmx.asm">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Assembling $(InputPath)"
+						CommandLine="nasm -f win32 -DPREFIX -o $(IntDir)\$(InputName).obj $(InputPath)
+"
+						Outputs="$(IntDir)\$(InputName).obj"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Assembling $(InputPath)"
+						CommandLine="nasm -f win32 -DPREFIX -o $(IntDir)\$(InputName).obj $(InputPath)
+"
+						Outputs="$(IntDir)\$(InputName).obj"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\src\xvid\image\image.c">
