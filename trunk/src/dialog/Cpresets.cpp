@@ -56,6 +56,7 @@ void TpresetsPage::lvSelectPreset(const char *presetName)
    {
     ListView_SetItemState(hlv,i,LVIS_SELECTED,LVIS_SELECTED);
     deci->setPreset(localPresets[i]);
+    parent->presetChanged();
     return;
    }
 }
@@ -119,6 +120,18 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
            }
           return TRUE;
          };
+        case LVN_ITEMCHANGED:
+         {
+          NMLISTVIEW *nmlv=LPNMLISTVIEW(lParam);
+          if (nmlv->iItem==-1) return TRUE;
+          DEBUGS1("activate",nmlv->iItem);
+          char presetName[1024];
+          ListView_GetItemText(hlv,nmlv->iItem,0,presetName,1023);
+          deci->setPreset(localPresets.getPreset(presetName));
+          parent->presetChanged();
+          return TRUE;
+         }
+        case NM_DBLCLK:
         case NM_CLICK:
          {
           NMITEMACTIVATE *nmia=LPNMITEMACTIVATE(lParam);
@@ -127,15 +140,8 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             //ListView_SetItemState(hlv,0,LVIS_SELECTED,LVIS_SELECTED);
             char activePresetName[260];
             deci->getActivePresetName(activePresetName,260);
-            DEBUGS1(activePresetName,nmia->iItem);
+            //DEBUGS1(activePresetName,nmia->iItem);
             lvSelectPreset(activePresetName);
-           }
-          else
-           {
-            char presetName[1024];
-            ListView_GetItemText(hlv,nmia->iItem,0,presetName,1023);
-            deci->setPreset(localPresets.getPreset(presetName));
-            parent->presetChanged();
            }
           return TRUE;
          }

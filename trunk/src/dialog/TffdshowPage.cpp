@@ -303,7 +303,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             RECT rr;
             TreeView_GetItemRect(htv,HTREEITEM(tvcd->nmcd.dwItemSpec),&rr,true);
             rr.left-=24;
-            DEBUGS2("tv rect",rr.left,rr.top);
+            //DEBUGS2("tv rect",rr.left,rr.top);
             TconfPage *page=(TconfPage*)tvcd->nmcd.lItemlParam;
             ImageList_Draw(hil,page->getInter()?ilChecked:ilClear,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+8+rr.left,tvcd->nmcd.rc.top+(rcDy-16)/2,ILD_TRANSPARENT);
             if (page->getOrder()!=-1 && (tvcd->nmcd.uItemState&CDIS_SELECTED)) 
@@ -332,7 +332,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           RECT r;
           TreeView_GetItemRect(htv,hti,&r,FALSE);
           ps.x-=rr.left-24;
-          DEBUGS2("tv rect",r.left+(rr.left-24),r.top);
+          //DEBUGS2("tv rect",r.left+(rr.left-24),r.top);
           int iconTop=((r.bottom-r.top)-16)/2;
           ps.y-=r.top;
           if (ps.x>=8 && ps.x<=16+8 && ps.y>=iconTop+2 && ps.y<=iconTop+13) 
