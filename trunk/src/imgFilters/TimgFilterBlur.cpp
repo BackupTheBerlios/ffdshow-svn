@@ -17,6 +17,7 @@
  */
 
 #pragma hdrstop
+#include <windows.h>
 #include <stdlib.h>
 #include <math.h>
 #include "TimgFilterBlur.h"
@@ -29,10 +30,11 @@ TimgFilterBlur::TimgFilterBlur(void)
  oldStrength=-1;
  tempPict=NULL;
 }
-void TimgFilterBlur::init(int Idx,int Istride,int Idy)
+TffRect::Trect* TimgFilterBlur::init(TffRect *rect,int full)
 {
- TimgFilter::init(Idx,Istride,Idy);
- tempPict=(unsigned char*)xvid_malloc(strideY*dyY,MCACHE_LINE);
+ TffRect::Trect *r=TimgFilter::init(rect,full);
+ if (!tempPict) tempPict=(unsigned char*)xvid_malloc(strideY*dyY,MCACHE_LINE);
+ return r;
 }
 void TimgFilterBlur::done(void)
 {
@@ -42,12 +44,11 @@ void TimgFilterBlur::done(void)
    tempPict=NULL;
   };
 }
-void TimgFilterBlur::process(TtempPictures *pict,const TpresetSettings *cfg)
+void TimgFilterBlur::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (!cfg->blurStrength) return;
- const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
-
- DEBUGS1("src",int(srcY));
+ TffRect::Trect *r=init(&rect,0);
+ const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
 
  if (oldStrength!=cfg->blurStrength)
   {

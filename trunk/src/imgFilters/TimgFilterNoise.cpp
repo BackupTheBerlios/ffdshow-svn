@@ -35,17 +35,19 @@ TimgFilterNoise::TimgFilterNoise(void)
 {
  noiseMaskY=noiseMaskU=noiseMaskV=NULL;
 }
-void TimgFilterNoise::init(int Idx,int Istride,int Idy)
+TffRect::Trect* TimgFilterNoise::init(TffRect *rect,int full)
 {
- TimgFilter::init(Idx,Istride,Idy);
- noiseCountY=noiseCountU=noiseCountV=-1;
- noiseAvihStrength=0;
- noiseMaskY=(short*)xvid_calloc(dxY *dyY *2,2,MCACHE_LINE);
- noiseMaskU=(short*)xvid_calloc(dxUV*dyUV*2,2,MCACHE_LINE);
- noiseMaskV=(short*)xvid_calloc(dxUV*dyUV*2,2,MCACHE_LINE);
- time_t t;  
- time(&t); 
- noisenext=t;
+ TffRect::Trect *r=TimgFilter::init(rect,full);
+ if (!noiseMaskY)
+  {
+   noiseCountY=noiseCountU=noiseCountV=-1;
+   noiseAvihStrength=0;
+   noiseMaskY=(short*)xvid_calloc(dxY *dyY *2,2,MCACHE_LINE);
+   noiseMaskU=(short*)xvid_calloc(dxUV*dyUV*2,2,MCACHE_LINE);
+   noiseMaskV=(short*)xvid_calloc(dxUV*dyUV*2,2,MCACHE_LINE);
+   noisenext=time(NULL);
+  }; 
+ return r;
 }
 void TimgFilterNoise::done(void)
 {
@@ -140,11 +142,13 @@ void TimgFilterNoise::noiseAvihUV(const unsigned char *srcU,unsigned char *dstU,
  #include "noise_avih_template.h"
 }
 
-void TimgFilterNoise::process(TtempPictures *pict,const TpresetSettings *cfg)
+void TimgFilterNoise::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
 {
+ if (!cfg->noiseStrength && !cfg->noiseStrengthChroma) return;
+ TffRect::Trect *r=init(&rect,0);
  if (cfg->noiseStrength)
   {  
-   const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
+   const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
    if (cfg->noiseMethod==0) 
     noiseY(srcY,dstY,cfg);
    else 
@@ -153,8 +157,8 @@ void TimgFilterNoise::process(TtempPictures *pict,const TpresetSettings *cfg)
   };
  if (cfg->noiseStrengthChroma)
   {
-   const unsigned char *srcU=pict->getCurU();unsigned char *dstU=pict->getNextU();
-   const unsigned char *srcV=pict->getCurV();unsigned char *dstV=pict->getNextV();
+   const unsigned char *srcU=pict->getCurU()+r->diffUV;unsigned char *dstU=pict->getNextU()+r->diffUV;
+   const unsigned char *srcV=pict->getCurV()+r->diffUV;unsigned char *dstV=pict->getNextV()+r->diffUV;
    if (cfg->noiseMethod==0)                    
     noiseUV(srcU,dstU,srcV,dstV,cfg);
    else 

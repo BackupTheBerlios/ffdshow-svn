@@ -29,7 +29,7 @@ public:
  virtual void done(void);
  virtual int  getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen, AVPicture *avpict,int &got_picture);
  static  bool getVersion(char **vers);
- virtual TmotionVectors getMV(void);
+ virtual TmotionVectors getMV(void) const;
 };
 
 #endif

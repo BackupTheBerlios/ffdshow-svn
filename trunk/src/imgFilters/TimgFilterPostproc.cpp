@@ -38,8 +38,10 @@ TimgFilterPostproc::~TimgFilterPostproc()
  done();
  delete cpu;
 }
-void TimgFilterPostproc::process(TtempPictures *pict,const TpresetSettings *cfg,bool afterResize,TmovieSource *movie,const Tpostproc *postproc)
+void TimgFilterPostproc::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
 {
+ TmovieSource *movie;deci->getMovieSource(&movie);
+ Tpostproc *postproc;deci->getPostproc(&postproc);
  if (!postproc->ok || dxY<16 || dyY<16) return;
  int currentq=deci->getParam2(IDFF_currentq);
  if (cpus>0 && cfg->autoq && cfg->ppqual)
@@ -60,10 +62,10 @@ void TimgFilterPostproc::process(TtempPictures *pict,const TpresetSettings *cfg,
   {
    const unsigned char *tempPict1[3]={pict->getCurY() ,pict->getCurU() ,pict->getCurV() };
    unsigned char       *tempPict2[3]={pict->getNextY(),pict->getNextU(),pict->getNextV()};
-   if (cfg->deblockStrength!=TpresetSettings::deblockStrengthDef || afterResize)
+   if (cfg->deblockStrength!=TpresetSettings::deblockStrengthDef/* || afterResize*/)
     for (int i=0;i<movie->quantDx*movie->quantDy;i++)
      {
-      int q=(((afterResize)?16:movie->quant[i])*cfg->deblockStrength)/256;
+      int q=(/*((afterResize)?16:*/movie->quant[i]/*)*/*cfg->deblockStrength)/256;
       if (q<1) q=1;else if (q>31) q=31;
       movie->quant[i]=q;
      }

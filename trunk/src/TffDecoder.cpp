@@ -432,6 +432,18 @@ STDMETHODIMP TffDecoder::showCfgDlg(HWND owner)
  ispp->Release();
  return S_OK;
 }
+STDMETHODIMP TffDecoder::getMovieSource(TmovieSource* *moviePtr)
+{
+ if (!moviePtr) return S_FALSE;
+ *moviePtr=movie;
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::getPostproc(Tpostproc* *postprocPtr)
+{
+ if (!postprocPtr) return S_FALSE;
+ *postprocPtr=&postproc;
+ return S_OK;
+}
 
 // constructor
 TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME("CffDecoder"),punk,/*CLSID_XVID*/CLSID_FFDSHOW)
@@ -944,9 +956,9 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
       }
      DEBUGS("imgFilters->init before");
      if (presetSettings.resizeFirst)
-      imgFilters->init(resizeCtx->imgDx,resizeCtx->strideY,resizeCtx->imgDy,resizeCtx->FFdy,resizeCtx->diffX,resizeCtx->diffY,true);
+      imgFilters->init(resizeCtx->imgDx,resizeCtx->strideY,resizeCtx->imgDy,resizeCtx->FFdy,resizeCtx->diffX,resizeCtx->diffY);
      else
-      imgFilters->init(cropDx,avpict.linesize[0],cropDy,cropDy,0,0,false);
+      imgFilters->init(cropDx,avpict.linesize[0],cropDy,cropDy,0,0);
      DEBUGS("imgFilters->init after");
      DEBUGS("initResize before");
      DEBUGS2("cropDx, cropDy",cropDx,cropDy);
@@ -958,7 +970,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
      DEBUGS("resizeCtx->clear after");
     }
    else
-    imgFilters->init(AVIdx,avpict.linesize[0],AVIdy,AVIdy,0,0,false);
+    imgFilters->init(AVIdx,avpict.linesize[0],AVIdy,AVIdy,0,0);
   };
  IMAGE destPict;
  if ((resizeCtx->isResize || presetSettings.resizeAspect==2 || presetSettings.isCropNzoom) && postproc.ok)
@@ -969,14 +981,14 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
      resizeCtx->resize(avpict.data[0]+cropDiffY,avpict.data[1]+cropDiffUV,avpict.data[2]+cropDiffUV,
                        avpict.linesize[0],avpict.linesize[1],avpict.linesize[2],
                        AVIdy);
-     imgFilters->process(&globalSettings,&presetSettings,movie,&postproc,
+     imgFilters->process(&globalSettings,&presetSettings,
                          resizeCtx->imgResizeY,resizeCtx->imgResizeU,resizeCtx->imgResizeV,
                          &destPict.y,&destPict.u,&destPict.v);
     }
    else
     {
      unsigned char *src[3];
-     imgFilters->process(&globalSettings,&presetSettings,movie,&postproc,
+     imgFilters->process(&globalSettings,&presetSettings,
                          avpict.data[0]+cropDiffY,avpict.data[1]+cropDiffUV,avpict.data[2]+cropDiffUV,
                          &src[0],&src[1],&src[2]);
      resizeCtx->resize(src[0],src[1],src[2],
@@ -1002,7 +1014,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
      char pomS[256];sprintf(pomS,"there would be an error: stride:%i, AVIdx:%i\n",m_frame.stride,AVIdx);DEBUGS(pomS);
      return S_FALSE;
     };
-   imgFilters->process(&globalSettings,&presetSettings,movie,&postproc,avpict.data[0],avpict.data[1],avpict.data[2],&destPict.y,&destPict.u,&destPict.v);
+   imgFilters->process(&globalSettings,&presetSettings,avpict.data[0],avpict.data[1],avpict.data[2],&destPict.y,&destPict.u,&destPict.v);
    image_output(&destPict,
                 AVIdx,AVIdy,avpict.linesize[0],
                 (unsigned char*)m_frame.image,

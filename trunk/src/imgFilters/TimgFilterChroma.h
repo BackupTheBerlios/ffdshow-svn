@@ -9,7 +9,7 @@ private:
  int hueSin[360+1],hueCos[360+1];
 public:
  TimgFilterChroma(void);
- virtual void process(TtempPictures *pict,const TpresetSettings *cfg);
+ virtual void process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg);
 };
 
 #endif

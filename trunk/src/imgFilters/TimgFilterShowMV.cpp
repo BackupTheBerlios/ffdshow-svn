@@ -18,20 +18,23 @@
  */
 
 #pragma hdrstop
+#include <windows.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include "TimgFilterShowMV.h"
 #include "TpresetSettings.h"
 #include "TmovieSource.h"
+#include "IffDecoder.h"
 
 void TimgFilterShowMV::init(int Idx,int Istride,int Idy)
 {
  TimgFilter::init(Idx,Istride,Idy);
- firsttime=true;
 }
-void TimgFilterShowMV::process(TtempPictures *pict,const TpresetSettings *cfg,const TmovieSource *movie)
+void TimgFilterShowMV::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
 {
+ TmovieSource *movie;
+ deci->getMovieSource(&movie);
  TmovieSource::TmotionVectors mv=movie->getMV();
  if (!mv.vectors) return;
  const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();

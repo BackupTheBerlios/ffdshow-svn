@@ -425,7 +425,7 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
   }
 }
 
-void TimgFilterSharpen::process(TtempPictures *pict,const TpresetSettings *cfg)
+void TimgFilterSharpen::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (cfg->sharpenMethod==0 && config.cpu_flags&XVID_CPU_MMXEXT && cfg->xsharp_strength!=cfg->xsharp_strengthDef)
   {

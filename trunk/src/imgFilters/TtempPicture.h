@@ -60,16 +60,13 @@ struct TtempPictures
       if (temp2) memset(temp2,c,size);
      } 
   } *y,*u,*v;
- int diffY,diffUV;
 public:
- TtempPictures(int stride,int dy,int IdiffX,int IdiffY)
+ TtempPictures(int stride,int dy)
   {
    dy+=16;
    y=new TtempPicture( stride   *dy+16,0);
    u=new TtempPicture((stride/2)*dy/2 ,128);
    v=new TtempPicture((stride/2)*dy/2 ,128);
-   diffY = IdiffY   * stride   + IdiffX   ;
-   diffUV=(IdiffY/2)*(stride/2)+(IdiffX/2);
   }
  ~TtempPictures()
   {
@@ -87,27 +84,27 @@ public:
   } 
  const unsigned char *getCurY(void)
   {
-   return y->getTempCur()+diffY;
+   return y->getTempCur();
   }
  const unsigned char *getCurU(void)
   {
-   return u->getTempCur()+diffUV;
+   return u->getTempCur();
   }
  const unsigned char *getCurV(void)
   {
-   return v->getTempCur()+diffUV;
+   return v->getTempCur();
   }
  unsigned char *getNextY(void)
   {
-   return y->getTempNext()+diffY;
+   return y->getTempNext();
   }
  unsigned char *getNextU(void)
   {
-   return u->getTempNext()+diffUV;
+   return u->getTempNext();
   }
  unsigned char *getNextV(void)
   {
-   return v->getTempNext()+diffUV;
+   return v->getTempNext();
   }
 };
 

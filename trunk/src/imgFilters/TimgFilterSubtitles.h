@@ -11,7 +11,7 @@ private:
 public:
  subtitle *sub;
  TimgFilterSubtitles(void);
- virtual void process(TtempPictures *pict,const TpresetSettings *cfg);
+ virtual void process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg);
 };
 
 #endif

@@ -13,8 +13,7 @@ private:
 public:
  TimgFilterPostproc(void);
  virtual ~TimgFilterPostproc();
- void process(TtempPictures*,const TpresetSettings*) {};
- void process(TtempPictures *pict,const TpresetSettings *cfg,bool afterResize,TmovieSource *movie,const Tpostproc *postproc);
+ virtual void process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg);
 };
 
 #endif

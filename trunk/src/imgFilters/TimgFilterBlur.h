@@ -10,11 +10,11 @@ private:
  int oldStrength;
  unsigned char *tempPict;
 protected:
+ virtual TffRect::Trect* init(TffRect *rect,int full);
  virtual void done(void);
 public:
  TimgFilterBlur(void);
- virtual void init(int Idx,int Istride,int Idy);
- virtual void process(TtempPictures *pict,const TpresetSettings *cfg);
+ virtual void process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg);
 };
 
 #endif

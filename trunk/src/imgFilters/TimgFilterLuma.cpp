@@ -30,10 +30,11 @@ TimgFilterLuma::TimgFilterLuma(void)
  oldGamma=-1;
 }
 
-void TimgFilterLuma::process(TtempPictures *pict,const TpresetSettings *cfg)
+void TimgFilterLuma::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (cfg->lumGain==TpresetSettings::lumGainDef && cfg->lumOffset==TpresetSettings::lumOffsetDef && cfg->gammaCorrection==TpresetSettings::gammaCorrectionDef) return;
- const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
+ TffRect::Trect *r=init(&rect,0);
+ const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
 
  const unsigned char *gammaSrc;unsigned char *gammaDst;
  if (cfg->lumGain==cfg->lumGainDef && cfg->lumOffset==cfg->lumOffsetDef)

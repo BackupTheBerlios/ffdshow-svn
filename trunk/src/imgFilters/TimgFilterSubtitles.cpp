@@ -26,7 +26,7 @@ TimgFilterSubtitles::TimgFilterSubtitles(void)
  sub=NULL;
 }
 
-void TimgFilterSubtitles::process(TtempPictures *pict,const TpresetSettings *cfg)
+void TimgFilterSubtitles::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (deci->getParam2(IDFF_fontChanged))
   {

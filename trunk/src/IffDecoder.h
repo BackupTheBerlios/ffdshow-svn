@@ -132,6 +132,8 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 
 struct TpresetSettings;
 class Tpresets;
+class TmovieSource;
+class Tpostproc;
 DECLARE_INTERFACE_(IffDecoder, IUnknown)
 {
  STDMETHOD (getParam)(unsigned int paramID, int* value) PURE;
@@ -175,6 +177,8 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (isDefaultPreset)(const char *presetName) PURE;
  STDMETHOD (showCfgDlg)(HWND owner) PURE;
  STDMETHOD (getXvidVersion)(char *buf,unsigned int len) PURE;
+ STDMETHOD (getMovieSource)(TmovieSource* *moviePtr) PURE;
+ STDMETHOD (getPostproc)(Tpostproc* *postprocPtr) PURE;
 };
 
 #ifdef __cplusplus

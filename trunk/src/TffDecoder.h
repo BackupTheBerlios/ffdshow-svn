@@ -87,6 +87,8 @@ public:
  STDMETHODIMP setDefaultPresetName(const char *presetName);
  STDMETHODIMP isDefaultPreset(const char *presetName);
  STDMETHODIMP showCfgDlg(HWND owner);
+ STDMETHODIMP getMovieSource(TmovieSource* *moviePtr);
+ STDMETHODIMP getPostproc(Tpostproc* *postprocPtr);
 
 private:
  bool firstFrame,firstTransform;

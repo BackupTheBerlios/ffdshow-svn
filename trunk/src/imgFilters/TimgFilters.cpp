@@ -23,12 +23,11 @@
 
 using namespace std;
 
-void TimgFilters::init(int IdxY,int IstrideY,int Idy,int dyFull,int IdiffX,int IdiffY,bool IafterResize)
+void TimgFilters::init(int IdxY,int IstrideY,int Idy,int dyFull,int IdiffX,int IdiffY)
 {
  dxY =IdxY  ;strideY =IstrideY  ;
  dxUV=IdxY/2;strideUV=IstrideY/2;
  dy=Idy;
- afterResize=IafterResize;
  done();
  tempPict=new TtempPictures(strideY,dyFull,IdiffX,IdiffY);
  #define ADD_FILTER(f) \
@@ -60,12 +59,12 @@ void TimgFilters::setSubtitle(subtitle *Isub)
 {
  subtitles.sub=Isub;
 }
-void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *cfg,TmovieSource *movie,const Tpostproc *pp,unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV)
+void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *cfg,unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV)
 {
  tempPict->reset(srcY,srcU,srcV);
  for (int i=cfg->min_order;i<=cfg->max_order;i++)
   if (i==cfg->orderPostproc && cfg->isPostproc)
-   postproc.process(tempPict,cfg,afterResize,movie,pp);
+   postproc.process(tempPict,cfg);
   else if (i==cfg->orderPictProp && cfg->isPictProp)
    {
     luma.process(tempPict,cfg);
@@ -84,8 +83,8 @@ void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *c
    subtitles.process(tempPict,cfg);
   else if (i==cfg->orderOffset && cfg->isOffset)
    offset.process(tempPict,cfg);
- if (global->showMV && !afterResize)
-  showMV.process(tempPict,cfg,movie);
+ if (global->showMV)
+  showMV.process(tempPict,cfg);
  *dstY=(unsigned char*)tempPict->getCurY();
  *dstU=(unsigned char*)tempPict->getCurU();
  *dstV=(unsigned char*)tempPict->getCurV();

@@ -17,6 +17,7 @@
  */
 
 #pragma hdrstop
+#include <windows.h>
 #include <stdlib.h>
 #include <math.h>
 #include "TimgFilterTimesmooth.h"
@@ -54,7 +55,6 @@ static const __int64 scaletab[]={
         SCALE2(120),
     };
 
-
 TimgFilterTimesmooth::TimgFilterTimesmooth(void)
 {
  oldStrength=-1;
@@ -64,7 +64,12 @@ TimgFilterTimesmooth::TimgFilterTimesmooth(void)
 void TimgFilterTimesmooth::init(int Idx,int Istride,int Idy)
 {
  TimgFilter::init(Idx,Istride,Idy);
- accumY=accumU=accumV=NULL;
+ if (!accumY)
+  {
+   accumY=(unsigned char*)xvid_malloc(dxY *dyY *KERNEL,MCACHE_LINE);memset(accumY,  0,dxY *dyY *KERNEL);
+   accumU=(unsigned char*)xvid_malloc(dxUV*dyUV*KERNEL,MCACHE_LINE);memset(accumU,128,dxUV*dyUV*KERNEL);
+   accumV=(unsigned char*)xvid_malloc(dxUV*dyUV*KERNEL,MCACHE_LINE);memset(accumV,128,dxUV*dyUV*KERNEL);
+  }
 }
 void TimgFilterTimesmooth::done(void)
 {
@@ -72,18 +77,12 @@ void TimgFilterTimesmooth::done(void)
  if (accumU) xvid_free(accumU);accumU=NULL;
  if (accumV) xvid_free(accumV);accumV=NULL;
 }
-void TimgFilterTimesmooth::process(TtempPictures *pict,const TpresetSettings *cfg)
+void TimgFilterTimesmooth::process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (!cfg->tempSmooth) return;
  const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
  const unsigned char *srcU=pict->getCurU();unsigned char *dstU=pict->getNextU();
  const unsigned char *srcV=pict->getCurV();unsigned char *dstV=pict->getNextV();
- if (!accumY)
-  {
-   accumY=(unsigned char*)xvid_malloc(dxY *dyY *KERNEL,MCACHE_LINE);memset(accumY,  0,dxY *dyY *KERNEL);
-   accumU=(unsigned char*)xvid_malloc(dxUV*dyUV*KERNEL,MCACHE_LINE);memset(accumU,128,dxUV*dyUV*KERNEL);
-   accumV=(unsigned char*)xvid_malloc(dxUV*dyUV*KERNEL,MCACHE_LINE);memset(accumV,128,dxUV*dyUV*KERNEL);
-  }
  if (cfg->tempSmooth!=oldStrength)
   {
    oldStrength=cfg->tempSmooth;

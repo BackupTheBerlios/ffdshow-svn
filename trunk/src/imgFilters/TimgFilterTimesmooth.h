@@ -12,11 +12,11 @@ private:
  int square_table[255*2+1];
  void smooth(const unsigned char *src,unsigned char *dst,unsigned char *Iaccum,int dx,int stride,int dy);
 protected:
+ virtual TffRect::Trect* init(TffRect *rect,int full);
  virtual void done(void);
 public:
  TimgFilterTimesmooth(void);
- virtual void init(int Idx,int Istride,int Idy);
- virtual void process(TtempPictures *pict,const TpresetSettings *cfg);
+ virtual void process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg);
 };
 
 #endif

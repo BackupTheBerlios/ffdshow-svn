@@ -10,11 +10,11 @@ private:
  void xsharpen(const unsigned char *src,unsigned char *dst,const TpresetSettings *cfg);
  void unsharpen(const unsigned char *src,unsigned char *dst,const TpresetSettings *cfg);
 protected:
+ virtual TffRect::Trect* init(TffRect *rect,int full);
  virtual void done(void);
 public:
  TimgFilterSharpen(void);
- virtual void init(int Idx,int Istride,int Idy);
- virtual void process(TtempPictures *pict,const TpresetSettings *cfg);
+ virtual void process(TtempPictures *pict,TffRect &rect,const TpresetSettings *cfg);
 };
 
 #endif

@@ -16,7 +16,6 @@
 
 struct TglobalSettings;
 struct TpresetSettings;
-class TmovieSource;
 struct subtitle;
 struct TtempPictures;
 struct IffDecoder;
@@ -26,7 +25,6 @@ private:
  int dxY ,strideY;
  int dxUV,strideUV;
  int dy;
- bool afterResize;
  TtempPictures *tempPict;
  IffDecoder *deci;
  std::vector<TimgFilter*> filters;
@@ -43,10 +41,10 @@ private:
 public:
  TimgFilters(IffDecoder *Ideci):deci(Ideci),tempPict(NULL) {};
  ~TimgFilters();
- void init(int IdxY,int IstrideY,int Idy,int dyFull,int IdiffX,int IdiffY,bool IafterResize);
+ void init(int IdxY,int IstrideY,int Idy,int dyFull,int IdiffX,int IdiffY);
  void done(void);
  void setSubtitle(subtitle *Isub);
- void process(const TglobalSettings *global,const TpresetSettings *cfg,TmovieSource *movie,const Tpostproc *pp,
+ void process(const TglobalSettings *global,const TpresetSettings *cfg,
               unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
               unsigned char**dstY,unsigned char**dstU,unsigned char**dstV);
 };
