@@ -32,6 +32,7 @@ extern "C" {
 #define CODEC_ID_WMV1      13
 #define CODEC_ID_H263P     14
 #define CODEC_ID_H263I     15
+#define CODEC_ID_WMV2      16
 
 #define CODEC_ID_XVID_MASK 256
 
@@ -245,10 +246,6 @@ typedef struct AVCodecContext {
     float b_quant_offset;/* qscale offset between ips and b frames, not implemented yet */
     int error_resilience;
     
-#ifndef MBC
-#define MBC 128
-#define MBR 96
-#endif
     int *quant_store; /* field for communicating with external postprocessing */
     unsigned qstride;
 } AVCodecContext;

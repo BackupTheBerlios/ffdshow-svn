@@ -7,7 +7,7 @@ LDFLAGS=
 
 SRCDIR=libavcodec
 
-OBJS= $(SRCDIR)/allcodecs.o $(SRCDIR)/common.o $(SRCDIR)/utils.o $(SRCDIR)/mpegvideo.o $(SRCDIR)/h263.o \
+OBJS= $(SRCDIR)/allcodecs.o $(SRCDIR)/mem.o $(SRCDIR)/common.o $(SRCDIR)/utils.o $(SRCDIR)/mpegvideo.o $(SRCDIR)/h263.o \
       $(SRCDIR)/dsputil.o \
       $(SRCDIR)/msmpeg4.o \
       $(SRCDIR)/mpeg12.o $(SRCDIR)/h263dec.o $(SRCDIR)/rv10.o $(SRCDIR)/jrevdct.o $(SRCDIR)/simple_idct.o \

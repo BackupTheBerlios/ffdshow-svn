@@ -19,92 +19,6 @@
 #include "avcodec.h"
 #include "dsputil.h"
 #include "mpegvideo.h"
-#ifdef HAVE_MALLOC_H
-#include <malloc.h>
-#endif
-
-static void *xvid_malloc(size_t size, uint8_t alignment)
-{
-	uint8_t *mem_ptr;
-  
-	if(!alignment)
-	{
-
-		/* We have not to satisfy any alignment */
-		if((mem_ptr = (uint8_t *) malloc(size + 1)) != NULL)
-		{
-
-			/* Store (mem_ptr - "real allocated memory") in *(mem_ptr-1) */
-			*mem_ptr = 0;
-
-			/* Return the mem_ptr pointer */
-			return (void *) mem_ptr++;
-
-		}
-
-	}
-	else
-	{
-		uint8_t *tmp;
-	
-		/*
-		 * Allocate the required size memory + alignment so we
-		 * can realign the data if necessary
-		 */
-
-		if((tmp = (uint8_t *) malloc(size + alignment)) != NULL)
-		{
-
-			/* Align the tmp pointer */
-			mem_ptr = (uint8_t *)((uint32_t)(tmp + alignment - 1)&(~(uint32_t)(alignment - 1)));
-
-			/*
-			 * Special case where malloc have already satisfied the alignment
-			 * We must add alignment to mem_ptr because we must store
-			 * (mem_ptr - tmp) in *(mem_ptr-1)
-			 * If we do not add alignment to mem_ptr then *(mem_ptr-1) points
-			 * to a forbidden memory space
-			 */
-			if(mem_ptr == tmp) mem_ptr += alignment;
-
-			/*
-			 * (mem_ptr - tmp) is stored in *(mem_ptr-1) so we are able to retrieve
-			 * the real malloc block allocated and free it in xvid_free
-			 */
-			*(mem_ptr - 1) = (uint8_t)(mem_ptr - tmp);
-
-			/* Return the aligned pointer */
-			return (void *) mem_ptr;
-
-		}
-	}
-
-	return NULL;
-
-}
-/* memory alloc */
-void *av_malloc(int size)
-{
-    void *ptr;
-#if defined ( ARCH_X86 ) && defined ( HAVE_MEMALIGN )
-    ptr = memalign(64,size);
-    /* Why 64? 
-       Indeed, we should align it:
-         on 4 for 386
-         on 16 for 486
-	 on 32 for 586, PPro - k6-III
-	 on 64 for K7 (maybe for P3 too).
-       Because L1 and L2 caches are aligned on those values.
-       But I don't want to code such logic here!
-     */
-#else
-    ptr = xvid_malloc(size,64);
-#endif
-    if (!ptr)
-        return NULL;
-    memset(ptr, 0, size);
-    return ptr;
-}
 
 void *av_mallocz(int size)
 {
@@ -114,20 +28,6 @@ void *av_mallocz(int size)
         return NULL;
     memset(ptr, 0, size);
     return ptr;
-}
-
-static void xvid_free(void *mem_ptr)
-{
- /* *(mem_ptr - 1) give us the offset to the real malloc block */
- free((uint8_t*)mem_ptr - *((uint8_t*)mem_ptr - 1));
-}
-
-/* NOTE: ptr = NULL is explicetly allowed */
-void av_free(void *ptr)
-{
-    /* XXX: this test should not be needed on most libcs */
-    if (ptr)
-        xvid_free(ptr);
 }
 
 /* cannot call it directly because of 'void **' casting is not automatic */
