@@ -9,9 +9,9 @@ private:
  unsigned int gammaTab[256];int oldGamma;
 public:
  TimgFilterLuma(void);
- virtual void process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
+ virtual void process(const unsigned char *srcY,const unsigned char *srcU,const unsigned char *srcV,
                       unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                      TpresetSettings *cfg);
+                      const TpresetSettings *cfg);
 };
 
 #endif

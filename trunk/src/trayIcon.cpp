@@ -269,6 +269,7 @@ int TtrayIcon::negate_Param(int id)
  int oldVal=deci->getParam2(id);
  oldVal=1-oldVal;
  deci->putParam(id,oldVal);
+ deci->saveGlobalSettings();
  deci->savePreset(NULL);
  return oldVal;
 }

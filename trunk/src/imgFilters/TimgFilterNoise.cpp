@@ -66,14 +66,14 @@ void TimgFilterNoise::done(void)
    noiseMaskV=NULL;
   } 
 }
-void TimgFilterNoise::noiseY(unsigned char *src,unsigned char *dst,TpresetSettings *cfg)
+void TimgFilterNoise::noiseY(const unsigned char *src,unsigned char *dst,const TpresetSettings *cfg)
 {
  noiseCountY++;
  if (noiseAvihStrenth) noiseCountY=0;
  noise0luma(src,dst,strideY,dxY,dyY,cfg->noiseStrength,cfg->uniformNoise,noiseMaskY,noiseCountY);
  noiseAvihStrenth=0;
 }
-void TimgFilterNoise::noiseUV(unsigned char *srcU,unsigned char *dstU,unsigned char *srcV,unsigned char *dstV,TpresetSettings *cfg)
+void TimgFilterNoise::noiseUV(const unsigned char *srcU,unsigned char *dstU,const unsigned char *srcV,unsigned char *dstV,const TpresetSettings *cfg)
 {
  noiseCountU++;noiseCountV++;
  if (noiseAvihStrenthChroma) noiseCountU=noiseCountV=0;
@@ -82,21 +82,21 @@ void TimgFilterNoise::noiseUV(unsigned char *srcU,unsigned char *dstU,unsigned c
  noiseAvihStrenthChroma=0;
 }
 
-void TimgFilterNoise::noise0luma(unsigned char *src,unsigned char *dst,int stride,int dx,int dy,int noiseStrength,int uniformNoise,short *noiseMask,int noiseCount)
+void TimgFilterNoise::noise0luma(const unsigned char *src,unsigned char *dst,int stride,int dx,int dy,int noiseStrength,int uniformNoise,short *noiseMask,int noiseCount)
 {
  #undef NOISE_CHROMA
  #undef NOISE_AVIH 
  #include "noise_template.h"
 }
 
-void TimgFilterNoise::noise0chroma(unsigned char *src,unsigned char *dst,int stride,int dx,int dy,int noiseStrength,int uniformNoise,short *noiseMask,int noiseCount)
+void TimgFilterNoise::noise0chroma(const unsigned char *src,unsigned char *dst,int stride,int dx,int dy,int noiseStrength,int uniformNoise,short *noiseMask,int noiseCount)
 {
  #define NOISE_CHROMA
  #undef NOISE_AVIH 
  #include "noise_template.h"
 }
 
-void TimgFilterNoise::noiseAvihY(unsigned char *src,unsigned char *dst,TpresetSettings *cfg)
+void TimgFilterNoise::noiseAvihY(const unsigned char *src,unsigned char *dst,const TpresetSettings *cfg)
 {
  if (cfg->noiseStrength!=noiseAvihStrenth)
   {
@@ -112,7 +112,7 @@ void TimgFilterNoise::noiseAvihY(unsigned char *src,unsigned char *dst,TpresetSe
  #include "noise_avih_template.h"
  __asm {emms};
 }
-void TimgFilterNoise::noiseAvihUV(unsigned char *srcU,unsigned char *dstU,unsigned char *srcV,unsigned char *dstV,TpresetSettings *cfg)
+void TimgFilterNoise::noiseAvihUV(const unsigned char *srcU,unsigned char *dstU,const unsigned char *srcV,unsigned char *dstV,const TpresetSettings *cfg)
 {
  if (cfg->noiseStrengthChroma!=noiseAvihStrenthChroma)
   {
@@ -127,7 +127,7 @@ void TimgFilterNoise::noiseAvihUV(unsigned char *srcU,unsigned char *dstU,unsign
   }
  #define NOISE_AVIH 
  #undef NOISE_CHROMA
- unsigned char *src=srcU,*dst=dstU;
+ const unsigned char *src=srcU;unsigned char *dst=dstU;
  int dx=dxUV,stride=strideUV,dy=dyUV;
  short *noiseMaskPtr=noiseMaskU+rand()%(dx*dy); 
  #define lineLoop2u lineLoop2u1
@@ -143,9 +143,9 @@ void TimgFilterNoise::noiseAvihUV(unsigned char *srcU,unsigned char *dstU,unsign
  __asm {emms};
 }
 
-void TimgFilterNoise::process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
+void TimgFilterNoise::process(const unsigned char *srcY,const unsigned char *srcU,const unsigned char *srcV,
                               unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                              TpresetSettings *cfg)
+                              const TpresetSettings *cfg)
 {
  if (srcY && dstY)
   {

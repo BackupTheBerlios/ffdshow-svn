@@ -346,9 +346,6 @@
 				RelativePath=".\src\xvid\utils\mem_align.h">
 			</File>
 			<File
-				RelativePath="src\resrc1.h">
-			</File>
-			<File
 				RelativePath=".\src\trayIcon.h">
 			</File>
 		</Filter>
@@ -664,6 +661,12 @@
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterOffset.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AssemblerOutput="4"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterOffset.h">

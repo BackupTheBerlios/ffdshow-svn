@@ -1,9 +1,9 @@
  if (noiseCount&1) 
   {
    short *noiseMaskPtr=noiseMask;
-   for (unsigned char *srcEnd=src+stride*dy;src<srcEnd;src+=stride,dst+=stride)
+   for (const unsigned char *srcEnd=src+stride*dy;src<srcEnd;src+=stride,dst+=stride)
     {
-     unsigned char *srcLnEnd=src+dx;
+     const unsigned char *srcLnEnd=src+dx;
      __asm
       {
        mov esi,[src]
@@ -35,18 +35,18 @@
  __declspec(align(8)) static __int64 noiseStrength64;
  noiseStrength64=__int64(noiseStrength) +(__int64(noiseStrength)<<16)+(__int64(noiseStrength)<<32)+(__int64(noiseStrength)<<48);
  if (!uniformNoise)
-  for (unsigned char *srcEnd=src+stride*dy;src<srcEnd;src+=stride,dst+=stride)
+  for (const unsigned char *srcEnd=src+stride*dy;src<srcEnd;src+=stride,dst+=stride)
    {
-    unsigned char *srcLnEnd=src+dx;
+    const unsigned char *srcLnEnd=src+dx;
     #undef NOISE_UNIFORM
     #undef  lineLoop2
     #define lineLoop2 lineLoop2u
     #include "noise_template_mmx.h"
    }
  else  
-  for (unsigned char *srcEnd=src+stride*dy;src<srcEnd;src+=stride,dst+=stride)
+  for (const unsigned char *srcEnd=src+stride*dy;src<srcEnd;src+=stride,dst+=stride)
    {
-    unsigned char *srcLnEnd=src+dx;
+    const unsigned char *srcLnEnd=src+dx;
     #define NOISE_UNIFORM
     #undef  lineLoop2
     #define lineLoop2 lineLoop2nu

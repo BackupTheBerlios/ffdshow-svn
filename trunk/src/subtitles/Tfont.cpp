@@ -139,7 +139,7 @@ Tfont::~Tfont()
 {
  done();
 }
-void Tfont::init(TpresetSettings *cfg)
+void Tfont::init(const TpresetSettings *cfg)
 {
  done();
  hf=CreateFont(cfg->fontSize*4,0,0,0,cfg->fontWeight,0,0,0,cfg->fontCharset,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,/*ANTIALIASED_QUALITY*/DEFAULT_QUALITY,DEFAULT_PITCH|FF_DONTCARE,cfg->fontName);

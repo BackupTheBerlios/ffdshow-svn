@@ -30,11 +30,11 @@ TimgFilterLuma::TimgFilterLuma(void)
  oldGamma=-1;
 }
 
-void TimgFilterLuma::process(unsigned char *srcY,unsigned char *,unsigned char *,
+void TimgFilterLuma::process(const unsigned char *srcY,const unsigned char *,const unsigned char *,
                              unsigned char *dstY,unsigned char *,unsigned char *,
-                             TpresetSettings *cfg)
+                             const TpresetSettings *cfg)
 {
- unsigned char *gammaSrc,*gammaDst;
+ const unsigned char *gammaSrc;unsigned char *gammaDst;
  if (cfg->lumGain==cfg->lumGainDef && cfg->lumOffset==cfg->lumOffsetDef)
   {
    gammaSrc=srcY;gammaDst=dstY;
@@ -48,7 +48,8 @@ void TimgFilterLuma::process(unsigned char *srcY,unsigned char *,unsigned char *
    lumGainMask=(lumGain<<48) + (lumGain<<32) + (lumGain<<16) + lumGain;
    lumOffsetMask=(lumOffset<<48) + (lumOffset<<32) + (lumOffset<<16) + lumOffset;
    int LUM_AREA=dxY;
-   for (unsigned char *src=srcY,*srcYend=srcY+strideY*dyY,*dst=dstY;src<srcYend;src+=strideY,dst+=strideY)
+   const unsigned char *src,*srcYend;unsigned char *dst;
+   for (src=srcY,srcYend=srcY+strideY*dyY,dst=dstY;src<srcYend;src+=strideY,dst+=strideY)
     {
      __asm
       {
@@ -101,6 +102,9 @@ void TimgFilterLuma::process(unsigned char *srcY,unsigned char *,unsigned char *
   };
  if (cfg->gammaCorrection!=cfg->gammaCorrectionDef)
   for (int y=0;y<dyY;y++)
-   for (unsigned char *src=gammaSrc+strideY*y,*dst=gammaDst+strideY*y,*dstEnd=dst+dxY;dst<dstEnd;src+=4,dst+=4)
-    *(unsigned int*)dst=(gammaTab[src[3]]<<24)|(gammaTab[src[2]]<<16)|(gammaTab[src[1]]<<8)|gammaTab[src[0]];
+   {
+    const unsigned char *src;unsigned char *dst,*dstEnd;
+    for (src=gammaSrc+strideY*y,dst=gammaDst+strideY*y,dstEnd=dst+dxY;dst<dstEnd;src+=4,dst+=4)
+     *(unsigned int*)dst=(gammaTab[src[3]]<<24)|(gammaTab[src[2]]<<16)|(gammaTab[src[1]]<<8)|gammaTab[src[0]];
+   }  
 };

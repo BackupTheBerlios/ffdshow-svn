@@ -75,7 +75,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP loadDialogSettings(void);
   //STDMETHODIMP getPreset(unsigned int i,TpresetSettings **preset);
   STDMETHODIMP getPresets(Tpresets *presets2);
-  STDMETHODIMP setPresets(Tpresets *presets2);
+  STDMETHODIMP setPresets(const Tpresets *presets2);
   STDMETHODIMP savePresets(void);
   STDMETHODIMP setPresetPtr(TpresetSettings *preset);
   STDMETHODIMP renameActivePreset(const char *newName);

@@ -25,15 +25,12 @@ TimgFilterSubtitles::TimgFilterSubtitles(void)
  sub=NULL;
 }
 
-void TimgFilterSubtitles::process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
+void TimgFilterSubtitles::process(const unsigned char *srcY,const unsigned char *srcU,const unsigned char *srcV,
                                   unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                                  TpresetSettings *cfg)
+                                  const TpresetSettings *cfg)
 {
  if (cfg->fontChanged)
-  {
-   cfg->fontChanged=false;
-   font.init(cfg);
-  }
+  font.init(cfg);
  if (sub)
   { 
    int y;

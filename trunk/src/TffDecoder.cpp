@@ -161,11 +161,11 @@ STDMETHODIMP TffDecoder::getPresets(Tpresets *presets2)
   presets2->push_back(new TpresetSettings(**i));
  return S_OK;       
 }
-STDMETHODIMP TffDecoder::setPresets(Tpresets *presets2)
+STDMETHODIMP TffDecoder::setPresets(const Tpresets *presets2)
 {
  if (!presets2) return E_POINTER;
  presets.done();
- for (Tpresets::iterator i=presets2->begin();i!=presets2->end();i++)
+ for (Tpresets::const_iterator i=presets2->begin();i!=presets2->end();i++)
   presets.push_back(new TpresetSettings(**i));
  return S_OK;       
 }
@@ -425,7 +425,7 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  
  tray=new TtrayIcon(this,g_hInst);
  
- //TODO: prevent creating of imgFilters and sub in cfg dialog only mode
+ //TODO: prevent creation of imgFilters and sub in cfg dialog only mode
  imgFilters=new TimgFilters;
  subs=new Tsubtitles;
 }
@@ -719,8 +719,8 @@ void TffDecoder::loadAVInameAndPreset(void)
        ifsf->GetCurFile(&aviNameL,NULL);
        ifsf->Release();
        WideCharToMultiByte(CP_ACP,0,aviNameL,-1,AVIname,511, NULL, NULL );
-       //TODO: auto preset load
-       //if (globalSettings.autoPreset) cfg.autoPresetLoad(AVIname);
+       if (globalSettings.autoPreset)
+        setPresetPtr(presets.getAutoPreset(AVIname,globalSettings.autoPresetFileFirst));
        subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings->subFlnm,subs->flnm);
       }
      if (iff.pGraph) iff.pGraph->Release();
@@ -837,7 +837,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   }
  avctx->showMV=globalSettings.showMV;
  int ret=libavcodec.avcodec_decode_video(avctx,&avpict,&got_picture,(UINT8*)m_frame.bitstream,m_frame.length);
- char pomS[256];sprintf(pomS,"framelen:%i ret:%i gotpicture:%i\n",m_frame.length,ret,got_picture);OutputDebugString(pomS);
+ //char pomS[256];sprintf(pomS,"framelen:%i ret:%i gotpicture:%i\n",m_frame.length,ret,got_picture);OutputDebugString(pomS);
  if (pIn->IsPreroll()==S_OK) 
   {
    DEBUGS("avcodec_decode_video preroll==S_OK");

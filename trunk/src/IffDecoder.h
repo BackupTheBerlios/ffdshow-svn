@@ -162,7 +162,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (loadDialogSettings)(void) PURE;
  //STDMETHOD (getPreset)(unsigned int i,TpresetSettings **preset) PURE;
  STDMETHOD (getPresets)(Tpresets *presets2) PURE;
- STDMETHOD (setPresets)(Tpresets *presets2) PURE;
+ STDMETHOD (setPresets)(const Tpresets *presets2) PURE;
  STDMETHOD (savePresets)(void) PURE;
  STDMETHOD (setPresetPtr)(TpresetSettings *preset) PURE;
  STDMETHOD (renameActivePreset)(const char *newName) PURE;

@@ -28,7 +28,7 @@ private:
 public:
  Tfont(void);
  ~Tfont();
- void init(TpresetSettings *cfg);
+ void init(const TpresetSettings *cfg);
  void print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,int dx,int stride,int dy,subtitle *sub,int posX,int posY);
  void done(void);
 };

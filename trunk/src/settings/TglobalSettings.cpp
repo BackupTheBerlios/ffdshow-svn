@@ -82,7 +82,7 @@ void TglobalSettings::save(void)
    }                                                \
   else return CODEC_ID_NONE;
   
-int TglobalSettings::codecSupported(const DWORD fourCC,char *AVIfourCC)
+int TglobalSettings::codecSupported(DWORD fourCC,char *AVIfourCC)
 {
  switch(fourCC)
   {

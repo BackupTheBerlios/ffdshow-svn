@@ -154,6 +154,7 @@ void TimgFilters::process(TpresetSettings *cfg,unsigned char *srcY,unsigned char
     unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV;
     unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
     subtitles.process(srcY,srcU,srcV,dstY,dstU,dstV,cfg);
+    cfg->fontChanged=false;
    }
   else if (i==cfg->orderOffset && cfg->isOffset)
    {

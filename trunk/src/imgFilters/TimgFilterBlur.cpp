@@ -42,9 +42,9 @@ void TimgFilterBlur::done(void)
    tempPict=NULL;
   }; 
 }
-void TimgFilterBlur::process(unsigned char *srcY,unsigned char *,unsigned char *,
+void TimgFilterBlur::process(const unsigned char *srcY,const unsigned char *,const unsigned char *,
                              unsigned char *dstY,unsigned char *,unsigned char *,
-                             TpresetSettings *cfg)
+                             const TpresetSettings *cfg)
 {
  DEBUGS1("src",int(srcY));
 
@@ -68,10 +68,10 @@ void TimgFilterBlur::process(unsigned char *srcY,unsigned char *,unsigned char *
  k0=(kernel[0]<<48)+(kernel[0]<<32)+(kernel[0]<<16)+kernel[0];
  k1=(kernel[1]<<48)+(kernel[1]<<32)+(kernel[1]<<16)+kernel[1];
  k2=(kernel[2]<<48)+(kernel[2]<<32)+(kernel[2]<<16)+kernel[2];
- unsigned char *src,*srcEnd,*dst;
+ const unsigned char *src,*srcEnd;unsigned char *dst;
  for (src=srcY,srcEnd=srcY+dy*stride,dst=tempPict;src<srcEnd;src+=stride,dst+=stride)
   {
-   unsigned char *srcLnEnd=src+dx-1;
+   const unsigned char *srcLnEnd=src+dx-1;
    __asm
     {
      mov esi,[src]
@@ -113,7 +113,7 @@ void TimgFilterBlur::process(unsigned char *srcY,unsigned char *,unsigned char *
      jl  blur1
     }
   };
- unsigned char *srcL=srcY+stride,*srcR=srcL+dx-1,*dstL=tempPict+stride,*dstR=dstL+dx-1;
+ const unsigned char *srcL=srcY+stride,*srcR=srcL+dx-1;unsigned char *dstL=tempPict+stride,*dstR=dstL+dx-1;
  for (int y=1;y<dy-1;srcL+=stride,srcR+=stride,dstL+=stride,dstR+=stride,y++)
   {
    *dstL=*srcL;
@@ -121,7 +121,7 @@ void TimgFilterBlur::process(unsigned char *srcY,unsigned char *,unsigned char *
   }
  for (src=tempPict+stride,srcEnd=tempPict+(dy-1)*stride,dst=dstY+stride;src<srcEnd;src+=stride,dst+=stride)
   {
-   unsigned char *srcLnEnd=src+dx;
+   const unsigned char *srcLnEnd=src+dx;
    __asm
     {
      mov eax,stride;

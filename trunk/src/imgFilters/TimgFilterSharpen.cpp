@@ -51,11 +51,11 @@ void TimgFilterSharpen::init(int Idx,int Istride,int Idy)
  Ymax=(unsigned char*)xvid_malloc(strideY*dyY,MCACHE_LINE);
 }
 
-void TimgFilterSharpen::xsharpen(unsigned char *src,unsigned char *dst,TpresetSettings *cfg)
+void TimgFilterSharpen::xsharpen(const unsigned char *src,unsigned char *dst,const TpresetSettings *cfg)
 {
  int dx=dxY,stride=strideY,dy=dyY;
- unsigned char *srcLnEnd=src+stride*dy;
- unsigned char *srcLn,*dstLn,*YminLn,*YmaxLn;
+ const unsigned char *srcLnEnd=src+stride*dy;
+ const unsigned char *srcLn,*dstLn;unsigned char *YminLn,*YmaxLn;
 
  #if 0
  for (srcLn=src,YminLn=Ymin,YmaxLn=Ymax;srcLn<srcLnEnd;srcLn+=stride,YminLn+=stride,YmaxLn+=stride)
@@ -76,7 +76,7 @@ void TimgFilterSharpen::xsharpen(unsigned char *src,unsigned char *dst,TpresetSe
  #else
  for (srcLn=src,YminLn=Ymin,YmaxLn=Ymax;srcLn<srcLnEnd;srcLn+=stride,YminLn+=stride,YmaxLn+=stride)
   {
-   unsigned char *srcPend=srcLn+(dx-1);
+   const unsigned char *srcPend=srcLn+(dx-1);
    __asm
     {
      mov esi,[srcLn]
@@ -166,7 +166,7 @@ void TimgFilterSharpen::xsharpen(unsigned char *src,unsigned char *dst,TpresetSe
  mtf_thresh64=mfd_threshold+(mfd_threshold<<16)+(mfd_threshold<<32)+(mfd_threshold<<48);
  for (srcLn=src+stride,dstLn=dst+stride,YminLn=Ymin+stride,YmaxLn=Ymax+stride;srcLn<srcLnEnd;srcLn+=stride,dstLn+=stride,YminLn+=stride,YmaxLn+=stride)
   {
-   unsigned char *srcPend=srcLn+dx-1;
+   const unsigned char *srcPend=srcLn+dx-1;
    __asm
     {
      mov eax,[stride]
@@ -252,7 +252,7 @@ void TimgFilterSharpen::xsharpen(unsigned char *src,unsigned char *dst,TpresetSe
     };
   }  
  #endif  
- unsigned char *srcL=src+stride,*srcR=srcL+dx-1,*dstL=dst+stride,*dstR=dstL+dx-1;
+ const unsigned char *srcL=src+stride,*srcR=srcL+dx-1;unsigned char *dstL=dst+stride,*dstR=dstL+dx-1;
  for (int y=1;y<dy-1;srcL+=stride,srcR+=stride,dstL+=stride,dstR+=stride,y++)
   {
    *dstL=*srcL;
@@ -261,13 +261,13 @@ void TimgFilterSharpen::xsharpen(unsigned char *src,unsigned char *dst,TpresetSe
  __asm {emms}; 
 }
 
-void TimgFilterSharpen::unsharpen(unsigned char *src,unsigned char *dst,TpresetSettings *cfg)
+void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,const TpresetSettings *cfg)
 {
  int dx=dxY,stride=strideY,dy=dyY;
  memcpy(dst,src,dx);
  memcpy(dst+stride*(dy-1),src+stride*(dy-1),dx);
  int y;
- unsigned char *srcOrig=src,*dstOrig=dst;
+ const unsigned char *srcOrig=src;unsigned char *dstOrig=dst;
 
  static const int C_SCALE=32;
 #ifdef C_UNSHARP
@@ -306,7 +306,7 @@ void TimgFilterSharpen::unsharpen(unsigned char *src,unsigned char *dst,TpresetS
  unsigned short *Ysum=(unsigned short*)Ymin;
 
  unsigned short *YsumLn=Ysum;
- unsigned char *srcLn=src;
+ const unsigned char *srcLn=src;
  int x;
  for (x=1;x<dx-1;x++) YsumLn[x]=(unsigned int)srcLn[x-1]+(unsigned int)srcLn[x]+(unsigned int)srcLn[x+1];
  YsumLn+=stride;
@@ -324,12 +324,12 @@ void TimgFilterSharpen::unsharpen(unsigned char *src,unsigned char *dst,TpresetS
 
  //for (int i=0;i<20;i++) src[2*stride+i]=i;
 
- unsigned char *srcEnd=src+(dy-1)*stride;
+ const unsigned char *srcEnd=src+(dy-1)*stride;
  unsigned short *sum=Ysum,*sum1=Ysum+stride;
  src+=stride;dst+=stride;sum+=stride;sum1+=stride;
  for (;src<srcEnd;src+=stride,dst+=stride,sum+=stride,sum1+=stride)
   {
-   unsigned  char *srcLnEnd=src+dx-1;
+   const unsigned char *srcLnEnd=src+dx-1;
    __asm
     {
      mov edx,[stride]
@@ -417,7 +417,7 @@ void TimgFilterSharpen::unsharpen(unsigned char *src,unsigned char *dst,TpresetS
   }
  __asm{emms};
 #endif 
- unsigned char *srcL=srcOrig+stride,*srcR=srcL+dx-1,*dstL=dstOrig+stride,*dstR=dstL+dx-1;
+ const unsigned char *srcL=srcOrig+stride,*srcR=srcL+dx-1;unsigned char *dstL=dstOrig+stride,*dstR=dstL+dx-1;
  for (y=1;y<dy-1;srcL+=stride,srcR+=stride,dstL+=stride,dstR+=stride,y++)
   {
    *dstL=*srcL;
@@ -425,9 +425,9 @@ void TimgFilterSharpen::unsharpen(unsigned char *src,unsigned char *dst,TpresetS
   }
 }
 
-void TimgFilterSharpen::process(unsigned char *srcY,unsigned char *,unsigned char *,
+void TimgFilterSharpen::process(const unsigned char *srcY,const unsigned char *,const unsigned char *,
                                 unsigned char *dstY,unsigned char *,unsigned char *,
-                                TpresetSettings *cfg)
+                                const TpresetSettings *cfg)
 {
  if (cfg->sharpenMethod==0)
   {

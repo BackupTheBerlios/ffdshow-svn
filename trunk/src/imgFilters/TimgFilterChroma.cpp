@@ -35,9 +35,9 @@ TimgFilterChroma::TimgFilterChroma(void)
   }
 }
 
-void TimgFilterChroma::process(unsigned char *,unsigned char *srcU,unsigned char *srcV,
+void TimgFilterChroma::process(const unsigned char *,const unsigned char *srcU,const unsigned char *srcV,
                                unsigned char *,unsigned char *dstU,unsigned char *dstV,
-                               TpresetSettings *cfg)
+                               const TpresetSettings *cfg)
 {
  int hue=cfg->hue;          //-180 ... 0 ... 180
  int sat = cfg->saturation ;//0 (BW) - 64 (normal) - 128 (too much color);
@@ -56,9 +56,9 @@ void TimgFilterChroma::process(unsigned char *,unsigned char *srcU,unsigned char
  Cos64=(Cos&0x000000000000ffff)+((Cos<<16)&0x00000000ffff0000)+((Cos<<32)&0x0000ffff00000000)+((Cos<<48)&0xffff000000000000);
  Sat64=(Sat&0x000000000000ffff)+((Sat<<16)&0x00000000ffff0000)+((Sat<<32)&0x0000ffff00000000)+((Sat<<48)&0xffff000000000000);
  #endif
- for (unsigned char *srcUend=srcU+strideUV*dyUV;srcU<srcUend;srcU+=strideUV,srcV+=strideUV,dstU+=strideUV,dstV+=strideUV)
+ for (const unsigned char *srcUend=srcU+strideUV*dyUV;srcU<srcUend;srcU+=strideUV,srcV+=strideUV,dstU+=strideUV,dstV+=strideUV)
   {
-   unsigned char *srcUlnEnd=srcU+dxUV;
+   const unsigned char *srcUlnEnd=srcU+dxUV;
    #ifdef CHUESAT
    stride=diffx;
    for (;srcU<srcUlnEnd;srcU++,srcV++,dstU++,dstV++)

@@ -9,10 +9,9 @@ private:
  int hueSin[360+1],hueCos[360+1];
 public:
  TimgFilterChroma(void);
-// void hueSat(unsigned char *srcU,unsigned char *srcV,unsigned char *dstU,unsigned char *dstV,Tconfig *cfg);
- virtual void process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
+ virtual void process(const unsigned char *srcY,const unsigned char *srcU,const unsigned char *srcV,
                       unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                      TpresetSettings *cfg);
+                      const TpresetSettings *cfg);
 };
 
 #endif
