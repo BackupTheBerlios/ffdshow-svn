@@ -42,6 +42,7 @@
 #include <assert.h>
 #include <commctrl.h>
 
+#include "Tconfig.h"
 #include "ffdebug.h"
 #define FF_POSTPROCESS
 extern "C"
@@ -248,7 +249,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_autoloadedfromreg  ]=Tparam(&presetSettings.autoloadedfromreg  ,0,0);
 
  params[IDFF_isPostproc         ]=Tparam(&presetSettings.isPostproc         ,0,0);
- params[IDFF_orderPostproc      ]=Tparam(&presetSettings.orderPostproc      ,MIN_ORDER,MAX_ORDER);
+ params[IDFF_orderPostproc      ]=Tparam(&presetSettings.orderPostproc      ,TpresetSettings::min_order,TpresetSettings::max_order);
  params[IDFF_ppqual             ]=Tparam(&presetSettings.ppqual             ,0,6);
  params[IDFF_autoq              ]=Tparam(&presetSettings.autoq              ,0,0);
  params[IDFF_ppIsCustom         ]=Tparam(&presetSettings.ppIsCustom         ,0,0);
@@ -258,7 +259,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_levelFixChrom      ]=Tparam(&presetSettings.levelFixChrom      ,0,0);
 
  params[IDFF_isPictProp         ]=Tparam(&presetSettings.isPictProp         ,0,0);
- params[IDFF_orderPictProp      ]=Tparam(&presetSettings.orderPictProp      ,MIN_ORDER,MAX_ORDER);
+ params[IDFF_orderPictProp      ]=Tparam(&presetSettings.orderPictProp      ,TpresetSettings::min_order,TpresetSettings::max_order);
  params[IDFF_lumGain            ]=Tparam(&presetSettings.lumGain            ,0,256);
  params[IDFF_lumOffset          ]=Tparam(&presetSettings.lumOffset          ,-256,256);
  params[IDFF_gammaCorrection    ]=Tparam(&presetSettings.gammaCorrection    ,1,400);
@@ -273,11 +274,11 @@ void TffDecoder::fillParams(void)
  params[IDFF_flip               ]=Tparam(&presetSettings.flip               ,0,0);
 
  params[IDFF_isBlur             ]=Tparam(&presetSettings.isBlur             ,0,0);
- params[IDFF_orderBlur          ]=Tparam(&presetSettings.orderBlur          ,MIN_ORDER,MAX_ORDER);
+ params[IDFF_orderBlur          ]=Tparam(&presetSettings.orderBlur          ,TpresetSettings::min_order,TpresetSettings::max_order);
  params[IDFF_blurStrength       ]=Tparam(&presetSettings.blurStrength       ,1,255);
 
  params[IDFF_isSharpen          ]=Tparam(&presetSettings.isSharpen          ,0,0);
- params[IDFF_orderSharpen       ]=Tparam(&presetSettings.orderSharpen       ,MIN_ORDER,MAX_ORDER);
+ params[IDFF_orderSharpen       ]=Tparam(&presetSettings.orderSharpen       ,TpresetSettings::min_order,TpresetSettings::max_order);
  params[IDFF_sharpenMethod      ]=Tparam(&presetSettings.sharpenMethod      ,0,1);
  params[IDFF_xsharp_strength    ]=Tparam(&presetSettings.xsharp_strength    ,1,127);
  params[IDFF_xsharp_threshold   ]=Tparam(&presetSettings.xsharp_threshold   ,0,255);
@@ -285,7 +286,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_unsharp_threshold  ]=Tparam(&presetSettings.unsharp_threshold  ,0,255);
                                                          
  params[IDFF_isNoise            ]=Tparam(&presetSettings.isNoise            ,0,0);
- params[IDFF_orderNoise         ]=Tparam(&presetSettings.orderNoise         ,MIN_ORDER,MAX_ORDER);
+ params[IDFF_orderNoise         ]=Tparam(&presetSettings.orderNoise         ,TpresetSettings::min_order,TpresetSettings::max_order);
  params[IDFF_noiseMethod        ]=Tparam(&presetSettings.noiseMethod        ,0,1);
  params[IDFF_uniformNoise       ]=Tparam(&presetSettings.uniformNoise       ,0,0);
  params[IDFF_noiseStrength      ]=Tparam(&presetSettings.noiseStrength      ,0,255);
@@ -316,7 +317,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_autocrop           ]=Tparam(&presetSettings.autocrop           ,0,0,&TffDecoder::resizeChanged);
 
  params[IDFF_isSubtitles        ]=Tparam(&presetSettings.isSubtitles        ,0,0,&TffDecoder::subsChanged);
- params[IDFF_orderSubtitles     ]=Tparam(&presetSettings.orderSubtitles     ,MIN_ORDER,MAX_ORDER);
+ params[IDFF_orderSubtitles     ]=Tparam(&presetSettings.orderSubtitles     ,TpresetSettings::min_order,TpresetSettings::max_order);
  params[IDFF_fontCharset        ]=Tparam(&presetSettings.fontCharset        ,0,0,&TffDecoder::subsChanged);
  params[IDFF_fontSize           ]=Tparam(&presetSettings.fontSize           ,2,255,&TffDecoder::subsChanged);
  params[IDFF_fontWeight         ]=Tparam(&presetSettings.fontWeight         ,0,1000,&TffDecoder::subsChanged);
@@ -566,11 +567,11 @@ STDMETHODIMP TffDecoder::getRealCrop(unsigned int *left,unsigned int *top,unsign
 }
 STDMETHODIMP TffDecoder::getMinOrder2(void)
 {
- return MIN_ORDER;
+ return TpresetSettings::min_order;
 }
 STDMETHODIMP TffDecoder::getMaxOrder2(void)
 {
- return MAX_ORDER;
+ return TpresetSettings::max_order;
 }
 STDMETHODIMP TffDecoder::saveGlobalSettings(void)
 {

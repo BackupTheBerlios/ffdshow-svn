@@ -18,10 +18,10 @@
 
 #include <windows.h>
 #include "Cpresets.h"
-#include "..\resource.h"
+#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
-#include "..\IffDecoder.h"
+#include "IffDecoder.h"
 
 void TpresetsPage::cfg2dlg(void)
 {

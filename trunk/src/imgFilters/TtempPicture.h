@@ -1,7 +1,7 @@
 #ifndef _TTEMPPICTURE_H_
 #define _TTEMPPICTURE_H_
 
-#include "..\xvid\utils\mem_align.h"
+#include "xvid\utils\mem_align.h"
 
 struct TtempPicture 
 {

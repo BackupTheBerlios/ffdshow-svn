@@ -19,7 +19,7 @@
 
 #include "TimgFilterNoise.h" 
 #include <stdlib.h>
-#include "..\xvid\utils\mem_align.h"
+#include "xvid\utils\mem_align.h"
 #include "TpresetSettings.h"
 #include <time.h>
 

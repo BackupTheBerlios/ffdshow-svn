@@ -18,11 +18,10 @@
 
 #include <windows.h>
 #include "TconfPage.h"
-#include "..\resource.h"
+#include "resource.h"
 #include <commctrl.h>
-#include "..\Tconfig.h"
 #include <assert.h>
-#include "..\IffDecoder.h"
+#include "IffDecoder.h"
 
 static INT_PTR CALLBACK dlgWndProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
 {

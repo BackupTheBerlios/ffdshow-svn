@@ -1,9 +1,6 @@
 #ifndef _TPRESET_H_
 #define _TPRESET_H_
 
-#define MIN_ORDER 1
-#define MAX_ORDER 6
-
 #define FFPRESET_EXT "ffpreset"
 
 struct TpresetSettings
@@ -85,6 +82,8 @@ public:
  int subPosX,subPosY,subDelay,subSpeed;
  int subAutoFlnm;
  char subFlnm[256];
+
+ static int min_order,max_order;
 };
 
 #endif

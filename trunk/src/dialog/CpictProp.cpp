@@ -17,13 +17,12 @@
  */
 
 #include <windows.h>
-#include "..\IffDecoder.h"
+#include "IffDecoder.h"
 #include "CpictProp.h"
-#include "..\resource.h"
+#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
 #include <stdio.h>
-//#include "..\Tconfig.h"
 #include "TffdshowPage.h"
 
 void TpictPropPage::createConfig(void)

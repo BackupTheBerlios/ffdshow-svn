@@ -2,7 +2,7 @@
 #define _TIMGFILTERSUBTITLES_H_
 
 #include "TimgFilter.h"
-#include "..\subtitles\Tfont.h"
+#include "subtitles\Tfont.h"
 
 class TimgFilterSubtitles :public TimgFilter
 {

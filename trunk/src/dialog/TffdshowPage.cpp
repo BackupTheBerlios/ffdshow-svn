@@ -20,10 +20,10 @@
 #include <windows.h>
 #include <commctrl.h>
 #include "TffdshowPage.h"
-#include "..\resource.h"
+#include "resource.h"
 #include <assert.h>
-#include "..\IffDecoder.h"
-#include "..\ffdebug.h"
+#include "IffDecoder.h"
+#include "ffdebug.h"
 #include "TconfPage.h"
 #include "Ccodecs.h"
 #include "Cinfo.h"

@@ -20,8 +20,8 @@
 #include "TimgFilterSharpen.h"
 #include "TpresetSettings.h"
 #include "Tconfig.h"
-#include "..\xvid\utils\mem_align.h"
-#include "..\xvid\xvid.h"
+#include "xvid\utils\mem_align.h"
+#include "xvid\xvid.h"
 
 const int TpresetSettings::xsharp_strengthDef=20,TpresetSettings::xsharp_thresholdDef=150;
 const int TpresetSettings::unsharp_strengthDef=40,TpresetSettings::unsharp_thresholdDef=0;

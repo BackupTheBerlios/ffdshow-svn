@@ -20,10 +20,9 @@
 extern "C"
 {
  #define FF_POSTPROCESS
- #include "..\ffmpeg\libavcodec\avcodec.h"
+ #include "ffmpeg\libavcodec\avcodec.h"
 }
 #include "TimgFilters.h"
-#include "..\Tconfig.h"
 #include "TpresetSettings.h"
 #include "ffdebug.h"
 
@@ -71,7 +70,7 @@ void TimgFilters::setSubtitle(subtitle *Isub)
 void TimgFilters::process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV,int *quant_store)
 {
  tempY->reset(srcY);tempU->reset(srcU);tempV->reset(srcV);
- for (int i=MIN_ORDER;i<=MAX_ORDER;i++)
+ for (int i=cfg->min_order;i<=cfg->max_order;i++)
   if (i==cfg->orderPostproc && postproc.ok && cfg->isPostproc)
    {
     if (cpus>0 && cfg->autoq && cfg->ppqual /*&& (avctx->frame_number%2)==0*/)

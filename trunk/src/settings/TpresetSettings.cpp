@@ -3,6 +3,8 @@
 #include "TpresetSettings.h"
 #include <stdio.h>
 
+int TpresetSettings::min_order=1,TpresetSettings::max_order=6;
+
 void TpresetSettings::loadReg (char *IpresetName)
 {
  char presetRegStr[256];

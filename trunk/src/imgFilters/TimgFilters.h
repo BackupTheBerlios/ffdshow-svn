@@ -2,8 +2,8 @@
 #define _TIMGFILTERS_H_
 
 #include <stdlib.h>
-#include "..\TcpuUsage.h"
-#include "..\Tpostproc.h"
+#include "TcpuUsage.h"
+#include "Tpostproc.h"
 #include "TtempPicture.h"
 #include "TimgFilterNoise.h"
 #include "TimgFilterLuma.h"

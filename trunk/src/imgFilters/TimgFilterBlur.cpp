@@ -2,7 +2,7 @@
 #include "TpresetSettings.h"
 #include <math.h>
 #include <stdlib.h>
-#include "..\xvid\utils\mem_align.h"
+#include "xvid\utils\mem_align.h"
 
 TimgFilterBlur::TimgFilterBlur(void)
 {

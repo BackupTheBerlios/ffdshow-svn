@@ -17,9 +17,9 @@
  */
 
 #include <windows.h>
-#include "..\IffDecoder.h"
+#include "IffDecoder.h"
 #include "Csharpen.h"
-#include "..\resource.h"
+#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
 #include <stdio.h>

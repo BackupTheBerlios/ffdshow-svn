@@ -4,7 +4,6 @@
 #include "IffDecoder.h"
 #include <assert.h>
 #include "Tlibavcodec.h"
-#include "Tconfig.h"
 #include "TglobalSettings.h"
 #include "TdialogSettings.h"
 #include "TpresetSettings.h"

@@ -17,12 +17,12 @@
  */
 
 #include <windows.h>
-#include "..\IffDecoder.h"
+#include "IffDecoder.h"
 #include "CpostProc.h"
-#include "..\resource.h"
+#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
-#include "..\Tpostproc.h"
+#include "Tpostproc.h"
 #include "TffdshowPage.h"
 
 #define POSTPROC_TIMER 1999

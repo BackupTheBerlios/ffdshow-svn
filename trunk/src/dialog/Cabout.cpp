@@ -18,10 +18,10 @@
 
 #include <windows.h>
 #include "Cabout.h"
-#include "..\resource.h"
+#include "resource.h"
 #include <commctrl.h>
 #include <string.h>
-#include "..\IffDecoder.h"
+#include "IffDecoder.h"
 
 void TaboutPage::cfg2dlg(void)
 {
