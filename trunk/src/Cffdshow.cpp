@@ -58,6 +58,7 @@ void TffdshowPage::selectPage(TconfPage *Ipage)
  GetWindowRect(m_hwnd,&rp);
  OffsetRect(&rd,-rp.left,-rp.top);
  SetWindowPos(page->m_hwnd,GetDlgItem(m_hwnd,IDC_HEADER),rd.left,rd.top+5,0,0,SWP_NOSIZE);
+ page->interDlg();
  ShowWindow(page->m_hwnd,SW_SHOW);
  InvalidateRect(m_hwnd,NULL,TRUE);
 }

@@ -46,7 +46,7 @@ void TglobalPage::now2dlg(void)
    SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_DIMENSIONS,WM_SETTEXT,0,LPARAM(pomS));
   } 
 }
-void TglobalPage::global2dlg(void)
+void TglobalPage::interDlg(void)
 {
  char pomS[1024];
  
@@ -68,7 +68,7 @@ void TglobalPage::global2dlg(void)
 }
 void TglobalPage::cfg2dlg(void)
 {
- global2dlg();
+ interDlg();
 
  setCheck(IDC_CHB_TRAYICON,cfgGet(IDFF_trayIcon));
  
@@ -210,9 +210,9 @@ HRESULT TglobalPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
-  case WM_SHOWWINDOW:
-   if (wParam) cfg2dlg();
-   break;
+  //case WM_SHOWWINDOW:
+  // if (wParam) cfg2dlg();
+  // break;
   case WM_COMMAND:
    switch (LOWORD(wParam))  
     {

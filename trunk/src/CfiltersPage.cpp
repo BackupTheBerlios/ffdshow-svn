@@ -130,7 +130,6 @@ void TfiltersPage::setPPchbs(void)
 void TfiltersPage::postProc2dlg(void)
 {
  SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_SETPOS,TRUE,cfgGet(IDFF_ppqual));
- setCheck(IDC_CHB_POSTPROC , cfgGet(IDFF_isPostproc));
  setCheck(IDC_CHB_AUTOQ    , cfgGet(IDFF_autoq));
  setCheck(IDC_RBT_PPPRESETS,!cfgGet(IDFF_ppIsCustom));
  setCheck(IDC_RBT_PPCUSTOM , cfgGet(IDFF_ppIsCustom));
@@ -141,7 +140,6 @@ void TfiltersPage::postProc2dlg(void)
 
 void TfiltersPage::noise2dlg(void)
 {
- setCheck(IDC_CHB_NOISE        ,cfgGet(IDFF_isNoise));
  setCheck(IDC_RBT_NOISE_MOJ    ,cfgGet(IDFF_noiseMethod)==0);
  setCheck(IDC_RBT_NOISE_AVIH   ,cfgGet(IDFF_noiseMethod)==1);
  setCheck(IDC_CHB_NOISE_UNIFORM,cfgGet(IDFF_uniformNoise));
@@ -151,7 +149,6 @@ void TfiltersPage::noise2dlg(void)
 
 void TfiltersPage::pictProp2dlg(void)
 {
- setCheck(IDC_CHB_PICTPROP,cfgGet(IDFF_isPictProp));
  SendDlgItemMessage(m_hwnd,IDC_TBR_LUMGAIN,TBM_SETPOS,TRUE,writeLumGain(cfgGet(IDFF_lumGain)));
  SendDlgItemMessage(m_hwnd,IDC_TBR_LUMOFFSET,TBM_SETPOS,TRUE,writeLumOffset(cfgGet(IDFF_lumOffset)+256));
  SendDlgItemMessage(m_hwnd,IDC_TBR_GAMMA,TBM_SETPOS,TRUE,writeGamma(cfgGet(IDFF_gammaCorrection)));
@@ -162,7 +159,6 @@ void TfiltersPage::pictProp2dlg(void)
 void TfiltersPage::sharpen2dlg(void)
 {
  int sharpenMethod=cfgGet(IDFF_sharpenMethod);
- setCheck(IDC_CHB_SHARPEN,cfgGet(IDFF_isSharpen));
  setCheck(IDC_RBT_SHARPEN_XSHARPEN   ,(sharpenMethod==0));
  setCheck(IDC_RBT_SHARPEN_UNSHARPMASK,(sharpenMethod==1));
  if (cfgGet(IDFF_xsharp_strength)==0) cfgSet(IDFF_xsharp_strength,1);
@@ -182,10 +178,19 @@ void TfiltersPage::sharpen2dlg(void)
 }
 void TfiltersPage::cfg2dlg(void)
 {
+ interDlg();
  postProc2dlg();
  pictProp2dlg();
  sharpen2dlg(); 
  noise2dlg();
+}
+
+void TfiltersPage::interDlg(void)
+{
+ setCheck(IDC_CHB_POSTPROC,cfgGet(IDFF_isPostproc));
+ setCheck(IDC_CHB_PICTPROP,cfgGet(IDFF_isPictProp));
+ setCheck(IDC_CHB_NOISE   ,cfgGet(IDFF_isNoise   ));
+ setCheck(IDC_CHB_SHARPEN ,cfgGet(IDFF_isSharpen ));
 }
 
 void TfiltersPage::createConfig(void)
@@ -234,9 +239,9 @@ HRESULT TfiltersPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
-  case WM_SHOWWINDOW:
-   if (wParam) cfg2dlg();
-   break;
+  //case WM_SHOWWINDOW:
+  // if (wParam) cfg2dlg();
+  // break;
   case WM_DESTROY:
    KillTimer(m_hwnd,POSTPROC_TIMER);
    break;

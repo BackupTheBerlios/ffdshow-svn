@@ -23,6 +23,7 @@ public:
  void done(void);
  void setFps(float Ifps),setDelay(int Idelay);
  subtitle* getSubtitle(unsigned long frame);
+ char flnm[1024];
 };
 
 #endif

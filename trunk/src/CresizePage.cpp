@@ -118,9 +118,9 @@ HRESULT TresizePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
-  case WM_SHOWWINDOW:
-   if (wParam) cfg2dlg();
-   break;
+  //case WM_SHOWWINDOW:
+  // if (wParam) cfg2dlg();
+  // break;
    
   case WM_HSCROLL:
    if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_ASPECT_USER))

@@ -301,7 +301,8 @@ void TffDecoder::fillParams(void)
  params[IDFF_mp41               ]=Tparam(&cfg.mp41               ,0,0);
  params[IDFF_h263               ]=Tparam(&cfg.h263               ,0,0);
 }                                                                      
-#else
+#endif
+#ifndef TPARAM
 int* TffDecoder::getIDFFvar(int paramID)                               
 {                                                                      
  switch (paramID)                                                      
@@ -443,12 +444,6 @@ STDMETHODIMP TffDecoder::put_Param(int paramID, int  value)
 #endif
 STDMETHODIMP TffDecoder::notifyParamsChanged(void)
 {
-/*
- cfg.idctChanged=true;
- if (cfg.trayIcon) tray->show(); else tray->hide();
- if (resizeCtx) resizeCtx->resizeChanged=true;
- cfg.fontChanged=true;
-*/
  subsChanged();
  resizeChanged();
  trayIconChanged();
@@ -1073,17 +1068,8 @@ void TffDecoder::loadAVInameAndPreset(void)
        ifsf->Release();
        WideCharToMultiByte(CP_ACP,0,aviNameL,-1,AVIname,511, NULL, NULL );
        if (cfg.autoPreset) cfg.autoPresetLoad(AVIname);
-       sub->init(AVIname,NULL,AVIfps);
+       sub->init(AVIname,NULL,AVIfps);strcpy(cfg.subFlnm,sub->flnm);
       }
-     /* 
-     if (iffclsid==CLSID_AsyncReader || iffclsid==CLSID_URLReader)
-      {
-       WideCharToMultiByte(CP_ACP,0,iff.achName,-1,AVIname,511, NULL, NULL );
-       if (cfg.autoPreset) cfg.autoPresetLoad(AVIname);
-       sub->init(AVIname,NULL,AVIfps);
-       break;
-      };
-     */ 
      if (iff.pGraph) iff.pGraph->Release();
      bff->Release();
     }

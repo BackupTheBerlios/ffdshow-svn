@@ -23,6 +23,7 @@
 Tsubtitles::Tsubtitles(void)
 {
  subs=NULL;
+ flnm[0]='\0';
 };
 Tsubtitles::~Tsubtitles()
 {
@@ -43,12 +44,12 @@ void Tsubtitles::init(const char *aviFlnm,const char *subFlnm,float Ifps)
    if (subFlnm)
     {
      __asm emms;
-     subs=sub_read_file(subFlnm?subFlnm:aviFlnm,Ifps);
+     subs=sub_read_file(strcpy(flnm,subFlnm?subFlnm:aviFlnm),Ifps);
      free(subFlnm);
     } 
   }
  else  
-  subs=sub_read_file(subFlnm,Ifps);
+  subs=sub_read_file(strcpy(flnm,subFlnm),Ifps);
  oldsub=NULL;
  current_sub=0;
  nosub_range_start=-1;

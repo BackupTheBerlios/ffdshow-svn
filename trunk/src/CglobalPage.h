@@ -7,7 +7,7 @@ class TglobalPage :public TconfPage
 {
  private:
   void listPresets(void);
-  void now2dlg(void),global2dlg(void);
+  void now2dlg(void);
   void selectPreset(void);
   void removePreset(void);
   void savePresetToFile(void);
@@ -16,6 +16,7 @@ class TglobalPage :public TconfPage
   TglobalPage(HWND IhwndParent,IffDecoder *Ideci,int dialogId);
   virtual void createConfig(void);
   virtual void cfg2dlg(void);
+  virtual void interDlg(void);
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
   void savePreset(void);

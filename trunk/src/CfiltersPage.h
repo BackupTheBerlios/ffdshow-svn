@@ -17,6 +17,7 @@ class TfiltersPage :public TconfPage
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
   virtual void createConfig(void);
   virtual void cfg2dlg(void);
+  virtual void interDlg(void);
 };
 
 #endif 

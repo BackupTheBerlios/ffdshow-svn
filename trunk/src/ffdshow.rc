@@ -336,8 +336,8 @@ BEGIN
     CONTROL         "",IDC_TBR_FONT_SPACING,"msctls_trackbar32",TBS_BOTH | 
                     TBS_NOTICKS | WS_TABSTOP,8,154,118,10
     LTEXT           "File",IDC_STATIC,8,15,12,8
-    PUSHBUTTON      "Load",IDC_BT_SUB_LOADFILE,232,13,22,12
-    COMBOBOX        IDC_CBX_SUB_FLNM,23,13,208,124,CBS_DROPDOWN | WS_VSCROLL | 
+    PUSHBUTTON      "Load",IDC_BT_SUB_LOADFILE,223,13,31,12
+    COMBOBOX        IDC_CBX_SUB_FLNM,23,13,199,124,CBS_DROPDOWN | WS_VSCROLL | 
                     WS_TABSTOP
     LTEXT           "Shadow strength",IDC_LBL_FONT_SHADOW_STRENGTH,136,144,
                     111,8
@@ -356,8 +356,7 @@ BEGIN
     LTEXT           "Delay",IDC_STATIC,136,40,19,8
     EDITTEXT        IDC_ED_SUB_SPEED,164,58,40,13,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "Speed",IDC_STATIC,136,61,22,8
-    LTEXT           "Shadow radius",IDC_LBL_FONT_SHADOW_RADIUS,136,164,
-                    111,8
+    LTEXT           "Shadow radius",IDC_LBL_FONT_SHADOW_RADIUS,136,164,111,8
     CONTROL         "",IDC_TBR_FONT_SHADOW_RADIUS,"msctls_trackbar32",
                     TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,136,174,119,10
 END

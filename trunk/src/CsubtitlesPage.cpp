@@ -42,7 +42,6 @@ static int CALLBACK EnumFamCallBackCharsets(CONST LOGFONT *lpelf,CONST TEXTMETRI
   }; 
  return 1;
 };
-
 void TsubtitlesPage::selectCharset(int ii)
 {
  int cnt=SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_GETCOUNT,0,0);
@@ -147,6 +146,9 @@ void TsubtitlesPage::sub2dlg(void)
  sprintf(s,"Vertical position:  %3i%% (%s)",x,posS);
  SendDlgItemMessage(m_hwnd,IDC_LBL_SUB_POSY,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSY,TBM_SETPOS,TRUE,x);
+ s[0]='\0';
+ deci->getSubFlnm(s,255);
+ SendDlgItemMessage(m_hwnd,IDC_CBX_SUB_FLNM,WM_SETTEXT,0,LPARAM(s));
 }
 void TsubtitlesPage::cfg2dlg(void)
 {
@@ -221,9 +223,9 @@ HRESULT TsubtitlesPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
-  case WM_SHOWWINDOW:
-   if (wParam) cfg2dlg();
-   break;
+  //case WM_SHOWWINDOW:
+  // if (wParam) cfg2dlg();
+  // break;
 
   case WM_HSCROLL:
    if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_FONT_SIZE))
