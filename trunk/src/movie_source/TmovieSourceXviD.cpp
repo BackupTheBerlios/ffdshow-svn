@@ -65,7 +65,7 @@ void TmovieSourceXviD::done(void)
  xvid_init=NULL;
  xvid_decore=NULL;
 }
-int TmovieSourceXviD::getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen, AVPicture *avpict,int &got_picture)
+TffPict2 TmovieSourceXviD::getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen,int &used_bytes,int &got_picture)
 {
  XVID_DEC_FRAME xframe;
  xframe.bitstream=(void*)src;
@@ -84,18 +84,15 @@ int TmovieSourceXviD::getFrame(const TglobalSettings *global,const TpresetSettin
  int xerr=xvid_decore(dechandle,XVID_DEC_DECODE,&xframe,NULL);
  if (xerr==XVID_ERR_OK)
   {
-   got_picture=24;
-   avpict->data[0]=(unsigned char*)xpict.y;avpict->data[1]=(unsigned char*)xpict.u;avpict->data[2]=(unsigned char*)xpict.v;
-   avpict->linesize[0]=xpict.stride_y;avpict->linesize[1]=xpict.stride_uv;avpict->linesize[2]=xpict.stride_uv;
+   got_picture=24;used_bytes=srcLen;
    for (unsigned int i=0;i<quantDx*quantDy;i++)
     quant[i]=10;
-   return srcLen;
+   return TffPict2((unsigned char*)xpict.y,(unsigned char*)xpict.u,(unsigned char*)xpict.v,xpict.stride_y,r,true);
   }
  else
   {
-   got_picture=0;
-   avpict->data[0]=avpict->data[1]=avpict->data[2]=NULL;
-   return 0;
+   got_picture=0;used_bytes=0;
+   return TffPict2(NULL,NULL,NULL,0,r,false);
   } 
 }
 

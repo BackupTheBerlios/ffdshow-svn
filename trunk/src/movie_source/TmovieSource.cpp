@@ -26,7 +26,10 @@
 #define TESTSOURCE(Tsource)            \
  movie=new Tsource;                    \
  if (movie->init(codecId,AVIdx,AVIdy)) \
-  return movie;                        \
+  {                                    \
+   movie->r=Trect(0,0,AVIdx,AVIdy);    \
+   return movie;                       \
+  }                                    \
  else                                  \
   delete movie; 
  

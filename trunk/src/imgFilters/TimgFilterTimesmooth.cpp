@@ -76,13 +76,13 @@ void TimgFilterTimesmooth::done(void)
  if (accumU) xvid_free(accumU);accumU=NULL;
  if (accumV) xvid_free(accumV);accumV=NULL;
 }
-void TimgFilterTimesmooth::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterTimesmooth::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
  if (!cfg->tempSmooth) return;
- Trect *r=init(&rect,cfg->fullBlur);
- const unsigned char *srcY=pict->getCurY()+r->diffY ;unsigned char *dstY=pict->getNextY()+r->diffY ;
- const unsigned char *srcU=pict->getCurU()+r->diffUV;unsigned char *dstU=pict->getNextU()+r->diffUV;
- const unsigned char *srcV=pict->getCurV()+r->diffUV;unsigned char *dstV=pict->getNextV()+r->diffUV;
+ Trect *r=init(&pict.rect,cfg->fullBlur);
+ const unsigned char *srcY=getCurY(pict)+r->diffY ;unsigned char *dstY=getNextY(pict)+r->diffY ;
+ const unsigned char *srcU=getCurU(pict)+r->diffUV;unsigned char *dstU=getNextU(pict)+r->diffUV;
+ const unsigned char *srcV=getCurV(pict)+r->diffUV;unsigned char *dstV=getNextV(pict)+r->diffUV;
  if (cfg->tempSmooth!=oldStrength)
   {
    oldStrength=cfg->tempSmooth;

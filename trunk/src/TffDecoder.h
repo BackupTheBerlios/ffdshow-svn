@@ -8,7 +8,6 @@
 #include "Tpostproc.h"
 
 class TtrayIcon;
-struct TffPict;
 class Tsubtitles;
 class TimgFilters;
 struct TpresetSettings;
@@ -98,11 +97,11 @@ private:
  TdialogSettings dialogSettings;
  Tpresets presets;
  int inPlayer;
- int fontChanged,cropChanged,currentq;
+ int fontChanged,cropChanged,resizeChanged,currentq;
  int cfgDlgHnwd;
  char AVIname[1024],AVIfourcc[10];
  int loadAVInameAndPreset(void);
- void onSubsChanged(void),onCropChanged(void),onTrayIconChanged(void);
+ void onSubsChanged(void),onCropChanged(void),onResizeChanged(void),onTrayIconChanged(void);
  HRESULT ChangeColorspace(GUID subtype,GUID formattype,void * format);
  HWND onChangeWnd;unsigned int onChangeMsg;
  HWND onInfoWnd;unsigned int onInfoMsg1,onInfoMsg2;
@@ -110,7 +109,6 @@ private:
 
  unsigned int AVIdx,AVIdy;double AVIfps;
  bool isResize;unsigned int outDx,outDy;
- TffPict *pict;
  struct
   {
    int colorspace;

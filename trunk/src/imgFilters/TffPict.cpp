@@ -2,7 +2,7 @@
 #include "TffRect.h"
 #include "TffPict.h"
 #include <string.h>
-
+/*
 unsigned char* TffPict::TtempPicture::getCurNext(unsigned int stride,const Trect *r,int div)
 {
  unsigned char *p=getTempCur();
@@ -23,3 +23,18 @@ unsigned char* TffPict::TtempPicture::getCurNext(unsigned int stride,const Trect
   }
  return p;
 }
+TffPict2::~TffPict2()
+{
+ if (y) xvid_free(y);
+ if (u) xvid_free(u);
+ if (v) xvid_free(v);
+}
+void TffPict2::alloc(const TffRect &rect)
+{
+ size=((rect.stride/16+2)*16)*rect.full.dy;
+ y=(unsigned char*)xvid_malloc(size  ,MCACHE_LINE);
+ u=(unsigned char*)xvid_malloc(size/4,MCACHE_LINE);
+ v=(unsigned char*)xvid_malloc(size/4,MCACHE_LINE);
+ own=true;
+}
+*/

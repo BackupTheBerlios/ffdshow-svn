@@ -49,7 +49,7 @@ void TresizeAspectPage::resize2dlg(void)
 
 void TresizeAspectPage::aspect2dlg(void)
 {
- int ra=cfgGet(IDFF_resizeAspect);
+ int ra=cfgGet(IDFF_isAspect);
  setCheck(IDC_RBT_ASPECT_NO  ,ra==0);
  setCheck(IDC_RBT_ASPECT_KEEP,ra==1);
  setCheck(IDC_RBT_ASPECT_USER,ra==2);
@@ -127,15 +127,15 @@ HRESULT TresizeAspectPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         }
        break;
       case IDC_RBT_ASPECT_NO:
-       cfgSet(IDFF_resizeAspect,0);
+       cfgSet(IDFF_isAspect,0);
        aspect2dlg();
        return TRUE;
       case IDC_RBT_ASPECT_KEEP:
-       cfgSet(IDFF_resizeAspect,1);
+       cfgSet(IDFF_isAspect,1);
        aspect2dlg();
        return TRUE;
       case IDC_RBT_ASPECT_USER:
-       cfgSet(IDFF_resizeAspect,2);
+       cfgSet(IDFF_isAspect,2);
        aspect2dlg();
        return TRUE;
      }   
@@ -160,7 +160,7 @@ HRESULT TresizeAspectPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 void TresizeAspectPage::getTip(char *tipS,int len)
 {
  strcpy(tipS,"Aspect ratio: ");
- switch (cfgGet(IDFF_resizeAspect))
+ switch (cfgGet(IDFF_isAspect))
   { 
    case 0:strcat(tipS,"no change");break;
    case 1:strcat(tipS,"keeping original aspect ratio");break;

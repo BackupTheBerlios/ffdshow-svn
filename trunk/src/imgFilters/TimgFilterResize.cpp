@@ -28,7 +28,6 @@ const TpresetSettings::resizeMethodNone=11;
 TimgFilterResize::TimgFilterResize(void)
 {
  swsc=NULL;
- resizeMethodOld=resizeGblurLumOld=resizeGblurChromOld=resizeSharpenLumOld=resizeSharpenChromOld=-1;
 }
 void TimgFilterResize::done(void)
 {
@@ -42,12 +41,12 @@ void TimgFilterResize::done(void)
 Trect TimgFilterResize::calcNewClip(const TpresetSettings *cfg,const Trect &oldClip,const Trect &newFull)
 {
  Trect newClip;
- if (cfg->resizeAspect==0)
+ if (cfg->isAspect==0)
   newClip=newFull;
  else
   {
    int ax,ay;
-   if (cfg->resizeAspect==1)
+   if (cfg->isAspect==1)
     {
      ax=oldClip.dx;
      ay=oldClip.dy;
@@ -70,13 +69,13 @@ Trect TimgFilterResize::calcNewClip(const TpresetSettings *cfg,const Trect &oldC
   }
  return newClip;
 }
-void TimgFilterResize::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterResize::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
- Trect *r=init(&rect,cfg->fullResize);
- if (r->dx==cfg->resizeDx && r->dy==cfg->resizeDy && cfg->resizeAspect!=2) return;
- if (!swsc || resizeMethodOld!=cfg->resizeMethod || resizeGblurLumOld!=cfg->resizeGblurLum || resizeGblurChromOld!=cfg->resizeGblurChrom || resizeSharpenLumOld!=cfg->resizeSharpenLum || resizeSharpenChromOld!=cfg->resizeSharpenChrom)
+ Trect *r=init(&pict.rect,cfg->fullResize);
+ if (r->dx==cfg->resizeDx && r->dy==cfg->resizeDy && cfg->isAspect!=2) return;
+ if (!swsc || deci->getParam2(IDFF_resizeChanged))
   {
-   resizeMethodOld=cfg->resizeMethod;resizeGblurLumOld=cfg->resizeGblurLum;resizeGblurChromOld=cfg->resizeGblurChrom;resizeSharpenLumOld=cfg->resizeSharpenLum;resizeSharpenChromOld=cfg->resizeSharpenChrom;
+   deci->putParam(IDFF_resizeChanged,0);
    done();
    Tpostproc *postproc;deci->getPostproc(&postproc);if (!postproc->ok) return;
    newRect.stride=(cfg->resizeDx/16+2)*16;
@@ -85,7 +84,7 @@ void TimgFilterResize::process(TffPict *pict,TffRect &rect,const TpresetSettings
     {
      newRect.clip=calcNewClip(cfg,*r,newRect.full);newRect.clip.calcDiff(newRect.stride);
      __asm emms;
-     swsc=postproc->getSwsContextFromCmdLine(r->dx,r->dy,IMGFMT_YV12,newRect.clip.dx,newRect.clip.dy,IMGFMT_YV12,resizeMethodOld,resizeGblurLumOld,resizeGblurChromOld,resizeSharpenLumOld,resizeSharpenChromOld);
+     swsc=postproc->getSwsContextFromCmdLine(r->dx,r->dy,IMGFMT_YV12,newRect.clip.dx,newRect.clip.dy,IMGFMT_YV12,cfg->resizeMethod,cfg->resizeGblurLum,cfg->resizeGblurChrom,cfg->resizeSharpenLum,cfg->resizeSharpenChrom);
     }
    else 
     {
@@ -96,15 +95,15 @@ void TimgFilterResize::process(TffPict *pict,TffRect &rect,const TpresetSettings
      swsc=(SwsContext*)-1;
     }
   }
- if (rect.clip==newRect.clip && rect.full==newRect.full) return;
+ if (pict.rect.clip==newRect.clip && pict.rect.full==newRect.full) return;
 
- const unsigned char *src[]={pict->getCurY()+r->diffY ,pict->getCurU()+r->diffUV,pict->getCurV()+r->diffUV};
- int srcStride[]={rect.stride,rect.stride/2,rect.stride/2};
- unsigned char *y2=pict->getNextY(),*u2=pict->getNextU(),*v2=pict->getNextV();
+ const unsigned char *src[]={getCurY(pict)+r->diffY,getCurU(pict)+r->diffUV,getCurV(pict)+r->diffUV};
+ int srcStride[]={pict.rect.stride,pict.rect.stride/2,pict.rect.stride/2};
+ unsigned char *y2=getNextY(pict,&newRect),*u2=getNextU(pict,&newRect),*v2=getNextV(pict,&newRect);
  unsigned char *dst[]={y2+newRect.clip.diffY,u2+newRect.clip.diffUV,v2+newRect.clip.diffUV};
  int dstStride[]={newRect.stride,newRect.stride/2,newRect.stride/2};
  newRect.clear(y2+newRect.full.diffY,u2+newRect.full.diffUV,v2+newRect.full.diffUV);
- if (cfg->resizeMethod!=cfg->resizeMethodNone)
+ if (swsc && swsc!=(void*)-1)
   swsc->swScale(swsc,src,srcStride,0,r->dy,dst,dstStride);
  else
   {
@@ -134,19 +133,19 @@ void TimgFilterResize::process(TffPict *pict,TffRect &rect,const TpresetSettings
      xdif1=0;
      xdif2=(r->dx-newRect.clip.dx)/2;
     }
-   src[0]+=ydif2*rect.stride;dst[0]+=ydif1*newRect.stride;
+   src[0]+=ydif2*pict.rect.stride;dst[0]+=ydif1*newRect.stride;
    unsigned int y;
-   for (y=0;y<dy;y++,src[0]+=rect.stride,dst[0]+=newRect.stride)
+   for (y=0;y<dy;y++,src[0]+=pict.rect.stride,dst[0]+=newRect.stride)
     memcpy(dst[0]+xdif1,src[0]+xdif2,dx);
    dx/=2;xdif1/=2;xdif2/=2;
    dy/=2;ydif1/=2;ydif2/=2;
-   src[1]+=ydif2*rect.stride/2;dst[1]+=ydif1*newRect.stride/2;
-   src[2]+=ydif2*rect.stride/2;dst[2]+=ydif1*newRect.stride/2;
-   for (y=0;y<dy;y++,src[1]+=rect.stride/2,src[2]+=rect.stride/2,dst[1]+=newRect.stride/2,dst[2]+=newRect.stride/2)
+   src[1]+=ydif2*pict.rect.stride/2;dst[1]+=ydif1*newRect.stride/2;
+   src[2]+=ydif2*pict.rect.stride/2;dst[2]+=ydif1*newRect.stride/2;
+   for (y=0;y<dy;y++,src[1]+=pict.rect.stride/2,src[2]+=pict.rect.stride/2,dst[1]+=newRect.stride/2,dst[2]+=newRect.stride/2)
     {
      memcpy(dst[1]+xdif1,src[1]+xdif2,dx);
      memcpy(dst[2]+xdif1,src[2]+xdif2,dx);
     }
   }
- rect=newRect;
+ pict.rect=newRect;
 }

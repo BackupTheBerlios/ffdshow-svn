@@ -49,13 +49,13 @@ void TimgFilterCrop::done(void)
 {
  cropDx=cropDy=-1;
 }
-void TimgFilterCrop::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterCrop::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
- Trect *r=init(&rect,0);
+ Trect *r=init(&pict.rect,0);
  if (cropDx==-1 || deci->getParam2(IDFF_cropChanged))
   {
    calcCrop(r,cfg);
    deci->putParam(IDFF_cropChanged,0);
   }
- r->x=cropLeft;r->y=cropTop;r->dx=cropDx;r->dy=cropDy;r->calcDiff(rect.stride);
+ r->x=cropLeft;r->y=cropTop;r->dx=cropDx;r->dy=cropDy;r->calcDiff(pict.rect.stride);
 }

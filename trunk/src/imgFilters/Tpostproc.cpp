@@ -78,5 +78,6 @@ int Tpostproc::getPPmode(const TpresetSettings *cfg,int currentq)
   result=cfg->ppcustom;  
  if (cfg->levelFixLum) result|=LUM_LEVEL_FIX;
  if (cfg->levelFixChrom) result|=CHROM_LEVEL_FIX;
+ if (cfg->isDeinterlace) result|=CUBIC_IPOL_DEINT_FILTER;
  return result;
 }

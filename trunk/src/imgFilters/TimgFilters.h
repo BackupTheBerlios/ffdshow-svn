@@ -7,10 +7,9 @@
 struct TglobalSettings;
 struct TpresetSettings;
 struct subtitle;
-struct TffPict;
+struct TffPict2;
 class TimgFilter;
 struct IffDecoder;
-struct TffRect;
 class TimgFilters
 {
 private:
@@ -19,7 +18,7 @@ private:
 public:
  TimgFilters(IffDecoder *Ideci);
  ~TimgFilters();
- void process(const TglobalSettings *global,const TpresetSettings *cfg,TffPict *pict,TffRect &rect);
+ void process(const TglobalSettings *global,const TpresetSettings *cfg,TffPict2 &pict);
 };
 
 #endif

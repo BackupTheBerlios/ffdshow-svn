@@ -23,6 +23,7 @@
 #include "Tpostproc.h"
 #include "TmovieSource.h"
 #include "IffDecoder.h"
+#include "ffdebug.h"
 
 const int TpresetSettings::deblockStrengthDef=256;
 
@@ -35,11 +36,11 @@ TimgFilterPostproc::~TimgFilterPostproc()
 {
  delete cpu;
 }
-void TimgFilterPostproc::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterPostproc::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
  TmovieSource *movie;deci->getMovieSource(&movie);
  Tpostproc *postproc;deci->getPostproc(&postproc);
- if (!postproc->ok || dxY<16 || dyY<16) return;
+ if (!postproc->ok) return;
  int currentq=deci->getParam2(IDFF_currentq);
  if (cpus>0 && cfg->autoq && cfg->ppqual)
   {
@@ -57,9 +58,10 @@ void TimgFilterPostproc::process(TffPict *pict,TffRect &rect,const TpresetSettin
  int ppmode=postproc->getPPmode(cfg,currentq);
  if (ppmode)
   {
-   Trect *r=init(&rect,cfg->fullPostproc);
-   const unsigned char *tempPict1[3]={pict->getCurY() +r->diffY,pict->getCurU() +r->diffUV,pict->getCurV() +r->diffUV};
-   unsigned char       *tempPict2[3]={pict->getNextY()+r->diffY,pict->getNextU()+r->diffUV,pict->getNextV()+r->diffUV};
+   Trect *r=init(&pict.rect,cfg->fullPostproc);
+   if (dxY<16 || dyY<16) return;
+   const unsigned char *tempPict1[3]={getCurY (pict)+r->diffY,getCurU (pict)+r->diffUV,getCurV (pict)+r->diffUV};
+   unsigned char       *tempPict2[3]={getNextY(pict)+r->diffY,getNextU(pict)+r->diffUV,getNextV(pict)+r->diffUV};
    if (cfg->deblockStrength!=TpresetSettings::deblockStrengthDef/* || afterResize*/)
     for (unsigned int i=0;i<movie->quantDx*movie->quantDy;i++)
      {

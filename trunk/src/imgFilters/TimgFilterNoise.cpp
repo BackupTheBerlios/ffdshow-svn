@@ -143,13 +143,13 @@ void TimgFilterNoise::noiseAvihUV(const unsigned char *srcU,unsigned char *dstU,
  __asm emms;
 }
 
-void TimgFilterNoise::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterNoise::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
  if (!cfg->noiseStrength && !cfg->noiseStrengthChroma) return;
- Trect *r=init(&rect,cfg->fullNoise);
+ Trect *r=init(&pict.rect,cfg->fullNoise);
  if (cfg->noiseStrength)
   {  
-   const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getCurNextY()+r->diffY;
+   const unsigned char *srcY=getCurY(pict)+r->diffY;unsigned char *dstY=getCurNextY(pict)+r->diffY;
    if (cfg->noiseMethod==0) 
     noiseY(srcY,dstY,cfg);
    else 
@@ -158,8 +158,8 @@ void TimgFilterNoise::process(TffPict *pict,TffRect &rect,const TpresetSettings 
   }
  if (cfg->noiseStrengthChroma)
   {
-   const unsigned char *srcU=pict->getCurU()+r->diffUV;unsigned char *dstU=pict->getCurNextU()+r->diffUV;
-   const unsigned char *srcV=pict->getCurV()+r->diffUV;unsigned char *dstV=pict->getCurNextV()+r->diffUV;
+   const unsigned char *srcU=getCurU(pict)+r->diffUV;unsigned char *dstU=getCurNextU(pict)+r->diffUV;
+   const unsigned char *srcV=getCurV(pict)+r->diffUV;unsigned char *dstV=getCurNextV(pict)+r->diffUV;
    if (cfg->noiseMethod==0)                    
     noiseUV(srcU,dstU,srcV,dstV,cfg);
    else 

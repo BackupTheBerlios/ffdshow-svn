@@ -23,14 +23,14 @@
 #include "TmovieSource.h"
 #include "IffDecoder.h"
 
-void TimgFilterShowMV::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterShowMV::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
  TmovieSource *movie;
  deci->getMovieSource(&movie);
  TmovieSource::TmotionVectors mv=movie->getMV();
  if (!mv.vectors) return;
- Trect *r=init(&rect,0);
- unsigned char *dstY=pict->getCurNextY(rect.stride,r)+r->diffY;
+ Trect *r=init(&pict.rect,0);
+ unsigned char *dstY=getCurNextY(pict)+r->diffY;
  for (unsigned int mb_y=0;mb_y<mv.dy;mb_y++)
   {
    unsigned int y=mb_y*16+8;

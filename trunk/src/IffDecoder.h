@@ -38,6 +38,8 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_levelFixLum         107
 #define IDFF_levelFixChrom       108
 
+#define IDFF_isDeinterlace      1401
+
 #define IDFF_isPictProp          205
 #define IDFF_orderPictProp       207
 #define IDFF_fullPictProp        213
@@ -78,13 +80,14 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_fullResize          723
 #define IDFF_resizeDx            702 //new width
 #define IDFF_resizeDy            703 //new height
-#define IDFF_resizeAspect        704 //0 - no aspect ratio correctio, 1 - keep original aspect, 2 - aspect ration is set in IDFF_aspectRatio
-#define IDFF_resizeMethod        706
+#define IDFF_isAspect            704 //0 - no aspect ratio correctio, 1 - keep original aspect, 2 - aspect ration is set in IDFF_aspectRatio
 #define IDFF_aspectRatio         707 //aspect ratio (<<16)
+#define IDFF_resizeMethod        706
 #define IDFF_resizeGblurLum      708 // *100
 #define IDFF_resizeGblurChrom    709 // *100
 #define IDFF_resizeSharpenLum    710 // *100
 #define IDFF_resizeSharpenChrom  711 // *100
+#define IDFF_resizeChanged       725
 
 #define IDFF_isCropNzoom         712
 #define IDFF_isZoom              713

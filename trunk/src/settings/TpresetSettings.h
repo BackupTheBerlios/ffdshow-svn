@@ -44,6 +44,8 @@ public:
  int hue,saturation;
  static const int hueDef,saturationDef;
  
+ int isDeinterlace;
+ 
  int flip;
 
  int isBlur,orderBlur;
@@ -73,7 +75,7 @@ public:
  static const int orderResizeDef;
  int fullResize;
  int resizeDx,resizeDy;
- int resizeAspect;
+ int isAspect;
  int aspectRatio;
  int resizeMethod;
  static const int resizeMethodNone;

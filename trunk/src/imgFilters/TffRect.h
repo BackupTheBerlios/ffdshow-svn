@@ -15,7 +15,6 @@ struct Trect
   }
 };
   
-struct TffPict;
 struct TffRect
 {
  Trect full,clip;
@@ -26,6 +25,7 @@ struct TffRect
   }
  unsigned int stride; 
  void clear(unsigned char *y,unsigned char *u,unsigned char *v);
+ void calcDiff(void) {full.calcDiff(stride);clip.calcDiff(stride);}
 };  
 inline bool operator !=(const Trect &r1,const Trect &r2)
 {

@@ -103,7 +103,14 @@ Function .onInit
   SectionSetFlags 10 0
  mp41End:
 
-
+  ReadRegDWORD $0 HKLM SOFTWARE\GNU\ffdshow "wmv1"
+  IntCmp $0 0 wmv1Equal wmv1Less 
+  SectionSetFlags 11 0x80000000
+  Goto wmv1End
+ wmv1Equal:
+ wmv1Less:
+  SectionSetFlags 11 0
+ wmv1End:
 
 FunctionEnd
 
@@ -179,6 +186,10 @@ SectionEnd
 ; 10
 Section "MS MPEG4v1"
   WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "mp41" 1
+SectionEnd
+; 11
+Section "Windows Media Video 1"
+  WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "wmv1" 1
 SectionEnd
 
 ; uninstall stuff

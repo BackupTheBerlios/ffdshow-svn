@@ -59,32 +59,32 @@ TimgFilters::~TimgFilters()
   }
  filters.clear();
 }
-void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *cfg,TffPict *pict,TffRect &rect)
+void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *cfg,TffPict2 &pict)
 {
- if (cfg->isCropNzoom) crop->process(pict,rect,cfg);
+ if (cfg->isCropNzoom) crop->process(pict,cfg);
  for (int i=cfg->min_order;i<=cfg->max_order;i++)
   if (i==cfg->orderPostproc && cfg->isPostproc)
-   postproc->process(pict,rect,cfg);
+   postproc->process(pict,cfg);
   else if (i==cfg->orderPictProp && cfg->isPictProp)
    {
-    luma->process(pict,rect,cfg);
-    chroma->process(pict,rect,cfg);
+    luma->process(pict,cfg);
+    chroma->process(pict,cfg);
    }
   else if (i==cfg->orderBlur && cfg->isBlur)
    {
-    blur->process(pict,rect,cfg);
-    timesmooth->process(pict,rect,cfg);
+    blur->process(pict,cfg);
+    timesmooth->process(pict,cfg);
    }
   else if (i==cfg->orderSharpen && cfg->isSharpen)
-   sharpen->process(pict,rect,cfg);
+   sharpen->process(pict,cfg);
   else if (i==cfg->orderNoise && cfg->isNoise)
-   noise->process(pict,rect,cfg);
+   noise->process(pict,cfg);
   else if (i==cfg->orderSubtitles && cfg->isSubtitles)
-   subtitles->process(pict,rect,cfg);
+   subtitles->process(pict,cfg);
   else if (i==cfg->orderOffset && cfg->isOffset)
-   offset->process(pict,rect,cfg);
+   offset->process(pict,cfg);
   else if (i==cfg->orderResize)
-   resize->process(pict,rect,cfg);
+   resize->process(pict,cfg);
   else if (i==cfg->orderShowMV && global->isShowMV) 
-   showMV->process(pict,rect,cfg);
+   showMV->process(pict,cfg);
 }

@@ -9,7 +9,7 @@ class TimgFilterSubtitles :public TimgFilter
 private:
  Tfont font;
 public:
- virtual void process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg);
+ virtual void process(TffPict2 &pict,const TpresetSettings *cfg);
 };
 
 #endif

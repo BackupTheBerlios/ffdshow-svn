@@ -429,22 +429,22 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
   }
 }
 
-void TimgFilterSharpen::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterSharpen::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
  if (cfg->xsharp_strength==cfg->xsharp_strengthDef && cfg->unsharp_strength!=cfg->unsharp_strengthDef) return;
- Trect *r=init(&rect,cfg->fullSharpen);
+ Trect *r=init(&pict.rect,cfg->fullSharpen);
  switch (cfg->sharpenMethod)
   {
    case 0:
     if (config.cpu_flags&XVID_CPU_MMXEXT)
      {
-      const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
+      const unsigned char *srcY=getCurY(pict)+r->diffY;unsigned char *dstY=getNextY(pict)+r->diffY;
       xsharpen(srcY,dstY,cfg);
      }
     return;
    case 1:
     {
-     const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
+     const unsigned char *srcY=getCurY(pict)+r->diffY;unsigned char *dstY=getNextY(pict)+r->diffY;
      unsharpen(srcY,dstY,cfg);
      return;
     }

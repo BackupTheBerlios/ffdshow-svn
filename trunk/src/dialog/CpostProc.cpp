@@ -55,6 +55,7 @@ void TpostProcPage::postProc2dlg(void)
  char pomS[256];
  sprintf(pomS,"Processing strength: %i%%",100*cfgGet(IDFF_deblockStrength)/256);
  SendDlgItemMessage(m_hwnd,IDC_LBL_DEBLOCKSTRENGTH,WM_SETTEXT,0,LPARAM(pomS));
+ setCheck(IDC_CHB_DEINTERLACE,cfgGet(IDFF_isDeinterlace));
  setPPchbs();
 }
 
@@ -150,6 +151,9 @@ HRESULT TpostProcPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         cfgSet(IDFF_levelFixChrom,getCheck(IDC_CHB_LEVELFIX_CHROM));
         return TRUE;
        }
+      case IDC_CHB_DEINTERLACE:
+       cfgSet(IDFF_isDeinterlace,getCheck(IDC_CHB_DEINTERLACE));
+       return TRUE;
      }  
     break; 
    case WM_TIMER:

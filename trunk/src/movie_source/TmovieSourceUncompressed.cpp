@@ -23,7 +23,6 @@
 #include "xvid\xvid.h"
 #include "ffmpeg\libavcodec\avcodec.h"
 
-
 TmovieSourceUncompressed::TmovieSourceUncompressed(void)
 {
  yuvY=yuvU=yuvV=NULL;
@@ -52,13 +51,10 @@ void TmovieSourceUncompressed::done(void)
  if (yuvU) xvid_free(yuvU);yuvU=NULL;
  if (yuvV) xvid_free(yuvV);yuvV=NULL;
 }
-int TmovieSourceUncompressed::getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen, AVPicture *avpict,int &got_picture)
+TffPict2 TmovieSourceUncompressed::getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen,int &used_bytes,int &got_picture)
 {
- avpict->data[0]=yuvY;avpict->data[1]=yuvU;avpict->data[2]=yuvV;
- avpict->linesize[0]=stride;
- avpict->linesize[1]=avpict->linesize[2]=stride/2;
- IMAGE img={avpict->data[0],avpict->data[1],avpict->data[2]};
- image_input(&img,dx,dy,avpict->linesize[0],src,csp);
+ IMAGE img={yuvY,yuvU,yuvV};
+ image_input(&img,dx,dy,stride,src,csp);
  /*
  if (codecId==CODEC_ID_YUY2)
   postproc.yuy2toyv12((const unsigned char*)m_frame.bitstream,avpict.data[0],avpict.data[1],avpict.data[2],
@@ -69,10 +65,10 @@ int TmovieSourceUncompressed::getFrame(const TglobalSettings *global,const Tpres
                         avctx->width,avctx->height,
                         -avpict.linesize[0],-avpict.linesize[1],avctx->width*3);
  */                                     
- got_picture=24; 
+ got_picture=24;used_bytes=srcLen; 
  for (unsigned int i=0;i<quantDx*quantDy;i++)
   quant[i]=10;
- return srcLen;
+ return TffPict2(yuvY,yuvU,yuvV,stride,r,false);
 }
 void TmovieSourceUncompressed::getVersion(char **vers)
 {

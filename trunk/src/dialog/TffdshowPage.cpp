@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2002 Milan Cutka
- * based on config.cpp from XVID DirectShow filter
+ * based on config.cpp from XviD DirectShow filter
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,11 @@
  */
 
 #include "stdafx.h"
-#include "Tconfig.h"
-#include "TffdshowPage.h"
 #include "resource.h"
-#include "IffDecoder.h"
 #include "ffdebug.h"
+#include "Tconfig.h"
+#include "IffDecoder.h"
+#include "TffdshowPage.h"
 #include "TconfPage.h"
 #include "Ccodecs.h"
 #include "Cinfo.h"
@@ -560,21 +560,6 @@ void CALLBACK configure(HWND hwnd,HINSTANCE hinst,LPTSTR lpCmdLine,int nCmdShow)
  if (CoInitialize(NULL)!=S_OK) return;
  if (CoCreateInstance(CLSID_FFDSHOW,NULL,CLSCTX_INPROC_SERVER,IID_IffDecoder,(void**)&iff)!=S_OK) return;
  iff->putParam(IDFF_inPlayer,0);
- ISpecifyPropertyPages *ispp;
- if (iff->QueryInterface(IID_ISpecifyPropertyPages,(void**)&ispp)==S_OK)
-  {
-   CAUUID pages;
-   if (ispp->GetPages(&pages)==S_OK)
-    {
-     IUnknown *ifflist[]={ispp};
-     OleCreatePropertyFrame(NULL,10,10,L"ffdshow",
-                            1,ifflist,
-                            pages.cElems,pages.pElems,
-                            LOCALE_SYSTEM_DEFAULT,
-                            0,0
-                           );
-    }
-   ispp->Release();
-  }
+ iff->showCfgDlg(NULL);
  iff->Release();
 }

@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by ffdshow.rc
 //
 #define VERSION_RES_MINOR_VER           0
@@ -95,6 +95,8 @@
 #define IDC_CHB_LEVELFIX_LUM            1035
 #define IDC_CHB_LEVELFIX_CHROM          1036
 #define IDC_LBL_GAMMA                   1037
+#define IDC_CHB_LEVELFIX_LUM2           1037
+#define IDC_CHB_DEINTERLACE             1037
 #define IDC_CHB_NOISE                   1038
 #define IDC_CHB_NOISE_UNIFORM           1039
 #define IDC_TBR_NOISESTRENGTH           1040

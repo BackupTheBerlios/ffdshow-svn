@@ -6,6 +6,7 @@
 #include <stddef.h>
 
 struct Trect;
+/*
 struct TffPict
 {
  struct TtempPicture 
@@ -119,6 +120,21 @@ public:
   {
    return v->getCurNext(stride,r,2);
   } 
+};
+*/
+#include "TffRect.h"
+struct TffPict2
+{
+public:
+ TffPict2(unsigned char *Iy,unsigned char *Iu,unsigned char *Iv,int stride,const Trect &r,bool Iro):y(Iy),u(Iu),v(Iv),ro(Iro)
+  {
+   rect.stride=stride;
+   rect.full=rect.clip=r;
+   rect.calcDiff();
+  }
+ TffRect rect;
+ unsigned char *y,*u,*v;
+ bool ro;
 };
 
 #endif

@@ -112,7 +112,7 @@ STDMETHODIMP TffDecoder::putParam(unsigned int paramID, int  val)
    #include "ffdshow_params.h"
    default:return S_FALSE;
   }
- if (paramID!=IDFF_lastPage && paramID!=IDFF_cropChanged && paramID!=IDFF_fontChanged) sendOnChange();
+ if (paramID!=IDFF_lastPage && paramID!=IDFF_cropChanged && paramID!=IDFF_fontChanged && paramID!=IDFF_resizeChanged) sendOnChange();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::notifyParamsChanged(void)
@@ -131,6 +131,11 @@ void TffDecoder::onCropChanged(void)
  if (!presetSettings) return;
  cropChanged=true;
  if (presetSettings->magnificationLocked) presetSettings->magnificationY=presetSettings->magnificationX;
+}
+void TffDecoder::onResizeChanged(void)
+{
+ if (!presetSettings) return;
+ resizeChanged=true;
 }
 void TffDecoder::onTrayIconChanged(void)
 {
@@ -444,10 +449,11 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  AVIname[0]=AVIfourcc[0]='\0';
  AVIdx=AVIdy=outDx=outDy=0;AVIfps=0;
  cfgDlgHnwd=NULL;inPlayer=1;
- movie=NULL;tray=NULL;subs=NULL;sub=NULL;pict=NULL;imgFilters=NULL;
+ movie=NULL;tray=NULL;subs=NULL;sub=NULL;imgFilters=NULL;
  onChangeWnd=NULL;onChangeMsg=0;
  onInfoWnd=NULL;onInfoMsg1=onInfoMsg2=0;
  codecId=CODEC_ID_NONE;
+ cropChanged=resizeChanged=true;
  lastTime=clock();
 
  config.init();
@@ -794,8 +800,8 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
  TpresetSettings presetSettings=*this->presetSettings;
  presetSettings.isResize=isResize;presetSettings.resizeDx=outDx;presetSettings.resizeDy=outDy;
  AVPicture avpict;memset(&avpict,0,sizeof(avpict));
- int got_picture=0;
- int ret=movie->getFrame(&globalSettings,&presetSettings,(unsigned char*)m_frame.bitstream,m_frame.length,&avpict,got_picture);
+ int got_picture=0,ret;
+ TffPict2 pict=movie->getFrame(&globalSettings,&presetSettings,(unsigned char*)m_frame.bitstream,m_frame.length,ret,got_picture);
  //char pomS[256];sprintf(pomS,"framelen:%i ret:%i gotpicture:%i\n",m_frame.length,ret,got_picture);OutputDebugString(pomS);
  if (pIn->IsPreroll()==S_OK)
   {
@@ -832,19 +838,16 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   }
  else sub=NULL;  
  
- if (!pict) pict=new TffPict(max(avpict.linesize[0]*AVIdy,((outDx/16+2)*16)*outDy));
  IMAGE destPict;
  if (m_frame.stride<outDx)
   {
    char pomS[256];sprintf(pomS,"here would be an error: stride:%u, AVIdx:%u\n",m_frame.stride,AVIdx);DEBUGS(pomS);
    return S_FALSE;
   }
- TffRect rect(avpict.linesize[0],0,0,AVIdx,AVIdy);
- pict->reset(avpict.data[0],avpict.data[1],avpict.data[2]);
- imgFilters->process(&globalSettings,&presetSettings,pict,rect);
- destPict.y=(uint8_t*)pict->getCurY();destPict.u=(uint8_t*)pict->getCurU();destPict.v=(uint8_t*)pict->getCurV();
+ imgFilters->process(&globalSettings,&presetSettings,pict);
+ destPict.y=pict.y;destPict.u=pict.u;destPict.v=pict.v;
  image_output(&destPict,
-              rect.full.dx,rect.full.dy,rect.stride,
+              pict.rect.full.dx,pict.rect.full.dy,pict.rect.stride,
               (unsigned char*)m_frame.image,
               m_frame.stride,
               m_frame.colorspace^(presetSettings.flip?XVID_CSP_VFLIP:0));

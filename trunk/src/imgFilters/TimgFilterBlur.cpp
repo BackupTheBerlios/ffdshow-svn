@@ -41,11 +41,11 @@ void TimgFilterBlur::done(void)
    tempPict=NULL;
   }
 }
-void TimgFilterBlur::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterBlur::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
  if (!cfg->blurStrength) return;
- Trect *r=init(&rect,cfg->fullBlur);
- const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
+ Trect *r=init(&pict.rect,cfg->fullBlur);
+ const unsigned char *srcY=getCurY(pict)+r->diffY;unsigned char *dstY=getNextY(pict)+r->diffY;
 
  if (oldStrength!=cfg->blurStrength)
   {

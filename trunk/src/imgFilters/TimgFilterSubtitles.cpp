@@ -23,7 +23,7 @@
 
 const int TpresetSettings::subDelayDef=0,TpresetSettings::subSpeedDef=1000;
 
-void TimgFilterSubtitles::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterSubtitles::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
  if (deci->getParam2(IDFF_fontChanged))
   {
@@ -34,10 +34,10 @@ void TimgFilterSubtitles::process(TffPict *pict,TffRect &rect,const TpresetSetti
  deci->getSubtitle(&sub); 
  if (sub)
   { 
-   Trect *r=init(&rect,cfg->fullSubtitles);
-   unsigned char *dstY=pict->getCurNextY(rect.stride,r)+r->diffY ;
-   unsigned char *dstU=pict->getCurNextU(rect.stride,r)+r->diffUV;
-   unsigned char *dstV=pict->getCurNextV(rect.stride,r)+r->diffUV;
+   Trect *r=init(&pict.rect,cfg->fullSubtitles);
+   unsigned char *dstY=getCurNextY(pict)+r->diffY ;
+   unsigned char *dstU=getCurNextU(pict)+r->diffUV;
+   unsigned char *dstV=getCurNextV(pict)+r->diffUV;
    font.print(dstY,dstU,dstV,dxY,strideY,dyY,sub,cfg->subPosX,cfg->subPosY);
   }
 }                                  

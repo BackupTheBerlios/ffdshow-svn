@@ -34,12 +34,12 @@ TimgFilterChroma::TimgFilterChroma(void)
   }
 }
 
-void TimgFilterChroma::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
+void TimgFilterChroma::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
  if (cfg->hue==TpresetSettings::hueDef && cfg->saturation==TpresetSettings::saturationDef) return;
- Trect *r=init(&rect,cfg->fullPictProp);
- const unsigned char *srcU=pict->getCurU()+r->diffUV;unsigned char *dstU=pict->getCurNextU()+r->diffUV;
- const unsigned char *srcV=pict->getCurV()+r->diffUV;unsigned char *dstV=pict->getCurNextV()+r->diffUV;
+ Trect *r=init(&pict.rect,cfg->fullPictProp);
+ const unsigned char *srcU=getCurU(pict)+r->diffUV;unsigned char *dstU=getCurNextU(pict)+r->diffUV;
+ const unsigned char *srcV=getCurV(pict)+r->diffUV;unsigned char *dstV=getCurNextV(pict)+r->diffUV;
  
  int hue=cfg->hue;          //-180 ... 0 ... 180
  int sat = cfg->saturation ;//0 (BW) - 64 (normal) - 128 (too much color);

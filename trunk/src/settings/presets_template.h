@@ -11,6 +11,8 @@ _REG_OP_N("deblockStrength",deblockStrength,deblockStrengthDef);
 _REG_OP_N("levelFixLum",levelFixLum,0);
 _REG_OP_N("levelFixChrom",levelFixChrom,0);levelFixChrom=0;
 
+_REG_OP_N("isDeinterlace",isDeinterlace,0);
+
 _REG_OP_N("isPictProp",isPictProp,0);
 _REG_OP_N("orderPictProp",orderPictProp,orderPictPropDef);
 _REG_OP_N("fullPictProp",fullPictProp,0);
@@ -50,7 +52,7 @@ _REG_OP_N("orderResize",orderResize,orderResizeDef);
 _REG_OP_N("fullResize",fullResize,0);
 _REG_OP_N("resizeDx",resizeDx,640);
 _REG_OP_N("resizeDy",resizeDy,480);       
-_REG_OP_N("resizeAscpect",resizeAspect,1);
+_REG_OP_N("resizeAscpect",isAspect,1);
 _REG_OP_N("resizeMethod",resizeMethod,2);
 _REG_OP_N("aspectRatio",aspectRatio,1.33*65536);
 _REG_OP_N("resizeGblurLum",resizeGblurLum,0);

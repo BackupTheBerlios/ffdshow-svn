@@ -67,6 +67,8 @@ _PARAM_OP(IDFF_deblockStrength    ,presetSettings->,deblockStrength    ,0,512,NU
 _PARAM_OP(IDFF_levelFixLum        ,presetSettings->,levelFixLum        ,0,0,NULL)
 _PARAM_OP(IDFF_levelFixChrom      ,presetSettings->,levelFixChrom      ,0,0,NULL)
 
+_PARAM_OP(IDFF_isDeinterlace      ,presetSettings->,isDeinterlace      ,0,0,NULL)
+
 _PARAM_OP(IDFF_isPictProp         ,presetSettings->,isPictProp         ,0,0,NULL)
 _PARAM_OP(IDFF_orderPictProp      ,presetSettings->,orderPictProp      ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)
 _PARAM_OP(IDFF_fullPictProp       ,presetSettings->,fullPictProp       ,0,0,NULL)
@@ -108,18 +110,19 @@ _PARAM_OP(IDFF_noiseStrengthChroma,presetSettings->,noiseStrengthChroma,0,127,NU
                                                 
 _PARAM_OP(IDFF_idct               ,presetSettings->,idct               ,0,4,NULL)
                                                 
-_PARAM_OP(IDFF_isResize           ,presetSettings->,isResize           ,0,0,NULL)
+_PARAM_OP(IDFF_isResize           ,presetSettings->,isResize           ,0,0,&TffDecoder::onResizeChanged)
 _PARAM_OP(IDFF_orderResize        ,presetSettings->,orderResize        ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)
 _PARAM_OP(IDFF_fullResize         ,presetSettings->,fullResize         ,0,0,NULL)
 _PARAM_OP(IDFF_resizeDx           ,presetSettings->,resizeDx           ,16,2048,NULL)
 _PARAM_OP(IDFF_resizeDy           ,presetSettings->,resizeDy           ,16,2048,NULL)
-_PARAM_OP(IDFF_resizeAspect       ,presetSettings->,resizeAspect       ,0,0,NULL)
-_PARAM_OP(IDFF_resizeMethod       ,presetSettings->,resizeMethod       ,0,TpresetSettings::resizeMethodNone,NULL)
-_PARAM_OP(IDFF_aspectRatio        ,presetSettings->,aspectRatio        ,0,0,NULL)
-_PARAM_OP(IDFF_resizeGblurLum     ,presetSettings->,resizeGblurLum     ,0,200,NULL)
-_PARAM_OP(IDFF_resizeGblurChrom   ,presetSettings->,resizeGblurChrom   ,0,200,NULL)
-_PARAM_OP(IDFF_resizeSharpenLum   ,presetSettings->,resizeSharpenLum   ,0,200,NULL)
-_PARAM_OP(IDFF_resizeSharpenChrom ,presetSettings->,resizeSharpenChrom ,0,200,NULL)
+_PARAM_OP(IDFF_isAspect           ,presetSettings->,isAspect           ,0,0,&TffDecoder::onResizeChanged)
+_PARAM_OP(IDFF_aspectRatio        ,presetSettings->,aspectRatio        ,0,0,&TffDecoder::onResizeChanged)
+_PARAM_OP(IDFF_resizeMethod       ,presetSettings->,resizeMethod       ,0,TpresetSettings::resizeMethodNone,&TffDecoder::onResizeChanged)
+_PARAM_OP(IDFF_resizeGblurLum     ,presetSettings->,resizeGblurLum     ,0,200,&TffDecoder::onResizeChanged)
+_PARAM_OP(IDFF_resizeGblurChrom   ,presetSettings->,resizeGblurChrom   ,0,200,&TffDecoder::onResizeChanged)
+_PARAM_OP(IDFF_resizeSharpenLum   ,presetSettings->,resizeSharpenLum   ,0,200,&TffDecoder::onResizeChanged)
+_PARAM_OP(IDFF_resizeSharpenChrom ,presetSettings->,resizeSharpenChrom ,0,200,&TffDecoder::onResizeChanged)
+_PARAM_OP(IDFF_resizeChanged,     ,this->          ,resizeChanged      ,0,0,NULL)
 
 _PARAM_OP(IDFF_isCropNzoom        ,presetSettings->,isCropNzoom        ,0,0,&TffDecoder::onCropChanged)
 _PARAM_OP(IDFF_isZoom             ,presetSettings->,isZoom             ,0,0,&TffDecoder::onCropChanged)

@@ -14,7 +14,7 @@ protected:
 public:
  TimgFilterSharpen(void);
  virtual void done(void);
- virtual void process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg);
+ virtual void process(TffPict2 &pict,const TpresetSettings *cfg);
 };
 
 #endif

@@ -83,7 +83,7 @@ void TmovieSourceLibavcodec::done(void)
  avcodec_close=NULL;
  set_ff_idct=NULL;
 }
-int TmovieSourceLibavcodec::getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen, AVPicture *avpict,int &got_picture)
+TffPict2 TmovieSourceLibavcodec::getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen,int &used_bytes,int &got_picture)
 {
  if (cfg->idct!=idctOld)
   switch (idctOld=cfg->idct)
@@ -99,7 +99,9 @@ int TmovieSourceLibavcodec::getFrame(const TglobalSettings *global,const Tpreset
  avctx->showMV=global->isShowMV;
  for (unsigned int i=0;i<quantDx*quantDy;i++)
   quant[i]=10;
- return avcodec_decode_video(avctx,avpict,&got_picture,src,srcLen);
+ AVPicture avpict;
+ used_bytes=avcodec_decode_video(avctx,&avpict,&got_picture,src,srcLen);
+ return TffPict2(avpict.data[0],avpict.data[1],avpict.data[2],avpict.linesize[0],r,true);
 }
 TmovieSource::TmotionVectors TmovieSourceLibavcodec::getMV(void) const 
 {
