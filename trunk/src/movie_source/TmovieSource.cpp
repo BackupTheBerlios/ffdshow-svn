@@ -38,7 +38,7 @@ TmovieSource* TmovieSource::initSource(int codecId,unsigned int AVIdx,unsigned i
   {
    xvidfirst=true;
    codecId-=CODEC_ID_XVID_MASK;
-  }; 
+  }
  if (xvidfirst)
   {
    TESTSOURCE(TmovieSourceXviD)
@@ -48,7 +48,7 @@ TmovieSource* TmovieSource::initSource(int codecId,unsigned int AVIdx,unsigned i
   {
    TESTSOURCE(TmovieSourceLibavcodec)
    TESTSOURCE(TmovieSourceXviD)
-  };
+  }
  TESTSOURCE(TmovieSourceUncompressed)
  return NULL; 
 }

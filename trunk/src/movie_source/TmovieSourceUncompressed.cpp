@@ -38,7 +38,7 @@ bool TmovieSourceUncompressed::init(int codecId,unsigned int AVIdx,unsigned int 
    case CODEC_ID_RGB5:csp=XVID_CSP_RGB555;break;
    case CODEC_ID_RGB6:csp=XVID_CSP_RGB565;break;
    default:return false;
-  };
+  }
  dx=AVIdx;dy=AVIdy;
  stride=(dx/16+4)*16;
  yuvY=(unsigned char*)xvid_malloc(stride*dy,MCACHE_LINE);

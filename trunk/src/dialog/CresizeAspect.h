@@ -15,8 +15,8 @@ public:
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
  virtual void init(void);
  virtual void cfg2dlg(void);
- virtual int getOrder(void) {return cfgGet(IDFF_orderResize);};
- virtual void setOrder(int o) {cfgSet(IDFF_orderResize,o);};
+ virtual int getOrder(void) {return cfgGet(IDFF_orderResize);}
+ virtual void setOrder(int o) {cfgSet(IDFF_orderResize,o);}
 };
 
 #endif 

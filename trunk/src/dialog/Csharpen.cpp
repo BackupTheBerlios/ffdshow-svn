@@ -64,7 +64,7 @@ void TsharpenPage::sharpen2dlg(void)
           enableWindow(IDC_LBL_XSHARPENTHRESH,false);
           SendDlgItemMessage(m_hwnd,IDC_TBR_XSHARPENTHRESH,TBM_SETPOS,TRUE,writeSharpenThreshold(cfgGet(IDFF_unsharp_threshold)));
           break;
-  };        
+  }
 }
 
 int TsharpenPage::writeSharpenStrength(int x)
@@ -97,7 +97,7 @@ HRESULT TsharpenPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         case 1:cfgSet(IDFF_unsharp_strength,writeSharpenStrength(SendDlgItemMessage(m_hwnd,IDC_TBR_XSHARPENSTRENGTH,TBM_GETPOS,0,0)));
                cfgSet(IDFF_unsharp_threshold,writeSharpenThreshold(SendDlgItemMessage(m_hwnd,IDC_TBR_XSHARPENTHRESH,TBM_GETPOS,0,0)));
                break;
-       };        
+       }
       return TRUE;
      }  
     break; 

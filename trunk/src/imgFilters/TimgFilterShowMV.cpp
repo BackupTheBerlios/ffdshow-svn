@@ -59,7 +59,7 @@ void TimgFilterShowMV::line(unsigned char *dst,unsigned int _x0,unsigned int _y0
   {
    dst[_y0*strideY+_x0]+=100;
    return;
-  };
+  }
  #define SET_PIXEL(adr,a1,a2) (a1),(a2),*adr+=100
 
  int dy=_y1-_y0;

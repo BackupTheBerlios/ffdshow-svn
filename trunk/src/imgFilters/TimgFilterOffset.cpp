@@ -63,15 +63,15 @@ void TimgFilterOffset::process(TffPict *pict,TffRect &rect,const TpresetSettings
   {
    const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
    offset(srcY,dstY,dxY,strideY,dyY,cfg->offsetY_X,-cfg->offsetY_Y,0);
-  };
+  }
  if (cfg->offsetU_X || cfg->offsetU_Y)
   {
    const unsigned char *srcU=pict->getCurU()+r->diffUV;unsigned char *dstU=pict->getNextU()+r->diffUV;
    offset(srcU,dstU,dxUV,strideUV,dyUV,cfg->offsetU_X/2,-cfg->offsetU_Y/2,128);
-  };
+  }
  if (cfg->offsetV_X || cfg->offsetV_Y)
   {
    const unsigned char *srcV=pict->getCurV()+r->diffUV;unsigned char *dstV=pict->getNextV()+r->diffUV;
    offset(srcV,dstV,dxUV,strideUV,dyUV,cfg->offsetV_X/2,-cfg->offsetV_Y/2,128);
-  };
+  }
 }

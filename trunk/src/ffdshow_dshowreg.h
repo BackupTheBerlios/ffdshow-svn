@@ -1,45 +1,45 @@
-const AMOVIESETUP_MEDIATYPE sudInputPinTypes[] =
- {
-  { &MEDIATYPE_Video, &CLSID_xvid },
-  { &MEDIATYPE_Video, &CLSID_XVID },
-  { &MEDIATYPE_Video, &CLSID_divx },
-  { &MEDIATYPE_Video, &CLSID_DIVX },
-  { &MEDIATYPE_Video, &CLSID_div3 },
-  { &MEDIATYPE_Video, &CLSID_DIV3 },
-  { &MEDIATYPE_Video, &CLSID_dx50 },
-  { &MEDIATYPE_Video, &CLSID_DX50 },
-  { &MEDIATYPE_Video, &CLSID_mp43 },
-  { &MEDIATYPE_Video, &CLSID_MP43 },
-  { &MEDIATYPE_Video, &CLSID_mp42 },
-  { &MEDIATYPE_Video, &CLSID_MP42 },
-  { &MEDIATYPE_Video, &CLSID_mp41 },
-  { &MEDIATYPE_Video, &CLSID_MP41 },
-  { &MEDIATYPE_Video, &CLSID_h263 },
-  { &MEDIATYPE_Video, &CLSID_H263 },
+const AMOVIESETUP_MEDIATYPE sudInputPinTypes[]=
+{
+ { &MEDIATYPE_Video, &CLSID_xvid },
+ { &MEDIATYPE_Video, &CLSID_XVID },
+ { &MEDIATYPE_Video, &CLSID_divx },
+ { &MEDIATYPE_Video, &CLSID_DIVX },
+ { &MEDIATYPE_Video, &CLSID_div3 },
+ { &MEDIATYPE_Video, &CLSID_DIV3 },
+ { &MEDIATYPE_Video, &CLSID_dx50 },
+ { &MEDIATYPE_Video, &CLSID_DX50 },
+ { &MEDIATYPE_Video, &CLSID_mp43 },
+ { &MEDIATYPE_Video, &CLSID_MP43 },
+ { &MEDIATYPE_Video, &CLSID_mp42 },
+ { &MEDIATYPE_Video, &CLSID_MP42 },
+ { &MEDIATYPE_Video, &CLSID_mp41 },
+ { &MEDIATYPE_Video, &CLSID_MP41 },
+ { &MEDIATYPE_Video, &CLSID_h263 },
+ { &MEDIATYPE_Video, &CLSID_H263 },
 #ifdef FF__WMV1
-  { &MEDIATYPE_Video, &CLSID_wmv1 },
-  { &MEDIATYPE_Video, &CLSID_WMV1 },
+ { &MEDIATYPE_Video, &CLSID_wmv1 },
+ { &MEDIATYPE_Video, &CLSID_WMV1 },
 #endif
 #ifdef FF__MPEG
-  { &MEDIATYPE_Video, &CLSID_MPEG1Packet },
-  { &MEDIATYPE_Video, &CLSID_MPEG1Payload },
+ { &MEDIATYPE_Video, &CLSID_MPEG1Packet },
+ { &MEDIATYPE_Video, &CLSID_MPEG1Payload },
 #endif
-  { &MEDIATYPE_Video, &MEDIASUBTYPE_YUY2 },
-  { &MEDIATYPE_Video, &MEDIASUBTYPE_RGB32},
-  { &MEDIATYPE_Video, &MEDIASUBTYPE_RGB24},
-  { &MEDIATYPE_Video, &MEDIASUBTYPE_RGB555},
-  { &MEDIATYPE_Video, &MEDIASUBTYPE_RGB565},
+ { &MEDIATYPE_Video, &MEDIASUBTYPE_YUY2 },
+ { &MEDIATYPE_Video, &MEDIASUBTYPE_RGB32},
+ { &MEDIATYPE_Video, &MEDIASUBTYPE_RGB24},
+ { &MEDIATYPE_Video, &MEDIASUBTYPE_RGB555},
+ { &MEDIATYPE_Video, &MEDIASUBTYPE_RGB565},
 #ifdef FF__MPEG2
-  { &MEDIATYPE_Video, &MEDIASUBTYPE_MPEG2_VIDEO},
+ { &MEDIATYPE_Video, &MEDIASUBTYPE_MPEG2_VIDEO},
 #endif
- };
+};
 
-const AMOVIESETUP_MEDIATYPE sudOutputPinTypes[] =
+const AMOVIESETUP_MEDIATYPE sudOutputPinTypes[]=
 {
  { &MEDIATYPE_Video, &MEDIASUBTYPE_NULL }
 };
 
-static AMOVIESETUP_PIN psudPins[] =
+static AMOVIESETUP_PIN psudPins[]=
 {
  {
   L"Input",           // String pin name
@@ -65,7 +65,7 @@ static AMOVIESETUP_PIN psudPins[] =
  }
 };
 
-const AMOVIESETUP_FILTER sudXvidDecoder =
+const AMOVIESETUP_FILTER sudXvidDecoder=
 {
  &CLSID_FFDSHOW,            // Filter CLSID
  FFDSHOW_NAME_L,            // Filter name

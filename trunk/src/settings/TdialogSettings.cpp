@@ -44,5 +44,5 @@ void TdialogSettings::save(void)
    REG_SET_N("dlgPosY",dlgPosY,0);
    REG_SET_N("lvWidth0",lvWidth0,0);
    RegCloseKey(hKey);
-  }; 
+  }
 }

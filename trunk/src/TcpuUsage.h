@@ -9,11 +9,11 @@ public:
  TcpuUsage(void)
   {
    usage_initialization();
-  };
+  }
  ~TcpuUsage()
   {
    usage_finalization();
-  };
+  }
  void CollectCPUData(void);  // Call CollectCPUData to refresh information about CPU usage
  int GetCPUCount(void);      // Call it to obtain the number of CPU's in the system
  int GetCPUUsage(int Index); // Call it to obtain the % of usage for given CPU

@@ -162,7 +162,7 @@ HRESULT TsubtitlesPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        return HRESULT(red); 
       }
      else return FALSE;  
-    }; 
+    }
   } 
  return FALSE;
 }

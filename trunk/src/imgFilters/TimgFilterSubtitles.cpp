@@ -27,7 +27,7 @@ void TimgFilterSubtitles::process(TffPict *pict,TffRect &rect,const TpresetSetti
   {
    font.init(cfg);
    deci->putParam(IDFF_fontChanged,0);
-  }; 
+  }
  subtitle *sub;
  deci->getSubtitle(&sub); 
  if (sub)
@@ -37,5 +37,5 @@ void TimgFilterSubtitles::process(TffPict *pict,TffRect &rect,const TpresetSetti
    unsigned char *dstU=pict->getCurNextU(rect.stride,r)+r->diffUV;
    unsigned char *dstV=pict->getCurNextV(rect.stride,r)+r->diffUV;
    font.print(dstY,dstU,dstV,dxY,strideY,dyY,sub,cfg->subPosX,cfg->subPosY);
-  }; 
+  }
 }                                  

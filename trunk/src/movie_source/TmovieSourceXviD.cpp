@@ -62,7 +62,7 @@ void TmovieSourceXviD::done(void)
    if (dechandle) xvid_decore(dechandle,XVID_DEC_DESTROY,NULL,NULL);dechandle=NULL;
    delete dll;
    dll=NULL;
-  }; 
+  }
  xvid_init=NULL;
  xvid_decore=NULL;
 }
@@ -116,7 +116,7 @@ bool TmovieSourceXviD::getVersion(char **vers)
    xinit.cpu_flags=0;
    xvid_init(NULL,0,&xinit,NULL);
    sprintf(ver,"XviD: API version %i.%i",xinit.api_version>>16,xinit.api_version&0xffff);
-  };
+  }
  delete dl;  
  return res;
 }

@@ -30,30 +30,31 @@ static const int KERNEL=4;
 #define SCALE2(i) SCALE((i)+0),SCALE((i)+1),SCALE((i)+2),SCALE((i)+3),SCALE((i)+4),\
                   SCALE((i)+5),SCALE((i)+6),SCALE((i)+7),SCALE((i)+8),SCALE((i)+9)
 
-static const __int64 scaletab[]={
-        0,
-        0x00007fff7fff7fffi64,      // special case for 1
-        0x00007fff7fff7fffi64,      // special case for 2
-        SCALE(3),
-        SCALE(4),
-        SCALE(5),
-        SCALE(6),
-        SCALE(7),
-        SCALE(8),
-        SCALE(9),
-        SCALE2(10),
-        SCALE2(20),
-        SCALE2(30),
-        SCALE2(40),
-        SCALE2(50),
-        SCALE2(60),
-        SCALE2(70),
-        SCALE2(80),
-        SCALE2(90),
-        SCALE2(100),
-        SCALE2(110),
-        SCALE2(120),
-    };
+static const __int64 scaletab[]=
+{
+ 0,
+ 0x00007fff7fff7fffi64,      // special case for 1
+ 0x00007fff7fff7fffi64,      // special case for 2
+ SCALE(3),
+ SCALE(4),
+ SCALE(5),
+ SCALE(6),
+ SCALE(7),
+ SCALE(8),
+ SCALE(9),
+ SCALE2(10),
+ SCALE2(20),
+ SCALE2(30),
+ SCALE2(40),
+ SCALE2(50),
+ SCALE2(60),
+ SCALE2(70),
+ SCALE2(80),
+ SCALE2(90),
+ SCALE2(100),
+ SCALE2(110),
+ SCALE2(120),
+};
 
 TimgFilterTimesmooth::TimgFilterTimesmooth(void)
 {

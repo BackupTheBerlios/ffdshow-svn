@@ -29,7 +29,7 @@ public:
       }
     }
    ok=(hdll!=NULL);
-  };
+  }
  ~Tdll()
   {
    if (hdll)
@@ -39,7 +39,7 @@ public:
   {
    *fnc=GetProcAddress(hdll,name);
    ok&=(*fnc!=NULL);
-  };
+  }
 };
 
 #endif

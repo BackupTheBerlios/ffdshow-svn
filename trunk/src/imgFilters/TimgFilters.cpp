@@ -54,7 +54,7 @@ TimgFilters::~TimgFilters()
   {
    (*i)->done();
    delete *i;
-  };
+  }
  filters.clear();
 }
 void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *cfg,TffPict *pict,TffRect &rect)

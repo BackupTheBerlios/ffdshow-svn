@@ -37,7 +37,7 @@ static INT_PTR CALLBACK dlgWndProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lPar
      cfgDlg->m_hwnd=hwnd;
      cfgDlg->init();
      return TRUE;
-    };
+    }
    default:
     {
      TconfPage *cfgDlg=(TconfPage*)GetWindowLong(hwnd,GWL_USERDATA);

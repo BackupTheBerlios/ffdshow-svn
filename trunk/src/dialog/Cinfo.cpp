@@ -95,7 +95,7 @@ HRESULT TinfoPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
   {
    deci->setOnInfoMsg(NULL,0,0);
    return TRUE;
-  };
+  }
  return FALSE;
 }
 

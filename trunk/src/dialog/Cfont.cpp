@@ -38,7 +38,7 @@ static int CALLBACK EnumFamCallBackCharsets(CONST LOGFONT *lpelf,CONST TEXTMETRI
    vector<int>::iterator i=find(sl->begin(),sl->end(),lpelf->lfCharSet);
    if (i==sl->end())
     sl->push_back(lpelf->lfCharSet);
-  }; 
+  }
  return 1;
 }
 
@@ -50,7 +50,7 @@ static int CALLBACK EnumFamCallBackFonts(CONST LOGFONT *lpelf,CONST TEXTMETRIC *
    vector<string>::iterator i=find(sl->begin(),sl->end(),lpelf->lfFaceName);
    if (i==sl->end())
     sl->push_back(lpelf->lfFaceName);
-  }; 
+  }
  return 1;
 }
 
@@ -151,10 +151,10 @@ void TfontPage::fillCharsets(void)
      case MAC_CHARSET        :name="Mac";break;
      case BALTIC_CHARSET     :name="Baltic";break;
      default                 :name="unknown";break;
-    };
+    }
    int ii=SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_ADDSTRING,0,LPARAM(name));
    SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_SETITEMDATA,ii,sl[i]);
-  };
+  }
  selectCharset(oldii);
 }
 

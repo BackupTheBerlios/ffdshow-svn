@@ -60,4 +60,4 @@ __asm
   #ifndef NOISE_AVIH
   movq [noisenext],mm4
   #endif
- };
+ }

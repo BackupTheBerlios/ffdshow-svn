@@ -74,7 +74,7 @@ void TglobalSettings::save(void)
    REG_SET_S("activePreset",defaultPreset,"");
    REG_SET_N("showMV",isShowMV,0);
    RegCloseKey(hKey);
-  }; 
+  }
 }
 
 #define FF_FOURCC(fourCC1,fourCC2,testVar,codecId)          \
@@ -110,5 +110,5 @@ int TglobalSettings::codecSupported(DWORD fourCC,char *AVIfourCC)
    FF_FOURCC(RGB5,rgb5,rawv,CODEC_ID_RGB5);
    FF_FOURCC(RGB6,rgb6,rawv,CODEC_ID_RGB6);
    default:return CODEC_ID_NONE;
-  }; 
+  }
 }

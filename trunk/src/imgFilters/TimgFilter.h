@@ -26,11 +26,11 @@ protected:
      oldRect=*rect;oldFull=full;
     }
    return (oldFull==1)?&oldRect.full:&oldRect.clip;
-  };
+  }
 public:
- TimgFilter(void) {deci=NULL;oldFull=-1;};
- virtual void done(void) {};
- void setDeci(IffDecoder *Ideci) {deci=Ideci;};
+ TimgFilter(void) {deci=NULL;oldFull=-1;}
+ virtual void done(void) {}
+ void setDeci(IffDecoder *Ideci) {deci=Ideci;}
  virtual void process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)=0;
 };
 

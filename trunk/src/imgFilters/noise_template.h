@@ -27,10 +27,10 @@
        jl lineLoop1 
        mov [noiseMaskPtr],ecx
       }
-    }; 
+    }
    __asm emms; 
    return;
-  }; 
+  }
  short *noiseMaskPtr=noiseMask; 
  static __declspec(align(8)) __int64 noiseStrength64;
  noiseStrength64=__int64(noiseStrength) +(__int64(noiseStrength)<<16)+(__int64(noiseStrength)<<32)+(__int64(noiseStrength)<<48);

@@ -88,7 +88,7 @@ HRESULT TcodecsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        cfgSet(IDFF_rawv,getCheck(IDC_CHB_RAWV));
        cfg2dlg();
        return TRUE;
-     };
+     }
     break; 
   }    
  return FALSE;

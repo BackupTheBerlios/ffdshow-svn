@@ -65,7 +65,7 @@ void TresizeAspectPage::aspect2dlg(void)
   {
    sprintf(pomS,"Keep original aspect ratio (%3.2f:1)",float(dx)/dy);
    SendDlgItemMessage(m_hwnd,IDC_RBT_ASPECT_KEEP,WM_SETTEXT,0,LPARAM(pomS));
-  };
+  }
  int aspectI=cfgGet(IDFF_aspectRatio);
  sprintf(pomS,"%3.2f:1",float(aspectI/65536.0));
  SendDlgItemMessage(m_hwnd,IDC_LBL_ASPECT_USER,WM_SETTEXT,0,LPARAM(pomS));
@@ -83,7 +83,7 @@ bool TresizeAspectPage::applyResizeXY(bool checkOnly)
   {
    cfgSet(IDFF_resizeDx,x);
    cfgSet(IDFF_resizeDy,y);
-  };
+  }
  parent->setChange(); 
  return true;
 }
@@ -127,7 +127,7 @@ HRESULT TresizeAspectPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
          InvalidateRect(GetDlgItem(m_hwnd,LOWORD(wParam)),NULL,TRUE);
          applyResizeXY(false);
          return TRUE;  
-        };
+        }
        break;
       case IDC_RBT_ASPECT_NO:
        cfgSet(IDFF_resizeAspect,0);
@@ -155,8 +155,8 @@ HRESULT TresizeAspectPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        return HRESULT(red); 
       }
      else return FALSE;  
-    }; 
-  }; 
+    }
+  }
  return FALSE;
 }
 

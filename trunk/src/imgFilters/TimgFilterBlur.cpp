@@ -42,7 +42,7 @@ void TimgFilterBlur::done(void)
   {
    xvid_free(tempPict);
    tempPict=NULL;
-  };
+  }
 }
 void TimgFilterBlur::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
@@ -114,7 +114,7 @@ void TimgFilterBlur::process(TffPict *pict,TffRect &rect,const TpresetSettings *
      cmp esi,eax
      jl  blur1
     }
-  };
+  }
  const unsigned char *srcL=srcY+stride,*srcR=srcL+dx-1;unsigned char *dstL=tempPict+stride,*dstR=dstL+dx-1;
  for (int y=1;y<dy-1;srcL+=stride,srcR+=stride,dstL+=stride,dstR+=stride,y++)
   {
@@ -170,7 +170,7 @@ void TimgFilterBlur::process(TffPict *pict,TffRect &rect,const TpresetSettings *
      cmp esi,eax
      jl  blur2
     }
-  };
+  }
  memcpy(dstY,tempPict,dx);
  memcpy(dstY+strideY*(dy-1),tempPict+strideY*(dy-1),dx);
  __asm emms;

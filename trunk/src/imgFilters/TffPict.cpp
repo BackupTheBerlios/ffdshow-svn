@@ -9,16 +9,16 @@ unsigned char* TffPict::TtempPicture::getCurNext(unsigned int stride,const Trect
   {
    p=getTempNext();
    if (!r) return p;
+   unsigned int y;
    switch (div)
     {
-     case 1:for (unsigned int y=r->y*stride;y<r->dy*stride;y+=stride)
+     case 1:for (y=r->y*stride;y<r->dy*stride;y+=stride)
              memcpy(p+y+r->x,av+y+r->x,r->dx);
             return p;
-     case 2:for (unsigned int y=(r->y/2)*(stride/2);y<(r->dy/2)*(stride/2);y+=stride/2)
+     case 2:for (y=(r->y/2)*(stride/2);y<(r->dy/2)*(stride/2);y+=stride/2)
              memcpy(p+y+r->x/2,av+y+r->x/2,r->dx/2);
             return p;
     }         
   }
- else 
-  return p;
+ return p;
 }

@@ -53,9 +53,9 @@ void TimgFilterPostproc::process(TffPict *pict,TffRect &rect,const TpresetSettin
    else
     {
      if (currentq<cfg->ppqual) currentq++ ;
-    };  
+    }
    deci->putParam(IDFF_currentq,currentq); 
-  };
+  }
  int ppmode=postproc->getPPmode(cfg,currentq);
  if (ppmode)
   {

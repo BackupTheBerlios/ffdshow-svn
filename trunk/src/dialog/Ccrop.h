@@ -15,8 +15,8 @@ public:
  virtual void init(void);
  virtual void cfg2dlg(void);
  virtual void interDlg(void);
- virtual int getInter(void) {return cfgGet(IDFF_isCropNzoom);};
- virtual int invInter(void) {return cfgInv(IDFF_isCropNzoom);};
+ virtual int getInter(void) {return cfgGet(IDFF_isCropNzoom);}
+ virtual int invInter(void) {return cfgInv(IDFF_isCropNzoom);}
  virtual void getTip(char *tipS,int len);
 };
 

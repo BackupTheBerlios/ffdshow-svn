@@ -100,8 +100,8 @@ Tchar::Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int co
           if (x+xx<0 || x+xx>=dxY) continue;
           s+=bmpY[dxY*(y+yy)+(x+xx)]*matrix[yy+2][xx+2];
           cnt++;
-         };
-       };
+         }
+       }
       s/=cnt*32;
       if (s>255) s=255;
       mskY[dxY*y+x]=s;
@@ -172,7 +172,7 @@ void Tfont::init(const TpresetSettings *cfg)
      {
       double d=8-(x*x+y*y);
       matrix[y+2][x+2]=2.55*cfg->fontShadowStrength*pow(d/8,2-cfg->fontShadowRadius/50.0);
-     };
+     }
   }
  else matrix[0][0]=-100;
 }
@@ -200,8 +200,8 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,un
       {
        char line[1024];strcpy(line,sub->text[i]);
       }
-    };
-  };
+    }
+  }
  if (c.empty()) return;
  unsigned int i;
  unsigned int h=0;
@@ -246,7 +246,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,un
        mov   [msk],esi
       }
      #endif
-    };
+    }
    unsigned char *dstLnU=dstU+(stride/2)*(y/2),*dstLnV=dstV+(stride/2)*(y/2);
    msk=c[i]->mskUV;unsigned char *bmpU=c[i]->bmpU,*bmpV=c[i]->bmpV;
    for (yy=0;yy<c[i]->dyUV;yy++,dstLnU+=stride/2,dstLnV+=stride/2)
@@ -260,7 +260,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,un
        c=*dstPixU;
        c-=128;
        if (c<0) {c+=m;if (c>0) c=0;}
-       else     {c-=m;if (c<0) c=0;};
+       else     {c-=m;if (c<0) c=0;}
        c+=(b*colorU)>>6;
        c+=128;
        *dstPixU=c;

@@ -57,7 +57,7 @@ void Tpostproc::done(void)
   {
    delete postproc_dll;
    postproc_dll=NULL;
-  }; 
+  }
  init_mplayer=NULL;
  postprocess=NULL;
  setModifyPPmode=NULL;

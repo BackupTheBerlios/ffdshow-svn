@@ -38,7 +38,7 @@ Trect* TimgFilterSharpen::init(TffRect *rect,int full)
   {
    Ymin=(unsigned char*)xvid_malloc(strideY*dyY*2,MCACHE_LINE);
    Ymax=(unsigned char*)xvid_malloc(strideY*dyY,MCACHE_LINE);
-  };
+  }
  return r;
 }
 void TimgFilterSharpen::done(void)
@@ -47,7 +47,7 @@ void TimgFilterSharpen::done(void)
   {
    xvid_free(Ymin);
    Ymin=NULL;
-  };
+  }
  if (Ymax)
   {
    xvid_free(Ymax);
@@ -76,7 +76,7 @@ void TimgFilterSharpen::xsharpen(const unsigned char *src,unsigned char *dst,con
      if (srcP[1]>max) max=srcP[1];
      *YmaxP=max;
     }
-  };  
+  }
  #else
  for (srcLn=src,YminLn=Ymin,YmaxLn=Ymax;srcLn<srcLnEnd;srcLn+=stride,YminLn+=stride,YmaxLn+=stride)
   {
@@ -110,7 +110,7 @@ void TimgFilterSharpen::xsharpen(const unsigned char *src,unsigned char *dst,con
      cmp esi,[srcPend]
      jl lineLoop1
     }
-  };
+  }
  #endif
 
  srcLnEnd=src+stride*(dy-1);
@@ -144,7 +144,7 @@ void TimgFilterSharpen::xsharpen(const unsigned char *src,unsigned char *dst,con
       {
        if (mfd_threshold > mindiff )
         p = lumamin;
-      };
+      }
 
      if (p == -1)
       dstLn[x] = srcLn[x];
@@ -253,7 +253,7 @@ void TimgFilterSharpen::xsharpen(const unsigned char *src,unsigned char *dst,con
      add esi,4
      cmp esi,[srcPend]
      jl lineLoop2
-    };
+    }
   }  
  #endif  
  const unsigned char *srcL=src+stride,*srcR=srcL+dx-1;unsigned char *dstL=dst+stride,*dstR=dstL+dx-1;
@@ -370,7 +370,7 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
      add edi,8
      cmp esi,eax
      jl  sumL1
-    };
+    }
    //for (x=1;x<dx-1;x++) sum1[x]=(unsigned int)src[stride+x-1]+(unsigned int)src[stride+x]+(unsigned int)src[stride+x+1];
    __asm
     {
@@ -440,13 +440,13 @@ void TimgFilterSharpen::process(TffPict *pict,TffRect &rect,const TpresetSetting
      {
       const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
       xsharpen(srcY,dstY,cfg);
-     };
+     }
     return;
    case 1:
     {
      const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
      unsharpen(srcY,dstY,cfg);
      return;
-    };
+    }
   }
 }                             

@@ -40,7 +40,7 @@ void TimgFilterResize::done(void)
    Tpostproc *postproc;deci->getPostproc(&postproc);
    if (postproc->ok) postproc->freeSwsContext(swsc);
    swsc=NULL;
-  };
+  }
 }
 Trect TimgFilterResize::calcNewClip(const TpresetSettings *cfg,const Trect &oldClip,const Trect &newFull)
 {
@@ -59,7 +59,7 @@ Trect TimgFilterResize::calcNewClip(const TpresetSettings *cfg,const Trect &oldC
     {
      ax=cfg->aspectRatio;
      ay=1<<16;
-    };
+    }
    newClip.dx=newFull.dx;
    newClip.dy=newFull.dx*ay/ax;
    if (newClip.dy>newFull.dy)
@@ -94,7 +94,7 @@ void TimgFilterResize::process(TffPict *pict,TffRect &rect,const TpresetSettings
     {
      newRect.clip=newRect.full;newRect.clip.calcDiff(newRect.stride);
      swsc=(SwsContext*)-1;
-    };
+    }
   }
  if (rect.clip==newRect.clip && rect.full==newRect.full) return;
 

@@ -544,7 +544,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
   {
    DEBUGS("colorspace: inverted input format not supported");
    return VFW_E_TYPE_NOT_ACCEPTED;
-  }; 
+  }
 
  //char pomS[5];memcpy(pomS,&hdr->biCompression,4);
  if (hdr->biCompression==0)
@@ -554,7 +554,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
     case 24:hdr->biCompression=FOURCC_RGB2;break;
     case 16:hdr->biCompression=FOURCC_RGB6;break;
     case 15:hdr->biCompression=FOURCC_RGB5;break;
-   };
+   }
  if (codecId==CODEC_ID_NONE)
   codecId=globalSettings.codecSupported(hdr->biCompression,AVIfourcc);
  if (codecId!=CODEC_ID_NONE)
@@ -571,7 +571,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
     {
      codecName="mpegvideo";strcpy(AVIfourcc,"mpeg1");
      return S_OK;
-    };
+    }
    #endif
    return S_OK;
   }
@@ -818,7 +818,7 @@ void TffDecoder::calcCrop(void)
    cropDx=AVIdx-(presetSettings->cropLeft+presetSettings->cropRight );
    cropDy=AVIdy-(presetSettings->cropTop +presetSettings->cropBottom);
    cropLeft=presetSettings->cropLeft;cropTop=presetSettings->cropTop;
-  };
+  }
  cropDx&=~7;cropDy&=~7;if (cropDx<=0) cropDx=8;if (cropDy<=0) cropDy=8;
  if (cropLeft+cropDx>=AVIdx) cropLeft=AVIdx-cropDx;if (cropTop+cropDy>=AVIdy) cropTop=AVIdy-cropDy;
  if (cropLeft>=AVIdx-8) cropLeft=AVIdx-8;if (cropTop>=AVIdy-8) cropTop=AVIdy-8;
@@ -835,14 +835,14 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    int fps=(t!=lastTime)?1000*CLOCKS_PER_SEC/(t-lastTime):0;
    PostMessage(onInfoWnd,onInfoMsg1,fps,(int)t1);
    lastTime=t;
-  };
+  }
  if (!subs)
   {
    if (globalSettings.trayIcon) tray->show();
    if (!subs) subs=new Tsubtitles;
    if (AVIname[0]=='\0') loadAVInameAndPreset();
    subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings->subFlnm,subs->flnm);
-  };
+  }
 
  if (t1==0 && movie)
   {
@@ -856,7 +856,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    DEBUGS("creating movie source");
    movie=TmovieSource::initSource(codecId,AVIdx,AVIdy);
    if (!movie) return S_FALSE;
-  };
+  }
 
  AM_MEDIA_TYPE *mtOut;
  pOut->GetMediaType(&mtOut);
@@ -881,7 +881,11 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
  OutputDebugString(pomS);
  #endif
 
- if (m_frame.length<10) {m_frame.bitstream=NULL;m_frame.length=0;};
+ if (m_frame.length<10)
+  {
+   m_frame.bitstream=NULL;
+   m_frame.length=0;
+  }
 
  TpresetSettings presetSettings=*this->presetSettings;
  presetSettings.isResize=isResize;presetSettings.resizeDx=outDx;presetSettings.resizeDy=outDy;
@@ -893,7 +897,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   {
    DEBUGS("avcodec_decode_video preroll==S_OK");
    return S_FALSE;
-  };
+  }
  if (m_frame.length==0 && ret<0) return S_OK;
  if (ret<0 || !got_picture)
 //#ifdef FF__MPEG
@@ -977,7 +981,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   {
    char pomS[256];sprintf(pomS,"here would be an error: stride:%u, AVIdx:%u\n",m_frame.stride,AVIdx);DEBUGS(pomS);
    return S_FALSE;
-  };
+  }
  TffRect rect(avpict.linesize[0],0,0,AVIdx,AVIdy);
  pict->reset(avpict.data[0],avpict.data[1],avpict.data[2]);
  imgFilters->process(&globalSettings,&presetSettings,pict,rect);
@@ -999,7 +1003,7 @@ STDMETHODIMP TffDecoder::GetPages(CAUUID * pPages)
    pPages->cElems=0;
    pPages->pElems=NULL;
    return S_FALSE;
-  };
+  }
 
  if (globalSettings.trayIcon) tray->show();
 

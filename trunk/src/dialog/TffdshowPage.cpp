@@ -111,7 +111,7 @@ void TffdshowPage::presetChanged(void)
    deci->getActivePresetName(presetName,260);
    sprintf(capt,"%s (%s)",caption,presetName);
    SendMessage(dlg,WM_SETTEXT,0,LPARAM(capt));
-  };
+  }
 }
 static int CALLBACK orderCompareFunc(LPARAM lParam1, LPARAM lParam2,LPARAM lParamSort)
 {
@@ -253,7 +253,7 @@ STDMETHODIMP TffdshowPage::Deactivate(void)
    deci->putParam(IDFF_dlgPosX,wpl.rcNormalPosition.left);
    deci->putParam(IDFF_dlgPosY,wpl.rcNormalPosition.top);
    SendMessage(dlg,WM_SETTEXT,0,LPARAM(caption));
-  };
+  }
  deci->saveDialogSettings();
  deci->putParam(IDFF_cfgDlgHnwd,0);
  return res;
@@ -289,7 +289,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
      {
       DEBUGS("onChangeParam");
       setChange();
-     }; 
+     }
     return TRUE;
    case WM_NOTIFY:
     {
@@ -321,7 +321,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           NMTREEVIEW *nmtv=LPNMTREEVIEW(lParam);
           if (nmtv->action==TVE_COLLAPSE) SetWindowLong(m_hwnd,DWL_MSGRESULT,TRUE);
           return TRUE;
-         }; 
+         }
         case NM_CUSTOMDRAW:
          {
           NMTVCUSTOMDRAW *tvcd=LPNMTVCUSTOMDRAW(lParam);
@@ -469,8 +469,8 @@ void CALLBACK configure(HWND hwnd,HINSTANCE hinst,LPTSTR lpCmdLine,int nCmdShow)
                             LOCALE_SYSTEM_DEFAULT,
                             0,0
                            );
-    };
+    }
    ispp->Release();
-  };
+  }
  iff->Release();
 }

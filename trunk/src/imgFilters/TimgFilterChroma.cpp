@@ -39,8 +39,8 @@ void TimgFilterChroma::process(TffPict *pict,TffRect &rect,const TpresetSettings
 {
  if (cfg->hue==TpresetSettings::hueDef && cfg->saturation==TpresetSettings::saturationDef) return;
  Trect *r=init(&rect,0);
- unsigned char *dstU=pict->getCurNextU(rect.stride,r)+r->diffUV;
- unsigned char *dstV=pict->getCurNextV(rect.stride,r)+r->diffUV;
+ const unsigned char *srcU=pict->getCurU()+r->diffUV;unsigned char *dstU=pict->getCurNextU()+r->diffUV;
+ const unsigned char *srcV=pict->getCurV()+r->diffUV;unsigned char *dstV=pict->getCurNextV()+r->diffUV;
  
  int hue=cfg->hue;          //-180 ... 0 ... 180
  int sat = cfg->saturation ;//0 (BW) - 64 (normal) - 128 (too much color);
@@ -59,9 +59,9 @@ void TimgFilterChroma::process(TffPict *pict,TffRect &rect,const TpresetSettings
  Cos64=(Cos&0x000000000000ffff)+((Cos<<16)&0x00000000ffff0000)+((Cos<<32)&0x0000ffff00000000)+((Cos<<48)&0xffff000000000000);
  Sat64=(Sat&0x000000000000ffff)+((Sat<<16)&0x00000000ffff0000)+((Sat<<32)&0x0000ffff00000000)+((Sat<<48)&0xffff000000000000);
  #endif
- for (const unsigned char *dstUend=dstU+strideUV*dyUV;dstU<dstUend;dstU+=strideUV,dstV+=strideUV)
+ for (const unsigned char *srcUend=srcU+strideUV*dyUV;srcU<srcUend;srcU+=strideUV,srcV+=strideUV,dstU+=strideUV,dstV+=strideUV)
   {
-   const unsigned char *dstUlnEnd=dstU+dxUV;
+   const unsigned char *srcUlnEnd=srcU+dxUV;
    #ifdef CHUESAT
    stride=diffx;
    for (;srcU<srcUlnEnd;srcU++,srcV++,dstU++,dstV++)
@@ -84,9 +84,9 @@ void TimgFilterChroma::process(TffPict *pict,TffRect &rect,const TpresetSettings
    //srcV[0]=5;srcV[1]=6;srcV[2]=7;srcV[3]=8;
    __asm 
     {
-     mov eax,[dstUlnEnd]
-     //mov ecx,[srcU]
-     //mov esi,[srcV]
+     mov eax,[srcUlnEnd]
+     mov ecx,[srcU]
+     mov esi,[srcV]
      mov edx,[dstU]
      mov edi,[dstV]
      movq mm0,[Sat64] // mm0 = Sat64
@@ -94,11 +94,11 @@ void TimgFilterChroma::process(TffPict *pict,TffRect &rect,const TpresetSettings
      movq mm2,[Cos64] // mm2 = Cos64
     lineLoop:
      pxor mm3,mm3
-     punpcklbw mm3,[edx]  
+     punpcklbw mm3,[ecx]  
      psrlw mm3,8     //mm3 = *srcU        
      
      pxor mm4,mm4
-     punpcklbw mm4,[edi]  
+     punpcklbw mm4,[esi]  
      psrlw mm4,8     //mm4 = *srcV        
 
      movq mm7,[m128]
@@ -133,14 +133,14 @@ void TimgFilterChroma::process(TffPict *pict,TffRect &rect,const TpresetSettings
      pxor mm6,mm6
      packuswb mm7,mm6
      movd [edi],mm7
-     //add ecx,4
-     //add esi,4
+     add ecx,4
+     add esi,4
      add edx,4
      add edi,4
-     cmp edx,eax
+     cmp ecx,eax
      jl  lineLoop
     }
    #endif 
-  }; 
+  }
  __asm emms; 
 }

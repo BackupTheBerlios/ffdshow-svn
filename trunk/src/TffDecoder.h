@@ -23,7 +23,7 @@ public:
  STDMETHODIMP QueryInterface(REFIID riid, void **ppv)
   {
    return GetOwner()->QueryInterface(riid,ppv);
-  };
+  }
  #else
  DECLARE_IUNKNOWN
  #endif

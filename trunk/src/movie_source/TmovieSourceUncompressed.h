@@ -11,7 +11,7 @@ private:
  unsigned int stride;
 public:
  TmovieSourceUncompressed(void);
- virtual ~TmovieSourceUncompressed() {done();};
+ virtual ~TmovieSourceUncompressed() {done();}
  virtual bool init(int codecId,unsigned int AVIdx,unsigned int AVIdy);
  virtual void done(void);
  virtual int  getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen, AVPicture *avpict,int &got_picture);

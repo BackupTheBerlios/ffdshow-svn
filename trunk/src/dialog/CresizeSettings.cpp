@@ -120,7 +120,7 @@ HRESULT TresizeSettingsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        break;
      }   
     break;
-  }; 
+  }
  return FALSE;
 }
 

@@ -34,21 +34,30 @@ void TimgFilterLuma::process(TffPict *pict,TffRect &rect,const TpresetSettings *
 {
  if (cfg->lumGain==TpresetSettings::lumGainDef && cfg->lumOffset==TpresetSettings::lumOffsetDef && cfg->gammaCorrection==TpresetSettings::gammaCorrectionDef) return;
  Trect *r=init(&rect,0);
- unsigned char *dstY=pict->getCurNextY(rect.stride,r);
- if (cfg->lumGain!=cfg->lumGainDef || cfg->lumOffset!=cfg->lumOffsetDef)
+ const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getCurNextY()+r->diffY;
+
+ const unsigned char *gammaSrc;unsigned char *gammaDst;
+ if (cfg->lumGain==cfg->lumGainDef && cfg->lumOffset==cfg->lumOffsetDef)
   {
+   gammaSrc=srcY;gammaDst=dstY;
+  }
+ else 
+  {
+   gammaSrc=dstY;gammaDst=dstY;
    static __declspec(align(8)) const __int64 m64 =0x0040004000400040;
    static __declspec(align(8)) __int64 lumGainMask,lumOffsetMask;
    __int64 lumGain=cfg->lumGain,lumOffset=cfg->lumOffset;
-   lumGainMask=(lumGain<<48) + (lumGain<<32) + (lumGain<<16) + lumGain;
+   lumGainMask  =(lumGain  <<48) + (lumGain  <<32) + (lumGain  <<16) + lumGain  ;
    lumOffsetMask=(lumOffset<<48) + (lumOffset<<32) + (lumOffset<<16) + lumOffset;
    int LUM_AREA=dxY;
-   for (unsigned char *dst=dstY,*dstYend=dstY+strideY*dyY;dst<dstYend;dst+=strideY)
+   const unsigned char *src,*srcYend;unsigned char *dst;
+   for (src=srcY,srcYend=srcY+strideY*dyY,dst=dstY;src<srcYend;src+=strideY,dst+=strideY)
     {
      __asm
       {
-       mov         ebx, [dst]
-       mov         edx, 0x00       
+       mov         eax, [src]
+       mov         esi, [dst]
+       mov         edx, 0
        mov         edi, [LUM_AREA]
        pxor        mm0, mm0
        movq        mm5, [lumOffsetMask]
@@ -56,9 +65,9 @@ void TimgFilterLuma::process(TffPict *pict,TffRect &rect,const TpresetSettings *
        movq        mm7, [m64]
  
       lumconv:
-       movq        mm1, [ebx+edx]
+       movq        mm1, [eax+edx]
        movq        mm2, mm1              
- 
+       
        punpcklbw   mm1, mm0
        punpckhbw   mm2, mm0
  
@@ -76,15 +85,15 @@ void TimgFilterLuma::process(TffPict *pict,TffRect &rect,const TpresetSettings *
 
        packuswb    mm1, mm0
        packuswb    mm2, mm0
-                                                       
+
        add         edx, 0x08
        cmp         edx, edi
-       movd        [ebx+edx-8], mm1
-       movd        [ebx+edx-4], mm2
+       movd        [esi+edx-8], mm1
+       movd        [esi+edx-4], mm2
        jl          lumconv
       }
     }
-  }  
+  }
  __asm emms;
  if (cfg->gammaCorrection!=oldGamma)
   {
@@ -92,9 +101,12 @@ void TimgFilterLuma::process(TffPict *pict,TffRect &rect,const TpresetSettings *
    double gamma=100.0/(oldGamma);
    for(int i=0;i<256;i++)
     gammaTab[i]=(unsigned char)(255.0*pow((i/255.0),gamma));
-  };
+  }
  if (cfg->gammaCorrection!=cfg->gammaCorrectionDef)
   for (unsigned int y=0;y<dyY;y++)
-   for (unsigned char *dst=dstY+strideY*y,*dstEnd=dst+dxY;dst<dstEnd;dst+=4)
-    *(unsigned int*)dst=(gammaTab[dst[3]]<<24)|(gammaTab[dst[2]]<<16)|(gammaTab[dst[1]]<<8)|gammaTab[dst[0]];
+   {
+    const unsigned char *src;unsigned char *dst,*dstEnd;
+    for (src=gammaSrc+strideY*y,dst=gammaDst+strideY*y,dstEnd=dst+dxY;dst<dstEnd;src+=4,dst+=4)
+     *(unsigned int*)dst=(gammaTab[src[3]]<<24)|(gammaTab[src[2]]<<16)|(gammaTab[src[1]]<<8)|gammaTab[src[0]];
+   }  
 }

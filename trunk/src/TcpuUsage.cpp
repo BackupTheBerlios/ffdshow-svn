@@ -124,7 +124,7 @@ int TcpuUsage::GetCPUUsage(int Index)
    if (!_W9xCollecting)
     CollectCPUData();
    result=_W9xCpuUsage ;
-  };
+  }
  return result;
 }
 
@@ -151,7 +151,7 @@ void TcpuUsage::CollectCPUData(void)
      _BufferSize+=0x1000;
      BS=_BufferSize;
      _PerfData=(PERF_DATA_BLOCK*)realloc( _PerfData, _BufferSize );
-    };
+    }
 
    // Locate the performance object
    _POT = PPERF_OBJECT_TYPE(DWORD(_PerfData) + _PerfData->HeaderLength);
@@ -160,7 +160,7 @@ void TcpuUsage::CollectCPUData(void)
      if (_POT->ObjectNameTitleIndex == Processor_IDX)
       break;
      _POT = PPERF_OBJECT_TYPE(DWORD(_POT) + _POT->TotalByteLength);
-    };
+    }
 
    // Check for success
    if (_POT->ObjectNameTitleIndex != Processor_IDX)
@@ -171,7 +171,7 @@ void TcpuUsage::CollectCPUData(void)
      _ProcessorsCount=_POT->NumInstances;
      _Counters=(PAInt64F)malloc(_ProcessorsCount*sizeof(TInt64));
      _PrevCounters=(PAInt64F)malloc(_ProcessorsCount*sizeof(TInt64));
-    };
+    }
 
    // Locate the "% CPU usage" counter definition
    _PCD = PPERF_COUNTER_DEFINITION(DWORD(_POT) + _POT->HeaderLength);
@@ -180,7 +180,7 @@ void TcpuUsage::CollectCPUData(void)
      if (_PCD->CounterNameTitleIndex==CPUUsageIDX)
       break;
      _PCD = PPERF_COUNTER_DEFINITION(DWORD(_PCD) + _PCD->ByteLength);
-    };
+    }
 
    // Check for success
    if (_PCD->CounterNameTitleIndex != CPUUsageIDX)
@@ -196,7 +196,7 @@ void TcpuUsage::CollectCPUData(void)
      _Counters[i]=FInt64(*PInt64(DWORD(_PCB_Instance) + _PCD->CounterOffset));
 
      _PID_Instance = PPERF_INSTANCE_DEFINITION(DWORD(_PCB_Instance) + _PCB_Instance->ByteLength);
-    };
+    }
 
    _PrevSysTime=_SysTime;
    SystemTimeToFileTime(&_PerfData->SystemTime, &ST);
@@ -222,11 +222,11 @@ void TcpuUsage::CollectCPUData(void)
       return;//raise Exception.Create('Unable to read performance data');
 
      _W9xCollecting=true;
-    };
+    }
 
    dwDataSize=sizeof(DWORD);
    RegQueryValueEx( _W9xCpuKey, "KERNEL\\CPUUsage",NULL,&dwType, (unsigned char*)&_W9xCpuUsage, &dwDataSize );
-  };
+  }
 }
 
 

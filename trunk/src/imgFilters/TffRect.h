@@ -3,9 +3,9 @@
 
 struct Trect
 {
- Trect(void) {x=y=dx=dy=diffY=diffUV=0;};
- Trect(unsigned int Ix,unsigned int Iy,unsigned int Idx,unsigned int Idy):x(Ix),y(Iy),dx(Idx),dy(Idy) {};
- Trect(unsigned int Ix,unsigned int Iy,unsigned int Idx,unsigned int Idy,unsigned int stride):x(Ix),y(Iy),dx(Idx),dy(Idy) {calcDiff(stride);};
+ Trect(void) {x=y=dx=dy=diffY=diffUV=0;}
+ Trect(unsigned int Ix,unsigned int Iy,unsigned int Idx,unsigned int Idy):x(Ix),y(Iy),dx(Idx),dy(Idy) {}
+ Trect(unsigned int Ix,unsigned int Iy,unsigned int Idx,unsigned int Idy,unsigned int stride):x(Ix),y(Iy),dx(Idx),dy(Idy) {calcDiff(stride);}
  unsigned int x,y,dx,dy;
  unsigned int diffY,diffUV;
  void calcDiff(unsigned int stride)
@@ -19,11 +19,11 @@ struct TffPict;
 struct TffRect
 {
  Trect full,clip;
- TffRect(void):stride(0) {};
+ TffRect(void):stride(0) {}
  TffRect(unsigned int Istride,unsigned int x,unsigned int y,unsigned int dx,unsigned int dy):stride(Istride)
   {
    full=clip=Trect(x,y,dx,dy);
-  };
+  }
  unsigned int stride; 
  void clear(unsigned char *y,unsigned char *u,unsigned char *v);
 };  

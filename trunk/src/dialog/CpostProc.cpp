@@ -84,7 +84,7 @@ void TpostProcPage::setPPchbs(void)
    enableWindow(IDC_CHB_DERING_LUM    ,false);
    enableWindow(IDC_CHB_DERING_CHROM  ,false);
    deci->getPPmode(&ppmode);
-  };
+  }
  setCheck(IDC_CHB_DEBLOCKV_LUM  ,ppmode&LUM_V_DEBLOCK);
  setCheck(IDC_CHB_DEBLOCKH_LUM  ,ppmode&LUM_H_DEBLOCK);
  setCheck(IDC_CHB_DEBLOCKV_CHROM,ppmode&CHROM_V_DEBLOCK);
@@ -163,7 +163,7 @@ HRESULT TpostProcPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_SETSELEND,TRUE,cfgGet(IDFF_currentq));
       setPPchbs();
       return TRUE;
-     };   
+     }
     break;
    case WM_DESTROY:
     KillTimer(m_hwnd,POSTPROC_TIMER);

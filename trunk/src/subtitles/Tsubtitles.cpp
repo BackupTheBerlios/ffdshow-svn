@@ -28,7 +28,7 @@ Tsubtitles::Tsubtitles(void)
 {
  subs=NULL;
  flnm[0]='\0';
-};
+}
 Tsubtitles::~Tsubtitles()
 {
  done();
@@ -80,7 +80,7 @@ subtitle* Tsubtitles::getSubtitle(int frame)
   {
    if(frame>nosub_range_start && frame<nosub_range_end)
     return oldsub; // OK!
-  };
+  }
  // sub changed!
  if (frame<=0)
   return oldsub=NULL; // no sub here

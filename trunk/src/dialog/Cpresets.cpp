@@ -178,7 +178,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           //PostMessage(hlv,LVM_EDITLABEL,ListView_GetNextItem(hlv,-1,LVNI_SELECTED),0); 
          } 
         return TRUE;
-       }; 
+       }
       case IDC_BT_PRESET_READFROMFILE:
        {
         int i=ListView_GetNextItem(hlv,-1,LVNI_SELECTED);
@@ -201,7 +201,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           localPresets[i]->loadFile(presetFlnm);
           strcpy(localPresets[i]->presetName,presetName);
           lvSelectPreset(presetName);
-         }; 
+         }
         return TRUE; 
        } 
       case IDC_BT_PRESET_SAVETOFILE:
@@ -239,7 +239,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           lvSelectPreset(presetName);
          }
         return TRUE; 
-       }; 
+       }
       case IDC_BT_PRESET_RENAME:
       case IDC_BT_PRESET_RENAME_MENU:
        {
@@ -270,7 +270,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
          { 
           SetFocus(hlv);
           ListView_EditLabel(hlv,i);
-         }; 
+         }
         return TRUE;
        }
       case IDC_BT_PRESET_HELP:
@@ -294,7 +294,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           if (nmdi->item.mask&LVIF_TEXT)
            strcpy(nmdi->item.pszText,localPresets[i]->presetName);
           return TRUE;
-         };
+         }
         case LVN_ITEMCHANGED:
          {
           NMLISTVIEW *nmlv=LPNMLISTVIEW(lParam);
@@ -390,7 +390,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        }
      break; 
     }
-  };
+  }
  return FALSE;
 }
 void TpresetsPage::applySettings(void)

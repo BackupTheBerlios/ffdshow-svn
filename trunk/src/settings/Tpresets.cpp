@@ -52,7 +52,7 @@ void Tpresets::listRegKeys(std::vector<string> &list)
     list.push_back(string(keyName));
    else
     break;
-  };
+  }
  RegCloseKey(hKey);
 }
 void Tpresets::init(void)

@@ -185,11 +185,11 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
             break;
           }
         DestroyMenu(hm);
-       };
+       }
      break;
     }
    return 0;
-  };
+  }
  return DefWindowProc(hwnd,msg,wprm,lprm);
 }
 
@@ -254,7 +254,7 @@ void TtrayIcon::show(void)
   {
    Shell_NotifyIcon(NIM_ADD,&nid);
    visible=true;
-  };
+  }
 }
 void TtrayIcon::hide(void)
 {
@@ -262,7 +262,7 @@ void TtrayIcon::hide(void)
   {
    Shell_NotifyIcon(NIM_DELETE,&nid);
    visible=false;
-  };
+  }
 }
 
 int TtrayIcon::negate_Param(int id)

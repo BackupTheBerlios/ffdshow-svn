@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /G6 /MT /W1 /GX /O2 /Ob2 /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /I "src\movie_source" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FD /c
+# ADD CPP /nologo /G6 /MT /GX /O2 /Ob2 /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /I "src\movie_source" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0xc09 /d "NDEBUG"
@@ -149,6 +149,10 @@ SOURCE=.\src\helpSharpen.txt
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\helpShowMV.txt
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\helpSubtitles.txt
 # End Source File
 # Begin Source File
@@ -182,7 +186,7 @@ SOURCE=.\src\xvid\utils\mem_align.c
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -195,7 +199,7 @@ SOURCE=.\src\Tconfig.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -208,7 +212,7 @@ SOURCE=.\src\TcpuUsage.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -674,7 +678,15 @@ SOURCE=.\src\imgFilters\noise_template_mmx.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\imgFilters\TffPict.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\imgFilters\TffPict.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\TffRect.cpp
 # End Source File
 # Begin Source File
 
@@ -706,7 +718,7 @@ SOURCE=.\src\imgFilters\TimgFilterLuma.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O2 /Ob2 /FAs
+# ADD CPP /FAs
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -752,16 +764,6 @@ SOURCE=.\src\imgFilters\TimgFilterResize.h
 # Begin Source File
 
 SOURCE=.\src\imgFilters\TimgFilters.cpp
-
-!IF  "$(CFG)" == "ffdshow - Win32 Release"
-
-# ADD CPP /Ox /Ot /Oa /Ow /Og /Op- /Oy-
-# SUBTRACT CPP /Oi /Os
-
-!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -825,10 +827,6 @@ SOURCE=.\src\imgFilters\Tpostproc.cpp
 
 SOURCE=.\src\imgFilters\Tpostproc.h
 # End Source File
-# Begin Source File
-
-SOURCE=.\src\imgFilters\TresizeCtx.h
-# End Source File
 # End Group
 # Begin Group "dialog"
 
@@ -839,7 +837,7 @@ SOURCE=.\src\dialog\Cabout.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -856,7 +854,7 @@ SOURCE=.\src\dialog\Cblur.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -873,7 +871,7 @@ SOURCE=.\src\dialog\Ccodecs.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -887,6 +885,15 @@ SOURCE=.\src\dialog\Ccodecs.h
 # Begin Source File
 
 SOURCE=.\src\dialog\Ccrop.cpp
+
+!IF  "$(CFG)" == "ffdshow - Win32 Release"
+
+# ADD CPP /O2
+
+!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -898,7 +905,7 @@ SOURCE=.\src\dialog\Cfont.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -915,7 +922,7 @@ SOURCE=.\src\dialog\Cinfo.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -932,7 +939,7 @@ SOURCE=.\src\dialog\Cmisc.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -949,7 +956,7 @@ SOURCE=.\src\dialog\Cnoise.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -966,7 +973,7 @@ SOURCE=.\src\dialog\Coffset.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -983,7 +990,7 @@ SOURCE=.\src\dialog\CpictProp.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -1000,7 +1007,7 @@ SOURCE=.\src\dialog\CpostProc.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -1017,7 +1024,7 @@ SOURCE=.\src\dialog\Cpresets.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -1031,6 +1038,15 @@ SOURCE=.\src\dialog\Cpresets.h
 # Begin Source File
 
 SOURCE=.\src\dialog\CresizeAspect.cpp
+
+!IF  "$(CFG)" == "ffdshow - Win32 Release"
+
+# ADD CPP /O2
+
+!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -1039,6 +1055,15 @@ SOURCE=.\src\dialog\CresizeAspect.h
 # Begin Source File
 
 SOURCE=.\src\dialog\CresizeSettings.cpp
+
+!IF  "$(CFG)" == "ffdshow - Win32 Release"
+
+# ADD CPP /O2
+
+!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -1050,7 +1075,7 @@ SOURCE=.\src\dialog\Csharpen.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -1063,11 +1088,28 @@ SOURCE=.\src\dialog\Csharpen.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\dialog\CshowMV.cpp
+
+!IF  "$(CFG)" == "ffdshow - Win32 Release"
+
+# ADD CPP /O2
+
+!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\CshowMV.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\dialog\Csubtitles.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -1084,7 +1126,7 @@ SOURCE=.\src\dialog\Ctray.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -1101,7 +1143,7 @@ SOURCE=.\src\dialog\TconfPage.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -1118,7 +1160,7 @@ SOURCE=.\src\dialog\TffdshowPage.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -1151,7 +1193,7 @@ SOURCE=.\src\settings\TdialogSettings.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -1168,7 +1210,7 @@ SOURCE=.\src\settings\TglobalSettings.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 
@@ -1185,7 +1227,7 @@ SOURCE=.\src\settings\Tpresets.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
 
-# ADD CPP /O1
+# ADD CPP /O2
 
 !ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
 

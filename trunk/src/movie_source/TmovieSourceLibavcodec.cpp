@@ -72,12 +72,12 @@ void TmovieSourceLibavcodec::done(void)
    avcodec_close(avctx);
    free(avctx);
    avctx=NULL;  
-  };
+  }
  if (dll)
   {
    delete dll;
    dll=NULL;
-  }; 
+  }
  libavcodec_init=NULL;
  avcodec_find_decoder=NULL;
  avcodec_open=NULL;
@@ -97,7 +97,7 @@ int TmovieSourceLibavcodec::getFrame(const TglobalSettings *global,const Tpreset
     case 0:
     case 3:
     default:set_ff_idct((void*)1);break;
-   };
+   }
  avctx->showMV=global->isShowMV;
  for (unsigned int i=0;i<quantDx*quantDy;i++)
   quant[i]=10;
@@ -127,7 +127,7 @@ bool TmovieSourceLibavcodec::getVersion(char **vers)
    char *version,*build,*datetime;
    av_getVersion(&version,&build,&datetime);
    sprintf(ver,"libavcodec: version %s, build %s (%s)",version,build,datetime);
-  };
+  }
  delete dl;  
  return res;
 }

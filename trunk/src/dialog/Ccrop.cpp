@@ -129,7 +129,7 @@ HRESULT TcropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
          if (cropOK(GetDlgItem(m_hwnd,IDC_ED_CROP_TOP   ))) cfgSet(IDFF_cropTop   ,GetDlgItemInt(m_hwnd,IDC_ED_CROP_TOP   ,&ok,FALSE));
          if (cropOK(GetDlgItem(m_hwnd,IDC_ED_CROP_BOTTOM))) cfgSet(IDFF_cropBottom,GetDlgItemInt(m_hwnd,IDC_ED_CROP_BOTTOM,&ok,FALSE));
          return TRUE;  
-        }; 
+        }
        break;
      }
     break; 
@@ -145,7 +145,7 @@ HRESULT TcropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        return HRESULT(red); 
       }
      else return FALSE;  
-    }; 
+    }
   }   
  return FALSE;
 }
@@ -163,7 +163,7 @@ void TcropPage::getTip(char *tipS,int len)
      char pomS[256];sprintf(pomS,"set to %3.2f:1",float(aspectI/65536.0));
      strcat(tipS,pomS);
      break;
-    }; 
+    }
   }
  strcat(tipS,"\nCrop & zoom: ");
  char pomS[256];
