@@ -338,5 +338,14 @@ void Tconfig::getSharpenDescription(char *buf)
 }
 void Tconfig::getCropDescription(char *buf)
 {
- sprintf(buf,"Crop && zoom");
+ strcpy(buf,"Crop && zoom (");
+ char pomS[256];
+ if (isZoom)
+  if (magnificationLocked) 
+   sprintf(pomS,"zoom: %i%%)",magnificationX);
+  else
+   sprintf(pomS,"horizontal zoom: %i%%, vertical zoom: %i%%)",magnificationX,magnificationY);
+ else
+  sprintf(pomS,"crop: left:%i, top:%i, right:%i, bottom:%i)",cropLeft,cropTop,cropRight,cropBottom);
+ strcat(buf,pomS);
 }

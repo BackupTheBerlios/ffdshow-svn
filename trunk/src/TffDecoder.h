@@ -18,9 +18,10 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   #ifdef DEBUG
   STDMETHODIMP_(ULONG) AddRef();                              
   STDMETHODIMP_(ULONG) Release();
-  STDMETHODIMP QueryInterface(REFIID riid, void **ppv) {      \
-      return GetOwner()->QueryInterface(riid,ppv);            \
-  };                                                          
+  STDMETHODIMP QueryInterface(REFIID riid, void **ppv) 
+   {     
+    return GetOwner()->QueryInterface(riid,ppv);           
+   };                                                          
   #else
   DECLARE_IUNKNOWN;
   #endif
