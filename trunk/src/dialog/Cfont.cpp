@@ -106,7 +106,7 @@ void TfontPage::selectCharset(int ii)
     }
   }
  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_SETCURSEL,0,0);
- cfgSet(IDFF_fontCharset,SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_GETITEMDATA,0,0));
+ cfgSet(osd?IDFF_OSDfontCharset:IDFF_fontCharset,SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_GETITEMDATA,0,0));
 }
 
 void TfontPage::getCharset(int i,char **name)
@@ -144,7 +144,10 @@ void TfontPage::fillCharsets(void)
  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_RESETCONTENT,0,0);
  vector<int> sl;
  LOGFONT lf;
- deci->getFontName(lf.lfFaceName,LF_FACESIZE);
+ if (osd)
+  deci->getOSDfontName(lf.lfFaceName,LF_FACESIZE);
+ else
+  deci->getFontName(lf.lfFaceName,LF_FACESIZE);
  lf.lfCharSet=DEFAULT_CHARSET;lf.lfPitchAndFamily=0;
  HDC dc=GetDC(m_hwnd);
  EnumFontFamiliesEx(dc,&lf,EnumFamCallBackCharsets,LPARAM(&sl),0); 
@@ -167,28 +170,32 @@ void TfontPage::cfg2dlg(void)
 void TfontPage::font2dlg(void)
 {
  char s[256];int x;
- x=cfgGet(IDFF_fontSize);
+ x=cfgGet(osd?IDFF_OSDfontSize:IDFF_fontSize);
  sprintf(s,"Size: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_FONT_SIZE,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SIZE,TBM_SETPOS,TRUE,x);
- x=cfgGet(IDFF_fontSpacing);
+ x=cfgGet(osd?IDFF_OSDfontSpacing:IDFF_fontSpacing);
  sprintf(s,"Spacing: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_FONT_SPACING,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SPACING,TBM_SETPOS,TRUE,x);
- x=cfgGet(IDFF_fontShadowStrength);
+ x=cfgGet(osd?IDFF_OSDfontShadowStrength:IDFF_fontShadowStrength);
  sprintf(s,"Shadow intensity: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_FONT_SHADOW_STRENGTH,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH,TBM_SETPOS,TRUE,x);
- x=cfgGet(IDFF_fontShadowRadius);
+ x=cfgGet(osd?IDFF_OSDfontShadowRadius:IDFF_fontShadowRadius);
  sprintf(s,"Shadow radius: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_FONT_SHADOW_RADIUS,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETPOS,TRUE,x);
 
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_SETCURSEL,cfgGet(IDFF_fontWeight)/100-1,0);
- char fontname[256];deci->getFontName(fontname,255);
+ SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_SETCURSEL,cfgGet(osd?IDFF_OSDfontWeight:IDFF_fontWeight)/100-1,0);
+ char fontname[256];
+ if (osd)
+  deci->getOSDfontName(fontname,255);
+ else
+  deci->getFontName(fontname,255);
  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_NAME,CB_SELECTSTRING,-1,LPARAM(fontname));
  fillCharsets();
- selectCharset(cfgGet(IDFF_fontCharset));
+ selectCharset(cfgGet(osd?IDFF_OSDfontCharset:IDFF_fontCharset));
 }
 
 HRESULT TfontPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -198,20 +205,20 @@ HRESULT TfontPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
    case WM_HSCROLL:
     if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_FONT_SIZE))
      {
-      cfgSet(IDFF_fontSize,SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SIZE,TBM_GETPOS,0,0));
+      cfgSet(osd?IDFF_OSDfontSize:IDFF_fontSize,SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SIZE,TBM_GETPOS,0,0));
       font2dlg();
       return TRUE;
      }
     else if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_FONT_SPACING))
      {
-      cfgSet(IDFF_fontSpacing,SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SPACING,TBM_GETPOS,0,0));
+      cfgSet(osd?IDFF_OSDfontSpacing:IDFF_fontSpacing,SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SPACING,TBM_GETPOS,0,0));
       font2dlg();
       return TRUE;
      }
     else if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH) || HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS))
      {
-      cfgSet(IDFF_fontShadowStrength,SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH,TBM_GETPOS,0,0));
-      cfgSet(IDFF_fontShadowRadius  ,SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS  ,TBM_GETPOS,0,0));
+      cfgSet(osd?IDFF_OSDfontShadowStrength:IDFF_fontShadowStrength,SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH,TBM_GETPOS,0,0));
+      cfgSet(osd?IDFF_OSDfontShadowRadius  :IDFF_fontShadowRadius  ,SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS  ,TBM_GETPOS,0,0));
       font2dlg();
       return TRUE;
      }
@@ -223,7 +230,7 @@ HRESULT TfontPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        if (HIWORD(wParam)==CBN_SELCHANGE)
         {
          int i=SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_GETCURSEL,0,0);
-         cfgSet(IDFF_fontWeight,(i+1)*100);
+         cfgSet(osd?IDFF_OSDfontWeight:IDFF_fontWeight,(i+1)*100);
          return TRUE;
         }
       else
@@ -234,7 +241,10 @@ HRESULT TfontPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
          int i=SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_NAME,CB_GETCURSEL,0,0);
          char pomS[256];
          SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_NAME,CB_GETLBTEXT,i,LPARAM(pomS));
-         deci->setFontName(pomS);
+         if (osd)
+          deci->setOSDfontName(pomS);
+         else
+          deci->setFontName(pomS);
          fillCharsets();
          return TRUE;
         }
@@ -245,7 +255,7 @@ HRESULT TfontPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
          int i=SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_GETCURSEL,0,0);
          int ii=SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_GETITEMDATA,i,0);
-         cfgSet(IDFF_fontCharset,ii);
+         cfgSet(osd?IDFF_OSDfontCharset:IDFF_fontCharset,ii);
          return TRUE;
         }
        else
@@ -257,13 +267,13 @@ HRESULT TfontPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
          memset(&cc,0,sizeof(cc));
          cc.lStructSize=sizeof(cc);
          cc.hwndOwner=m_hwnd;
-         cc.rgbResult=cfgGet(IDFF_fontColor);
+         cc.rgbResult=cfgGet(osd?IDFF_OSDfontColor:IDFF_fontColor);
          //TODO: store custom colors
          cc.lpCustColors=custColors;
          cc.Flags=CC_ANYCOLOR|CC_FULLOPEN|CC_RGBINIT;
          if (ChooseColor(&cc))
           {
-           cfgSet(IDFF_fontColor,cc.rgbResult);
+           cfgSet(osd?IDFF_OSDfontColor:IDFF_fontColor,cc.rgbResult);
            font2dlg();
            InvalidateRect(GetDlgItem(m_hwnd,IDC_IMG_FONT_COLOR),NULL,FALSE);
           }
@@ -278,7 +288,7 @@ HRESULT TfontPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
      {
       LPDRAWITEMSTRUCT dis=LPDRAWITEMSTRUCT(lParam);
       LOGBRUSH lb;
-      lb.lbColor=cfgGet(IDFF_fontColor);
+      lb.lbColor=cfgGet(osd?IDFF_OSDfontColor:IDFF_fontColor);
       lb.lbStyle=BS_SOLID;
       HBRUSH br=CreateBrushIndirect(&lb);
       FillRect(dis->hDC,&dis->rcItem,br);
@@ -293,13 +303,18 @@ HRESULT TfontPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void TfontPage::getTip(char *tipS,int len)
 {
- char font[256];deci->getFontName(font,255);
- char *charset;getCharset(cfgGet(IDFF_fontCharset),&charset);
- sprintf(tipS,"Font: %s, %s charset, size:%i, %s, spacing:%i\nShadow intensity: %i, shadow radius:%i",font,charset,cfgGet(IDFF_fontSize),fontWeights[cfgGet(IDFF_fontWeight)/100-1],cfgGet(IDFF_fontSpacing),cfgGet(IDFF_fontShadowStrength),cfgGet(IDFF_fontShadowRadius));
+ char font[256];
+ if (osd)
+  deci->getOSDfontName(font,255);
+ else 
+  deci->getFontName(font,255);
+ char *charset;getCharset(cfgGet(osd?IDFF_OSDfontCharset:IDFF_fontCharset),&charset);
+ sprintf(tipS,"Font: %s, %s charset, size:%i, %s, spacing:%i\nShadow intensity: %i, shadow radius:%i",font,charset,cfgGet(osd?IDFF_OSDfontSize:IDFF_fontSize),fontWeights[cfgGet(osd?IDFF_OSDfontWeight:IDFF_fontWeight)/100-1],cfgGet(osd?IDFF_OSDfontSpacing:IDFF_fontSpacing),cfgGet(osd?IDFF_OSDfontShadowStrength:IDFF_fontShadowStrength),cfgGet(osd?IDFF_OSDfontShadowRadius:IDFF_fontShadowRadius));
 }
 
 TfontPage::TfontPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
+ osd=false;
  dialogId=IDD_FONT;
  inPreset=1;
  createWindow();

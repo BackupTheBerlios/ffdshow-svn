@@ -178,6 +178,7 @@ TresizeAspectPage::TresizeAspectPage(TffdshowPage *Iparent,HWND IhwndParent,IffD
 {
  dialogId=IDD_RESIZEASPECT;
  idffFull=IDFF_fullResize;
+ idffOrder=IDFF_orderResize;
  inPreset=1;
  createWindow();
 }

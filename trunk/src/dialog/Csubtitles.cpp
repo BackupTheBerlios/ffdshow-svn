@@ -195,6 +195,7 @@ TsubtitlesPage::TsubtitlesPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder
  dialogId=IDD_SUBTITLES;
  idffInter=IDFF_isSubtitles;resInter=IDC_CHB_SUBTITLES;
  idffFull=IDFF_fullSubtitles;
+ idffOrder=IDFF_orderSubtitles;
  inPreset=1;
  createWindow();
 }

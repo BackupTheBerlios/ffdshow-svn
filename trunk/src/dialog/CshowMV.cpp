@@ -61,6 +61,7 @@ TshowMVpage::TshowMVpage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Idec
 {
  dialogId=IDD_SHOWMV;
  idffInter=IDFF_isShowMV;resInter=IDC_CHB_SHOWMV;
+ idffOrder=IDFF_orderShowMV;
  inPreset=1;
  createWindow();
 }

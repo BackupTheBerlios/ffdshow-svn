@@ -16,8 +16,6 @@ public:
  virtual void init(void);
  virtual void cfg2dlg(void);
  virtual void applySettings(void);
- virtual int getOrder(void) {return cfgGet(IDFF_orderSubtitles);}
- virtual void setOrder(int o) {cfgSet(IDFF_orderSubtitles,o);}
  virtual void getTip(char *tipS,int len);
 };
 

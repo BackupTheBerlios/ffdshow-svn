@@ -108,6 +108,7 @@ TnoisePage::TnoisePage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci)
  dialogId=IDD_NOISE;
  idffInter=IDFF_isNoise;resInter=IDC_CHB_NOISE;
  idffFull=IDFF_fullNoise;
+ idffOrder=IDFF_orderNoise;
  inPreset=1;
  createWindow();
 }

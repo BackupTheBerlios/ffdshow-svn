@@ -157,6 +157,7 @@ TcropPage::TcropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :
 {
  dialogId=IDD_CROP;
  idffInter=IDFF_isCropNzoom;resInter=IDC_CHB_CROP;
+ idffOrder=0;
  inPreset=1;
  createWindow();
 }

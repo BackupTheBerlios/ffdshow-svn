@@ -12,6 +12,8 @@ private:
  void selectCharset(int ii);
  COLORREF custColors[16];
  static const char *fontWeights[];
+protected:
+ bool osd;
 public:
  TfontPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);

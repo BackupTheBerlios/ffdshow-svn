@@ -31,6 +31,15 @@ const int TdeinterlacePage::deintRbts[]=
  IDC_RBT_DEINT_METHOD5,
 };
 
+const char* TdeinterlacePage::deintNames[]=
+{
+ "Linear interpolation",
+ "Linear blending",
+ "Cubic interpolation",
+ "Cubic blending",
+ "Median"
+};
+
 void TdeinterlacePage::init(void)
 {
  cfg2dlg();
@@ -71,13 +80,14 @@ HRESULT TdeinterlacePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void TdeinterlacePage::getTip(char *tipS,int len)
 {
- sprintf(tipS,"method: %i",cfgGet(IDFF_deinterlaceMethod));
+ sprintf(tipS,"Method: %s",deintNames[cfgGet(IDFF_deinterlaceMethod)]);
 }
 TdeinterlacePage::TdeinterlacePage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
  dialogId=IDD_DEINTERLACE;
  idffInter=IDFF_isDeinterlace;resInter=IDC_CHB_DEINTERLACE;
  idffFull=IDFF_fullDeinterlace;
+ idffOrder=0;
  inPreset=1;
  createWindow();
 }

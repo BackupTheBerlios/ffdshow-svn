@@ -149,6 +149,7 @@ TpictPropPage::TpictPropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *
  dialogId=IDD_PICTPROP;
  idffInter=IDFF_isPictProp;resInter=IDC_CHB_PICTPROP;
  idffFull=IDFF_fullPictProp;
+ idffOrder=IDFF_orderPictProp;
  inPreset=1;
  createWindow();
 }

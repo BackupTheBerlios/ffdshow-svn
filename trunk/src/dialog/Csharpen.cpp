@@ -126,6 +126,7 @@ TsharpenPage::TsharpenPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Id
  dialogId=IDD_SHARPEN;
  idffInter=IDFF_isSharpen;resInter=IDC_CHB_SHARPEN;
  idffFull=IDFF_fullSharpen;
+ idffOrder=IDFF_orderSharpen;
  inPreset=1;
  createWindow();
 }

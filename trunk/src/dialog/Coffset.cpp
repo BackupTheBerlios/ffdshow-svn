@@ -105,6 +105,7 @@ ToffsetPage::ToffsetPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Idec
  dialogId=IDD_OFFSET;
  idffInter=IDFF_isOffset;resInter=IDC_CHB_OFFSET;
  idffFull=IDFF_fullOffset;
+ idffOrder=IDFF_orderOffset;
  inPreset=1;
  createWindow();
 }

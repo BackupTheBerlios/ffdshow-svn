@@ -43,9 +43,29 @@ static INT_PTR CALLBACK dlgWndProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lPar
   }
 }
 
+TconfPage::TconfPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci)
+{
+ assert(Ideci);
+ m_hwnd=NULL;
+ deci=Ideci;
+ parent=Iparent;
+ hwndParent=IhwndParent;
+ helpStr=NULL;
+ dialogId=0;
+ idffInter=idffFull=0;idffOrder=-1;resInter=0;
+ inPreset=0;
+}
+
+TconfPage::~TconfPage()
+{
+ DestroyWindow(m_hwnd);
+ if (helpStr) free(helpStr);
+}
+
 void TconfPage::createWindow(void)
 {
  hi=(HINSTANCE)GetWindowLong(hwndParent,GWL_HINSTANCE);
+ if (m_hwnd) DestroyWindow(m_hwnd);
  m_hwnd=CreateDialogParam(hi,MAKEINTRESOURCE(dialogId),hwndParent,dlgWndProc,LPARAM(this));
  dialogName[0]='\0';
  LoadString(hi,dialogId,dialogName,255);
@@ -57,29 +77,12 @@ void TconfPage::createWindow(void)
    if (!rsrc) return;
    HGLOBAL hglb=LoadResource(hm,rsrc);
    int len=SizeofResource(hm,rsrc);
+   if (helpStr) free(helpStr);
    helpStr=(char*)calloc(len+1,1);
    strncpy(helpStr,(char*)LockResource(hglb),len);
    SendDlgItemMessage(m_hwnd,IDC_ED_HELP,WM_SETTEXT,0,LPARAM(helpStr));
    SendDlgItemMessage(m_hwnd,IDC_ED_HELP,EM_SETSEL,0,-1);
   }
-}
-
-TconfPage::TconfPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci)
-{
- assert(Ideci);
- deci=Ideci;
- parent=Iparent;
- hwndParent=IhwndParent;
- helpStr=NULL;
- dialogId=0;
- idffInter=idffFull=0;resInter=0;
- inPreset=0;
-}
-
-TconfPage::~TconfPage()
-{
- DestroyWindow(m_hwnd);
- if (helpStr) free(helpStr);
 }
 
 int TconfPage::getInter(void)
@@ -105,6 +108,15 @@ void TconfPage::interDlg(void)
 {
  if (resInter) setCheck(resInter,cfgGet(idffInter));
 }
+void TconfPage::setOrder(int o)
+{
+ if (idffOrder>0) cfgSet(idffOrder,o);
+}
+int TconfPage::getOrder(void)
+{
+ if (idffOrder<=0) return idffOrder;
+ else return cfgGet(idffOrder);
+} 
 
 int TconfPage::cfgGet(unsigned int i)
 {

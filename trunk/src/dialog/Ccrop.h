@@ -14,7 +14,6 @@ public:
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
  virtual void init(void);
  virtual void cfg2dlg(void);
- virtual int getOrder(void) {return 0;}
  virtual void getTip(char *tipS,int len);
 };
 

@@ -200,6 +200,7 @@ TpostProcPage::TpostProcPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *
  dialogId=IDD_POSTPROC;
  idffInter=IDFF_isPostproc;resInter=IDC_CHB_POSTPROC;
  idffFull=IDFF_fullPostproc;
+ idffOrder=IDFF_orderPostproc;
  inPreset=1;
  createWindow();
 }

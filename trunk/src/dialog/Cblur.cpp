@@ -89,6 +89,7 @@ TblurPage::TblurPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :
  dialogId=IDD_BLUR;
  idffInter=IDFF_isBlur;resInter=IDC_CHB_BLUR;
  idffFull=IDFF_fullBlur;
+ idffOrder=IDFF_orderBlur;
  inPreset=1;
  createWindow();
 }

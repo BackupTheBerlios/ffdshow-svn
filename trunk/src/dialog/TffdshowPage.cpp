@@ -43,6 +43,8 @@
 #include "Coffset.h"
 #include "CshowMV.h"
 #include "Cdeinterlace.h"
+#include "CfontOSD.h"
+#include "Clevels.h"
 
 using namespace std;
 
@@ -232,7 +234,13 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  tvis.hInsertAfter=TVI_LAST;
  tvis.item.mask=TVIF_PARAM|TVIF_TEXT;
  addTI(tvis,new TcodecsPage(this,m_hwnd,deci));
- addTI(tvis,new TinfoPage(this,m_hwnd,deci));
+ tvis.item.cChildren=1;
+ HTREEITEM htiInfo=addTI(tvis,new TinfoPage(this,m_hwnd,deci));
+ tvis.hParent=htiInfo;
+ tvis.item.cChildren=0;
+ addTI(tvis,new TOSDfontPage(this,m_hwnd,deci));
+ tvis.hParent=NULL;
+ TreeView_Expand(htv,htiInfo,TVE_EXPAND);
  addTI(tvis,new TdlgMiscPage(this,m_hwnd,deci));
  tvis.item.mask|=TVIF_CHILDREN;
  tvis.item.cChildren=1;
@@ -242,6 +250,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  tvis.item.cChildren=0;
  addTI(tvis,new TpostProcPage(this,m_hwnd,deci)); 
  addTI(tvis,new TpictPropPage(this,m_hwnd,deci)); 
+ addTI(tvis,new TlevelsPage(this,m_hwnd,deci)); 
  addTI(tvis,new TnoisePage(this,m_hwnd,deci));    
  addTI(tvis,new TsharpenPage(this,m_hwnd,deci));  
  addTI(tvis,new TblurPage(this,m_hwnd,deci));     
