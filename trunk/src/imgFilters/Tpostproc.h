@@ -40,6 +40,4 @@ private:
  void (*setModifyPPmode)(void (*mofidyPPmodeFnc)(PPMode *ppFnc,Tconfig *cfg),const Tconfig *cfg);
 };
 
-extern Tpostproc postproc;
-
 #endif

@@ -468,16 +468,12 @@ TffDecoder::~TffDecoder()
 {
  __asm {emms};
  DEBUGS("Destructor");
- if (movie)
-  {
-   delete movie;
-   movie=NULL;
-  };
- if (imgFilters) delete imgFilters;
- if (resizeCtx) delete resizeCtx;
+ if (movie) delete movie;movie=NULL;
+ if (imgFilters) delete imgFilters;imgFilters=NULL;
+ if (resizeCtx) delete resizeCtx;resizeCtx=NULL;
  postproc.done();
- if (subs) delete subs;
- delete tray;
+ if (subs) delete subs;subs=NULL;
+ delete tray;tray=NULL;
 }
 
 // check input type
@@ -904,8 +900,12 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
  OutputDebugString(pomS);
  #endif
 
- int sframe=1000*(int(t1)-presetSettings->subDelay)/presetSettings->subSpeed;
- imgFilters->setSubtitle((sframe<1)?NULL:subs->getSubtitle(sframe));
+ if (presetSettings->isSubtitles)
+  {
+   int sframe=1000*(int(t1)-presetSettings->subDelay)/presetSettings->subSpeed;
+   imgFilters->setSubtitle((sframe<1)?NULL:subs->getSubtitle(sframe));
+  }
+ else imgFilters->setSubtitle(NULL);  
  if (resizeCtx->resizeChanged)
   {
    resizeCtx->resizeChanged=false;
@@ -969,14 +969,14 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
      resizeCtx->resize(avpict.data[0]+cropDiffY,avpict.data[1]+cropDiffUV,avpict.data[2]+cropDiffUV,
                        avpict.linesize[0],avpict.linesize[1],avpict.linesize[2],
                        AVIdy);
-     imgFilters->process(&globalSettings,presetSettings,movie,
+     imgFilters->process(&globalSettings,presetSettings,movie,&postproc,
                          resizeCtx->imgResizeY,resizeCtx->imgResizeU,resizeCtx->imgResizeV,
                          &destPict.y,&destPict.u,&destPict.v);
     }
    else
     {
      unsigned char *src[3];
-     imgFilters->process(&globalSettings,presetSettings,movie,
+     imgFilters->process(&globalSettings,presetSettings,movie,&postproc,
                          avpict.data[0]+cropDiffY,avpict.data[1]+cropDiffUV,avpict.data[2]+cropDiffUV,
                          &src[0],&src[1],&src[2]);
      resizeCtx->resize(src[0],src[1],src[2],
@@ -1002,7 +1002,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
      char pomS[256];sprintf(pomS,"there would be an error: stride:%i, AVIdx:%i\n",m_frame.stride,AVIdx);DEBUGS(pomS);
      return S_FALSE;
     };
-   imgFilters->process(&globalSettings,presetSettings,movie,avpict.data[0],avpict.data[1],avpict.data[2],&destPict.y,&destPict.u,&destPict.v);
+   imgFilters->process(&globalSettings,presetSettings,movie,&postproc,avpict.data[0],avpict.data[1],avpict.data[2],&destPict.y,&destPict.u,&destPict.v);
    image_output(&destPict,
                 AVIdx,AVIdy,avpict.linesize[0],
                 (unsigned char*)m_frame.image,

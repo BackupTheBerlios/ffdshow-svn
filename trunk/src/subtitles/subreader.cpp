@@ -60,7 +60,7 @@ static void trail_space(char *s) {
 }
 
 
-subtitle *sub_read_line_sami(FILE *fd, subtitle *current) {
+subtitle *sub_read_line_sami(FILE *fd, subtitle *current,float fps) {
     static char line[LINE_LEN+1];
     static char *s = NULL, *slacktime_s;
     char text[LINE_LEN+1], *p, *q;
@@ -172,7 +172,7 @@ char *sub_readtext(char *source, char **dest) {
     else return NULL;  // last text field
 }
 
-subtitle *sub_read_line_microdvd(FILE *fd,subtitle *current) {
+subtitle *sub_read_line_microdvd(FILE *fd,subtitle *current,float fps) {
     char line[LINE_LEN+1];
     char line2[LINE_LEN+1];
     char *p, *next;
@@ -200,7 +200,7 @@ subtitle *sub_read_line_microdvd(FILE *fd,subtitle *current) {
     return current;
 }
 
-subtitle *sub_read_line_subrip(FILE *fd, subtitle *current) {
+subtitle *sub_read_line_subrip(FILE *fd, subtitle *current,float fps) {
     char line[LINE_LEN+1];
     int a1,a2,a3,a4,b1,b2,b3,b4;
     char *p=NULL, *q=NULL;
@@ -209,8 +209,8 @@ subtitle *sub_read_line_subrip(FILE *fd, subtitle *current) {
     while (1) {
 	if (!fgets (line, LINE_LEN, fd)) return NULL;
 	if (sscanf (line, "%d:%d:%d.%d,%d:%d:%d.%d",&a1,&a2,&a3,&a4,&b1,&b2,&b3,&b4) < 8) continue;
-	current->start = a1*360000+a2*6000+a3*100+a4;
-	current->end   = b1*360000+b2*6000+b3*100+b4;
+	current->start = a1*(60*60*fps)+a2*(60*fps)+a3*fps+a4*(fps/1000);
+	current->end   = b1*(60*60*fps)+b2*(60*fps)+b3*fps+b4*(fps/1000);
 
 	if (!fgets (line, LINE_LEN, fd)) return NULL;
 
@@ -229,7 +229,7 @@ subtitle *sub_read_line_subrip(FILE *fd, subtitle *current) {
     return current;
 }
 
-subtitle *sub_read_line_subviewer(FILE *fd,subtitle *current) {
+subtitle *sub_read_line_subviewer(FILE *fd,subtitle *current,float fps) {
     char line[LINE_LEN+1];
     int a1,a2,a3,a4,b1,b2,b3,b4;
     char *p=NULL;
@@ -239,8 +239,8 @@ subtitle *sub_read_line_subviewer(FILE *fd,subtitle *current) {
 	if (!fgets (line, LINE_LEN, fd)) return NULL;
 	if ((len=sscanf (line, "%d:%d:%d,%d --> %d:%d:%d,%d",&a1,&a2,&a3,&a4,&b1,&b2,&b3,&b4)) < 8)
 	    continue;
-	current->start = a1*360000+a2*6000+a3*100+a4/10;
-	current->end   = b1*360000+b2*6000+b3*100+b4/10;
+	current->start = a1*(60*60*fps)+a2*(60*fps)+a3*fps+a4*(fps/1000);
+	current->end   = b1*(60*60*fps)+b2*(60*fps)+b3*fps+b4*(fps/1000);
 	for (i=0; i<SUB_MAX_TEXT;) {
 	    if (!fgets (line, LINE_LEN, fd)) break;
 	    len=0;
@@ -259,7 +259,7 @@ subtitle *sub_read_line_subviewer(FILE *fd,subtitle *current) {
     return current;
 }
 
-subtitle *sub_read_line_subviewer2(FILE *fd,subtitle *current) {
+subtitle *sub_read_line_subviewer2(FILE *fd,subtitle *current,float fps) {
     char line[LINE_LEN+1];
     int a1,a2,a3,a4;
     char *p=NULL;
@@ -271,7 +271,7 @@ subtitle *sub_read_line_subviewer2(FILE *fd,subtitle *current) {
 	    continue;
         if ((len=sscanf (line, "{T %d:%d:%d:%d",&a1,&a2,&a3,&a4)) < 4)
             continue;
-        current->start = a1*360000+a2*6000+a3*100+a4/10;
+        current->start = a1*(60*60*fps)+a2*(60*fps)+a3*fps+a4*(fps/1000);
         for (i=0; i<SUB_MAX_TEXT;) {
             if (!fgets (line, LINE_LEN, fd)) break;
             if (line[0]=='}') break;
@@ -292,7 +292,7 @@ subtitle *sub_read_line_subviewer2(FILE *fd,subtitle *current) {
 }
 
 
-subtitle *sub_read_line_vplayer(FILE *fd,subtitle *current) {
+subtitle *sub_read_line_vplayer(FILE *fd,subtitle *current,float fps) {
 	char line[LINE_LEN+1];
 	int a1,a2,a3;
 	char *p=NULL, *next,separator;
@@ -303,7 +303,7 @@ subtitle *sub_read_line_vplayer(FILE *fd,subtitle *current) {
 		if ((len=sscanf (line, "%d:%d:%d%c%n",&a1,&a2,&a3,&separator,&plen)) < 4)
 			continue;
 
-		if (!(current->start = a1*360000+a2*6000+a3*100))
+		if (!(current->start = a1*(60*60*fps)+a2*(60*fps)+a3*fps))
 			continue;
                 /* removed by wodzu
 		p=line;
@@ -338,7 +338,7 @@ subtitle *sub_read_line_vplayer(FILE *fd,subtitle *current) {
 	return current;
 }
 
-subtitle *sub_read_line_rt(FILE *fd,subtitle *current) {
+subtitle *sub_read_line_rt(FILE *fd,subtitle *current,float fps) {
 	//TODO: This format uses quite rich (sub/super)set of xhtml
 	// I couldn't check it since DTD is not included.
 	// WARNING: full XML parses can be required for proper parsing
@@ -361,8 +361,8 @@ subtitle *sub_read_line_rt(FILE *fd,subtitle *current) {
 	((len=sscanf (line, "<%*[tT]ime %*[bB]egin=\"%d:%d:%d.%d\" %*[Ee]nd=\"%d:%d:%d.%d\"%*[^<]<clear/>%n",&a1,&a2,&a3,&a4,&b1,&b2,&b3,&b4,&plen)) < 8)
 	)
 	    continue;
-	current->start = a1*360000+a2*6000+a3*100+a4/10;
-	current->end   = b1*360000+b2*6000+b3*100+b4/10;
+	current->start = a1*(60*60*fps)+a2*(60*fps)+a3*fps+a4*(fps/1000);
+	current->end   = b1*(60*60*fps)+b2*(60*fps)+b3*fps+b4*(fps/1000);
 	p=line;	p+=plen;i=0;
 	// TODO: I don't know what kind of convention is here for marking multiline subs, maybe <br/> like in xml?
 	next = strstr(line,"<clear/>");
@@ -379,7 +379,7 @@ subtitle *sub_read_line_rt(FILE *fd,subtitle *current) {
     return current;
 }
 
-subtitle *sub_read_line_ssa(FILE *fd,subtitle *current) {
+subtitle *sub_read_line_ssa(FILE *fd,subtitle *current,float fps) {
 	int hour1, min1, sec1, hunsec1,
 	    hour2, min2, sec2, hunsec2, nothing;
 	int num;
@@ -402,8 +402,8 @@ subtitle *sub_read_line_ssa(FILE *fd,subtitle *current) {
 	line2 ++;
 
 	current->lines=0;num=0;
-	current->start = 360000*hour1 + 6000*min1 + 100*sec1 + hunsec1;
-	current->end   = 360000*hour2 + 6000*min2 + 100*sec2 + hunsec2;
+	current->start = hour1*(60*60*fps)+min1*(60*fps)+sec1*fps+hunsec1*(fps/1000);
+	current->end   = hour2*(60*60*fps)+min2*(60*fps)+sec2*fps+hunsec2*(fps/1000);
 
         while (((tmp=strstr(line2, "\\n")) != NULL) || ((tmp=strstr(line2, "\\N")) != NULL) ){
 		current->text[num]=(char *)malloc(tmp-line2+1);
@@ -421,7 +421,7 @@ subtitle *sub_read_line_ssa(FILE *fd,subtitle *current) {
 	return current;
 }
 
-subtitle *sub_read_line_dunnowhat(FILE *fd,subtitle *current) {
+subtitle *sub_read_line_dunnowhat(FILE *fd,subtitle *current,float fps) {
     char line[LINE_LEN+1];
     char text[LINE_LEN+1];
 
@@ -436,7 +436,7 @@ subtitle *sub_read_line_dunnowhat(FILE *fd,subtitle *current) {
     return current;
 }
 
-subtitle *sub_read_line_mpsub(FILE *fd, subtitle *current) {
+subtitle *sub_read_line_mpsub(FILE *fd, subtitle *current,float fps) {
 	char line[LINE_LEN+1];
 	float a,b;
 	int num=0;
@@ -478,7 +478,7 @@ subtitle *sub_read_line_mpsub(FILE *fd, subtitle *current) {
 
 subtitle *previous_aqt_sub = NULL;
 
-subtitle *sub_read_line_aqt(FILE *fd,subtitle *current) {
+subtitle *sub_read_line_aqt(FILE *fd,subtitle *current,float fps) {
     char line[LINE_LEN+1];
     char *next;
     int i;
@@ -525,7 +525,7 @@ subtitle *sub_read_line_aqt(FILE *fd,subtitle *current) {
 
 subtitle *previous_subrip09_sub = NULL;
 
-subtitle *sub_read_line_subrip09(FILE *fd,subtitle *current) {
+subtitle *sub_read_line_subrip09(FILE *fd,subtitle *current,float fps) {
     char line[LINE_LEN+1];
     int a1,a2,a3;
     char * next=NULL;
@@ -547,7 +547,7 @@ subtitle *sub_read_line_subrip09(FILE *fd,subtitle *current) {
     if (!fgets (line, LINE_LEN, fd))
 	return NULL;
 
-    current->start = a1*360000+a2*6000+a3*100;
+    current->start = a1*(60*60*fps)+a2*(60*fps)+a3*fps;
 
     next = line,i=0;
 
@@ -728,7 +728,7 @@ subtitle* sub_read_file (const char *filename, float fps) {
     subtitle *first;
     char *fmtname[] = { "microdvd", "subrip", "subviewer", "sami", "vplayer",
 		        "rt", "ssa", "dunnowhat", "mpsub", "aqt", "subviewer 2.0", "subrip 0.9" };
-    subtitle * (*func[])(FILE *fd,subtitle *dest)=
+    subtitle * (*func[])(FILE *fd,subtitle *dest,float fps)=
     {
 	    sub_read_line_microdvd,
 	    sub_read_line_subrip,
@@ -769,7 +769,7 @@ subtitle* sub_read_file (const char *filename, float fps) {
         }
 	sub = &first[sub_num];
 	memset(sub, '\0', sizeof(subtitle));
-        sub=func[sub_format](fd,sub);
+        sub=func[sub_format](fd,sub,fps);
         if(!sub) break;   // EOF
 #ifdef USE_ICONV
 	if ((sub!=ERR) && (sub_utf8 & 2)) sub=subcp_recode(sub);

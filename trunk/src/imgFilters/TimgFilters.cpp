@@ -61,12 +61,12 @@ void TimgFilters::setSubtitle(subtitle *Isub)
 {
  subtitles.sub=Isub;
 }
-void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSource *movie,unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV)
+void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSource *movie,Tpostproc *pp,unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV)
 {
  tempPict->reset(srcY,srcU,srcV);
  for (int i=cfg->min_order;i<=cfg->max_order;i++)
   if (i==cfg->orderPostproc && cfg->isPostproc)
-   postproc.process(tempPict,cfg,afterResize,movie);
+   postproc.process(tempPict,cfg,afterResize,movie,pp);
   else if (i==cfg->orderPictProp && cfg->isPictProp)
    {
     luma.process(tempPict,cfg);

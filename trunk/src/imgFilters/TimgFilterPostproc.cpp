@@ -37,9 +37,9 @@ TimgFilterPostproc::~TimgFilterPostproc()
  done();
  delete cpu;
 }
-void TimgFilterPostproc::process(TtempPictures *pict,TpresetSettings *cfg,bool afterResize,TmovieSource *movie)
+void TimgFilterPostproc::process(TtempPictures *pict,TpresetSettings *cfg,bool afterResize,TmovieSource *movie,Tpostproc *postproc)
 {
- if (!postproc.ok || dxY<16 || dyY<16) return;
+ if (!postproc->ok || dxY<16 || dyY<16) return;
  if (cpus>0 && cfg->autoq && cfg->ppqual)
   {
    cpu->CollectCPUData();
@@ -54,7 +54,7 @@ void TimgFilterPostproc::process(TtempPictures *pict,TpresetSettings *cfg,bool a
       cfg->currentq++ ;
     };  
   };
- int ppmode=postproc.getPPmode(cfg);
+ int ppmode=postproc->getPPmode(cfg);
  if (ppmode)
   {
    const unsigned char *tempPict1[3]={pict->getCurY() ,pict->getCurU() ,pict->getCurV() };
@@ -66,9 +66,9 @@ void TimgFilterPostproc::process(TtempPictures *pict,TpresetSettings *cfg,bool a
       if (q<1) q=1;else if (q>31) q=31;
       movie->quant[i]=q;
      }
-   postproc.postprocess(tempPict1,strideY,
-                        tempPict2,strideY,
-                        dxY,dyY,
-                        movie->quant,movie->quantDx,ppmode);
+   postproc->postprocess(tempPict1,strideY,
+                         tempPict2,strideY,
+                         dxY,dyY,
+                         movie->quant,movie->quantDx,ppmode);
   }
 }

@@ -7,6 +7,7 @@
 #include "TpresetSettings.h"
 #include "Tpresets.h"
 #include "TimgFilters.h"
+#include "Tpostproc.h"
 
 class TtrayIcon;
 class TresizeCtx;
@@ -118,6 +119,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
 
   TmovieSource *movie;
   TresizeCtx *resizeCtx;
+  Tpostproc postproc;
   int cropLeft,cropTop,cropDx,cropDy;
   void calcCrop(void);
   TimgFilters *imgFilters;

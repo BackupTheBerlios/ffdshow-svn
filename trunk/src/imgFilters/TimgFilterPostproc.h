@@ -5,6 +5,7 @@
 
 class TcpuUsage;
 class TmovieSource;
+class Tpostproc;
 class TimgFilterPostproc :public TimgFilter
 {
 private:
@@ -13,7 +14,7 @@ public:
  TimgFilterPostproc(void);
  virtual ~TimgFilterPostproc();
  void process(TtempPictures*,const TpresetSettings*) {};
- void process(TtempPictures *pict,TpresetSettings *cfg,bool afterResize,TmovieSource *movie);
+ void process(TtempPictures *pict,TpresetSettings *cfg,bool afterResize,TmovieSource *movie,Tpostproc *postproc);
 };
 
 #endif
