@@ -1,0 +1,13 @@
+XVID
+  XviD MPEG4 video codec (www.xvid.org)
+MP43
+  Microsoft MPEG-4 Video Codec V3 (used in some ASFs)
+MP42
+  Microsoft MPEG-4 Video Codec V2
+MP41
+  Microsoft MPEG-4 Video Codec V1 (old and low quality)
+Raw video
+  ffdshow will be able to process YUY2 and RGB video on input which means it can provide prostprocessing for most of other video decoders
+  
+Decode using XviD
+If xvid.dll is found, ffdshow can use it instead of libavcodec to decompress MPEG4 compatible movies (DIVX 4, XVID, partially DIVX 5).

@@ -1,0 +1,18 @@
+Dimensions must be multiplies of 16.
+If you enter invalid value, edit line will have red background and that value won't be saved
+
+Settings
+Resizing can be applied before or after other filters. This is controled with "Resizing is applied before other filters" checkbox. Note: if cropping or zoom is selected, it is applied always first
+Resize algorithms:
+  Fast bilinear - fast with acceptable quality
+  Bilinear - quality slighty better than previous, but a little bit slower
+  Bicubic - high quality, slower
+  Experimental - similar to bicubic, but with different coefficients
+  Point - fastest, ugliest
+  Area - 
+Gaussian blur - during resizing, image can be slightly blurred - independend on blur filter
+Sharpen - sharpens image during resizing, independend on sharpening filters
+  
+    
+  
+  

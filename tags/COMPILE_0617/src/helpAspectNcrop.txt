@@ -1,0 +1,8 @@
+Aspect ratio
+Zoom
+Crop
+  cropping is done just after decoding before any other processing
+  width and height of cropped area are rounded to multiplies of eight
+  If you enter invalid value, edit line will have red background and that value won't be saved
+  
+These filters use resize functions - parameters can be set on Resize page
