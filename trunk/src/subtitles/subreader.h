@@ -20,6 +20,7 @@ extern float sub_fps;
 #define SUB_MPSUB     8
 #define SUB_AQTITLE   9
 #define SUB_SUBVIEWER2 10
+#define SUB_SUBRIP09 11
 
 // One of the SUB_* constant above
 extern int sub_format;
@@ -38,8 +39,6 @@ struct subtitle {
 
 subtitle* sub_read_file (const char *filename, float pts);
 char * sub_filename(const char *path,const char * fname);
-void list_sub_file(subtitle* subs);
-void dump_mpsub(subtitle* subs, float fps);
 void sub_free( subtitle * subs );
 void find_sub(subtitle* subtitles,int key);
 
