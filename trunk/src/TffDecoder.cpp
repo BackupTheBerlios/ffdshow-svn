@@ -57,7 +57,7 @@ extern "C"
 #include "xvid\xvid.h"
 #include "xvid\dct\idct.h"
 
-#include "dialog\TffdshowPage.h"
+#include "TffdshowPage.h"
 #include "TffDecoder.h"
 #include "TresizeCtx.h"
 #include "trayIcon.h"
@@ -152,6 +152,13 @@ STDMETHODIMP TffDecoder::getPreset(unsigned int i,void *buf)
 {
  if (!buf) return E_POINTER;
  *((TpresetSettings*)buf)=presets[i];
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::setPreset(const void *buf)
+{
+ if (!buf) return E_POINTER;
+ presetSettings=*((TpresetSettings*)buf);
+ notifyParamsChanged();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getActivePresetName(char *buf,unsigned int len)

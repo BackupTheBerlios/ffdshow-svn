@@ -12,7 +12,8 @@ void Tpresets::init(void)
 
  HKEY hKey;
  RegOpenKeyEx(HKEY_CURRENT_USER,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,KEY_READ,&hKey);
- for (int i=0,retCode=ERROR_SUCCESS;retCode==ERROR_SUCCESS;i++) 
+ int i,retCode;
+ for (i=0,retCode=ERROR_SUCCESS;retCode==ERROR_SUCCESS;i++) 
   { 
    char keyName[256];DWORD keyNameSize=255;
    FILETIME ftLastWriteTime;
@@ -30,10 +31,11 @@ void Tpresets::init(void)
      TpresetSettings preset(keyName);
      preset.loadReg();
      push_back(preset);
-    };
+    }
+   else break;
   };
  RegCloseKey(hKey);
- if (size()==0)
+ if (i==0)
   (*begin()).saveReg();
 }
 

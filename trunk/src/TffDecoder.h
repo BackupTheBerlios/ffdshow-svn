@@ -80,6 +80,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP saveDialogSettings(void);
   STDMETHODIMP loadDialogSettings(void);
   STDMETHODIMP getPreset(unsigned int i,void *buf);
+  STDMETHODIMP setPreset(const void *buf);
  
  private:
   bool firstFrame;

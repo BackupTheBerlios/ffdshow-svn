@@ -1,4 +1,4 @@
-// Microsoft Visual C++ generated resource script.
+//Microsoft Developer Studio generated resource script.
 //
 #include "resource.h"
 
@@ -27,7 +27,7 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 //
 
 IDD_ABOUT DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
@@ -42,7 +42,7 @@ BEGIN
 END
 
 IDD_GLOBAL DIALOGEX 0, 0, 259, 230
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -113,17 +113,17 @@ BEGIN
 END
 
 IDD_FFDSHOW DIALOGEX 0, 0, 339, 168
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     CONTROL         "",IDC_TV_TREE,"SysTreeView32",TVS_DISABLEDRAGDROP | 
-                    TVS_SHOWSELALWAYS | TVS_FULLROWSELECT | WS_BORDER | 
-                    WS_TABSTOP | 0x800,0,2,80,165,WS_EX_CLIENTEDGE
+                    TVS_SHOWSELALWAYS | TVS_INFOTIP | TVS_FULLROWSELECT | 
+                    WS_BORDER | WS_TABSTOP,0,2,80,165,WS_EX_CLIENTEDGE
 END
 
 IDD_CODECS DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -151,7 +151,7 @@ BEGIN
 END
 
 IDD_PICTPROP DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -179,7 +179,7 @@ BEGIN
 END
 
 IDD_MISC DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -194,31 +194,35 @@ BEGIN
 END
 
 IDD_PRESETS DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX        "Presets",IDC_STATIC,0,0,253,165
-    PUSHBUTTON      "Load",IDC_BT_PRESET_LOAD,5,140,35,12
-    PUSHBUTTON      "Save",IDC_BT_PRESET_SAVE,41,140,35,12
-    PUSHBUTTON      "Remove",IDC_BT_PRESET_REMOVE,77,140,35,12
+    PUSHBUTTON      "Load",IDC_BT_PRESET_LOAD,10,90,35,12
+    PUSHBUTTON      "Save",IDC_BT_PRESET_SAVE_,46,90,35,12
+    PUSHBUTTON      "Remove",IDC_BT_PRESET_REMOVE_,82,90,35,12
     CONTROL         "Automatic preset loading",IDC_CHB_AUTOPRESET,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,6,154,94,9
-    PUSHBUTTON      "->",IDC_BT_PRESET_PUTFLNM,111,151,15,12
-    PUSHBUTTON      "Load from file...",IDC_BT_PRESET_FILE_LOAD,129,140,60,
-                    12
-    PUSHBUTTON      "Save to file...",IDC_BT_PRESET_FILE_SAVE,189,140,60,12
+    PUSHBUTTON      "->",IDC_BT_PRESET_PUTFLNM,106,119,15,12
+    PUSHBUTTON      "Load from file...",IDC_BT_PRESET_FILE_LOAD,134,90,60,12
+    PUSHBUTTON      "Save to file...",IDC_BT_PRESET_FILE_SAVE,194,90,60,12
     CONTROL         "Try to load preset from file first",
                     IDC_CHB_AUTOPRESET_FILEFIRST,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,129,154,117,10
     CONTROL         "",IDC_LV_PRESETS,"SysListView32",LVS_REPORT | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
                     LVS_ALIGNLEFT | LVS_OWNERDATA | LVS_NOSORTHEADER | 
-                    WS_BORDER | WS_TABSTOP,6,9,242,128
+                    WS_BORDER | WS_TABSTOP,6,25,242,127
+    PUSHBUTTON      "New",IDC_BT_PRESET_NEW,6,10,35,12
+    PUSHBUTTON      "v",IDC_BT_PRESET_NEW_MENU,41,10,8,12
+    PUSHBUTTON      "Save",IDC_BT_PRESET_SAVE,55,10,35,12
+    PUSHBUTTON      "v",IDC_BT_PRESET_SAVE_MENU,91,10,8,12
+    PUSHBUTTON      "Remove",IDC_BT_PRESET_REMOVE,105,10,35,12
 END
 
 IDD_POSTPROC DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -260,7 +264,7 @@ BEGIN
 END
 
 IDD_INFO DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -276,7 +280,7 @@ BEGIN
 END
 
 IDD_NOISE DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -302,7 +306,7 @@ BEGIN
 END
 
 IDD_SHARPEN DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -326,7 +330,7 @@ BEGIN
 END
 
 IDD_BLUR DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -342,7 +346,7 @@ BEGIN
 END
 
 IDD_SUBTITLES DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -370,7 +374,7 @@ BEGIN
 END
 
 IDD_FONT DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -406,7 +410,7 @@ BEGIN
 END
 
 IDD_RESIZE DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -446,7 +450,7 @@ BEGIN
 END
 
 IDD_ASPECTNCROP DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -492,7 +496,7 @@ BEGIN
 END
 
 IDD_TRAY DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -511,57 +515,79 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_FFDSHOW             ICON                    "ffdshow.ico"
+IDI_FFDSHOW             ICON    DISCARDABLE     "ffdshow.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // TEXT
 //
 
-IDD_ABOUT               TEXT                    "readme.txt"
-IDD_PICTPROP            TEXT                    "helpPictprop.txt"
-IDD_ASPECTNCROP         TEXT                    "helpAspectNcrop.txt"
-IDD_SHARPEN             TEXT                    "helpSharpen.txt"
-IDD_CODECS              TEXT                    "helpCodecs.txt"
-IDD_FONT                TEXT                    "helpFont.txt"
-IDD_INFO                TEXT                    "helpInfo.txt"
-IDD_NOISE               TEXT                    "helpNoise.txt"
-IDD_POSTPROC            TEXT                    "helpPostproc.txt"
-IDD_RESIZE              TEXT                    "helpResize.txt"
-IDD_BLUR                TEXT                    "helpBlur.txt"
-IDD_TRAY                TEXT                    "helpTray.txt"
-IDD_SUBTITLES           TEXT                    "helpSubtitles.txt"
-IDD_MISC                TEXT                    "helpMisc.txt"
+IDD_ABOUT               TEXT    MOVEABLE PURE   "readme.txt"
+IDD_PICTPROP            TEXT    MOVEABLE PURE   "helpPictprop.txt"
+IDD_ASPECTNCROP         TEXT    MOVEABLE PURE   "helpAspectNcrop.txt"
+IDD_SHARPEN             TEXT    MOVEABLE PURE   "helpSharpen.txt"
+IDD_CODECS              TEXT    MOVEABLE PURE   "helpCodecs.txt"
+IDD_FONT                TEXT    MOVEABLE PURE   "helpFont.txt"
+IDD_INFO                TEXT    MOVEABLE PURE   "helpInfo.txt"
+IDD_NOISE               TEXT    MOVEABLE PURE   "helpNoise.txt"
+IDD_POSTPROC            TEXT    MOVEABLE PURE   "helpPostproc.txt"
+IDD_RESIZE              TEXT    MOVEABLE PURE   "helpResize.txt"
+IDD_BLUR                TEXT    MOVEABLE PURE   "helpBlur.txt"
+IDD_TRAY                TEXT    MOVEABLE PURE   "helpTray.txt"
+IDD_SUBTITLES           TEXT    MOVEABLE PURE   "helpSubtitles.txt"
+IDD_MISC                TEXT    MOVEABLE PURE   "helpMisc.txt"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
 //
 
-IDB_CHECKED             BITMAP                  "checked.bmp"
-IDB_CLEAR               BITMAP                  "empty.bmp"
-IDB_CHB_MASK            BITMAP                  "mask.bmp"
-IDB_ARROWS              BITMAP                  "arrows.bmp"
-IDB_ARROWS_MASK_UD      BITMAP                  "arrows_mask_ud.bmp"
-IDB_ARROWS_MASK_U       BITMAP                  "arrows_mask_u.bmp"
-IDB_ARROWS_MASK_D       BITMAP                  "arrows_mask_d.bmp"
+IDB_CHECKED             BITMAP  MOVEABLE PURE   "checked.bmp"
+IDB_CLEAR               BITMAP  MOVEABLE PURE   "empty.bmp"
+IDB_CHB_MASK            BITMAP  MOVEABLE PURE   "mask.bmp"
+IDB_ARROWS              BITMAP  MOVEABLE PURE   "arrows.bmp"
+IDB_ARROWS_MASK_UD      BITMAP  MOVEABLE PURE   "arrows_mask_ud.bmp"
+IDB_ARROWS_MASK_U       BITMAP  MOVEABLE PURE   "arrows_mask_u.bmp"
+IDB_ARROWS_MASK_D       BITMAP  MOVEABLE PURE   "arrows_mask_d.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU_PRESET_NEW MENU DISCARDABLE 
+BEGIN
+    POPUP "New"
+    BEGIN
+        MENUITEM "From default",                ID_MNI_PRESET_NEWFROMDEFAULT
+        MENUITEM "From selected",               ID_MNI_PRESET_NEWFROMSELECTED
+
+        MENUITEM "From file...",                ID_MNI_PRESET_NEW_FROMFILE
+    END
+    POPUP "Store"
+    BEGIN
+        MENUITEM "Store",                       ID_SAVE_STORE
+        MENUITEM "Save to file...",             ID_SAVE_SAVETOFILE
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_FFDSHOW             "Configuration"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDD_ABOUT               "About"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDD_BLUR                "Blur"
     IDD_FONT                "Font"
@@ -570,7 +596,7 @@ BEGIN
     IDD_TRAY                "Tray"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDD_SUBTITLES           "Subtitles"
     IDD_CODECS              "Codecs"
@@ -602,18 +628,18 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE 
+1 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE 
+2 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "#include <windows.h>\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE 
+3 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "\r\n"
     "\0"

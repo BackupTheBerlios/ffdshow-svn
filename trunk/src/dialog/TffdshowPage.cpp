@@ -57,7 +57,6 @@ CUnknown * WINAPI TffdshowPage::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 TffdshowPage::TffdshowPage(LPUNKNOWN pUnk, HRESULT * phr):CBasePropertyPage(NAME("TffdshowPage"), pUnk, IDD_FFDSHOW, IDS_FFDSHOW)
 {
  ASSERT(phr);
- pages=new vector<TconfPage*>;
  hil=NULL;
  deci=NULL;
  page=NULL;
@@ -84,7 +83,7 @@ void TffdshowPage::selectPage(TconfPage *Ipage)
 
 HTREEITEM TffdshowPage::addTI(TVINSERTSTRUCT &tvis,TconfPage *page)
 {
- tvis.item.lParam=(LPARAM)page;pages->push_back(page);
+ tvis.item.lParam=(LPARAM)page;pages.push_back(page);
  tvis.item.pszText=page->dialogName;;
  HTREEITEM hti=TreeView_InsertItem(htv,&tvis);
  return hti;
@@ -97,6 +96,13 @@ TconfPage* TffdshowPage::hti2page(HTREEITEM hti)
  TreeView_GetItem(htv,&tvi);
  return (TconfPage*)tvi.lParam;
 }
+void TffdshowPage::presetChanged(void)
+{
+ for (int i=0;i<pages.size();i++)
+  pages[i]->cfg2dlg();
+ InvalidateRect(htv,NULL,FALSE);
+}
+
 HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
 {
  CBasePropertyPage::Activate(hwndParent,prect,fModal);
@@ -171,7 +177,7 @@ STDMETHODIMP TffdshowPage::Deactivate(void)
  if (beSaved) deci->loadPreset(NULL);
  //loadPreset();
  HRESULT res=CBasePropertyPage::Deactivate();
- for (vector<TconfPage*>::iterator i=pages->begin();i!=pages->end();i++)
+ for (vector<TconfPage*>::iterator i=pages.begin();i!=pages.end();i++)
   delete *i;
  deci->saveDialogSettings();
  deci->putParam(IDFF_isDlg,0);
@@ -263,15 +269,19 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
            }
           if (tvcd->nmcd.dwDrawStage==CDDS_ITEMPOSTPAINT)
            {
+            RECT rr;
+            TreeView_GetItemRect(htv,HTREEITEM(tvcd->nmcd.dwItemSpec),&rr,true);
+            rr.left-=24;
+            DEBUGS2("tv rect",rr.left,rr.top);
             TconfPage *page=(TconfPage*)tvcd->nmcd.lItemlParam;
-            ImageList_Draw(hil,page->getInter()?ilChecked:ilClear,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+8,tvcd->nmcd.rc.top+(rcDy-16)/2,ILD_TRANSPARENT);
+            ImageList_Draw(hil,page->getInter()?ilChecked:ilClear,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+8+rr.left,tvcd->nmcd.rc.top+(rcDy-16)/2,ILD_TRANSPARENT);
             if (page->getOrder()!=-1 && (tvcd->nmcd.uItemState&CDIS_SELECTED)) 
              {
               int img;
               if (page->getOrder()==deci->getMinOrder2()) img=ilArrowD;
               else if (page->getOrder()==deci->getMaxOrder2()) img=ilArrowU;
               else img=ilArrowUD;
-              ImageList_DrawEx(hil,img,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+2,tvcd->nmcd.rc.top+(rcDy-16)/2,5,16,CLR_DEFAULT,CLR_DEFAULT,ILD_TRANSPARENT);
+              ImageList_DrawEx(hil,img,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+2+rr.left,tvcd->nmcd.rc.top+(rcDy-16)/2,5,16,CLR_DEFAULT,CLR_DEFAULT,ILD_TRANSPARENT);
              }
             return TRUE;
            } 
@@ -286,8 +296,12 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           tvhti.pt=ps;
           HTREEITEM hti=TreeView_HitTest(htv,&tvhti);
           if (!hti) return FALSE;
+          RECT rr;
+          TreeView_GetItemRect(htv,hti,&rr,TRUE);
           RECT r;
           TreeView_GetItemRect(htv,hti,&r,FALSE);
+          ps.x-=rr.left-24;
+          DEBUGS2("tv rect",r.left+(rr.left-24),r.top);
           int iconTop=((r.bottom-r.top)-16)/2;
           ps.y-=r.top;
           if (ps.x>=8 && ps.x<=16+8 && ps.y>=iconTop+2 && ps.y<=iconTop+13) 
@@ -341,7 +355,7 @@ void TffdshowPage::swap(HTREEITEM hti1,HTREEITEM hti2)
 }
 void TffdshowPage::applySettings(void)
 {
- for (unsigned int i=0;i<pages->size();i++) (*pages)[i]->applySettings();
+ for (unsigned int i=0;i<pages.size();i++) pages[i]->applySettings();
 }
 void TffdshowPage::drawInter(void)
 {

@@ -10,6 +10,7 @@ class TconfPage
  protected:
   TffdshowPage *parent;
   IffDecoder *deci;
+  HINSTANCE hi;
   void createWindow(int IdialogId);
   int cfgGet(unsigned int i),cfgSet(unsigned int i,int val),cfgInv(unsigned int i);
   void loadPreset(void);

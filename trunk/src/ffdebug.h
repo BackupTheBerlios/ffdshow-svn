@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#if 0
+#if 1
 static inline void DEBUGS(const char *s)
 {
  char pomS[1024];strcpy(pomS,s);strcat(pomS,"\n");

@@ -22,10 +22,10 @@
 #include <stdio.h>
 #pragma hdrstop
 #include "IffDecoder.h"
+#include "TffdshowPage.h"
 #include "CpostProc.h"
 #include "resource.h"
 #include "Tpostproc.h"
-#include "TffdshowPage.h"
 
 #define POSTPROC_TIMER 1999
 

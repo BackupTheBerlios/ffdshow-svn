@@ -152,6 +152,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (saveDialogSettings)(void) PURE;
  STDMETHOD (loadDialogSettings)(void) PURE;
  STDMETHOD (getPreset)(unsigned int i,void *buf) PURE;
+ STDMETHOD (setPreset)(const void *buf) PURE;
 };
 
 #ifdef __cplusplus

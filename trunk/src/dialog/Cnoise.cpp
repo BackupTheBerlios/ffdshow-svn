@@ -22,9 +22,9 @@
 #include <stdio.h>
 #pragma hdrstop
 #include "IffDecoder.h"
+#include "TffdshowPage.h"
 #include "Cnoise.h"
 #include "resource.h"
-#include "TffdshowPage.h"
 
 void TnoisePage::init(void)
 {

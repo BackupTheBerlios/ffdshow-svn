@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
+// Microsoft Developer Studio generated include file.
 // Used by ffdshow.rc
 //
 #define VERSION_RES_MINOR_VER           0
@@ -31,6 +31,7 @@
 #define IDB_ARROWS                      145
 #define IDB_ARROWS_MASK_UD              146
 #define IDB_ARROWS_MASK_U               147
+#define IDR_MENU_PRESET_NEW             147
 #define IDB_ARROWS_MASK_D               148
 #define IDC_TBR_PPQUAL                  1002
 #define IDC_TBR_ASPECT_USER             1002
@@ -49,10 +50,13 @@
 #define IDC_CHB_DX50                    1014
 #define IDC_BT_PRESET_LOAD              1015
 #define IDC_CHB_FLIP                    1016
+#define IDC_BT_PRESET_NEW               1016
 #define IDC_LBL_LUMGAIN                 1017
+#define IDC_BT_PRESET_NEW_MENU          1017
 #define IDC_LBL_LUMOFFSET               1018
 #define IDC_LBL_XSHARPENSTRENGTH        1019
 #define IDC_LBL_RESIZE_SHARPEN_LUM      1019
+#define IDC_BT_PRESET_SAVE_MENU         1019
 #define IDC_TBR_XSHARPENSTRENGTH        1020
 #define IDC_LBL_RESIZE_SHARPEN_CHROM    1020
 #define IDC_LBL_XSHARPENTHRESH          1021
@@ -172,16 +176,23 @@
 #define IDC_LIST1                       1142
 #define IDC_ED_HELP                     1143
 #define IDC_LV_PRESETS                  1144
+#define IDC_BT_PRESET_SAVE_             1146
+#define IDC_BT_PRESET_REMOVE_           1147
 #define VERSION_RES_CHARSET             1252
+#define ID_MNI_PRESET_NEWFROMDEFAULT    40004
+#define ID_MNI_PRESET_NEWFROMSELECTED   40005
+#define ID_MNI_PRESET_NEW_FROMFILE      40006
+#define ID_SAVE_STORE                   40007
+#define ID_SAVE_SAVETOFILE              40008
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        146
-#define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1145
+#define _APS_NEXT_RESOURCE_VALUE        148
+#define _APS_NEXT_COMMAND_VALUE         40009
+#define _APS_NEXT_CONTROL_VALUE         1148
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
