@@ -143,7 +143,8 @@ void Tpresets::nextUniqueName(char *presetName)
 void Tpresets::saveRegAll(void)
 {
  for (iterator ii=begin();ii!=end();ii++)
-  (*ii)->saveReg();
+  if (!(*ii)->autoLoadedFromFile)
+   (*ii)->saveReg();
 
  vector<string> keys;
  listRegKeys(keys);
@@ -166,6 +167,8 @@ TpresetSettings* Tpresets::getAutoPreset(const char *AVIname,bool filefirst)
    if (GetFileAttributes(presetFlnm)!=INVALID_FILE_ATTRIBUTES)
     {
      TpresetSettings *preset=new TpresetSettings(AVIname);
+     preset->loadFile(presetFlnm);
+     TpresetSettings::normalizePresetName(preset->presetName,AVIname);
      preset->autoLoadedFromFile=true;
      nextUniqueName(preset);
      push_back(preset);

@@ -731,7 +731,7 @@ int TffDecoder::loadAVInameAndPreset(void)
           {
            TpresetSettings *preset=presets.getAutoPreset(AVIname,globalSettings.autoPresetFileFirst);
            if (preset)
-            presetSettings=preset;
+            setPresetPtr(preset);
           }  
          subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings->subFlnm,subs->flnm);
         }
@@ -741,7 +741,6 @@ int TffDecoder::loadAVInameAndPreset(void)
     }
    eff->Release();
   }
- cnt=1; 
  return cnt; 
 }
 void TffDecoder::calcCrop(void)

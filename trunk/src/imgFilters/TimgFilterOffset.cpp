@@ -26,6 +26,7 @@
 TimgFilterOffset::TimgFilterOffset(void)
 {
  old_offsetY_X=old_offsetY_Y=old_offsetU_X=old_offsetU_Y=old_offsetV_X=old_offsetV_Y=-12345;
+ oldOrder=-1;
 }
 void TimgFilterOffset::init(int Idx,int Istride,int Idy)
 {
@@ -61,7 +62,7 @@ void TimgFilterOffset::process(const unsigned char *srcY,const unsigned char *sr
                                unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
                                const TpresetSettings *cfg)
 {
- if (cfg->offsetY_X!=old_offsetY_X || cfg->offsetY_Y!=old_offsetY_Y)
+ if (cfg->offsetY_X!=old_offsetY_X || cfg->offsetY_Y!=old_offsetY_Y || oldOrder!=cfg->orderOffset)
   {
    old_offsetY_X=cfg->offsetY_X;old_offsetY_Y=cfg->offsetY_Y;
    for (unsigned char *dst=dstY,*dstEnd=dst+dyY*strideY;dst<dstEnd;dst+=strideY)
@@ -69,7 +70,7 @@ void TimgFilterOffset::process(const unsigned char *srcY,const unsigned char *sr
   };  
  offset(srcY,dstY,dxY,strideY,dyY,cfg->offsetY_X,cfg->offsetY_Y);
 
- if (cfg->offsetU_X!=old_offsetU_X || cfg->offsetU_Y!=old_offsetU_Y)
+ if (cfg->offsetU_X!=old_offsetU_X || cfg->offsetU_Y!=old_offsetU_Y || oldOrder!=cfg->orderOffset)
   {
    old_offsetU_X=cfg->offsetU_X;old_offsetU_Y=cfg->offsetU_Y;
    for (unsigned char *dst=dstU,*dstEnd=dst+dyUV*strideUV;dst<dstEnd;dst+=strideUV)
@@ -77,11 +78,12 @@ void TimgFilterOffset::process(const unsigned char *srcY,const unsigned char *sr
   };  
  offset(srcU,dstU,dxUV,strideUV,dyUV,cfg->offsetU_X/2,-cfg->offsetU_Y/2);
 
- if (cfg->offsetV_X!=old_offsetV_X || cfg->offsetV_Y!=old_offsetV_Y)
+ if (cfg->offsetV_X!=old_offsetV_X || cfg->offsetV_Y!=old_offsetV_Y || oldOrder!=cfg->orderOffset)
   {
    old_offsetV_X=cfg->offsetV_X;old_offsetV_Y=cfg->offsetV_Y;
    for (unsigned char *dst=dstV,*dstEnd=dst+dyUV*strideUV;dst<dstEnd;dst+=strideUV)
     memset(dst,128,dxUV);
   };  
  offset(srcV,dstV,dxUV,strideUV,dyUV,cfg->offsetV_X/2,-cfg->offsetV_Y/2);
+ oldOrder=cfg->orderOffset;
 }
