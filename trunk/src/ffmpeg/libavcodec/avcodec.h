@@ -12,8 +12,8 @@ extern "C" {
 
 #define LIBAVCODEC_VERSION_INT 0x000406
 #define LIBAVCODEC_VERSION     "0.4.6"
-#define LIBAVCODEC_BUILD       4614
-#define LIBAVCODEC_BUILD_STR   "4614"
+#define LIBAVCODEC_BUILD       4617
+#define LIBAVCODEC_BUILD_STR   "4617"
 
 #define CODEC_ID_NONE       0
 #define CODEC_ID_MPEG1VIDEO 1
@@ -33,6 +33,7 @@ extern "C" {
 #define CODEC_ID_WMV2      14
 #define CODEC_ID_H263P     15
 #define CODEC_ID_H263I     16
+#define CODEC_ID_SVQ1      17
 
 #define CODEC_ID_XVID_MASK 256
 
@@ -56,6 +57,7 @@ enum PixelFormat {
     PIX_FMT_BGR24,
     PIX_FMT_YUV422P,
     PIX_FMT_YUV444P,
+    PIX_FMT_YUV410P
 };
 
 /* currently unused, may be used if 24/32 bits samples ever supported */
@@ -102,11 +104,13 @@ static const int Motion_Est_QTab[] = { ME_ZERO, ME_PHODS, ME_LOG,
 #define CODEC_FLAG_PASS2 0x0400  /* use internal 2pass ratecontrol in second pass mode */
 #define CODEC_FLAG_EXTERN_HUFF 0x1000 /* use external huffman table (for mjpeg) */
 #define CODEC_FLAG_GRAY  0x2000 /* only decode/encode grayscale */
-
+#define CODEC_FLAG_EMU_EDGE 0x4000/* dont draw edges */
+#define CODEC_FLAG_DR1    0x8000 /* dr1 */
 /* codec capabilities */
 
 /* decoder can use draw_horiz_band callback */
 #define CODEC_CAP_DRAW_HORIZ_BAND 0x0001
+#define CODEC_CAP_DR1             0x0002 /* direct rendering method 1 */
 
 #define FRAME_RATE_BASE 10000
 
@@ -249,8 +253,19 @@ typedef struct AVCodecContext {
     float b_quant_offset;/* qscale offset between ips and b frames, not implemented yet */
     int error_resilience;
     
-    int *quant_store; /* field for communicating with external postprocessing */
+#define QP_TYPE int //FIXME note xxx this might be changed to int8_t
+    
+QP_TYPE *quant_store; /* field for communicating with external postprocessing */
     unsigned qstride;
+
+    uint8_t *dr_buffer[3];
+    int dr_stride;
+    void *dr_opaque_frame;
+    void (*get_buffer_callback)(struct AVCodecContext *c, int width, int height, int pict_type);
+
+    int has_b_frames; // is 1 if the decoded stream contains b frames
+    int dr_uvstride;
+    int dr_ip_buffer_count;
 } AVCodecContext;
 
 typedef struct AVCodec {

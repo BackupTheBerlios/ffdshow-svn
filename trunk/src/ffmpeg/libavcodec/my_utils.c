@@ -15,13 +15,13 @@ void getVersion(char **version,char **build,char **datetime)
 static UINT8 zigzag_direct0[64];
 static UINT8 ff_alternate_horizontal_scan0[64];
 static UINT8 ff_alternate_vertical_scan0[64];
-static INT16 default_intra_matrix0[64];
-static INT16 default_non_intra_matrix0[64];
+static INT16 ff_mpeg1_default_intra_matrix0[64];
+static INT16 ff_mpeg1_default_non_intra_matrix0[64];
 static INT16 ff_mpeg4_default_intra_matrix0[64];
 static INT16 ff_mpeg4_default_non_intra_matrix0[64];
 
-extern INT16 default_intra_matrix[64];
-extern INT16 default_non_intra_matrix[64];
+extern INT16 ff_mpeg1_default_intra_matrix[64];
+extern INT16 ff_mpeg1_default_non_intra_matrix[64];
 extern INT16 ff_mpeg4_default_intra_matrix[64];
 extern INT16 ff_mpeg4_default_non_intra_matrix[64];
 
@@ -35,8 +35,8 @@ void libavcodec_init(void)
    memcpy(ff_alternate_horizontal_scan0,ff_alternate_horizontal_scan,64);
    memcpy(ff_alternate_vertical_scan0,ff_alternate_vertical_scan,64);
    memcpy(zigzag_direct0,zigzag_direct,64);
-   memcpy(default_intra_matrix0,default_intra_matrix,128);
-   memcpy(default_non_intra_matrix0,default_non_intra_matrix,128);
+   memcpy(ff_mpeg1_default_intra_matrix0,ff_mpeg1_default_intra_matrix,128);
+   memcpy(ff_mpeg1_default_non_intra_matrix0,ff_mpeg1_default_non_intra_matrix,128);
    memcpy(ff_mpeg4_default_intra_matrix0,ff_mpeg4_default_intra_matrix,128);
    memcpy(ff_mpeg4_default_non_intra_matrix0,ff_mpeg4_default_non_intra_matrix,128);
    avcodec_init();
@@ -53,8 +53,8 @@ void set_ff_idct(void *idct)
  memcpy(ff_alternate_horizontal_scan,ff_alternate_horizontal_scan0,64);
  memcpy(ff_alternate_vertical_scan,ff_alternate_vertical_scan0,64);
  memcpy(zigzag_direct,zigzag_direct0,64);
- memcpy(default_intra_matrix,default_intra_matrix0,128);
- memcpy(default_non_intra_matrix,default_non_intra_matrix0,128);
+ memcpy(ff_mpeg1_default_intra_matrix,ff_mpeg1_default_intra_matrix0,128);
+ memcpy(ff_mpeg1_default_non_intra_matrix,ff_mpeg1_default_non_intra_matrix0,128);
  memcpy(ff_mpeg4_default_intra_matrix,ff_mpeg4_default_intra_matrix0,128);
  memcpy(ff_mpeg4_default_non_intra_matrix,ff_mpeg4_default_non_intra_matrix0,128);
  if (idct==1)      dsputil_init(1,3); //simple16383
