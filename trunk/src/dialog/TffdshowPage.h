@@ -14,6 +14,7 @@ class TffdshowPage : public CBasePropertyPage
 {
  private:
   HIMAGELIST hil;
+  int ilClear,ilChecked,ilArrowUD,ilArrowU,ilArrowD;
   HWND htv;
   HTREEITEM addTI(TVINSERTSTRUCT &tvis,TconfPage *page);
   IffDecoder *deci;

@@ -264,6 +264,10 @@ SOURCE=.\src\Tpostproc.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\Tpreset.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\trayIcon.h
 # End Source File
 # Begin Source File

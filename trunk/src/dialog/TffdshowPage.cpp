@@ -102,11 +102,11 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  htv=GetDlgItem(m_hwnd,IDC_TV_TREE);
  hil=ImageList_Create(16,16,ILC_COLOR|ILC_MASK,2,2);
  HINSTANCE hi=(HMODULE)GetWindowLong(m_hwnd,GWL_HINSTANCE);
- ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_CLEAR  )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHB_MASK)));
- ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHECKED)),LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHB_MASK))); 
- ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS_MASK_UD)));
- ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS_MASK_U)));
- ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS_MASK_D)));
+ ilClear  =ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_CLEAR  )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHB_MASK)));
+ ilChecked=ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHECKED)),LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHB_MASK))); 
+ ilArrowUD=ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS_MASK_UD)));
+ ilArrowU =ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS_MASK_U)));
+ ilArrowD =ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS_MASK_D)));
  
  TVINSERTSTRUCT tvis;
  tvis.hParent=NULL;
@@ -262,13 +262,13 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           if (tvcd->nmcd.dwDrawStage==CDDS_ITEMPOSTPAINT)
            {
             TconfPage *page=(TconfPage*)tvcd->nmcd.lItemlParam;
-            ImageList_Draw(hil,page->getInter()?1:0,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+8,tvcd->nmcd.rc.top,ILD_TRANSPARENT);
+            ImageList_Draw(hil,page->getInter()?ilChecked:ilClear,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+8,tvcd->nmcd.rc.top,ILD_TRANSPARENT);
             if (page->getOrder()!=-1 && (tvcd->nmcd.uItemState&CDIS_SELECTED)) 
              {
               int img;
-              if (page->getOrder()==deci->getMinOrder2()) img=4;
-              else if (page->getOrder()==deci->getMaxOrder2()) img=3;
-              else img=2;
+              if (page->getOrder()==deci->getMinOrder2()) img=ilArrowD;
+              else if (page->getOrder()==deci->getMaxOrder2()) img=ilArrowU;
+              else img=ilArrowUD;
               ImageList_DrawEx(hil,img,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+2,tvcd->nmcd.rc.top,5,16,CLR_DEFAULT,CLR_DEFAULT,ILD_TRANSPARENT);
              }
             return TRUE;
@@ -297,17 +297,15 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             if (ps.y>r.top+2 && ps.y<r.bottom-8 && page->getOrder()>deci->getMinOrder2())
              {
               HTREEITEM hti0=TreeView_GetPrevSibling(htv,hti);
-              OutputDebugString("up\n");
               swap(hti,hti0);
-              SetWindowLong(m_hwnd,DWL_MSGRESULT,1);
+              SetWindowLong(m_hwnd,DWL_MSGRESULT,TRUE);
               return TRUE;
              }
             else if (ps.y>r.top+10 && ps.y<r.bottom-2 && page->getOrder()<deci->getMaxOrder2())
              {
               HTREEITEM hti0=TreeView_GetNextSibling(htv,hti);
-              OutputDebugString("down\n");
               swap(hti,hti0);
-              SetWindowLong(m_hwnd,DWL_MSGRESULT,1);
+              SetWindowLong(m_hwnd,DWL_MSGRESULT,TRUE);
               return TRUE;
              }
            }
