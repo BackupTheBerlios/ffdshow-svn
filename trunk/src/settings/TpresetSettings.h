@@ -4,6 +4,9 @@
 #define FFPRESET_EXT "ffpreset"
 #define FFPRESET_DEFAULT "default"
 
+#include "subtitles/TfontSettings.h"
+
+struct TregOp;
 struct TpresetSettings
 {
 public:
@@ -18,6 +21,8 @@ public:
    } while (c);
   }
  static bool isValidPresetName(const char *presetName);
+private:
+ void reg_op(TregOp &t);
 public:
  TpresetSettings(const char *IpresetName=FFPRESET_DEFAULT);
  void loadDefault(void);
@@ -38,6 +43,8 @@ public:
    int deblockStrength;
    static const int deblockStrengthDef;
    int levelFixLum,levelFixChrom;
+   int fullYrange;
+   int tempNoiseFilter;
   } postproc;
   
  int isPictProp,orderPictProp; 
@@ -52,6 +59,12 @@ public:
   } pictProp;
  
  int isDeinterlace;
+ int fullDeinterlace;
+ struct TdeinterlaceSettings
+  {
+   int method;
+   static const int methodDef;
+  } deinterlace;
  
  int flip;
 
@@ -98,6 +111,7 @@ public:
    int aspectRatio;
    int method;
    static const int methodNone;
+   int bicubicParam,xParam,gaussParam,lanczosParam;
    int GblurLum,GblurChrom;
    int sharpenLum,sharpenChrom;
   } resizeAspect;
@@ -114,11 +128,7 @@ public:
  int isSubtitles,orderSubtitles;
  static const int orderSubtitlesDef;
  int fullSubtitles;
- struct TfontSettings
-  {
-   char name[256];
-   int charset,size,spacing,weight,color,shadowStrength,shadowRadius;
-  } font;
+ TfontSettings font,fontOSD;
  struct TsubtitlesSettings
   {
    char flnm[260];

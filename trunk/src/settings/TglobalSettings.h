@@ -3,8 +3,12 @@
 
 #include <vector>
 
+struct TregOp;
 struct TglobalSettings
 {
+private:
+ void reg_op_HKLM(TregOp &t),reg_op_HKCU(TregOp &t);
+public:
  int trayIcon;
  int autoPreset,autoPresetFileFirst;
  int xvid,div3,divx,dx50,mp43,mp42,mp41,h263,blz0,wmv1,rawv;
