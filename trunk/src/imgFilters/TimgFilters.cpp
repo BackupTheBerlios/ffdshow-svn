@@ -48,6 +48,7 @@ void TimgFilters::init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY)
  noise.init(IdxY,IstrideY,Idy);
  luma.init(IdxY,IstrideY,Idy);
  chroma.init(IdxY,IstrideY,Idy);
+ blur.init(IdxY,IstrideY,Idy);
  sharpen.init(IdxY,IstrideY,Idy);
  subtitles.init(IdxY,IstrideY,Idy);
 }
@@ -114,6 +115,12 @@ void TimgFilters::process(unsigned char *srcY,unsigned char *srcU,unsigned char 
      unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
      chroma.process(NULL,srcU,srcV,NULL,dstU,dstV,cfg);
     }; 
+  };
+
+ if (cfg->isBlur)
+  {
+   unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
+   blur.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
   };
   
  if (cfg->isSharpen)

@@ -11,7 +11,7 @@ class TfiltersPage :public TconfPage
   int writeSharpenStrength(int x),writeSharpenThreshold(int x);
   int writeNoiseStrength(int x),writeNoiseStrengthChroma(int x);
   void setPPchbs(void);
-  void postProc2dlg(void),noise2dlg(void),pictProp2dlg(void),sharpen2dlg(void);
+  void postProc2dlg(void),noise2dlg(void),pictProp2dlg(void),sharpen2dlg(void),blur2dlg(void);
  public:
   TfiltersPage(HWND IhwndParent,IffDecoder *Ideci,int dialogId);
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);

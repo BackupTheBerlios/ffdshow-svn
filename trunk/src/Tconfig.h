@@ -55,6 +55,9 @@ public:
  int xvid,div3,divx,dx50,mp43,mp42,mp41,h263;
  
  int flip;
+
+ int isBlur;
+ int blurStrength;
  
  int isSharpen,sharpenMethod;
  int xsharp_strength,xsharp_threshold;

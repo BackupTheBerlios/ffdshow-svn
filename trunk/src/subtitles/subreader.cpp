@@ -680,7 +680,7 @@ subtitle* sub_read_file (const char *filename, float fps) {
 	    sub_read_line_subviewer2
 
     };
-    if(filename==NULL) return NULL; //qnx segfault
+    if(filename==NULL || filename[0]=='\0') return NULL; //qnx segfault
     fd=fopen (filename, "r"); if (!fd) return NULL;
 
     sub_format=sub_autodetect (fd);

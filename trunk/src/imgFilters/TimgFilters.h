@@ -10,6 +10,7 @@
 #include "TimgFilterChroma.h"
 #include "TimgFilterSharpen.h"
 #include "TimgFilterSubtitles.h"
+#include "TimgFilterBlur.h"
 
 class Tconfig;
 class TimgFilters
@@ -25,6 +26,7 @@ private:
  TimgFilterNoise noise;
  TimgFilterLuma luma;
  TimgFilterChroma chroma;
+ TimgFilterBlur blur;
  TimgFilterSharpen sharpen;
  TimgFilterSubtitles subtitles;
 public:

@@ -250,7 +250,10 @@ void TffDecoder::fillParams(void)
  params[IDFF_saturation         ]=Tparam(&cfg.saturation         ,0,128);
                                                          
  params[IDFF_flip               ]=Tparam(&cfg.flip               ,0,0);
-                                                         
+
+ params[IDFF_isBlur             ]=Tparam(&cfg.isBlur             ,0,0);
+ params[IDFF_blurStrength       ]=Tparam(&cfg.blurStrength       ,1,255);
+
  params[IDFF_isSharpen          ]=Tparam(&cfg.isSharpen          ,0,0);
  params[IDFF_sharpenMethod      ]=Tparam(&cfg.sharpenMethod      ,0,1);
  params[IDFF_xsharp_strength    ]=Tparam(&cfg.xsharp_strength    ,1,127);

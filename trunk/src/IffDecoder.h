@@ -78,6 +78,9 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_subDelay            812
 #define IDFF_subSpeed            813
 #define IDFF_subAutoFlnm         814
+
+#define IDFF_isBlur              901
+#define IDFF_blurStrength        902
               
 #define IDFF_xvid               1001 //are AVIs with this FOURCC played by ffdshow?
 #define IDFF_div3               1002

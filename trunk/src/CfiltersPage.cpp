@@ -176,13 +176,22 @@ void TfiltersPage::sharpen2dlg(void)
           break;
   };        
 }
+void TfiltersPage::blur2dlg(void)
+{
+ int x=cfgGet(IDFF_blurStrength);
+ char s[256];
+ sprintf(s,"Strength: %i",x);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_BLUR_STRENGTH,WM_SETTEXT,0,LPARAM(s));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_BLUR_STRENGTH,TBM_SETPOS,TRUE,x);
+}
 void TfiltersPage::cfg2dlg(void)
 {
  interDlg();
  postProc2dlg();
  pictProp2dlg();
- sharpen2dlg(); 
  noise2dlg();
+ blur2dlg();
+ sharpen2dlg(); 
 }
 
 void TfiltersPage::interDlg(void)
@@ -190,6 +199,7 @@ void TfiltersPage::interDlg(void)
  setCheck(IDC_CHB_POSTPROC,cfgGet(IDFF_isPostproc));
  setCheck(IDC_CHB_PICTPROP,cfgGet(IDFF_isPictProp));
  setCheck(IDC_CHB_NOISE   ,cfgGet(IDFF_isNoise   ));
+ setCheck(IDC_CHB_BLUR    ,cfgGet(IDFF_isBlur    ));
  setCheck(IDC_CHB_SHARPEN ,cfgGet(IDFF_isSharpen ));
 }
 
@@ -231,6 +241,10 @@ void TfiltersPage::createConfig(void)
  SendDlgItemMessage(m_hwnd,IDC_TBR_NOISESTRENGTH_CHROMA,TBM_SETRANGE,TRUE,MAKELPARAM(0,127));
  SendDlgItemMessage(m_hwnd,IDC_TBR_NOISESTRENGTH_CHROMA,TBM_SETLINESIZE,0,1);
  SendDlgItemMessage(m_hwnd,IDC_TBR_NOISESTRENGTH_CHROMA,TBM_SETPAGESIZE,0,16); 
+
+ SendDlgItemMessage(m_hwnd,IDC_TBR_BLUR_STRENGTH,TBM_SETRANGE,TRUE,MAKELPARAM(1,255));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_BLUR_STRENGTH,TBM_SETLINESIZE,0,1);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_BLUR_STRENGTH,TBM_SETPAGESIZE,0,16); 
 
  cfg2dlg();
 }
@@ -289,6 +303,12 @@ HRESULT TfiltersPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
      cfgSet(IDFF_noiseStrengthChroma,writeNoiseStrengthChroma(SendDlgItemMessage(m_hwnd,IDC_TBR_NOISESTRENGTH_CHROMA,TBM_GETPOS,0,0)));
      return TRUE;
     }
+   else if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_BLUR_STRENGTH))
+    {
+     cfgSet(IDFF_blurStrength,SendDlgItemMessage(m_hwnd,IDC_TBR_BLUR_STRENGTH,TBM_GETPOS,0,0));
+     blur2dlg();
+     return TRUE;
+    }
    break;
    
   case WM_COMMAND:
@@ -305,6 +325,9 @@ HRESULT TfiltersPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
      return TRUE;
     case IDC_CHB_SHARPEN:
      cfgSet(IDFF_isSharpen,getCheck(IDC_CHB_SHARPEN));
+     return TRUE;
+    case IDC_CHB_BLUR:
+     cfgSet(IDFF_isBlur,getCheck(IDC_CHB_BLUR));
      return TRUE;
     
     case IDC_RBT_PPPRESETS:

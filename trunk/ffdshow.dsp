@@ -614,6 +614,14 @@ SOURCE=.\src\imgFilters\TimgFilter.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\imgFilters\TimgFilterBlur.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\TimgFilterBlur.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\imgFilters\TimgFilterChroma.cpp
 # End Source File
 # Begin Source File

@@ -14,6 +14,9 @@ _REG_OP_N("hue",hue,hueDef);
 _REG_OP_N("saturation",saturation,saturationDef);
 _REG_OP_N("flip",flip,0);
 
+_REG_OP_N("isBlur",isBlur,0);
+_REG_OP_N("blurStrength",blurStrength,30);
+
 _REG_OP_N("xsharpen",isSharpen,0);
 _REG_OP_N("sharpenMethod",sharpenMethod,0);
 _REG_OP_N("xsharp_strenght",xsharp_strength,xsharp_strengthDef);
