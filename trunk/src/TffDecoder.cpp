@@ -733,7 +733,6 @@ int TffDecoder::loadAVInameAndPreset(void)
            if (preset)
             setPresetPtr(preset);
           }  
-         subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings->subFlnm,subs->flnm);
         }
        if (iff.pGraph) iff.pGraph->Release();
       } 
@@ -849,6 +848,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   {
    firstFrame=false;
    if (AVIname[0]=='\0') loadAVInameAndPreset();
+   subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings->subFlnm,subs->flnm);
   }
  avctx->showMV=globalSettings.showMV;
  int ret;

@@ -37,7 +37,7 @@ Tsubtitles::~Tsubtitles()
 void Tsubtitles::init(const char *aviFlnm,const char *subFlnm,double Ifps)
 {
  done();
- if (aviFlnm)
+ if (aviFlnm && aviFlnm[0])
   {
    char dsk[256],dir[256],name[256],ext[256];
    _splitpath(aviFlnm,dsk,dir,name,ext);
@@ -67,7 +67,7 @@ void Tsubtitles::done(void)
    subs=NULL;
   } 
 }
-subtitle* Tsubtitles::getSubtitle(unsigned long frame)
+subtitle* Tsubtitles::getSubtitle(int frame)
 {
  if (!subs) return NULL;
 

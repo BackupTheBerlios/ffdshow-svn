@@ -29,7 +29,7 @@ extern int sub_format;
 
 struct subtitle {
 
-    unsigned int lines;
+    int lines;
 
     unsigned long start;
     unsigned long end;

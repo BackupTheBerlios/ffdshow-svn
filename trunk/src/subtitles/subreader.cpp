@@ -15,6 +15,10 @@
 #define _CTYPE_DISABLE_MACROS
 #include <ctype.h>
 
+inline void mp_msg(int x,...) {};
+#define MSGT_SUBREADER 1
+#define MSGL_WARN      2
+#define MSGL_INFO      3
 
 #include "subreader.h"
 
@@ -189,7 +193,7 @@ subtitle *sub_read_line_microdvd(FILE *fd,subtitle *current) {
     while ((next =sub_readtext (next, &(current->text[i])))) {
         if (current->text[i]==ERR) {return (subtitle*)ERR;}
 	i++;
-	if (i>=SUB_MAX_TEXT) { printf ("Too many lines in a subtitle\n");current->lines=i;return current;}
+	if (i>=SUB_MAX_TEXT) { mp_msg(MSGT_SUBREADER,MSGL_WARN,"Too many lines in a subtitle\n");current->lines=i;return current;}
     }
     current->lines= ++i;
 
@@ -326,7 +330,7 @@ subtitle *sub_read_line_vplayer(FILE *fd,subtitle *current) {
 			while ((next =sub_readtext (next, &(current->text[i])))) {
 				if (current->text[i]==ERR) {return (subtitle*)ERR;}
 				i++;
-				if (i>=SUB_MAX_TEXT) { printf ("Too many lines in a subtitle\n");current->lines=i;return current;}
+				if (i>=SUB_MAX_TEXT) { mp_msg(MSGT_SUBREADER,MSGL_WARN,"Too many lines in a subtitle\n");current->lines=i;return current;}
 			}
 			current->lines=i+1;
 		}
@@ -361,12 +365,15 @@ subtitle *sub_read_line_rt(FILE *fd,subtitle *current) {
 	current->end   = b1*360000+b2*6000+b3*100+b4/10;
 	p=line;	p+=plen;i=0;
 	// TODO: I don't know what kind of convention is here for marking multiline subs, maybe <br/> like in xml?
-	next = strstr(line,"<clear/>")+8;i=0;
-	while ((next =sub_readtext (next, &(current->text[i])))) {
-		if (current->text[i]==ERR) {return (subtitle*)ERR;}
-		i++;
-		if (i>=SUB_MAX_TEXT) { printf ("Too many lines in a subtitle\n");current->lines=i;return current;}
-	}
+	next = strstr(line,"<clear/>");
+	if(next && strlen(next)>8){
+	  next+=8;i=0;
+	  while ((next =sub_readtext (next, &(current->text[i])))) {
+		  if (current->text[i]==ERR) {return (subtitle*)ERR;}
+		  i++;
+		if (i>=SUB_MAX_TEXT) { mp_msg(MSGT_SUBREADER,MSGL_WARN,"Too many lines in a subtitle\n");current->lines=i;return current;}
+	  }
+        } 
 			current->lines=i+1;
     }
     return current;
@@ -394,7 +401,7 @@ subtitle *sub_read_line_ssa(FILE *fd,subtitle *current) {
 	line2 ++;
 	line2 ++;
 
-	current->lines=1;num=0;
+	current->lines=0;num=0;
 	current->start = 360000*hour1 + 6000*min1 + 100*sec1 + hunsec1;
 	current->end   = 360000*hour2 + 6000*min2 + 100*sec2 + hunsec2;
 	
@@ -408,8 +415,8 @@ subtitle *sub_read_line_ssa(FILE *fd,subtitle *current) {
 		if (current->lines >=  SUB_MAX_TEXT) return current;
 	}
 
-
 	current->text[num]=strdup(line2);
+	current->lines++;
 
 	return current;
 }
@@ -503,7 +510,7 @@ subtitle *sub_read_line_aqt(FILE *fd,subtitle *current) {
     while ((next =sub_readtext (next, &(current->text[i])))) {
 	if (current->text[i]==ERR) {return (subtitle*)ERR;}
 	i++;
-	if (i>=SUB_MAX_TEXT) { printf ("Too many lines in a subtitle\n");current->lines=i;return current;}
+	if (i>=SUB_MAX_TEXT) { mp_msg(MSGT_SUBREADER,MSGL_WARN,"Too many lines in a subtitle\n");current->lines=i;return current;}
 	}
     current->lines=i+1;
 
@@ -549,7 +556,7 @@ subtitle *sub_read_line_subrip09(FILE *fd,subtitle *current) {
     while ((next =sub_readtext (next, &(current->text[i])))) {
 	if (current->text[i]==ERR) {return (subtitle*)ERR;}
 	i++;
-	if (i>=SUB_MAX_TEXT) { printf ("Too many lines in a subtitle\n");current->lines=i;return current;}
+	if (i>=SUB_MAX_TEXT) { mp_msg(MSGT_SUBREADER,MSGL_WARN,"Too many lines in a subtitle\n");current->lines=i;return current;}
 	}
     current->lines=i+1;
 
@@ -631,10 +638,10 @@ void	subcp_open (void)
 	icdsc = (iconv_t)(-1);
 	if (sub_cp){
 		if ((icdsc = iconv_open (tocp, sub_cp)) != (iconv_t)(-1)){
-			printf ("SUB: opened iconv descriptor.\n");
+			mp_msg(MSGT_SUBREADER,MSGL_V,"SUB: opened iconv descriptor.\n");
 			sub_utf8 = 2;
 		} else
-			printf ("SUB: error opening iconv descriptor.\n");
+			mp_msg(MSGT_SUBREADER,MSGL_ERR,"SUB: error opening iconv descriptor.\n");
 	}
 }
 
@@ -642,7 +649,7 @@ void	subcp_close (void)
 {
 	if (icdsc != (iconv_t)(-1)){
 		(void) iconv_close (icdsc);
-	   	printf ("SUB: closed iconv descriptor.\n");
+	   	mp_msg(MSGT_SUBREADER,MSGL_V,"SUB: closed iconv descriptor.\n");
 	}
 }
 
@@ -663,12 +670,12 @@ subtitle* subcp_recode (subtitle *sub)
 		
 		if (iconv(icdsc, (const char **) &ip, &ileft,
 			  &op, &oleft) == (size_t)(-1)) {
-			printf ("SUB: error recoding line.\n");
+			mp_msg(MSGT_SUBREADER,MSGL_WARN,"SUB: error recoding line.\n");
 			l++;
 			break;
 		}
 		if (!(ot = (char *)malloc(op - icbuffer + 1))){
-			printf ("SUB: error allocating mem.\n");
+			mp_msg(MSGT_SUBREADER,MSGL_WARN,"SUB: error allocating mem.\n");
 			l++;
 		   	break;
 		}
@@ -712,7 +719,7 @@ static void adjust_subs_time(subtitle* sub, float subtime, float fps){
 		sub = nextsub;
 		m = 0;
 	}
-	if (n) printf ("SUB: Adjusted %d subtitle(s).\n", n);
+	if (n) mp_msg(MSGT_SUBREADER,MSGL_INFO,"SUB: Adjusted %d subtitle(s).\n", n);
 }
 
 subtitle* sub_read_file (const char *filename, float fps) {
@@ -741,8 +748,8 @@ subtitle* sub_read_file (const char *filename, float fps) {
     fd=fopen (filename, "r"); if (!fd) return NULL;
 
     sub_format=sub_autodetect (fd);
-    if (sub_format==SUB_INVALID) {printf ("SUB: Could not determine file format\n");return NULL;}
-    printf ("SUB: Detected subtitle file format: %s\n", fmtname[sub_format]);
+    if (sub_format==SUB_INVALID) {mp_msg(MSGT_SUBREADER,MSGL_WARN,"SUB: Could not determine file format\n");return NULL;}
+    mp_msg(MSGT_SUBREADER,MSGL_INFO,"SUB: Detected subtitle file format: %s\n", fmtname[sub_format]);
     
     rewind (fd);
 
@@ -777,9 +784,9 @@ subtitle* sub_read_file (const char *filename, float fps) {
 #endif
 
 //    printf ("SUB: Subtitle format %s time.\n", sub_uses_time?"uses":"doesn't use");
-    printf ("SUB: Read %i subtitles", sub_num);
-    if (sub_errs) printf (", %i bad line(s).\n", sub_errs);
-    else 	  printf (".\n");
+    mp_msg(MSGT_SUBREADER,MSGL_INFO,"SUB: Read %i subtitles", sub_num);
+    if (sub_errs) mp_msg(MSGT_SUBREADER,MSGL_INFO,", %i bad line(s).\n", sub_errs);
+    else 	  mp_msg(MSGT_SUBREADER,MSGL_INFO,".\n");
 
     if(sub_num<=0){
 	free(first);
@@ -859,7 +866,7 @@ char * sub_filename(const char* path, const char * fname )
 //   printf("trying: '%s'\n",sub_name);
    if((f=fopen( sub_name,"rt" ))) {
      fclose( f );
-     printf( "SUB: Detected sub file: %s\n",sub_name );
+     mp_msg(MSGT_SUBREADER,MSGL_INFO,"SUB: Detected sub file: %s\n",sub_name );
      if (i<2) sub_utf8=1;
      return sub_name;
    }

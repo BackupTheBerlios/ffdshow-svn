@@ -12,8 +12,8 @@ private:
  int delay;
  subtitle *oldsub;
  int current_sub;
- unsigned long nosub_range_start;
- unsigned long nosub_range_end;
+ int nosub_range_start;
+ int nosub_range_end;
 
  subtitle *findSubtitle(int frame,subtitle *begin);
 public:
@@ -22,8 +22,8 @@ public:
  void init(const char *aviFlnm,const char *subFlnm,double Ifps);
  void done(void);
  void setFps(double Ifps),setDelay(int Idelay);
- subtitle* getSubtitle(unsigned long frame);
- char flnm[1024];
+ subtitle* getSubtitle(int frame);
+ char flnm[260];
 };
 
 #endif
