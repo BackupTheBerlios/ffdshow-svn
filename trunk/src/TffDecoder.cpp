@@ -899,7 +899,8 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
  OutputDebugString(pomS);
  #endif
  
- imgFilters->setSubtitle(subs->getSubtitle(t1));
+ int sframe=1000*(int(t1)-presetSettings->subDelay)/presetSettings->subSpeed;
+ imgFilters->setSubtitle((sframe<1)?NULL:subs->getSubtitle(sframe));
  if (resizeCtx->resizeChanged)
   {
    resizeCtx->resizeChanged=false;

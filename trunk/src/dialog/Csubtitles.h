@@ -6,6 +6,7 @@
 class TsubtitlesPage : public TconfPage
 {
  private:
+  HBRUSH red;
   void sub2dlg(void);
   void loadSubtitles(void);
  public:

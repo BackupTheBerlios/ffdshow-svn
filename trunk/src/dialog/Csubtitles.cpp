@@ -28,6 +28,7 @@
 
 void TsubtitlesPage::init(void)
 {
+ red=NULL;
  SendDlgItemMessage(m_hwnd,IDC_CBX_SUB_FLNM,CB_LIMITTEXT,1023,0);
  
  SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSX,TBM_SETRANGE,TRUE,MAKELPARAM(0,100));
@@ -73,6 +74,10 @@ void TsubtitlesPage::sub2dlg(void)
  deci->getSubFlnm(s,255);
  SendDlgItemMessage(m_hwnd,IDC_CBX_SUB_FLNM,WM_SETTEXT,0,LPARAM(s));
  setCheck(IDC_CHB_SUB_AUTOFLNM,cfgGet(IDFF_subAutoFlnm));
+ x=cfgGet(IDFF_subDelay);
+ SendDlgItemMessage(m_hwnd,IDC_ED_SUB_DELAY,WM_SETTEXT,0,LPARAM(_itoa(x,s,10)));
+ x=cfgGet(IDFF_subSpeed);
+ SendDlgItemMessage(m_hwnd,IDC_ED_SUB_SPEED,WM_SETTEXT,0,LPARAM(_itoa(x,s,10)));
 }
 
 void TsubtitlesPage::applySettings(void)
@@ -93,6 +98,9 @@ HRESULT TsubtitlesPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
+   case WM_DESTROY:
+    if (red) DeleteObject(red);
+    return TRUE;
    case WM_HSCROLL:
     if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_SUB_POSX) || HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_SUB_POSY))
      {
@@ -116,8 +124,45 @@ HRESULT TsubtitlesPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       case IDC_BT_SUB_LOADFILE:
        loadSubtitles();
        return TRUE;
+      case IDC_ED_SUB_DELAY:
+       if (HIWORD(wParam)==EN_CHANGE) 
+        {
+         InvalidateRect(GetDlgItem(m_hwnd,LOWORD(wParam)),NULL,TRUE);
+         BOOL ok;
+         int delay=GetDlgItemInt(m_hwnd,IDC_ED_SUB_DELAY,&ok,TRUE);
+         if (ok) cfgSet(IDFF_subDelay,delay);
+         return TRUE; 
+        }
+       break; 
+      case IDC_ED_SUB_SPEED:
+       if (HIWORD(wParam)==EN_CHANGE) 
+        {
+         InvalidateRect(GetDlgItem(m_hwnd,LOWORD(wParam)),NULL,TRUE);
+         BOOL ok;
+         int speed=GetDlgItemInt(m_hwnd,IDC_ED_SUB_SPEED,&ok,TRUE);
+         if (ok && speed>0) cfgSet(IDFF_subSpeed,speed);
+         return TRUE; 
+        }
+       break; 
      }
     break;   
+   case WM_CTLCOLOREDIT:
+    {
+     HWND hwnd=HWND(lParam);
+     if (hwnd!=GetDlgItem(m_hwnd,IDC_ED_SUB_DELAY) && hwnd!=GetDlgItem(m_hwnd,IDC_ED_SUB_SPEED)) return FALSE;
+     if (!red) red=CreateSolidBrush(RGB(255,0,0));
+     char pomS[256];
+     SendMessage(hwnd,WM_GETTEXT,255,LPARAM(pomS));
+     char *end;
+     int val=strtol(pomS,&end,10);
+     if (*end!='\0' || (hwnd==GetDlgItem(m_hwnd,IDC_ED_SUB_SPEED) && val<=0))
+      {
+       HDC dc=HDC(wParam);
+       SetBkColor(dc,RGB(255,0,0));
+       return HRESULT(red); 
+      }
+     else return FALSE;  
+    }; 
   } 
  return FALSE;
 }

@@ -175,7 +175,7 @@ HRESULT TresizePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       }
      else return FALSE;  
     }; 
-   }; 
+  }; 
  return FALSE;
 }
 
