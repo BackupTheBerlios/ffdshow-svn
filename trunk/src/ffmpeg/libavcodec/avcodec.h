@@ -38,6 +38,9 @@ extern "C" {
 
 #define CODEC_ID_YUY2      100
 #define CODEC_ID_RGB2      101
+#define CODEC_ID_RGB3      102
+#define CODEC_ID_RGB5      103
+#define CODEC_ID_RGB6      104
 
 enum CodecType {
     CODEC_TYPE_UNKNOWN = -1,

@@ -520,14 +520,17 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
   }
  #endif 
  else
-  {
-   return VFW_E_TYPE_NOT_ACCEPTED;
-  }
+  return VFW_E_TYPE_NOT_ACCEPTED;
  if (hdr->biHeight<0) DEBUGS("colorspace: inverted input format not supported");
 
  if (hdr->biCompression==0)
-  if (hdr->biBitCount==24 || hdr->biBitCount==32)
-   hdr->biCompression=FOURCC_RGB2;
+  switch (hdr->biBitCount)
+   {
+    case 32:hdr->biCompression=FOURCC_RGB3;break;
+    case 24:hdr->biCompression=FOURCC_RGB2;break;
+    case 16:hdr->biCompression=FOURCC_RGB6;break;
+    case 15:hdr->biCompression=FOURCC_RGB5;break;
+   }
  if (codecId==CODEC_ID_NONE)  
   codecId=globalSettings.codecSupported(hdr->biCompression,AVIfourcc);
  if (codecId!=CODEC_ID_NONE)

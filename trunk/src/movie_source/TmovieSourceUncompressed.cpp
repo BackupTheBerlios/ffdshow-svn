@@ -34,6 +34,9 @@ bool TmovieSourceUncompressed::init(int codecId,int AVIdx,int AVIdy)
   {
    case CODEC_ID_YUY2:csp=XVID_CSP_YUY2;break;
    case CODEC_ID_RGB2:csp=XVID_CSP_RGB24;break;
+   case CODEC_ID_RGB3:csp=XVID_CSP_RGB32;break;
+   case CODEC_ID_RGB5:csp=XVID_CSP_RGB555;break;
+   case CODEC_ID_RGB6:csp=XVID_CSP_RGB565;break;
    default:return false;
   };
  dx=AVIdx;dy=AVIdy;
