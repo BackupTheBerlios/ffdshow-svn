@@ -154,7 +154,6 @@ void TcropPage::getTip(char *tipS,int len)
    case 1:strcat(tipS,"keeping original aspect ratio");break;
    case 2:
     {
-     __asm emms;
      int aspectI=cfgGet(IDFF_aspectRatio);
      char pomS[256];sprintf(pomS,"set to %3.2f:1",float(aspectI/65536.0));
      strcat(tipS,pomS);

@@ -75,7 +75,6 @@ int TpictPropPage::writeLumOffset(int x)
 int TpictPropPage::writeGamma(int x)
 {
  char s[256];
- __asm emms;
  sprintf(s,"Gamma correction:  %3.2f",float(x/100.0));
  if (x==cfgGet(IDFF_gammaCorrectionDef)) strcat(s," (off)");
  SendDlgItemMessage(m_hwnd,IDC_LBL_GAMMA,WM_SETTEXT,0,LPARAM(s));
@@ -136,7 +135,6 @@ void TpictPropPage::interDlg(void)
 }
 void TpictPropPage::getTip(char *tipS,int len)
 {
- __asm emms;
  sprintf(tipS,"luma gain:%i, luma offset:%i, gamma:%5.2f, hue:%i, saturation:%i",cfgGet(IDFF_lumGain),cfgGet(IDFF_lumOffset),float(cfgGet(IDFF_gammaCorrection)/100.0),cfgGet(IDFF_hue),cfgGet(IDFF_saturation));
 }
 bool TpictPropPage::reset(bool testOnly)

@@ -43,7 +43,6 @@ void Tsubtitles::init(const char *aviFlnm,const char *subFlnm,double Ifps)
    char *subFlnm=sub_filename(path,fname);
    if (subFlnm)
     {
-     __asm emms;
      subs=sub_read_file(strcpy(flnm,subFlnm?subFlnm:aviFlnm),Ifps);
      free(subFlnm);
     }

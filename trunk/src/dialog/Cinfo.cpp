@@ -54,7 +54,6 @@ void TinfoPage::cfg2dlg(void)
   SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_FPS,WM_SETTEXT,0,LPARAM("FPS:"));
  else
   {
-   __asm emms;
    sprintf(pomS,"FPS: %-6.2f",float(x/1000.0));
    SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_FPS,WM_SETTEXT,0,LPARAM(pomS));
   } 
@@ -78,7 +77,6 @@ HRESULT TinfoPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
    deci->getAVIfps(&fps1000);
    if (fps1000>0) 
     {
-     __asm emms;
      float fps=fps1000/1000.0;
      unsigned int Bps=bytesCnt/(frameCnt/fps);
      char pomS[256];

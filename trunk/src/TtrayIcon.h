@@ -5,7 +5,6 @@ struct IffDecoder;
 class TtrayIcon
 {
 private:
- ATOM ha;
  HWND h;
  HINSTANCE hi;
  NOTIFYICONDATA nid;

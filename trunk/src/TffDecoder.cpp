@@ -116,7 +116,7 @@ STDMETHODIMP TffDecoder::putParam(unsigned int paramID, int  val)
    #include "ffdshow_params.h"
    default:return S_FALSE;
   }
- if (paramID!=IDFF_lastPage) sendOnChange();
+ if (paramID!=IDFF_lastPage && paramID!=IDFF_cropChanged && paramID!=IDFF_fontChanged) sendOnChange();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::notifyParamsChanged(void)
@@ -396,11 +396,7 @@ STDMETHODIMP TffDecoder::renameActivePreset(const char *newName)
 void TffDecoder::sendOnChange(void)
 {
  if (onChangeWnd && onChangeMsg)
-  {
-   DWORD z;
-   //SendMessageTimeout(onChangeWnd,onChangeMsg,0,0,SMTO_NORMAL,1000,&z);
-   SendMessage(onChangeWnd,onChangeMsg,0,0);
-  }; 
+  SendMessage(onChangeWnd,onChangeMsg,0,0);
 }
 STDMETHODIMP TffDecoder::setOnChangeMsg(HWND wnd,unsigned int msg)
 {

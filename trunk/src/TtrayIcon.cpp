@@ -117,7 +117,7 @@ HMENU TtrayIcon::createMenu(void)
  return hm;
 }
 
-static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lprm)
+static LRESULT CALLBACK trayWndProc(HWND hwnd, UINT msg, WPARAM wprm, LPARAM lprm)
 {
  if (msg==MSG_TRAYICON)
   {
@@ -215,7 +215,7 @@ TtrayIcon::TtrayIcon(IffDecoder *Ideci,HINSTANCE Ihi):deci(Ideci),hi(Ihi)
  wndclass.hbrBackground = GetSysColorBrush(COLOR_BTNFACE);
  wndclass.lpszMenuName  = NULL ;
  wndclass.lpszClassName = "ffdshow";
- ha=RegisterClass(&wndclass);
+ RegisterClass(&wndclass);
 
  h=CreateWindow(
                 "ffdshow",                   // window class name

@@ -56,7 +56,6 @@ void TresizeAspectPage::aspect2dlg(void)
  char pomS[256];
  unsigned int dx,dy;
  deci->getAVIdimensions(&dx,&dy);
- __asm emms;
  if (dx!=0 && dy!=0)
   {
    sprintf(pomS,"Keep original aspect ratio (%3.2f:1)",float(dx)/dy);

@@ -31,7 +31,74 @@ ComponentText "This will install ffdhow DirectShow filter on your computer."
 ; The text to prompt the user to enter a directory
 DirText "Choose a directory to install in to:"
 
-; The stuff to install
+Function .onInit
+  ReadRegDWORD $0 HKLM SOFTWARE\GNU\ffdshow "xvid"
+  IntCmp $0 0 xvidEqual xvidLess 
+  SectionSetFlags 4 0x80000000
+  Goto xvidEnd
+ xvidEqual:
+ xvidLess:
+  SectionSetFlags 4 0
+ xvidEnd:
+
+  ReadRegDWORD $0 HKLM SOFTWARE\GNU\ffdshow "div3"
+  IntCmp $0 0 div3Equal div3Less 
+  SectionSetFlags 5 0x80000000
+  Goto div3End
+ div3Equal:
+ div3Less:
+  SectionSetFlags 5 0
+ div3End:
+
+  ReadRegDWORD $0 HKLM SOFTWARE\GNU\ffdshow "divx"
+  IntCmp $0 0 divxEqual divxLess 
+  SectionSetFlags 6 0x80000000
+  Goto divxEnd
+ divxEqual:
+ divxLess:
+  SectionSetFlags 6 0
+ divxEnd:
+
+  ReadRegDWORD $0 HKLM SOFTWARE\GNU\ffdshow "dx50"
+  IntCmp $0 0 dx50Equal dx50Less 
+  SectionSetFlags 7 0x80000000
+  Goto dx50End
+ dx50Equal:
+ dx50Less:
+  SectionSetFlags 7 0
+ dx50End:
+
+  ReadRegDWORD $0 HKLM SOFTWARE\GNU\ffdshow "mp43"
+  IntCmp $0 0 mp43Equal mp43Less 
+  SectionSetFlags 8 0x80000000
+  Goto mp43End
+ mp43Equal:
+ mp43Less:
+  SectionSetFlags 8 0
+ mp43End:
+
+  ReadRegDWORD $0 HKLM SOFTWARE\GNU\ffdshow "mp42"
+  IntCmp $0 0 mp42Equal mp42Less 
+  SectionSetFlags 9 0x80000000
+  Goto mp42End
+ mp42Equal:
+ mp42Less:
+  SectionSetFlags 9 0
+ mp42End:
+
+  ReadRegDWORD $0 HKLM SOFTWARE\GNU\ffdshow "mp41"
+  IntCmp $0 0 mp41Equal mp41Less 
+  SectionSetFlags 10 0x80000000
+  Goto mp41End
+ mp41Equal:
+ mp41Less:
+  SectionSetFlags 10 0
+ mp41End:
+
+FunctionEnd
+
+
+; 0 - The stuff to install
 Section "DirectShow Filter (required)"
   SectionIn 1
   ; Set output path to the installation directory.
@@ -46,11 +113,6 @@ Section "DirectShow Filter (required)"
   ; Write the uninstall keys for Windows
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ffdshow" "DisplayName" "ffdshow (remove only)"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\ffdshow" "UninstallString" '"$INSTDIR\uninstall.exe"'
-  WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "xvid" 1
-  WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "div3" 1
-  WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "divx" 1
-  WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "dx50" 1
-  WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "mp43" 1
 
   WriteUninstaller "uninstall.exe"
   CreateDirectory "$SMPROGRAMS\ffdshow"
@@ -58,11 +120,13 @@ Section "DirectShow Filter (required)"
   CreateShortCut "$SMPROGRAMS\ffdshow\Configuration.lnk" "rundll32.exe" "ffdshow.ax,configure" "regedit.exe" 0
 SectionEnd
 
+; 1
 Section "Postprocessing (recommended)"
   SectionIn 1
   File "..\..\src\mplayer\libpostproc.dll"
 SectionEnd
 
+; 2
 Section "Documentation (optional)"
   SectionIn 1
   File "..\..\copying.txt"
@@ -73,6 +137,38 @@ Section "Documentation (optional)"
   File "..\help\index.html"
   File "..\help\presets.html"
   File "..\help\compilation.html"
+SectionEnd
+
+; 3
+SectionDivider "Supported codecs"
+
+; 4
+Section "XVID"
+  WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "xvid" 1
+SectionEnd
+; 5
+Section "DIVX 3"
+  WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "div3" 1
+SectionEnd
+; 6
+Section "DIVX 4"
+  WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "divx" 1
+SectionEnd
+; 7
+Section "DIVX 5"
+  WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "dx50" 1
+SectionEnd
+; 8
+Section "MS MPEG4v3"
+  WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "mp43" 1
+SectionEnd
+; 9
+Section "MS MPEG4v2"
+  WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "mp42" 1
+SectionEnd                                     
+; 10
+Section "MS MPEG4v1"
+  WriteRegDWORD HKLM SOFTWARE\GNU\ffdshow "mp41" 1
 SectionEnd
 
 ; uninstall stuff
