@@ -20,7 +20,7 @@ public:
  void storePreset(TpresetSettings *preset);
  void removePreset(const char *presetName);
  void saveRegAll(void);
- void nextUniqueName(TpresetSettings *preset); 
+ void nextUniqueName(TpresetSettings *preset),nextUniqueName(char *presetName); 
 };
 
 #endif

@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by ffdshow.rc
 //
 #define VERSION_RES_MINOR_VER           0
@@ -32,7 +32,10 @@
 #define IDB_ARROWS_MASK_UD              146
 #define IDB_ARROWS_MASK_U               147
 #define IDR_MENU_PRESET_NEW             147
+#define IDR_MENU_PRESET                 147
 #define IDB_ARROWS_MASK_D               148
+#define ID_MNI_PRESET_RENAME            149
+#define ID_MNI_PRESET_RENAMETOFILE      150
 #define IDC_TBR_PPQUAL                  1002
 #define IDC_TBR_ASPECT_USER             1002
 #define IDC_TBR_LUMGAIN                 1003
@@ -48,11 +51,13 @@
 #define IDC_CHB_DIV3                    1012
 #define IDC_CHB_DIVX                    1013
 #define IDC_CHB_DX50                    1014
+#define IDC_CHB_RAWV                    1015
 #define IDC_CHB_FLIP                    1016
 #define IDC_BT_PRESET_NEW               1016
 #define IDC_LBL_LUMGAIN                 1017
 #define IDC_BT_PRESET_NEW_MENU          1017
 #define IDC_LBL_LUMOFFSET               1018
+#define IDC_BT_PRESET_RENAME_MENU       1018
 #define IDC_LBL_XSHARPENSTRENGTH        1019
 #define IDC_LBL_RESIZE_SHARPEN_LUM      1019
 #define IDC_TBR_XSHARPENSTRENGTH        1020
@@ -82,6 +87,7 @@
 #define IDC_LBL_NOISESTRENGTH           1041
 #define IDC_BT_PRESET_REMOVE            1044
 #define IDC_LBL_IDCT                    1045
+#define IDC_BT_PRESET_RENAME            1045
 #define IDC_CBX_IDCT                    1046
 #define IDC_CHB_H263                    1048
 #define IDC_LBL_NOISESTRENGTH_CHROMA    1049
@@ -104,8 +110,8 @@
 #define IDC_CHB_DLG_RESTOREPOS          1071
 #define IDC_LBL_FFDSHOWVERSION          1072
 #define IDC_CHB_PICTPROP                1072
-#define IDC_CHB_SHOWMV                  1074
 #define IDC_CHB_POSTPROC                1073
+#define IDC_CHB_SHOWMV                  1074
 #define IDC_CHB_AUTOPRESET_FILEFIRST    1080
 #define IDC_CHB_RESIZE                  1083
 #define IDC_ED_RESIZEDX                 1084
@@ -187,7 +193,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        149
+#define _APS_NEXT_RESOURCE_VALUE        151
 #define _APS_NEXT_COMMAND_VALUE         40009
 #define _APS_NEXT_CONTROL_VALUE         1156
 #define _APS_NEXT_SYMED_VALUE           101

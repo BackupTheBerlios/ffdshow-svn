@@ -123,15 +123,19 @@ void Tpresets::removePreset(const char *presetName)
 
 void Tpresets::nextUniqueName(TpresetSettings *preset)
 {
- iterator i=findPreset(preset->presetName);
+ nextUniqueName(preset->presetName);
+}
+void Tpresets::nextUniqueName(char *presetName)
+{
+ iterator i=findPreset(presetName);
  if (i==end()) return;
  for (int ii=1;;ii++)
   {
    char pomS[260];
-   sprintf(pomS,"%s %i",preset->presetName,ii);
+   sprintf(pomS,"%s %i",presetName,ii);
    if (findPreset(pomS)==end())
     {
-     strcpy(preset->presetName,pomS);
+     strcpy(presetName,pomS);
      return;
     }
   }

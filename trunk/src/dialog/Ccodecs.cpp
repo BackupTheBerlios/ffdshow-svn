@@ -39,6 +39,7 @@ void TcodecsPage::cfg2dlg(void)
  setCheck(IDC_CHB_MP43,cfgGet(IDFF_mp43));
  setCheck(IDC_CHB_MP42,cfgGet(IDFF_mp42));
  setCheck(IDC_CHB_H263,cfgGet(IDFF_h263));
+ setCheck(IDC_CHB_RAWV,cfgGet(IDFF_rawv));
 }
 
 HRESULT TcodecsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -55,6 +56,7 @@ HRESULT TcodecsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       case IDC_CHB_MP43:
       case IDC_CHB_MP42:
       case IDC_CHB_H263:
+      case IDC_CHB_RAWV:
        cfgSet(IDFF_xvid,getCheck(IDC_CHB_XVID));
        cfgSet(IDFF_div3,getCheck(IDC_CHB_DIV3));
        cfgSet(IDFF_divx,getCheck(IDC_CHB_DIVX));
@@ -62,6 +64,7 @@ HRESULT TcodecsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        cfgSet(IDFF_mp43,getCheck(IDC_CHB_MP43));
        cfgSet(IDFF_mp42,getCheck(IDC_CHB_MP42));
        cfgSet(IDFF_h263,getCheck(IDC_CHB_H263));
+       cfgSet(IDFF_rawv,getCheck(IDC_CHB_RAWV));
        return TRUE;
      };
     break; 

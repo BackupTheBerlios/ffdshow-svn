@@ -93,7 +93,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   Tpresets presets;
   int inPlayer,isDlg;
   char AVIname[1024],AVIfourcc[10];
-  void loadAVInameAndPreset(void);
+  int loadAVInameAndPreset(void);
   void subsChanged(void),resizeChanged(void),trayIconChanged(void);
   int idctOld;
   Tlibavcodec libavcodec;
@@ -119,7 +119,8 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   void calcCrop(void);
   TimgFilters *imgFilters;
   Tsubtitles *subs;
-  int  codecId;
+  int codecId;
+  unsigned char *yuvY,*yuvU,*yuvV;
   CCritSec lock;
 };
 

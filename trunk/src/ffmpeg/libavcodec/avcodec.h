@@ -29,7 +29,7 @@ extern "C" {
 #define CODEC_ID_WMV1      13
 #define CODEC_ID_H263P     14
 #define CODEC_ID_H263I     15
-
+#define CODEC_ID_YUY2      16
 
 enum CodecType {
     CODEC_TYPE_UNKNOWN = -1,

@@ -36,6 +36,7 @@ void TglobalSettings::load(void)
  REG_GET_N("mp42",mp42,0);
  REG_GET_N("mp41",mp41,0);
  REG_GET_N("h263",h263,0);
+ REG_GET_N("rawv",rawv,0);
  RegCloseKey(hKey);
  RegOpenKeyEx(HKEY_CURRENT_USER, FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,KEY_READ,&hKey);
  REG_GET_N("autoPreset",autoPreset,0);
@@ -59,6 +60,7 @@ void TglobalSettings::save(void)
    REG_SET_N("mp42",mp42,0);
    REG_SET_N("mp41",mp41,0);
    REG_SET_N("h263",h263,0);
+   REG_SET_N("rawv",rawv,0);
    RegCloseKey(hKey);
   } 
  if (RegCreateKeyEx(HKEY_CURRENT_USER,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,FFDSHOW_REG_CLASS,REG_OPTION_NON_VOLATILE,KEY_WRITE,0,&hKey,&dispo)==ERROR_SUCCESS)
@@ -94,6 +96,7 @@ int TglobalSettings::codecSupported(DWORD fourCC,char *AVIfourCC)
    FF_FOURCC(MP42,mp42,mp42,CODEC_ID_MSMPEG4V2);
    FF_FOURCC(MP41,mp41,mp41,CODEC_ID_MSMPEG4V1);
    FF_FOURCC(H263,h263,h263,CODEC_ID_H263);
+   FF_FOURCC(YUY2,yuy2,rawv,CODEC_ID_YUY2);
    default:return CODEC_ID_NONE;
   }; 
 }

@@ -126,6 +126,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_mp42               1006
 #define IDFF_mp41               1007
 #define IDFF_h263               1008
+#define IDFF_rawv               1009 
 
 struct TpresetSettings;
 class Tpresets;

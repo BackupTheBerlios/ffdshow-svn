@@ -340,9 +340,6 @@
 				RelativePath="src\ffdshow_mediaguids.h">
 			</File>
 			<File
-				RelativePath="src\ffdshow_params.h">
-			</File>
-			<File
 				RelativePath=".\src\xvid\utils\mem_align.h">
 			</File>
 			<File
@@ -1043,6 +1040,9 @@
 			</File>
 			<File
 				RelativePath="src\settings\Tpresets.h">
+			</File>
+			<File
+				RelativePath="src\ffdshow_params.h">
 			</File>
 			<File
 				RelativePath="src\settings\presets_template.h">

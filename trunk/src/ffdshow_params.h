@@ -38,6 +38,7 @@ _PARAM_OP(IDFF_mp43               ,globalSettings.,mp43               ,0,0,NULL)
 _PARAM_OP(IDFF_mp42               ,globalSettings.,mp42               ,0,0,NULL)
 _PARAM_OP(IDFF_mp41               ,globalSettings.,mp41               ,0,0,NULL)
 _PARAM_OP(IDFF_h263               ,globalSettings.,h263               ,0,0,NULL)
+_PARAM_OP(IDFF_rawv               ,globalSettings.,rawv               ,0,0,NULL)
 _PARAM_OP(IDFF_showMV             ,globalSettings.,showMV             ,0,0,NULL)
  
 //preset settings

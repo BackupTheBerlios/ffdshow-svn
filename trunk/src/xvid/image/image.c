@@ -55,6 +55,78 @@
 #define SAFETY	64
 #define EDGE_SIZE2  (EDGE_SIZE/2)
 
+int image_input(IMAGE * image, uint32_t width, int height, uint32_t edged_width,
+			uint8_t * src, int csp)
+{
+
+/*	if (csp & XVID_CSP_VFLIP)
+	{
+		height = -height;
+	}
+*/
+
+	switch(csp & ~XVID_CSP_VFLIP)
+	{
+	case XVID_CSP_RGB555 :
+		rgb555_to_yv12(image->y, image->u, image->v, src, 
+						width, height, edged_width);
+		return 0;
+
+	case XVID_CSP_RGB565 :
+		rgb565_to_yv12(image->y, image->u, image->v, src, 
+						width, height, edged_width);
+		return 0;
+
+
+	case XVID_CSP_RGB24 :
+		rgb24_to_yv12(image->y, image->u, image->v, src, 
+							width, height, edged_width);
+		return 0;
+
+	case XVID_CSP_RGB32 :
+		rgb32_to_yv12(image->y, image->u, image->v, src, 
+						width, height, edged_width);
+		return 0;
+
+	case XVID_CSP_I420 :
+		yuv_to_yv12(image->y, image->u, image->v, src, 
+						width, height, edged_width);
+		return 0;
+
+	case XVID_CSP_YV12 :	/* u/v swapped */
+		yuv_to_yv12(image->y, image->v, image->u, src, 
+						width, height, edged_width);
+		return 0;
+
+	case XVID_CSP_YUY2 :
+		yuyv_to_yv12(image->y, image->u, image->v, src, 
+						width, height, edged_width);
+		return 0;
+
+	case XVID_CSP_YVYU :	/* u/v swapped */
+		yuyv_to_yv12(image->y, image->v, image->u, src, 
+						width, height, edged_width);
+		return 0;
+
+	case XVID_CSP_UYVY :
+		uyvy_to_yv12(image->y, image->u, image->v, src, 
+						width, height, edged_width);
+		return 0;
+/*
+	case XVID_CSP_USER :
+		user_to_yuv_c(image->y, image->u, image->v, edged_width, 
+					(DEC_PICTURE*)src,
+				   width, height);
+		return 0;
+*/
+	case XVID_CSP_NULL :
+		break;
+		
+    }
+
+	return -1;
+}
+
 int image_output(IMAGE * image, uint32_t width, int height, uint32_t edged_width,
 			uint8_t * dst, uint32_t dst_stride,	int csp)
 {

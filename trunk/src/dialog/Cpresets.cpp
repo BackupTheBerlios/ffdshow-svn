@@ -103,7 +103,6 @@ void TpresetsPage::cfg2dlg(void)
 
 HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
- int menuCmd=0;
  switch (uMsg)
   {
    case WM_DESTROY:
@@ -124,6 +123,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       case IDC_BT_PRESET_NEW:
       case IDC_BT_PRESET_NEW_MENU:
        {
+        int menuCmd=0;
         if (LOWORD(wParam)==IDC_BT_PRESET_NEW)
          menuCmd=ID_MNI_PRESET_NEWFROMDEFAULT;
         else
@@ -225,19 +225,54 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         return TRUE; 
        }
       case IDC_BT_PRESET_REMOVE:
-       int i=ListView_GetNextItem(hlv,-1,LVNI_SELECTED);
-       if (i!=0 && MessageBox(m_hwnd,"Do you realy want to remove selected preset?","Removing preset",MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2)==IDYES)
-        {
-         char presetName[1024];
-         ListView_GetItemText(hlv,i,0,presetName,1023);
-         localPresets.removePreset(presetName);
-         if (deci->isDefaultPreset(presetName)==S_OK)
-          deci->setDefaultPresetName(localPresets[0]->presetName);
-         ListView_SetItemCountEx(hlv,localPresets.size(),0);
-         ListView_GetItemText(hlv,0,0,presetName,1023);
-         lvSelectPreset(presetName);
-        }
-       return TRUE; 
+       {
+        int i=ListView_GetNextItem(hlv,-1,LVNI_SELECTED);
+        if (i!=0 && MessageBox(m_hwnd,"Do you realy want to remove selected preset?","Removing preset",MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2)==IDYES)
+         {
+          char presetName[1024];
+          ListView_GetItemText(hlv,i,0,presetName,1023);
+          localPresets.removePreset(presetName);
+          if (deci->isDefaultPreset(presetName)==S_OK)
+           deci->setDefaultPresetName(localPresets[0]->presetName);
+          ListView_SetItemCountEx(hlv,localPresets.size(),0);
+          ListView_GetItemText(hlv,0,0,presetName,1023);
+          lvSelectPreset(presetName);
+         }
+        return TRUE; 
+       }; 
+      case IDC_BT_PRESET_RENAME:
+      case IDC_BT_PRESET_RENAME_MENU:
+       {
+        int menuCmd=0;
+        char AVIname[260];deci->getAVIname(AVIname,260);
+        if (LOWORD(wParam)==IDC_BT_PRESET_RENAME)
+         menuCmd=ID_MNI_PRESET_RENAME;
+        else
+         {
+          HMENU hmn=LoadMenu(hi,MAKEINTRESOURCE(IDR_MENU_PRESET)),hmn2=GetSubMenu(hmn,1);
+          RECT r;
+          GetWindowRect(GetDlgItem(m_hwnd,IDC_BT_PRESET_RENAME_MENU),&r);
+          if (AVIname[0]=='\0')
+           EnableMenuItem(hmn2,1,MF_BYPOSITION|MF_GRAYED);
+          menuCmd=TrackPopupMenu(hmn2,TPM_LEFTALIGN|TPM_TOPALIGN|TPM_RETURNCMD,r.left-1,r.bottom,0,m_hwnd,0);
+          DestroyMenu(hmn);
+         } 
+        int i=ListView_GetNextItem(hlv,-1,LVNI_SELECTED); 
+        if (menuCmd==ID_MNI_PRESET_RENAMETOFILE)
+         {
+          char presetName[260];TpresetSettings::normalizePresetName(presetName,AVIname);
+          localPresets.nextUniqueName(presetName);
+          deci->renameActivePreset(presetName);
+          parent->presetChanged();
+          InvalidateRect(hlv,NULL,false);
+         } 
+        else if (menuCmd==ID_MNI_PRESET_RENAME)
+         { 
+          SetFocus(hlv);
+          ListView_EditLabel(hlv,i);
+         }; 
+        return TRUE;
+       }
      }
     break;
    case WM_NOTIFY:
@@ -279,7 +314,9 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             char activePresetName[260];
             deci->getActivePresetName(activePresetName,260);
             //DEBUGS1(activePresetName,nmia->iItem);
+            parent->applying=true;
             lvSelectPreset(activePresetName);
+            parent->applying=false;
            }
           else if (nmhdr->code==NM_DBLCLK)
            {

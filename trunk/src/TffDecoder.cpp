@@ -393,17 +393,8 @@ STDMETHODIMP TffDecoder::setOnChangeMsg(HWND wnd,unsigned int msg)
 STDMETHODIMP TffDecoder::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
  CheckPointer(ppv, E_POINTER);
-
- if (riid == IID_IffDecoder)
-  {
-   return GetInterface((IffDecoder *) this, ppv);
-  }
-
- if (riid == IID_ISpecifyPropertyPages)
-  {
-   return GetInterface((ISpecifyPropertyPages *) this, ppv);
-  }
-
+ if (riid==IID_IffDecoder) return GetInterface((IffDecoder *) this, ppv);
+ if (riid==IID_ISpecifyPropertyPages) return GetInterface((ISpecifyPropertyPages *) this, ppv);
  return CVideoTransformFilter::NonDelegatingQueryInterface(riid, ppv);
 }
 
@@ -420,6 +411,8 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  isDlg=0;inPlayer=1;idctOld=-1;
  avctx=NULL;resizeCtx=NULL;tray=NULL;
  onChangeWnd=NULL;onChangeMsg=0;
+ yuvY=yuvU=yuvV=NULL;
+ codecId=CODEC_ID_NONE;
  
  presets.init();
  config.init();
@@ -440,10 +433,16 @@ TffDecoder::~TffDecoder()
  DEBUGS("Destructor");
  if (avctx)
   {
-   libavcodec.avcodec_close(avctx);
+   if (codecId!=CODEC_ID_YUY2) libavcodec.avcodec_close(avctx);
    free(avctx);
    avctx=NULL;
   }; 
+ if (yuvY)
+  {
+   free(yuvY);yuvY=NULL;
+   free(yuvU);yuvU=NULL;
+   free(yuvV);yuvV=NULL;
+  } 
  if (imgFilters) delete imgFilters;
  libavcodec.done();
  //cfg.done(false);
@@ -467,13 +466,13 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
  if (formatType == FORMAT_VideoInfo)
   {
    VIDEOINFOHEADER * vih = (VIDEOINFOHEADER *) mtIn->Format();
-   AVIfps=(vih->AvgTimePerFrame)?10000000.0/vih->AvgTimePerFrame:0;
+   AVIfps=(vih->AvgTimePerFrame)?10000000.0/vih->AvgTimePerFrame:25;
    hdr = &vih->bmiHeader;
   }
  else if (formatType == FORMAT_VideoInfo2)
   {
    VIDEOINFOHEADER2 * vih2 = (VIDEOINFOHEADER2 *) mtIn->Format();
-   AVIfps=(vih2->AvgTimePerFrame)?10000000.0/vih2->AvgTimePerFrame:0;
+   AVIfps=(vih2->AvgTimePerFrame)?10000000.0/vih2->AvgTimePerFrame:25;
    hdr = &vih2->bmiHeader;
   }
  #ifdef  FF__MPEG
@@ -490,29 +489,32 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
 
  if (hdr->biHeight<0) DEBUGS("colorspace: inverted input format not supported");
 
- AVIdx=hdr->biWidth;
- AVIdy=hdr->biHeight;
- loadAVInameAndPreset();
- if (!resizeCtx)
-  {
-   if (!imgFilters->postproc.ok) presetSettings->isResize=false;
-   resizeCtx=new TresizeCtx(presetSettings);
-   if (presetSettings->isResize)
-    resizeCtx->allocate(presetSettings->resizeDx,presetSettings->resizeDy);
-   else
-    resizeCtx->allocate(AVIdx,AVIdy);
-  };  
- #ifdef FF__MPEG
- if (formatType==FORMAT_MPEGVideo)
-  {
-   codecName="mpegvideo";strcpy(AVIfourcc,"mpeg1");
-   return S_OK;
-  }; 
- #endif 
- 
- AVIfourcc[0]='\0';
  codecId=globalSettings.codecSupported(hdr->biCompression,AVIfourcc);
- return (codecId!=CODEC_ID_NONE)?S_OK:VFW_E_TYPE_NOT_ACCEPTED;
+ if (codecId!=CODEC_ID_NONE)
+  {
+   AVIdx=hdr->biWidth;
+   AVIdy=hdr->biHeight;
+   int cnt=loadAVInameAndPreset();
+   if (cnt>1) return VFW_E_TYPE_NOT_ACCEPTED;
+   if (!resizeCtx)
+    {
+     if (!imgFilters->postproc.ok) presetSettings->isResize=false;
+     resizeCtx=new TresizeCtx(presetSettings);
+     if (presetSettings->isResize)
+      resizeCtx->allocate(presetSettings->resizeDx,presetSettings->resizeDy);
+     else
+      resizeCtx->allocate(AVIdx,AVIdy);
+    };  
+   #ifdef FF__MPEG
+   if (formatType==FORMAT_MPEGVideo)
+    {
+     codecName="mpegvideo";strcpy(AVIfourcc,"mpeg1");
+     return S_OK;
+    }; 
+   #endif 
+   return S_OK;
+  }
+ else return VFW_E_TYPE_NOT_ACCEPTED;
 }
 
 // get list of supported output colorspaces 
@@ -700,37 +702,47 @@ HRESULT TffDecoder::DecideBufferSize(IMemAllocator *pAlloc, ALLOCATOR_PROPERTIES
  return S_OK;
 }
 
-void TffDecoder::loadAVInameAndPreset(void)
+int TffDecoder::loadAVInameAndPreset(void)
 {
  IEnumFilters *eff=NULL;
- AVIname[0]='\0';
+ int cnt=0;
  if (m_pGraph->EnumFilters(&eff)==S_OK)
   {
    eff->Reset();
    IBaseFilter *bff;
-   while (eff->Next(1,&bff,NULL)==S_OK || AVIname[0]=='\0')
+   while (eff->Next(1,&bff,NULL)==S_OK)
     {
-     FILTER_INFO iff;
      CLSID iffclsid;
      bff->GetClassID(&iffclsid);
-     bff->QueryFilterInfo(&iff);
-     IFileSourceFilter *ifsf=NULL;
-     bff->QueryInterface(IID_IFileSourceFilter,(void**)&ifsf);
-     if (ifsf)
+     if (iffclsid==CLSID_FFDSHOW) cnt++;
+     if (AVIname[0]=='\0')
       {
-       LPOLESTR aviNameL;
-       ifsf->GetCurFile(&aviNameL,NULL);
-       ifsf->Release();
-       WideCharToMultiByte(CP_ACP,0,aviNameL,-1,AVIname,511, NULL, NULL );
-       if (globalSettings.autoPreset)
-        setPresetPtr(presets.getAutoPreset(AVIname,globalSettings.autoPresetFileFirst));
-       subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings->subFlnm,subs->flnm);
-      }
-     if (iff.pGraph) iff.pGraph->Release();
+       FILTER_INFO iff;
+       bff->QueryFilterInfo(&iff);
+       IFileSourceFilter *ifsf=NULL;
+       bff->QueryInterface(IID_IFileSourceFilter,(void**)&ifsf);
+       if (ifsf)
+        {
+         LPOLESTR aviNameL;
+         ifsf->GetCurFile(&aviNameL,NULL);
+         ifsf->Release();
+         WideCharToMultiByte(CP_ACP,0,aviNameL,-1,AVIname,511, NULL, NULL );
+         if (globalSettings.autoPreset)
+          {
+           TpresetSettings *preset=presets.getAutoPreset(AVIname,globalSettings.autoPresetFileFirst);
+           if (preset)
+            presetSettings=preset;
+          }  
+         subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings->subFlnm,subs->flnm);
+        }
+       if (iff.pGraph) iff.pGraph->Release();
+      } 
      bff->Release();
     }
    eff->Release();
   }
+ cnt=1; 
+ return cnt; 
 }
 void TffDecoder::calcCrop(void)
 {
@@ -790,7 +802,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    AVCodec *avcodec=libavcodec.avcodec_find_decoder(codecId);
    DEBUGS("avcodec_find_decoder_by_name after");
    DEBUGS("avcodec_open before");
-   if (libavcodec.avcodec_open(avctx,avcodec)<0) return S_FALSE;
+   if (codecId!=CODEC_ID_YUY2 && libavcodec.avcodec_open(avctx,avcodec)<0) return S_FALSE;
    DEBUGS("avcodec_open after");
    firstFrame=true;
   };
@@ -840,7 +852,25 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    if (AVIname[0]=='\0') loadAVInameAndPreset();
   }
  avctx->showMV=globalSettings.showMV;
- int ret=libavcodec.avcodec_decode_video(avctx,&avpict,&got_picture,(UINT8*)m_frame.bitstream,m_frame.length);
+ int ret;
+ if (codecId!=CODEC_ID_YUY2)
+  ret=libavcodec.avcodec_decode_video(avctx,&avpict,&got_picture,(UINT8*)m_frame.bitstream,m_frame.length);
+ else
+  {
+   libavcodec.quant_store=NULL;
+   avpict.linesize[0]=(avctx->width/16+4)*16;
+   avpict.linesize[1]=avpict.linesize[2]=avpict.linesize[0]/2;
+   if (!yuvY)
+    {
+     yuvY=(unsigned char*)malloc(avpict.linesize[0]*avctx->height  );
+     yuvU=(unsigned char*)malloc(avpict.linesize[1]*avctx->height/2);
+     yuvV=(unsigned char*)malloc(avpict.linesize[2]*avctx->height/2);
+    }
+   avpict.data[0]=yuvY;avpict.data[1]=yuvU;avpict.data[2]=yuvV;
+   IMAGE img={avpict.data[0],avpict.data[1],avpict.data[2]};
+   image_input(&img,avctx->width,avctx->height,avpict.linesize[0],(unsigned char*)m_frame.bitstream,XVID_CSP_YUY2);
+   ret=m_frame.length;got_picture=24;
+  }; 
  //char pomS[256];sprintf(pomS,"framelen:%i ret:%i gotpicture:%i\n",m_frame.length,ret,got_picture);OutputDebugString(pomS);
  if (pIn->IsPreroll()==S_OK) 
   {

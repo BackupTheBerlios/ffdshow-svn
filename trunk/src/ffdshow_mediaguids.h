@@ -21,6 +21,9 @@
 #define FOURCC_WMV1 mmioFOURCC('W','M','V','1') 
 #define FOURCC_wmv1 mmioFOURCC('w','m','v','1')
 
+#define FOURCC_YUY2 mmioFOURCC('Y','U','Y','2')
+#define FOURCC_yuy2 mmioFOURCC('y','u','y','2')
+
 // --- media uids --- 
 DEFINE_GUID(CLSID_xvid, 0x64697678, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
 DEFINE_GUID(CLSID_XVID, 0x44495658, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
