@@ -728,6 +728,14 @@ SOURCE=.\src\imgFilters\TimgFilterOffset.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\imgFilters\TimgFilterPostproc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\TimgFilterPostproc.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\imgFilters\TimgFilters.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"

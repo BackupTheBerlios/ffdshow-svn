@@ -1,6 +1,8 @@
 #ifndef _IMGFILTER_H_
 #define _IMGFILTER_H_
 
+#include "TtempPicture.h"
+
 struct TpresetSettings;
 class TimgFilter
 {
@@ -15,9 +17,7 @@ public:
    dxUV=Idx/2;dyUV=Idy/2;strideUV=Istride/2;
   };
  virtual void done(void) {};
- virtual void process(const unsigned char *srcY,const unsigned char *srcU,const unsigned char *srcV,
-                      unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                      const TpresetSettings *cfg)=0;
+ virtual void process(TtempPictures *pict,const TpresetSettings *cfg)=0;
 };
 
 #endif

@@ -23,6 +23,8 @@
 #include <time.h>
 #include "xvid\utils\mem_align.h"
 
+Tpostproc postproc;
+
 extern "C" void modifyPPmode(PPMode *pp,Tconfig *cfg);
 void modifyPPmode(PPMode *pp,Tconfig *cfg)
 {

@@ -2,6 +2,8 @@
 #define _TRESIZECTX_H_
 
 #include "mplayer\libmpcodecs\img_format.h"
+#include "Tpostproc.h"
+#include "xvid\utils\mem_align.h"
 
 struct SwsContext;
 class TresizeCtx

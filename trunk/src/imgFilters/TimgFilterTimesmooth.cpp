@@ -72,10 +72,12 @@ void TimgFilterTimesmooth::done(void)
  if (accumU) xvid_free(accumU);accumU=NULL;
  if (accumV) xvid_free(accumV);accumV=NULL;
 }
-void TimgFilterTimesmooth::process(const unsigned char *srcY,const unsigned char *srcU,const unsigned char *srcV,
-                                   unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                                   const TpresetSettings *cfg)
+void TimgFilterTimesmooth::process(TtempPictures *pict,const TpresetSettings *cfg)
 {
+ if (!cfg->tempSmooth) return;
+ const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
+ const unsigned char *srcU=pict->getCurU();unsigned char *dstU=pict->getNextU();
+ const unsigned char *srcV=pict->getCurV();unsigned char *dstV=pict->getNextV();
  if (!accumY)
   {
    accumY=(unsigned char*)xvid_malloc(dxY *dyY *KERNEL,MCACHE_LINE);memset(accumY,  0,dxY *dyY *KERNEL);

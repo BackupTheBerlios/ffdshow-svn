@@ -25,14 +25,15 @@ TimgFilterSubtitles::TimgFilterSubtitles(void)
  sub=NULL;
 }
 
-void TimgFilterSubtitles::process(const unsigned char *srcY,const unsigned char *srcU,const unsigned char *srcV,
-                                  unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                                  const TpresetSettings *cfg)
+void TimgFilterSubtitles::process(TtempPictures *pict,const TpresetSettings *cfg)
 {
  if (cfg->fontChanged)
   font.init(cfg);
  if (sub)
   { 
+   const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
+   const unsigned char *srcU=pict->getCurU();unsigned char *dstU=pict->getNextU();
+   const unsigned char *srcV=pict->getCurV();unsigned char *dstV=pict->getNextV();
    int y;
    for (y=0;y<dyY;y++)
     memcpy(dstY+y*strideY,srcY+y*strideY,dxY);

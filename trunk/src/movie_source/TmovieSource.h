@@ -22,7 +22,7 @@ public:
    int dx,dy;
    char *vectors;
   };                         
- virtual TmotionVectors getMV(void) {TmotionVectors v;return v;};  
+ virtual TmotionVectors getMV(void) const  {TmotionVectors v;return v;};  
 };
 
 #endif

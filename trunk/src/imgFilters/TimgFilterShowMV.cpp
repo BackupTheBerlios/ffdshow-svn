@@ -23,35 +23,29 @@
 #include <math.h>
 #include "TimgFilterShowMV.h"
 #include "TpresetSettings.h"
+#include "TmovieSource.h"
 
 void TimgFilterShowMV::init(int Idx,int Istride,int Idy)
 {
  TimgFilter::init(Idx,Istride,Idy);
  firsttime=true;
- mv_dx=mv_dy=0;
- mv=NULL;
 }
-void TimgFilterShowMV::setMV(int Imv_dx,int Imv_dy,char *Imv)
+void TimgFilterShowMV::process(TtempPictures *pict,const TpresetSettings *cfg,const TmovieSource *movie)
 {
- mv_dx=Imv_dx;
- mv_dy=Imv_dy;
- mv=Imv;
-}
-void TimgFilterShowMV::process(const unsigned char *srcY,const unsigned char *,const unsigned char *,
-                               unsigned char *dstY,unsigned char *,unsigned char *,
-                               const TpresetSettings *cfg)
-{
+ TmovieSource::TmotionVectors mv=movie->getMV();
+ if (!mv.vectors) return;
+ const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
  for (int y=0;y<dyY;y++) memcpy(dstY+y*strideY,srcY+y*strideY,dxY);
- for (int mb_y=0;mb_y<mv_dy;mb_y++)
+ for (int mb_y=0;mb_y<mv.dy;mb_y++)
   {
    int y=mb_y*16+8;
    if (y>=dyY) break;
-   for (int mb_x=0;mb_x<mv_dx;mb_x++)
+   for (int mb_x=0;mb_x<mv.dx;mb_x++)
     {
      int x=mb_x*16+8;
      if (x>=dxY) break;
-     int mx=mv[2*(mb_y*mv_dx+mb_x)+0]+x;
-     int my=mv[2*(mb_y*mv_dx+mb_x)+1]+y;
+     int mx=mv.vectors[2*(mb_y*mv.dx+mb_x)+0]+x;
+     int my=mv.vectors[2*(mb_y*mv.dx+mb_x)+1]+y;
      if (mx<0) mx=0;if (mx>=dxY) mx=dxY-1;
      if (my<0) my=0;if (my>=dyY) my=dyY-1;
      line(dstY,x,y,mx,my);

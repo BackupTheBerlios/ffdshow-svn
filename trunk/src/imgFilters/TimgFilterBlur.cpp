@@ -36,16 +36,17 @@ void TimgFilterBlur::init(int Idx,int Istride,int Idy)
 }
 void TimgFilterBlur::done(void)
 {
- if (tempPict) 
+ if (tempPict)
   {
    xvid_free(tempPict);
    tempPict=NULL;
-  }; 
+  };
 }
-void TimgFilterBlur::process(const unsigned char *srcY,const unsigned char *,const unsigned char *,
-                             unsigned char *dstY,unsigned char *,unsigned char *,
-                             const TpresetSettings *cfg)
+void TimgFilterBlur::process(TtempPictures *pict,const TpresetSettings *cfg)
 {
+ if (!cfg->blurStrength) return;
+ const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
+
  DEBUGS1("src",int(srcY));
 
  if (oldStrength!=cfg->blurStrength)
@@ -84,21 +85,21 @@ void TimgFilterBlur::process(const unsigned char *srcY,const unsigned char *,con
      movq mm7,[k2]
     blur1:
      pxor mm0,mm0
-     punpcklbw mm0,[esi-1];     
-     psrlw mm0,8        
+     punpcklbw mm0,[esi-1];
+     psrlw mm0,8
      pmullw mm0,mm5
      psrlw mm0,8
 
      pxor mm1,mm1
-     punpcklbw mm1,[esi];     
-     psrlw mm1,8        
+     punpcklbw mm1,[esi];
+     psrlw mm1,8
      pmullw mm1,mm6
      psrlw mm1,8
      paddusb mm0,mm1
 
      pxor mm2,mm2
-     punpcklbw mm2,[esi+1];     
-     psrlw mm2,8        
+     punpcklbw mm2,[esi+1];
+     psrlw mm2,8
      pmullw mm2,mm7
      psrlw mm2,8
 
@@ -137,21 +138,21 @@ void TimgFilterBlur::process(const unsigned char *srcY,const unsigned char *,con
      movq mm7,[k2]
     blur2:
      pxor mm0,mm0
-     punpcklbw mm0,[ecx];     
-     psrlw mm0,8        
+     punpcklbw mm0,[ecx];
+     psrlw mm0,8
      pmullw mm0,mm5
      psrlw mm0,8
 
      pxor mm1,mm1
-     punpcklbw mm1,[esi];     
-     psrlw mm1,8        
+     punpcklbw mm1,[esi];
+     psrlw mm1,8
      pmullw mm1,mm6
      psrlw mm1,8
      paddusb mm0,mm1
 
      pxor mm2,mm2
-     punpcklbw mm2,[edx];     
-     psrlw mm2,8        
+     punpcklbw mm2,[edx];
+     psrlw mm2,8
      pmullw mm2,mm7
      psrlw mm2,8
 

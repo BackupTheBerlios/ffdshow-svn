@@ -20,30 +20,22 @@
 #include "TimgFilters.h"
 #include "TglobalSettings.h"
 #include "TpresetSettings.h"
-#include "TmovieSource.h"
 
 using namespace std;
 
-const int TpresetSettings::deblockStrengthDef=256;
-
 TimgFilters::TimgFilters(void)
 {
- cpus=cpu.GetCPUCount();
- postproc.init();
- tempY=tempU=tempV=NULL;
+ tempPict=NULL;
 }
 void TimgFilters::init(int IdxY,int IstrideY,int Idy,int dyFull,int IdiffX,int IdiffY,bool IafterResize)
 {
  dxY =IdxY  ;strideY =IstrideY  ;
  dxUV=IdxY/2;strideUV=IstrideY/2;
  dy=Idy;
- diffY=IdiffY*strideY+IdiffX;
- diffUV=(IdiffY/2)*strideUV+(IdiffX/2);
  afterResize=IafterResize;
  done();
- tempY=new TtempPicture(strideY*(dyFull+16)+16,0);
- tempU=new TtempPicture(strideUV*(dyFull+32)/2,128);
- tempV=new TtempPicture(strideUV*(dyFull+32)/2,128);
+ tempPict=new TtempPictures(strideY,dyFull,IdiffX,IdiffY);
+ filters.push_back(&postproc);postproc.init(IdxY,IstrideY,Idy);
  filters.push_back(&noise);noise.init(IdxY,IstrideY,Idy);
  filters.push_back(&luma);luma.init(IdxY,IstrideY,Idy);
  filters.push_back(&chroma);chroma.init(IdxY,IstrideY,Idy);
@@ -56,9 +48,7 @@ void TimgFilters::init(int IdxY,int IstrideY,int Idy,int dyFull,int IdiffX,int I
 }
 void TimgFilters::done(void)
 {
- if (tempY) {delete tempY;tempY=NULL;};
- if (tempU) {delete tempU;tempU=NULL;};
- if (tempV) {delete tempV;tempV=NULL;};
+ if (tempPict) delete tempPict;tempPict=NULL;
  for (vector<TimgFilter*>::iterator i=filters.begin();i!=filters.end();i++)
   (*i)->done();
  filters.clear(); 
@@ -74,126 +64,34 @@ void TimgFilters::setSubtitle(subtitle *Isub)
 }
 void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSource *movie,unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV)
 {
- tempY->reset(srcY);tempU->reset(srcU);tempV->reset(srcV);
+ tempPict->reset(srcY,srcU,srcV);
  for (int i=cfg->min_order;i<=cfg->max_order;i++)
-  if (i==cfg->orderPostproc && postproc.ok && cfg->isPostproc && dxY>16 && dy>16)
-   {
-    if (cpus>0 && cfg->autoq && cfg->ppqual)
-     {
-      cpu.CollectCPUData();
-      if (cpu.GetCPUUsage(0)>90)
-       {
-        if (cfg->currentq>0)
-        cfg->currentq--;
-       }
-      else
-       {
-        if (cfg->currentq<cfg->ppqual)
-         cfg->currentq++ ;
-       };  
-     };
-    int ppmode=postproc.getPPmode(cfg);
-    if (ppmode)
-     {
-      unsigned char *tempPict1[3]={
-                                  tempY->getTempCur()+diffY,
-                                  tempU->getTempCur()+diffUV,
-                                  tempV->getTempCur()+diffUV
-                                 },
-                   *tempPict2[3]={
-                                  tempY->getTempNext()+diffY,
-                                  tempU->getTempNext()+diffUV,
-                                  tempV->getTempNext()+diffUV
-                                 };
-      if (cfg->deblockStrength!=TpresetSettings::deblockStrengthDef || afterResize)
-       for (int i=0;i<movie->quantDx*movie->quantDy;i++)
-        {
-         int q=(((afterResize)?16:movie->quant[i])*cfg->deblockStrength)/256;
-         if (q<1) q=1;else if (q>31) q=31;
-         movie->quant[i]=q;
-        }
-      postproc.postprocess(tempPict1,strideY,
-                           tempPict2,strideY,
-                           dxY,dy,
-                           movie->quant,movie->quantDx,ppmode);
-     }
-   }
+  if (i==cfg->orderPostproc && cfg->isPostproc)
+   postproc.process(tempPict,cfg,afterResize,movie);
   else if (i==cfg->orderPictProp && cfg->isPictProp)
    {
-    if (cfg->lumGain!=TpresetSettings::lumGainDef || cfg->lumOffset!=TpresetSettings::lumOffsetDef || cfg->gammaCorrection!=TpresetSettings::gammaCorrectionDef)
-     {
-      unsigned char *srcY=tempY->getTempCur()+diffY;
-      unsigned char *dstY=tempY->getTempNext()+diffY;
-      luma.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
-     };
-    if (cfg->hue!=TpresetSettings::hueDef || cfg->saturation!=TpresetSettings::saturationDef) 
-     {
-      unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV;
-      unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
-      chroma.process(NULL,srcU,srcV,NULL,dstU,dstV,cfg);
-     }; 
+    luma.process(tempPict,cfg);
+    chroma.process(tempPict,cfg);
    }
   else if (i==cfg->orderBlur && cfg->isBlur)
    {
-    if (cfg->blurStrength)
-     {
-      unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
-      blur.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
-     };
-    if (cfg->tempSmooth)
-     {
-      unsigned char *srcY=tempY->getTempCur()+diffY ,*dstY=tempY->getTempNext()+diffY ;
-      unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV;
-      unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
-      timesmooth.process(srcY,srcU,srcV,dstY,dstU,dstV,cfg);  
-     }  
+    blur.process(tempPict,cfg);
+    timesmooth.process(tempPict,cfg);
    }
   else if (i==cfg->orderSharpen && cfg->isSharpen)
-   {
-    unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
-    sharpen.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
-   }
+   sharpen.process(tempPict,cfg);
   else if (i==cfg->orderNoise && cfg->isNoise)
-   {                           
-    if (cfg->noiseStrength)
-     {  
-      unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
-      noise.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
-     }
-    if (cfg->noiseStrengthChroma)
-     {
-      unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV,
-                    *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
-      noise.process(NULL,srcU,srcV,NULL,dstU,dstV,cfg);
-     } 
-   } 
-  else if (i==cfg->orderSubtitles && cfg->isSubtitles && subtitles.sub)
+   noise.process(tempPict,cfg);
+  else if (i==cfg->orderSubtitles && cfg->isSubtitles)
    {
-    unsigned char *srcY=tempY->getTempCur()+diffY ,*dstY=tempY->getTempNext()+diffY ;
-    unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV;
-    unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
-    subtitles.process(srcY,srcU,srcV,dstY,dstU,dstV,cfg);
+    subtitles.process(tempPict,cfg);
     cfg->fontChanged=false;
    }
   else if (i==cfg->orderOffset && cfg->isOffset)
-   {
-    unsigned char *srcY=tempY->getTempCur()+diffY ,*dstY=tempY->getTempNext()+diffY ;
-    unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV;
-    unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
-    offset.process(srcY,srcU,srcV,dstY,dstU,dstV,cfg);
-   } 
- TmovieSource::TmotionVectors mv=movie->getMV();
- if (mv.vectors && global->showMV && !afterResize)
-  {
-   unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY ;
-   if (showMV.firsttime)
-    {
-     showMV.firsttime=false;
-     showMV.setMV(mv.dx,mv.dy,mv.vectors);
-    }; 
-   showMV.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
-  }
- *dstY=tempY->getTempCur();
- *dstU=tempU->getTempCur();
- *dstV=tempV->getTempCur();
+   offset.process(tempPict,cfg);
+ if (global->showMV && !afterResize)
+  showMV.process(tempPict,cfg,movie);
+ *dstY=tempPict->getCurY();
+ *dstU=tempPict->getCurU();
+ *dstV=tempPict->getCurV();
 }

@@ -303,7 +303,7 @@ STDMETHODIMP TffDecoder::getAVIdimensions(unsigned int *x,unsigned int *y)
 }
 STDMETHODIMP TffDecoder::getPPmode(unsigned int *ppmode)
 {
- if (!imgFilters || !imgFilters->postproc.ok) 
+ if (!imgFilters || !postproc.ok) 
   { 
    *ppmode=0;
    return S_FALSE;
@@ -542,7 +542,8 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    if (cnt>1) return VFW_E_TYPE_NOT_ACCEPTED;
    if (!resizeCtx)
     {
-     if (!imgFilters->postproc.ok) presetSettings->isResize=false;
+     postproc.init();
+     if (!postproc.ok) presetSettings->isResize=false;
      resizeCtx=new TresizeCtx(presetSettings);
      if (presetSettings->isResize)
       resizeCtx->allocate(presetSettings->resizeDx,presetSettings->resizeDy);
@@ -949,8 +950,8 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
      DEBUGS("imgFilters->init after"); 
      DEBUGS("initResize before");
      DEBUGS2("cropDx, cropDy",cropDx,cropDy);
-     if (imgFilters->postproc.ok)
-      resizeCtx->initResize(&imgFilters->postproc,cropDx,cropDy,presetSettings);
+     if (postproc.ok)
+      resizeCtx->initResize(&postproc,cropDx,cropDy,presetSettings);
      DEBUGS("initResize after");
      DEBUGS("resizeCtx->clear before");
      resizeCtx->clear(); 
@@ -960,7 +961,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
     imgFilters->init(AVIdx,avpict.linesize[0],AVIdy,AVIdy,0,0,false);
   };  
  IMAGE destPict;
- if ((resizeCtx->isResize || presetSettings->resizeAspect==2 || presetSettings->isCropNzoom) && imgFilters->postproc.ok)
+ if ((resizeCtx->isResize || presetSettings->resizeAspect==2 || presetSettings->isCropNzoom) && postproc.ok)
   {
    int cropDiffY=avpict.linesize[0]*cropTop+cropLeft,cropDiffUV=avpict.linesize[1]*(cropTop/2)+(cropLeft/2);
    if (presetSettings->resizeFirst)

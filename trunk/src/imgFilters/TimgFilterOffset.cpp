@@ -39,51 +39,61 @@ void TimgFilterOffset::offset(const unsigned char *src,unsigned char *dst,int dx
   {
    x1=offsetX;x2=0;
   }
- else 
+ else
   {
    offsetX=abs(offsetX);
    x1=0;x2=offsetX;
-  } 
- int y1,y2; 
+  }
+ int y1,y2;
  if (offsetY>0)
   {
    y1=offsetY;y2=0;
   }
- else 
+ else
   {
    offsetY=abs(offsetY);
    y1=0;y2=offsetY;
-  } 
+  }
  src+=y1*stride;dst+=y2*stride;
  for (int y=0;y<dy-offsetY;src+=stride,dst+=stride,y++)
   memcpy(dst+x1,src+x2,dx-offsetX);
 }
-void TimgFilterOffset::process(const unsigned char *srcY,const unsigned char *srcU,const unsigned char *srcV,
-                               unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                               const TpresetSettings *cfg)
+void TimgFilterOffset::process(TtempPictures *pict,const TpresetSettings *cfg)
 {
- if (cfg->offsetY_X!=old_offsetY_X || cfg->offsetY_Y!=old_offsetY_Y || oldOrder!=cfg->orderOffset)
+ if (cfg->offsetY_X || cfg->offsetY_Y)
   {
-   old_offsetY_X=cfg->offsetY_X;old_offsetY_Y=cfg->offsetY_Y;
-   for (unsigned char *dst=dstY,*dstEnd=dst+dyY*strideY;dst<dstEnd;dst+=strideY)
-    memset(dst,0,dxY);
-  };  
- offset(srcY,dstY,dxY,strideY,dyY,cfg->offsetY_X,cfg->offsetY_Y);
+   const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
+   if (cfg->offsetY_X!=old_offsetY_X || cfg->offsetY_Y!=old_offsetY_Y || oldOrder!=cfg->orderOffset)
+    {
+     old_offsetY_X=cfg->offsetY_X;old_offsetY_Y=cfg->offsetY_Y;
+     for (unsigned char *dst=dstY,*dstEnd=dst+dyY*strideY;dst<dstEnd;dst+=strideY)
+      memset(dst,0,dxY);
+    };
+   offset(srcY,dstY,dxY,strideY,dyY,cfg->offsetY_X,cfg->offsetY_Y);
+  };
 
- if (cfg->offsetU_X!=old_offsetU_X || cfg->offsetU_Y!=old_offsetU_Y || oldOrder!=cfg->orderOffset)
+ if (cfg->offsetU_X || cfg->offsetU_Y)
   {
-   old_offsetU_X=cfg->offsetU_X;old_offsetU_Y=cfg->offsetU_Y;
-   for (unsigned char *dst=dstU,*dstEnd=dst+dyUV*strideUV;dst<dstEnd;dst+=strideUV)
-    memset(dst,128,dxUV);
-  };  
- offset(srcU,dstU,dxUV,strideUV,dyUV,cfg->offsetU_X/2,-cfg->offsetU_Y/2);
+   const unsigned char *srcU=pict->getCurU();unsigned char *dstU=pict->getNextU();
+   if (cfg->offsetU_X!=old_offsetU_X || cfg->offsetU_Y!=old_offsetU_Y || oldOrder!=cfg->orderOffset)
+    {
+     old_offsetU_X=cfg->offsetU_X;old_offsetU_Y=cfg->offsetU_Y;
+     for (unsigned char *dst=dstU,*dstEnd=dst+dyUV*strideUV;dst<dstEnd;dst+=strideUV)
+      memset(dst,128,dxUV);
+    };
+   offset(srcU,dstU,dxUV,strideUV,dyUV,cfg->offsetU_X/2,-cfg->offsetU_Y/2);
+  };
 
- if (cfg->offsetV_X!=old_offsetV_X || cfg->offsetV_Y!=old_offsetV_Y || oldOrder!=cfg->orderOffset)
+ if (cfg->offsetV_X || cfg->offsetV_Y)
   {
-   old_offsetV_X=cfg->offsetV_X;old_offsetV_Y=cfg->offsetV_Y;
-   for (unsigned char *dst=dstV,*dstEnd=dst+dyUV*strideUV;dst<dstEnd;dst+=strideUV)
-    memset(dst,128,dxUV);
-  };  
- offset(srcV,dstV,dxUV,strideUV,dyUV,cfg->offsetV_X/2,-cfg->offsetV_Y/2);
+   const unsigned char *srcV=pict->getCurV();unsigned char *dstV=pict->getNextV();
+   if (cfg->offsetV_X!=old_offsetV_X || cfg->offsetV_Y!=old_offsetV_Y || oldOrder!=cfg->orderOffset)
+    {
+     old_offsetV_X=cfg->offsetV_X;old_offsetV_Y=cfg->offsetV_Y;
+     for (unsigned char *dst=dstV,*dstEnd=dst+dyUV*strideUV;dst<dstEnd;dst+=strideUV)
+      memset(dst,128,dxUV);
+    };
+   offset(srcV,dstV,dxUV,strideUV,dyUV,cfg->offsetV_X/2,-cfg->offsetV_Y/2);
+  };
  oldOrder=cfg->orderOffset;
 }

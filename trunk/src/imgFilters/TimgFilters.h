@@ -3,9 +3,7 @@
 
 #include <stdlib.h>
 #include <vector>
-#include "TcpuUsage.h"
-#include "Tpostproc.h"
-#include "TtempPicture.h"
+#include "TimgFilterPostproc.h"
 #include "TimgFilterNoise.h"
 #include "TimgFilterLuma.h"
 #include "TimgFilterChroma.h"
@@ -20,17 +18,17 @@ struct TglobalSettings;
 struct TpresetSettings;
 class TmovieSource;
 struct subtitle;
+struct TtempPictures;
 class TimgFilters
 {
 private:
- int dxY ,diffY ,strideY;
- int dxUV,diffUV,strideUV;
+ int dxY ,strideY;
+ int dxUV,strideUV;
  int dy;
- //int _dx,_dy;
  bool afterResize;
- TcpuUsage cpu;int cpus;
- TtempPicture *tempY,*tempU,*tempV;
+ TtempPictures *tempPict;
  std::vector<TimgFilter*> filters;
+ TimgFilterPostproc postproc;
  TimgFilterNoise noise;
  TimgFilterLuma luma;
  TimgFilterChroma chroma;
@@ -49,7 +47,6 @@ public:
  void process(TglobalSettings *global,TpresetSettings *cfg,TmovieSource *movie,
               unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
               unsigned char**dstY,unsigned char**dstU,unsigned char**dstV);
- Tpostproc postproc;
 };
 
 #endif

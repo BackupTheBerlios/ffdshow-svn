@@ -143,21 +143,25 @@ void TimgFilterNoise::noiseAvihUV(const unsigned char *srcU,unsigned char *dstU,
  __asm {emms};
 }
 
-void TimgFilterNoise::process(const unsigned char *srcY,const unsigned char *srcU,const unsigned char *srcV,
-                              unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                              const TpresetSettings *cfg)
+void TimgFilterNoise::process(TtempPictures *pict,const TpresetSettings *cfg)
 {
- if (srcY && dstY)
-  {
+ if (cfg->noiseStrength)
+  {  
+   const unsigned char *srcY=pict->getCurY();unsigned char *dstY=pict->getNextY();
    if (cfg->noiseMethod==0) 
     noiseY(srcY,dstY,cfg);
    else 
     noiseAvihY(srcY,dstY,cfg);
-   return; 
-  }
- if (cfg->noiseMethod==0)                    
-  noiseUV(srcU,dstU,srcV,dstV,cfg);
- else 
-  noiseAvihUV(srcU,dstU,srcV,dstV,cfg);
-};
+  };
+ if (cfg->noiseStrengthChroma)
+  {
+   const unsigned char *srcU=pict->getCurU();unsigned char *dstU=pict->getNextU();
+   const unsigned char *srcV=pict->getCurV();unsigned char *dstV=pict->getNextV();
+   if (cfg->noiseMethod==0)                    
+    noiseUV(srcU,dstU,srcV,dstV,cfg);
+   else 
+    noiseAvihUV(srcU,dstU,srcV,dstV,cfg);
+  };
+}
+
                                
