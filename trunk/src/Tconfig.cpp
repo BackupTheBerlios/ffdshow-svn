@@ -36,13 +36,13 @@ void Tconfig::init(void)
  GetSystemDirectory(sysdir,255);
  REG_GET_S("pth",pth,sysdir);
  RegCloseKey(hKey);
- 
+
  if (strlen(pth) && pth[strlen(pth)-1]!='\\') strcat(pth,"\\");
  XVID_INIT_PARAM xip;
  xip.cpu_flags=0;
  xvid_init(NULL, 0, &xip, NULL);
  cpu_flags=xip.cpu_flags;
- 
+
  isLibavcodec=TmovieSourceLibavcodec::getVersion(NULL);
  isXviD=TmovieSourceXviD::getVersion(NULL);
 }

@@ -13,8 +13,8 @@ class TcpuUsage
   ~TcpuUsage()
    {
     usage_finalization();
-   }; 
-  
+   };
+
   void CollectCPUData(void);  // Call CollectCPUData to refresh information about CPU usage
   int GetCPUCount(void);      // Call it to obtain the number of CPU's in the system
   int GetCPUUsage(int Index); // Call it to obtain the % of usage for given CPU
@@ -23,26 +23,26 @@ class TcpuUsage
   void usage_initialization(void),usage_finalization(void);
   /*
   implementation
-   
+
   {$ifndef ver110}
-   
+
       {$ifndef ver90}
       {$ifndef ver100}
       {$define UseInt64}
       {$endif}
       {$endif}
-   
-   
+
+
       {$ifdef UseInt64}
       type TInt64 = Int64;
       {$else}
       type TInt64 = Comp;
       {$endif}
-   
+
   {$else}
-   
+
       type TInt64 = TLargeInteger;
-   
+
   {$endif}
   */
 
@@ -89,7 +89,7 @@ class TcpuUsage
           result:= -1 - FInt64(V);
       end;
   end;
-   
+
   function Int64D(Value: DWORD): TInt64;
   begin
       result.LowPart:=Value;

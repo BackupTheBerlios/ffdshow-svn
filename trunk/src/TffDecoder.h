@@ -18,12 +18,12 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   static CUnknown * WINAPI CreateInstance(LPUNKNOWN punk, HRESULT *phr);
   STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
   #ifdef DEBUG
-  STDMETHODIMP_(ULONG) AddRef();                              
+  STDMETHODIMP_(ULONG) AddRef();
   STDMETHODIMP_(ULONG) Release();
-  STDMETHODIMP QueryInterface(REFIID riid, void **ppv) 
-   {     
-    return GetOwner()->QueryInterface(riid,ppv);           
-   };                                                          
+  STDMETHODIMP QueryInterface(REFIID riid, void **ppv)
+   {
+    return GetOwner()->QueryInterface(riid,ppv);
+   };
   #else
   DECLARE_IUNKNOWN;
   #endif
@@ -32,7 +32,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   virtual ~TffDecoder();
 
   STDMETHODIMP JoinFilterGraph(IFilterGraph * pGraph,LPCWSTR pName);
-  
+
   HRESULT CheckInputType(const CMediaType * mtIn);
   HRESULT GetMediaType(int iPos, CMediaType * pmt);
   HRESULT SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt);
@@ -86,7 +86,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP setDefaultPresetName(const char *presetName);
   STDMETHODIMP isDefaultPreset(const char *presetName);
   STDMETHODIMP showCfgDlg(HWND owner);
-  
+
  private:
   bool firstFrame,firstTransform;
   TtrayIcon *tray;
@@ -103,7 +103,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   HWND onChangeWnd;unsigned int onChangeMsg;
   HWND onInfoWnd;unsigned int onInfoMsg;
   void sendOnChange(void);
-  
+
   int AVIdx,AVIdy;double AVIfps;
   struct
    {
@@ -115,8 +115,8 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
     void *bitstream;
     void *image;
    } m_frame;
-  
-  TmovieSource *movie; 
+
+  TmovieSource *movie;
   TresizeCtx *resizeCtx;
   int cropLeft,cropTop,cropDx,cropDy;
   void calcCrop(void);
@@ -127,4 +127,4 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   clock_t lastTime;
 };
 
-#endif 
+#endif

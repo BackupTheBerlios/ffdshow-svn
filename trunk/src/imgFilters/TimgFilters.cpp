@@ -51,7 +51,7 @@ void TimgFilters::done(void)
  if (tempPict) delete tempPict;tempPict=NULL;
  for (vector<TimgFilter*>::iterator i=filters.begin();i!=filters.end();i++)
   (*i)->done();
- filters.clear(); 
+ filters.clear();
 }
 TimgFilters::~TimgFilters()
 {

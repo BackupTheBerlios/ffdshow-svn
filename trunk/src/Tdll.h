@@ -40,6 +40,6 @@ public:
    *fnc=GetProcAddress(hdll,name);
    ok&=(*fnc!=NULL);
   };
-};  
+};
 
 #endif

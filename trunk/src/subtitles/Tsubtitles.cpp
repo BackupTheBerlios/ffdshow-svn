@@ -50,9 +50,9 @@ void Tsubtitles::init(const char *aviFlnm,const char *subFlnm,double Ifps)
      __asm emms;
      subs=sub_read_file(strcpy(flnm,subFlnm?subFlnm:aviFlnm),Ifps);
      free(subFlnm);
-    } 
+    }
   }
- else  
+ else
   subs=sub_read_file(strcpy(flnm,subFlnm),Ifps);
  oldsub=NULL;
  current_sub=0;
@@ -61,11 +61,11 @@ void Tsubtitles::init(const char *aviFlnm,const char *subFlnm,double Ifps)
 }
 void Tsubtitles::done(void)
 {
- if (subs) 
+ if (subs)
   {
    sub_free(subs);
    subs=NULL;
-  } 
+  }
 }
 subtitle* Tsubtitles::getSubtitle(int frame)
 {
@@ -76,9 +76,9 @@ subtitle* Tsubtitles::getSubtitle(int frame)
    if(frame>=oldsub->start && frame<=oldsub->end)
     return oldsub; // OK!
   }
- else 
+ else
   {
-   if(frame>nosub_range_start && frame<nosub_range_end) 
+   if(frame>nosub_range_start && frame<nosub_range_end)
     return oldsub; // OK!
   };
  // sub changed!
@@ -92,7 +92,7 @@ subtitle* Tsubtitles::getSubtitle(int frame)
      nosub_range_start=subs[current_sub].end;
      nosub_range_end  =subs[current_sub+1].start;
      return oldsub=NULL;
-    } 
+    }
    // next sub?
    ++current_sub;
    oldsub=&subs[current_sub];
@@ -129,7 +129,7 @@ subtitle* Tsubtitles::getSubtitle(int frame)
   }
  else
   {
-   if (frame<=oldsub->end) /*printf("JAJJ!  ")*/; 
+   if (frame<=oldsub->end) /*printf("JAJJ!  ")*/;
    else
     if (current_sub+1>=sub_num)
      {

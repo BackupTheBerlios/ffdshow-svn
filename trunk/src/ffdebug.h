@@ -21,9 +21,9 @@ static inline void DEBUGS2(const char *s,int a,int b)
  OutputDebugString(pomS);
 };
 #else
-#define DEBUGS(X) 
-#define DEBUGS1(X,A) 
-#define DEBUGS2(X,A,B) 
+#define DEBUGS(X)
+#define DEBUGS1(X,A)
+#define DEBUGS2(X,A,B)
 #endif
 
 #endif

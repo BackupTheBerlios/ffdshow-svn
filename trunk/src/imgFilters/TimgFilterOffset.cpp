@@ -69,7 +69,7 @@ void TimgFilterOffset::process(TtempPictures *pict,const TpresetSettings *cfg)
      for (unsigned char *dst=dstY,*dstEnd=dst+dyY*strideY;dst<dstEnd;dst+=strideY)
       memset(dst,0,dxY);
     };
-   offset(srcY,dstY,dxY,strideY,dyY,cfg->offsetY_X,cfg->offsetY_Y);
+   offset(srcY,dstY,dxY,strideY,dyY,cfg->offsetY_X,-cfg->offsetY_Y);
   };
 
  if (cfg->offsetU_X || cfg->offsetU_Y)

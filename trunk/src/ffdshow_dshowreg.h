@@ -16,22 +16,22 @@ const AMOVIESETUP_MEDIATYPE sudInputPinTypes[] =
   { &MEDIATYPE_Video, &CLSID_MP41 },
   { &MEDIATYPE_Video, &CLSID_h263 },
   { &MEDIATYPE_Video, &CLSID_H263 },
-#ifdef FF__WMV1  
+#ifdef FF__WMV1
   { &MEDIATYPE_Video, &CLSID_wmv1 },
   { &MEDIATYPE_Video, &CLSID_WMV1 },
-#endif  
+#endif
 #ifdef FF__MPEG
-  { &MEDIATYPE_Video, &CLSID_MPEG1Packet },  
+  { &MEDIATYPE_Video, &CLSID_MPEG1Packet },
   { &MEDIATYPE_Video, &CLSID_MPEG1Payload },
-#endif  
+#endif
   { &MEDIATYPE_Video, &MEDIASUBTYPE_YUY2 },
   { &MEDIATYPE_Video, &MEDIASUBTYPE_RGB32},
   { &MEDIATYPE_Video, &MEDIASUBTYPE_RGB24},
   { &MEDIATYPE_Video, &MEDIASUBTYPE_RGB555},
   { &MEDIATYPE_Video, &MEDIASUBTYPE_RGB565},
-#ifdef FF__MPEG2  
+#ifdef FF__MPEG2
   { &MEDIATYPE_Video, &MEDIASUBTYPE_MPEG2_VIDEO},
-#endif  
+#endif
  };
 
 const AMOVIESETUP_MEDIATYPE sudOutputPinTypes[] =
@@ -73,7 +73,7 @@ const AMOVIESETUP_FILTER sudXvidDecoder =
   0x40000002,
  #else
   MERIT_PREFERRED+1+1,    // Its merit - stupid hack, but Windows Media filters use it too
- #endif 
+ #endif
  sizeof(psudPins) / sizeof(AMOVIESETUP_PIN), // Number of pins
  psudPins                // Pin details
 };

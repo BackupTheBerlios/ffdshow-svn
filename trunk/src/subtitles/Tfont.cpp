@@ -86,7 +86,7 @@ Tchar::Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int co
  if (!matrix)
   memset(mskY,255,dxY*dyY);
  else
-  { 
+  {
    memcpy(mskY,bmpY,dxY*dyY);
    for (int y=0;y<dyY;y++)
     for (int x=0;x<dxY;x++)
@@ -101,9 +101,9 @@ Tchar::Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int co
           s+=bmpY[dxY*(y+yy)+(x+xx)]*matrix[yy+2][xx+2];
           cnt++;
          };
-       };   
-      s/=cnt*32;  
-      if (s>255) s=255;  
+       };
+      s/=cnt*32;
+      if (s>255) s=255;
       mskY[dxY*y+x]=s;
      }
   }
@@ -132,7 +132,7 @@ Tchar::Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int co
     *mskUVptr=s/8;
    }
  for (int i=0;i<dxY*dyY;i++) bmpY[i]=(bmpY[i]*colorY)>>8;
-}  
+}
 Tchar::~Tchar()
 {
  free(bmpY);free(mskY);
@@ -172,7 +172,7 @@ void Tfont::init(const TpresetSettings *cfg)
      {
       double d=8-(x*x+y*y);
       matrix[y+2][x+2]=2.55*cfg->fontShadowStrength*pow(d/8,2-cfg->fontShadowRadius/50.0);
-     }; 
+     };
   }
  else matrix[0][0]=-100;
 }
@@ -196,12 +196,12 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
      int lineDx=Tchar::getWidth(hdc,sub->text[i]);
      if (lineDx<dx)
       c.push_back(new Tchar(hdc,sub->text[i],(matrix[0][0]==-100)?NULL:matrix,colorY,colorU,colorV));
-     else 
+     else
       {
        char line[1024];strcpy(line,sub->text[i]);
-      } 
-    }; 
-  }; 
+      }
+    };
+  };
  if (c.empty()) return;
  unsigned int i;
  int h=0;
@@ -221,7 +221,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
       {
        int c=*dstPix;
        c-=*msk;if (c<0) c=0;
-       c+=(*bmp*colorY)>>8;if (c>255) c=255;      
+       c+=(*bmp*colorY)>>8;if (c>255) c=255;
        *dstPix=c;
       }
      #else
@@ -264,7 +264,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
        c+=(b*colorU)>>6;
        c+=128;
        *dstPixU=c;
-       
+
        c=*dstPixV;
        c-=128;
        if (c<0) {c+=m;if (c>0) c=0;}
@@ -277,7 +277,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
      int dxUV=c[i]->dxUV/8;
      __declspec(align(8)) static const __int64 m128=0x8080808080808080;
      __declspec(align(8)) static const __int64 m255=0xffffffffffffffff;
-     __asm 
+     __asm
       {
        mov ebx,[msk]
        mov ecx,[bmpU]
@@ -289,15 +289,15 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
       lumChrom1:
        movq  mm0,[esi]
        movq  mm1,[edi]
-       
+
        psubb mm0,mm5
        psubb mm1,mm5
-       
+
        movq    mm6,[ebx] //mm6 - mask
        pxor    mm7,mm7
        pcmpgtb mm7,mm0   //mm7 - what to be negated
        movq    mm3,mm0
-       paddusb mm3,mm6 
+       paddusb mm3,mm6
        movq    mm4,mm0
        psubusb mm4,mm6
        pand    mm3,mm7
@@ -310,7 +310,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
        pxor    mm7,mm7
        pcmpgtb mm7,mm1   //mm7 - what to be negated
        movq    mm3,mm1
-       paddusb mm3,mm6 
+       paddusb mm3,mm6
        movq    mm4,mm1
        psubusb mm4,mm6
        pand    mm3,mm7
@@ -318,20 +318,20 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
        pand    mm4,mm7
        por     mm3,mm4
        movq    mm1,mm3
-      
+
        add    ebx,8
-       
+
        paddb mm0,[ecx]
        add   ecx,8
        paddb mm1,[edx]
        add   edx,8
-       
+
        paddb mm0,mm5
        paddb mm1,mm5
-       
+
        movq  [esi],mm0
        add   esi,8
-       movq  [edi],mm1  
+       movq  [edi],mm1
        add   edi,8
        dec   eax
        jnz  lumChrom1
@@ -340,7 +340,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
        mov  [bmpV],edx
       }
      #endif
-    } 
-  } 
- __asm emms; 
+    }
+  }
+ __asm emms;
 }

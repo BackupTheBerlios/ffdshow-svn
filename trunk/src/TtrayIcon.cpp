@@ -97,7 +97,7 @@ HMENU TtrayIcon::createMenu(void)
    insertMenuItem(hm,ord,IDC_FIRST_PRESET+i,preset,_stricmp(preset,actPreset)==0);
   }
  insertSeparator(hm,ord);
- 
+
  for (i=deci->getMinOrder2();i<=deci->getMaxOrder2();i++)
   if      (i==cfgGet(IDFF_orderPostproc )) insertMenuItem(hm,ord,IDC_CHB_POSTPROC,"Postprocessing",IDFF_isPostproc);
    // insertSubmenu(hm,ord,"Postprocessing settings",createPostProcMenu());
@@ -125,7 +125,7 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
    TtrayIcon *ti=(TtrayIcon*)GetWindowLong(hwnd,GWL_USERDATA);
    if (ti)
     switch (lprm)
-     {                      
+     {
       case WM_LBUTTONDBLCLK:
        ti->deci->showCfgDlg(hwnd);
        break;
@@ -138,7 +138,7 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
         SetForegroundWindow(hwnd);
         HMENU hm=ti->createMenu();
         int cmd=TrackPopupMenu(hm,TPM_RIGHTALIGN|TPM_BOTTOMALIGN|TPM_RETURNCMD,p.x,p.y,0,hwnd,NULL);
-        PostMessage(hwnd, WM_NULL, 0, 0); 
+        PostMessage(hwnd, WM_NULL, 0, 0);
         if (cmd>=IDC_FIRST_PRESET)
          {
           int i=cmd-IDC_FIRST_PRESET;
@@ -150,42 +150,42 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
           GetMenuItemInfo(hm,i,TRUE,&mii);
           ti->deci->setActivePreset(preset);
          }
-        else 
+        else
          switch (cmd)
           {
            case IDC_CHB_POSTPROC:
             ti->negate_Param(IDFF_isPostproc);
-            break; 
+            break;
            case IDC_CHB_PICTPROP:
             ti->negate_Param(IDFF_isPictProp);
-            break; 
+            break;
            case IDC_CHB_NOISE:
             ti->negate_Param(IDFF_isNoise);
-            break; 
+            break;
            case IDC_CHB_BLUR:
             ti->negate_Param(IDFF_isBlur);
-            break; 
+            break;
            case IDC_CHB_SHARPEN:
             ti->negate_Param(IDFF_isSharpen);
-            break; 
+            break;
            case IDC_CHB_CROP:
             ti->negate_Param(IDFF_isCropNzoom);
-            break; 
+            break;
            case IDC_CHB_FLIP:
             ti->negate_Param(IDFF_flip);
-            break; 
+            break;
            case IDC_CHB_SUBTITLES:
             ti->negate_Param(IDFF_isSubtitles);
-            break; 
+            break;
            case IDC_CHB_OFFSET:
             ti->negate_Param(IDFF_isOffset);
-            break; 
+            break;
            case IDC_CHB_SHOWMV:
             ti->negate_Param(IDFF_showMV);
             break;
           }
         DestroyMenu(hm);
-       }; 
+       };
      break;
     }
    return 0;
@@ -217,7 +217,7 @@ TtrayIcon::TtrayIcon(IffDecoder *Ideci,HINSTANCE Ihi):deci(Ideci),hi(Ihi)
  wndclass.lpszMenuName  = NULL ;
  wndclass.lpszClassName = "ffdshow";
  ha=RegisterClass(&wndclass);
- 
+
  h=CreateWindow(
                 "ffdshow",                   // window class name
                 TEXT("ffdshow"),            // window caption
@@ -230,7 +230,7 @@ TtrayIcon::TtrayIcon(IffDecoder *Ideci,HINSTANCE Ihi):deci(Ideci),hi(Ihi)
                 NULL,                       // window menu handle
                 hi,                         // program instance handle
                 NULL
-               );                     
+               );
  SetWindowLong(h,GWL_USERDATA,LONG(this));
  nid.cbSize=sizeof(nid);
  nid.hWnd=h;
@@ -254,7 +254,7 @@ void TtrayIcon::show(void)
   {
    Shell_NotifyIcon(NIM_ADD,&nid);
    visible=true;
-  }; 
+  };
 }
 void TtrayIcon::hide(void)
 {
@@ -262,7 +262,7 @@ void TtrayIcon::hide(void)
   {
    Shell_NotifyIcon(NIM_DELETE,&nid);
    visible=false;
-  }; 
+  };
 }
 
 int TtrayIcon::negate_Param(int id)
