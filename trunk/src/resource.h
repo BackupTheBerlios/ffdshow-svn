@@ -27,7 +27,7 @@
 #define IDD_FONT                        132
 #define IDD_RESIZE                      133
 #define IDD_ASPECTNCROP                 134
-#define IDD_TRAY                        136
+#define IDD_DLGMISC                     136
 #define IDB_ARROWS                      145
 #define IDB_ARROWS_MASK_UD              146
 #define IDB_ARROWS_MASK_U               147
@@ -112,6 +112,7 @@
 #define IDC_CHB_GLOBAL_SHARPEN          1069
 #define IDC_CHB_TRAYICON                1070
 #define IDC_LBL_AVVERSION               1071
+#define IDC_CHB_DLG_RESTOREPOS          1071
 #define IDC_LBL_FFDSHOWVERSION          1072
 #define IDC_CHB_PICTPROP                1072
 #define IDC_CHB_POSTPROC                1073

@@ -25,17 +25,18 @@
 #include "resource.h"
 #include "IffDecoder.h"
 
-void TtrayPage::init(void)
+void TdlgMiscPage::init(void)
 {
  cfg2dlg();
 }
 
-void TtrayPage::cfg2dlg(void)
+void TdlgMiscPage::cfg2dlg(void)
 {
  setCheck(IDC_CHB_TRAYICON,cfgGet(IDFF_trayIcon));
+ setCheck(IDC_CHB_DLG_RESTOREPOS,cfgGet(IDFF_dlgRestorePos));
 }
 
-HRESULT TtrayPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
+HRESULT TdlgMiscPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
@@ -45,13 +46,16 @@ HRESULT TtrayPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       case IDC_CHB_TRAYICON:
        cfgSet(IDFF_trayIcon,getCheck(IDC_CHB_TRAYICON));
        return TRUE;
+      case IDC_CHB_DLG_RESTOREPOS:
+       cfgSet(IDFF_dlgRestorePos,getCheck(IDC_CHB_DLG_RESTOREPOS));
+       return TRUE;
      }
     break; 
   }    
  return FALSE;
 }
 
-TtrayPage::TtrayPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
+TdlgMiscPage::TdlgMiscPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_TRAY);
+ createWindow(IDD_DLGMISC);
 }

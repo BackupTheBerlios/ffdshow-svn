@@ -21,7 +21,10 @@
 PARAM(IDFF_inPlayer           ,this->,inPlayer          ,0,0,NULL)
 PARAM(IDFF_isDlg              ,this->,isDlg             ,0,0,NULL)
 //dialog settings
-PARAM(IDFF_lastPage           ,dialogSettings.,lastPage,0,0,NULL)
+PARAM(IDFF_lastPage           ,dialogSettings.,lastPage     ,0,0,NULL)
+PARAM(IDFF_dlgRestorePos      ,dialogSettings.,dlgRestorePos,0,0,NULL)
+PARAM(IDFF_dlgPosX            ,dialogSettings.,dlgPosX      ,-4096,4096,NULL)
+PARAM(IDFF_dlgPosY            ,dialogSettings.,dlgPosY      ,-4096,4096,NULL)
 //global settings
 PARAM(IDFF_autoPreset         ,globalSettings.,autoPreset         ,0,0,NULL)
 PARAM(IDFF_trayIcon           ,globalSettings.,trayIcon           ,0,0,&TffDecoder::trayIconChanged)

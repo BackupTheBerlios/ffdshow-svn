@@ -495,16 +495,19 @@ BEGIN
                     NOT WS_BORDER | WS_VSCROLL
 END
 
-IDD_TRAY DIALOGEX 0, 0, 254, 165
+IDD_DLGMISC DIALOGEX 0, 0, 254, 165
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX        "Tray icon",IDC_STATIC,0,0,253,26
     CONTROL         "Show tray icon",IDC_CHB_TRAYICON,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,5,11,117,8
     EDITTEXT        IDC_ED_HELP,0,93,253,71,ES_MULTILINE | ES_READONLY | NOT 
                     WS_BORDER | WS_VSCROLL
+    GROUPBOX        "Configuration dialog",IDC_STATIC,0,26,253,26
+    CONTROL         "Restore position",IDC_CHB_DLG_RESTOREPOS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,37,117,8
 END
 
 
@@ -533,7 +536,7 @@ IDD_NOISE               TEXT    MOVEABLE PURE   "helpNoise.txt"
 IDD_POSTPROC            TEXT    MOVEABLE PURE   "helpPostproc.txt"
 IDD_RESIZE              TEXT    MOVEABLE PURE   "helpResize.txt"
 IDD_BLUR                TEXT    MOVEABLE PURE   "helpBlur.txt"
-IDD_TRAY                TEXT    MOVEABLE PURE   "helpTray.txt"
+IDD_DLGMISC             TEXT    MOVEABLE PURE   "helpTray.txt"
 IDD_SUBTITLES           TEXT    MOVEABLE PURE   "helpSubtitles.txt"
 IDD_MISC                TEXT    MOVEABLE PURE   "helpMisc.txt"
 
@@ -593,7 +596,7 @@ BEGIN
     IDD_FONT                "Font"
     IDD_RESIZE              "Resize"
     IDD_ASPECTNCROP         "Aspect & crop"
-    IDD_TRAY                "Tray"
+    IDD_DLGMISC             "Tray & dialog settings"
 END
 
 STRINGTABLE DISCARDABLE 

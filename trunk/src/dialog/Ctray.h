@@ -1,12 +1,12 @@
-#ifndef _CTRAYPAGE_H_
-#define _CTRAYPAGE_H_
+#ifndef _CDLGMISCPAGE_H_
+#define _CDLGMISCPAGE_H_
 
 #include "TconfPage.h"
 
-class TtrayPage : public TconfPage
+class TdlgMiscPage : public TconfPage
 {
  public:
-  TtrayPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+  TdlgMiscPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
   virtual void init(void);
   virtual void cfg2dlg(void);

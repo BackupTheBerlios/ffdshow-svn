@@ -113,6 +113,7 @@ void TffdshowPage::presetChanged(void)
 static int CALLBACK orderCompareFunc(LPARAM lParam1, LPARAM lParam2,LPARAM lParamSort)
 {
  int o1=((TconfPage*)lParam1)->getOrder(),o2=((TconfPage*)lParam2)->getOrder();
+ DEBUGS2("sort",o1,o2);
  if (o1==-1 && o2==-1) return 0;
  if (o1==-1) return 1;
  if (o2==-1) return -1;
@@ -139,7 +140,19 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  if (!m_hwnd) return ERROR;
  dlg=findParentDlg();
  if (dlg)
-  GetWindowText(dlg,caption,255);
+  {
+   GetWindowText(dlg,caption,255);
+   if (deci->getParam2(IDFF_dlgRestorePos))
+    {
+     int x,y;
+     x=deci->getParam2(IDFF_dlgPosX);
+     y=deci->getParam2(IDFF_dlgPosY);
+     WINDOWPLACEMENT wpl;
+     GetWindowPlacement(dlg,&wpl);
+     OffsetRect(&wpl.rcNormalPosition,x-wpl.rcNormalPosition.left,y-wpl.rcNormalPosition.top);
+     SetWindowPlacement(dlg,&wpl);
+    }
+  }
  else
   caption[0]='\0';
  htv=GetDlgItem(m_hwnd,IDC_TV_TREE);
@@ -157,7 +170,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  tvis.item.mask=TVIF_PARAM|TVIF_TEXT;
  addTI(tvis,new TcodecsPage(this,m_hwnd,deci));
  addTI(tvis,new TinfoPage(this,m_hwnd,deci));
- addTI(tvis,new TtrayPage(this,m_hwnd,deci));
+ addTI(tvis,new TdlgMiscPage(this,m_hwnd,deci));
  tvis.item.mask|=TVIF_CHILDREN;
  tvis.item.cChildren=1;
  pagePresets=addTI(tvis,new TpresetsPage(this,m_hwnd,deci));
@@ -210,6 +223,14 @@ STDMETHODIMP TffdshowPage::Deactivate(void)
  HRESULT res=CBasePropertyPage::Deactivate();
  for (vector<TconfPage*>::iterator i=pages.begin();i!=pages.end();i++)
   delete *i;
+ if (IsWindow(dlg))
+  {
+   WINDOWPLACEMENT wpl;
+   wpl.length=sizeof(wpl);
+   GetWindowPlacement(dlg,&wpl);
+   deci->putParam(IDFF_dlgPosX,wpl.rcNormalPosition.left);
+   deci->putParam(IDFF_dlgPosY,wpl.rcNormalPosition.top);
+  };
  deci->saveDialogSettings();
  deci->putParam(IDFF_isDlg,0);
  return res;

@@ -15,6 +15,7 @@ class TpresetsPage : public TconfPage
   HWND hlv;
  public:
   TpresetsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+  virtual ~TpresetsPage();
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
   virtual void init(void);
   virtual void cfg2dlg(void);

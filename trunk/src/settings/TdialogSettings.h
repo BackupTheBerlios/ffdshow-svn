@@ -4,6 +4,8 @@
 struct TdialogSettings
 {
  int lastPage;
+ int dlgRestorePos;
+ int dlgPosX,dlgPosY;
  TdialogSettings(void) {load();};
  void load(void),save(void);
 };

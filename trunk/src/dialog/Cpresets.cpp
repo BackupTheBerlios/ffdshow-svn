@@ -147,7 +147,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
          }
        }
      break; 
-    } 
+    }
   };
  return FALSE;
 }
@@ -155,6 +155,11 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 void TpresetsPage::applySettings(void)
 {
  strcpy(oldActivePresetName,localPresets[ListView_GetNextItem(hlv,-1,LVNI_SELECTED)]->presetName);
+}
+
+TpresetsPage::~TpresetsPage()
+{
+ deci->loadPreset(oldActivePresetName);
 }
 
 TpresetsPage::TpresetsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
