@@ -23,17 +23,36 @@
 #include <string.h>
 #include "IffDecoder.h"
 
+void TpresetsPage::createConfig(void)
+{
+ cfg2dlg();
+}
+
 void TpresetsPage::cfg2dlg(void)
 {
+ setCheck(IDC_CHB_AUTOPRESET,cfgGet(IDFF_autoPreset));
+ setCheck(IDC_CHB_AUTOPRESET_FILEFIRST,cfgGet(IDFF_autoPresetFileFirst));
+ enableWindow(IDC_CHB_AUTOPRESET_FILEFIRST,getCheck(IDC_CHB_AUTOPRESET));
 }
 
 HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+ switch (uMsg)
+  {
+   case WM_COMMAND:
+    switch (LOWORD(wParam))  
+     {
+      case IDC_CHB_AUTOPRESET:
+       cfgSet(IDFF_autoPreset,getCheck(IDC_CHB_AUTOPRESET));
+       enableWindow(IDC_CHB_AUTOPRESET_FILEFIRST,getCheck(IDC_CHB_AUTOPRESET));
+       return TRUE;
+      case IDC_CHB_AUTOPRESET_FILEFIRST:
+       cfgSet(IDFF_autoPresetFileFirst,getCheck(IDC_CHB_AUTOPRESET_FILEFIRST));
+       return TRUE;
+     }
+   break;
+  };
  return FALSE;
-}
-
-void TpresetsPage::createConfig(void)
-{
 }
 
 TpresetsPage::TpresetsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
