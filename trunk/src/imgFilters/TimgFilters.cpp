@@ -32,7 +32,7 @@ TimgFilters::TimgFilters(void)
  postproc.init();
  tempY=tempU=tempV=NULL;
 }
-void TimgFilters::init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY,bool IafterResize)
+void TimgFilters::init(int IdxY,int IstrideY,int Idy,int dyFull,int IdiffX,int IdiffY,bool IafterResize)
 {
  dxY =IdxY  ;strideY =IstrideY  ;
  dxUV=IdxY/2;strideUV=IstrideY/2;
@@ -41,11 +41,9 @@ void TimgFilters::init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY,bool 
  diffUV=(IdiffY/2)*strideUV+(IdiffX/2);
  afterResize=IafterResize;
  done();
- tempY=new TtempPicture(strideY*dy+16,0);
- tempU=new TtempPicture(strideUV*dy/2,128);
- tempV=new TtempPicture(strideUV*dy/2,128);
- IdxY-=IdiffX*2;_dy=Idy-=IdiffY*2;
- _dx=IdxY;_dy=Idy;
+ tempY=new TtempPicture(strideY*(dyFull+16)+16,0);
+ tempU=new TtempPicture(strideUV*(dyFull+32)/2,128);
+ tempV=new TtempPicture(strideUV*(dyFull+32)/2,128);
  filters.push_back(&noise);noise.init(IdxY,IstrideY,Idy);
  filters.push_back(&luma);luma.init(IdxY,IstrideY,Idy);
  filters.push_back(&chroma);chroma.init(IdxY,IstrideY,Idy);
@@ -98,14 +96,14 @@ void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSou
     if (ppmode)
      {
       unsigned char *tempPict1[3]={
-                                  tempY->getTempCur(),//+diffY,
-                                  tempU->getTempCur(),//+diffUV,
-                                  tempV->getTempCur(),//+diffUV
+                                  tempY->getTempCur()+diffY,
+                                  tempU->getTempCur()+diffUV,
+                                  tempV->getTempCur()+diffUV
                                  },
                    *tempPict2[3]={
-                                  tempY->getTempNext(),//+diffY,
-                                  tempU->getTempNext(),//+diffUV,
-                                  tempV->getTempNext(),//+diffUV
+                                  tempY->getTempNext()+diffY,
+                                  tempU->getTempNext()+diffUV,
+                                  tempV->getTempNext()+diffUV
                                  };
       if (movie->quant && cfg->deblockStrength!=TpresetSettings::deblockStrengthDef || afterResize)
        {

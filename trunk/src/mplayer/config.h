@@ -92,7 +92,7 @@
 /* memalign is mapped to malloc if unsupported */
 #undef HAVE_MEMALIGN
 #ifndef HAVE_MEMALIGN
-# define memalign(a,b) xvid_malloc(b,a)
+# define memalign(a,b) xvid_malloc(b,a*8)
 #endif
 
 /* Define this if your system has the "alloca.h" header file */

@@ -31,7 +31,6 @@ void modifyPPmode(PPMode *pp,Tconfig *cfg)
 
 void Tpostproc::init(void)
 {
- //cfg->ppsetting=1;
  postproc_dll=new Tdll("C:\\mydocuments\\ffdshow\\src\\mplayer\\libpostproc.dll");
  postproc_dll->loadFunction((void**)&init_mplayer,"init_mplayer");
  postproc_dll->loadFunction((void**)&postprocess,"postprocess");

@@ -2675,6 +2675,16 @@ static void RENAME(postProcess)(uint8_t src[], int srcStride, uint8_t dst[], int
 		tempSrcBlock= (uint8_t*)memalign(8, 1024*24);
 	}
 
+	{
+         static int oldWidth=0;
+         if (width!=oldWidth)
+          {
+           oldWidth=width;
+           memset(tempDst,0,1024*24);
+           memset(tempDstBlock,0,1024*24); 
+          }
+        }
+
 	if(tempBlured[isColor]==NULL && (mode & TEMP_NOISE_FILTER))
 	{
 //		printf("%d %d %d\n", isColor, dstStride, height);

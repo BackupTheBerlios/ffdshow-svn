@@ -71,6 +71,8 @@ int TmovieSourceUncompressed::getFrame(const TglobalSettings *global,const Tpres
                                    -avpict.linesize[0],-avpict.linesize[1],avctx->width*3);
  */                                     
  got_picture=24; 
+ for (int i=0;i<quantDx*quantDy;i++)
+  quant[i]=10;
  return srcLen;
 }
 void TmovieSourceUncompressed::getVersion(char **vers)

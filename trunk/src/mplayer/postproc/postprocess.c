@@ -877,7 +877,6 @@ void  postprocess(unsigned char * src[], int src_stride,
 	    return;
 	}
 #endif
-
 	postProcess(src[0], src_stride, dst[0], dst_stride,
 		horizontal_size, vertical_size, QP_store, QP_stride, 0, &ppMode);
 

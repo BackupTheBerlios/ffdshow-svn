@@ -523,6 +523,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
   return VFW_E_TYPE_NOT_ACCEPTED;
  if (hdr->biHeight<0) DEBUGS("colorspace: inverted input format not supported");
 
+ //char pomS[5];memcpy(pomS,&hdr->biCompression,4);
  if (hdr->biCompression==0)
   switch (hdr->biBitCount)
    {
@@ -942,9 +943,9 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
       }
      DEBUGS("imgFilters->init before"); 
      if (presetSettings->resizeFirst)
-      imgFilters->init(resizeCtx->FFdx,resizeCtx->strideY,resizeCtx->FFdy,resizeCtx->diffX,resizeCtx->diffY,true);
+      imgFilters->init(resizeCtx->imgDx,resizeCtx->strideY,resizeCtx->imgDy,resizeCtx->FFdy,resizeCtx->diffX,resizeCtx->diffY,true);
      else
-      imgFilters->init(cropDx,avpict.linesize[0],cropDy,0,0,false);
+      imgFilters->init(cropDx,avpict.linesize[0],cropDy,cropDy,0,0,false);
      DEBUGS("imgFilters->init after"); 
      DEBUGS("initResize before");
      DEBUGS2("cropDx, cropDy",cropDx,cropDy);
@@ -956,7 +957,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
      DEBUGS("resizeCtx->clear after");
     }  
    else 
-    imgFilters->init(AVIdx,avpict.linesize[0],AVIdy,0,0,false);
+    imgFilters->init(AVIdx,avpict.linesize[0],AVIdy,AVIdy,0,0,false);
   };  
  IMAGE destPict;
  if ((resizeCtx->isResize || presetSettings->resizeAspect==2 || presetSettings->isCropNzoom) && imgFilters->postproc.ok)

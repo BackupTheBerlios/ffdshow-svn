@@ -89,6 +89,8 @@ int TmovieSourceXviD::getFrame(const TglobalSettings *global,const TpresetSettin
    got_picture=24;
    avpict->data[0]=(unsigned char*)xpict.y;avpict->data[1]=(unsigned char*)xpict.u;avpict->data[2]=(unsigned char*)xpict.v;
    avpict->linesize[0]=xpict.stride_y;avpict->linesize[1]=xpict.stride_uv;avpict->linesize[2]=xpict.stride_uv;
+   for (int i=0;i<quantDx*quantDy;i++)
+    quant[i]=10;
    return srcLen;
   }
  else

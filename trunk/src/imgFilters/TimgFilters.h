@@ -26,7 +26,7 @@ private:
  int dxY ,diffY ,strideY;
  int dxUV,diffUV,strideUV;
  int dy;
- int _dx,_dy;
+ //int _dx,_dy;
  bool afterResize;
  TcpuUsage cpu;int cpus;
  TtempPicture *tempY,*tempU,*tempV;
@@ -43,7 +43,7 @@ private:
 public:
  TimgFilters(void);
  ~TimgFilters();
- void init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY,bool IafterResize);
+ void init(int IdxY,int IstrideY,int Idy,int dyFull,int IdiffX,int IdiffY,bool IafterResize);
  void done(void);
  void setSubtitle(subtitle *Isub);
  void process(TglobalSettings *global,TpresetSettings *cfg,TmovieSource *movie,

@@ -58,8 +58,8 @@ TmovieSource::~TmovieSource()
 }
 void TmovieSource::initQuant(void)
 {
- quantDx=dx/8+1;
- quantDy=dy/8+1;
+ quantDx=128;
+ quantDy=96;
  quant=(int*)malloc(quantDx*quantDy*sizeof(int));
  for (int i=0;i<quantDx*quantDy;i++)
   quant[i]=10;
