@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
+// Microsoft Developer Studio generated include file.
 // Used by ffdshow.rc
 //
 #define VERSION_RES_MINOR_VER           0
@@ -104,6 +104,7 @@
 #define IDC_CHB_DLG_RESTOREPOS          1071
 #define IDC_LBL_FFDSHOWVERSION          1072
 #define IDC_CHB_PICTPROP                1072
+#define IDC_CHB_SHOWMV                  1074
 #define IDC_CHB_POSTPROC                1073
 #define IDC_CHB_AUTOPRESET_FILEFIRST    1080
 #define IDC_CHB_RESIZE                  1083

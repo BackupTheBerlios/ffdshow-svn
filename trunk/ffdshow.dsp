@@ -125,6 +125,10 @@ SOURCE=.\src\helpNoise.txt
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\helpOffset.txt
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\helpPictprop.txt
 # End Source File
 # Begin Source File
@@ -227,7 +231,7 @@ SOURCE=.\src\ffdshow_dshowreg.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\ffdshow_params.h
+SOURCE=.\src\ffdshow_mediaguids.h
 # End Source File
 # Begin Source File
 
@@ -704,6 +708,14 @@ SOURCE=.\src\imgFilters\TimgFilterNoise.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\imgFilters\TimgFilterOffset.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\TimgFilterOffset.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\imgFilters\TimgFilters.cpp
 # End Source File
 # Begin Source File
@@ -804,6 +816,14 @@ SOURCE=.\src\dialog\Cnoise.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\dialog\Coffset.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Coffset.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\dialog\CpictProp.cpp
 # End Source File
 # Begin Source File
@@ -878,6 +898,10 @@ SOURCE=.\src\dialog\TffdshowPage.h
 # Begin Group "settings"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\ffdshow_params.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\src\settings\presets_template.h

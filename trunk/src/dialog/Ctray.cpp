@@ -34,6 +34,7 @@ void TdlgMiscPage::cfg2dlg(void)
 {
  setCheck(IDC_CHB_TRAYICON,cfgGet(IDFF_trayIcon));
  setCheck(IDC_CHB_DLG_RESTOREPOS,cfgGet(IDFF_dlgRestorePos));
+ setCheck(IDC_CHB_SHOWMV,cfgGet(IDFF_showMV));
 }
 
 HRESULT TdlgMiscPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -48,6 +49,9 @@ HRESULT TdlgMiscPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        return TRUE;
       case IDC_CHB_DLG_RESTOREPOS:
        cfgSet(IDFF_dlgRestorePos,getCheck(IDC_CHB_DLG_RESTOREPOS));
+       return TRUE;
+      case IDC_CHB_SHOWMV:
+       cfgSet(IDFF_showMV,getCheck(IDC_CHB_SHOWMV));
        return TRUE;
      }
     break; 

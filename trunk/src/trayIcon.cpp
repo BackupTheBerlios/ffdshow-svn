@@ -113,6 +113,8 @@ HMENU TtrayIcon::createMenu(void)
 
  insertMenuItem(hm,ord,IDC_CHB_CROP,"Crop",IDFF_isCropNzoom);
  insertMenuItem(hm,ord,IDC_CHB_FLIP,"Flip",IDFF_flip);
+ insertSeparator(hm,ord);
+ insertMenuItem(hm,ord,IDC_CHB_SHOWMV,"Show motion vectors",IDFF_showMV);
  return hm;
 }
 
@@ -177,6 +179,9 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
            case IDC_CHB_OFFSET:
             ti->negate_Param(IDFF_isOffset);
             break; 
+           case IDC_CHB_SHOWMV:
+            ti->negate_Param(IDFF_showMV);
+            break;
           }
         DestroyMenu(hm);
        }; 

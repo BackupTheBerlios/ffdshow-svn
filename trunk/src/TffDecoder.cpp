@@ -90,8 +90,8 @@ STDMETHODIMP TffDecoder::getParam(unsigned int paramID, int* value)
  int val; 
  switch (paramID)
   {
-   #undef PARAM
-   #define PARAM PARAM_GET
+   #undef _PARAM_OP
+   #define _PARAM_OP PARAM_GET
    #include "ffdshow_params.h"
    default:*value=0;return S_FALSE;
   }
@@ -103,8 +103,8 @@ STDMETHODIMP TffDecoder::getParam2(unsigned int paramID)
  int val; 
  switch (paramID)
   {
-   #undef PARAM
-   #define PARAM PARAM_GET
+   #undef _PARAM_OP
+   #define _PARAM_OP PARAM_GET
    #include "ffdshow_params.h"
    default:val=0;break;
   }
@@ -114,8 +114,8 @@ STDMETHODIMP TffDecoder::putParam(unsigned int paramID, int  val)
 {
  switch (paramID)
   {
-   #undef PARAM
-   #define PARAM PARAM_SET
+   #undef _PARAM_OP
+   #define _PARAM_OP PARAM_SET
    #include "ffdshow_params.h"
    default:return S_FALSE;
   }
@@ -841,6 +841,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    firstFrame=false;
    if (AVIname[0]=='\0') loadAVInameAndPreset();
   }
+ avctx->showMV=globalSettings.showMV;
  int ret=libavcodec.avcodec_decode_video(avctx,&avpict,&got_picture,(UINT8*)m_frame.bitstream,m_frame.length);
  //char pomS[256];sprintf(pomS,"framelen:%i ret:%i gotpicture:%i\n",m_frame.length,ret,got_picture);OutputDebugString(pomS);
  if (pIn->IsPreroll()==S_OK) 
@@ -850,15 +851,15 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   };
  if (m_frame.length==0 && ret<0) return S_OK;
  if (ret<0 || !got_picture) 
-#ifdef FF__MPEG
+//#ifdef FF__MPEG
   if (!avpict.data[0]) return S_FALSE;
   else
-#endif 
-  {
-   memset(avpict.data[0],  0,avpict.linesize[0]*AVIdy  );
-   memset(avpict.data[1],128,avpict.linesize[1]*AVIdy/2);
-   memset(avpict.data[2],128,avpict.linesize[2]*AVIdy/2);
-  }
+//#endif 
+   {
+    memset(avpict.data[0],  0,avpict.linesize[0]*AVIdy  );
+    memset(avpict.data[1],128,avpict.linesize[1]*AVIdy/2);
+    memset(avpict.data[2],128,avpict.linesize[2]*AVIdy/2);
+   }
  //else DEBUGS("got image"); 
  
  #ifdef FF__MPEG 

@@ -8,6 +8,7 @@ struct TglobalSettings
  int xvid,div3,divx,dx50,mp43,mp42,mp41,h263;
  int TglobalSettings::codecSupported(const DWORD fourCC,char *AVIfourCC);
  char defaultPreset[260];
+ int showMV;
  TglobalSettings(void) {load();};
  void load(void),save(void);
 };

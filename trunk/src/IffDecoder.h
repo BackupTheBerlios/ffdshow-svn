@@ -18,6 +18,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_dlgPosX              10
 #define IDFF_dlgPosY              11
 #define IDFF_lvWidth0             12
+#define IDFF_showMV                8
 #define IDFF_trayIcon              3  //is tray icon visible
 #define IDFF_isDlg                 4  //is configuration dialog visible
 #define IDFF_autoPresetFileFirst   5  //try to load preset from file 
