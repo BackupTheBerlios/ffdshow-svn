@@ -10,7 +10,7 @@ class TconfPage
  protected:
   TffdshowPage *parent;
   IffDecoder *deci;
-  void createWindow(int dialogId);
+  void createWindow(int IdialogId);
   int cfgGet(unsigned int i),cfgSet(unsigned int i,int val),cfgInv(unsigned int i);
   void loadPreset(void);
   void enableWindow(int id,int enable);
@@ -21,6 +21,7 @@ class TconfPage
   virtual ~TconfPage();
   
   HWND m_hwnd,hwndParent;
+  int dialogId;
   virtual void createConfig(void)=0;
   virtual void cfg2dlg(void)=0;
   virtual void interDlg(void) {};

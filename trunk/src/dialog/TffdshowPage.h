@@ -20,6 +20,7 @@ class TffdshowPage : public CBasePropertyPage
   TconfPage  *page;
   void selectPage(int i),selectPage(TconfPage *Ipage);
   std::vector<TconfPage*> *pages;
+  TconfPage* hti2page(HTREEITEM hti);
  public: 
   static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT * phr);
   TffdshowPage(LPUNKNOWN pUnk, HRESULT * phr);

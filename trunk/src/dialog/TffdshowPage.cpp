@@ -87,6 +87,14 @@ HTREEITEM TffdshowPage::addTI(TVINSERTSTRUCT &tvis,TconfPage *page,const char *n
  HTREEITEM hti=TreeView_InsertItem(htv,&tvis);
  return hti;
 }
+TconfPage* TffdshowPage::hti2page(HTREEITEM hti)
+{
+ TVITEM tvi;
+ tvi.hItem=hti;
+ tvi.mask=TVIF_PARAM;
+ TreeView_GetItem(htv,&tvi);
+ return (TconfPage*)tvi.lParam;
+}
 HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
 {
  CBasePropertyPage::Activate(hwndParent,prect,fModal);
@@ -130,6 +138,16 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  TreeView_SetIndent(htv,24);
  TreeView_SetItemHeight(htv,16);
  TreeView_Expand(htv,pagePresets,TVE_EXPAND);
+ int lastPage=deci->get_Param2(IDFF_lastPage);
+ for (HTREEITEM hti=TreeView_GetRoot(htv);hti;hti=TreeView_GetNextVisible(htv,hti))
+  {
+   TconfPage *page=hti2page(hti);
+   if (page->dialogId==lastPage)
+    {
+     TreeView_SelectItem(htv,hti);
+     break;
+    }
+  }
  deci->put_Param(IDFF_isDlg,1);
  m_bDirty=true;
  return NOERROR;
@@ -197,7 +215,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           NMTREEVIEW *nmtv=LPNMTREEVIEW(lParam);
           TconfPage *page=(TconfPage*)nmtv->itemNew.lParam;
           selectPage(page);
-          //deci->put_Param(IDFF_lastPage,i);
+          deci->put_Param(IDFF_lastPage,page->dialogId);
           return TRUE;
          }
         case TVN_ITEMEXPANDING:
@@ -241,11 +259,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           RECT r;
           TreeView_GetItemRect(htv,hti,&r,FALSE);
           if (ps.x<8 || ps.x>16+8) return FALSE;
-          TVITEM tvi;
-          tvi.hItem=hti;
-          tvi.mask=TVIF_PARAM;
-          TreeView_GetItem(htv,&tvi);
-          TconfPage *page=(TconfPage*)tvi.lParam;
+          TconfPage *page=hti2page(hti);
           page->invInter();
           InvalidateRect(htv,&r,FALSE);
           return FALSE;

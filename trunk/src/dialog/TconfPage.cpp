@@ -45,8 +45,9 @@ static INT_PTR CALLBACK dlgWndProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lPar
   }
 }
 
-void TconfPage::createWindow(int dialogId)
+void TconfPage::createWindow(int IdialogId)
 {
+ dialogId=IdialogId;
  HINSTANCE hi=(HINSTANCE)GetWindowLong(hwndParent,GWL_HINSTANCE);
  m_hwnd=CreateDialogParam(hi,MAKEINTRESOURCE(dialogId),hwndParent,dlgWndProc,LPARAM(this));
  assert(m_hwnd);
