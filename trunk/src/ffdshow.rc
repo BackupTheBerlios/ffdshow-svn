@@ -222,10 +222,10 @@ BEGIN
     GROUPBOX        "Info",IDC_STATIC,0,0,253,55
     CONTROL         "Now playing",IDC_LBL_NOW_PLAYING,"Static",
                     SS_LEFTNOWORDWRAP | SS_NOPREFIX | SS_PATHELLIPSIS | 
-                    WS_GROUP,5,10,182,8
+                    WS_GROUP,5,10,239,8
     LTEXT           "Codec",IDC_LBL_NOW_CODEC,6,20,179,8
     LTEXT           "Dimensions:",IDC_LBL_NOW_DIMENSIONS,5,31,109,8
-    LTEXT           "FPS:",IDC_LBL_NOW_FPS,125,31,96,8
+    LTEXT           "FPS:",IDC_LBL_NOW_FPS,125,31,116,8
     EDITTEXT        IDC_ED_HELP,0,56,253,108,ES_MULTILINE | ES_READONLY | 
                     NOT WS_BORDER | WS_VSCROLL
     LTEXT           "Decoder FPS:",IDC_LBL_NOW_DECODERFPS,96,41,72,8

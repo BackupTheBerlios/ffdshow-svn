@@ -6,8 +6,7 @@
 class TimgFilterCrop :public TimgFilter
 {
 private:
- unsigned int cropLeft,cropTop,cropDx,cropDy;
- TffRect oldRect;
+ int cropLeft,cropTop,cropDx,cropDy;
  void calcCrop(const Trect *r,const TpresetSettings *cfg);
 public:
  TimgFilterCrop(void);

@@ -23,7 +23,7 @@
 #include "Tpostproc.h"
 #include "mplayer\libmpcodecs\img_format.h"
 
-const TpresetSettings::resizeMethodNone=6;
+const TpresetSettings::resizeMethodNone=7;
 
 TimgFilterResize::TimgFilterResize(void)
 {

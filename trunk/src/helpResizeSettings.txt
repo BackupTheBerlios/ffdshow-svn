@@ -5,6 +5,7 @@ Resize algorithms:
   Experimental - similar to bicubic, but with different coefficients
   Point - fastest, ugliest
   Area - 
+  Bicublin - luminance bicubic, chroma bilinear
   None - just adds black borders or crops the image
 Gaussian blur - during resizing, image can be slightly blurred - independend on blur filter
 Sharpen - sharpens image during resizing, independend on sharpening filters

@@ -25,7 +25,7 @@ protected:
      r->calcDiff(rect->stride);
      oldRect=*rect;oldFull=full;
     }
-   return (oldFull==1)?&oldRect.full:&oldRect.clip;
+   return (oldFull==1)?&rect->full:&rect->clip;
   }
 public:
  TimgFilter(void) {deci=NULL;oldFull=-1;}

@@ -119,7 +119,9 @@ HRESULT TresizeAspectPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       case IDC_ED_RESIZEDY:
        if (HIWORD(wParam)==EN_CHANGE) 
         {
-         InvalidateRect(GetDlgItem(m_hwnd,LOWORD(wParam)),NULL,TRUE);
+         HWND hed=GetDlgItem(m_hwnd,LOWORD(wParam));
+         if (hed!=GetFocus()) return FALSE;
+         InvalidateRect(hed,NULL,TRUE);
          applyResizeXY(false);
          return TRUE;  
         }

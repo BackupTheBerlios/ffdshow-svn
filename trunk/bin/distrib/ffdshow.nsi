@@ -33,7 +33,9 @@ DirText "Choose a directory to install in to:"
 
 Function .onInit
   ReadRegDWORD $0 HKLM SOFTWARE\GNU\ffdshow "xvid"
+  IfErrors xvidMore
   IntCmp $0 0 xvidEqual xvidLess 
+ xvidMore:
   SectionSetFlags 4 0x80000000
   Goto xvidEnd
  xvidEqual:
@@ -42,7 +44,9 @@ Function .onInit
  xvidEnd:
 
   ReadRegDWORD $0 HKLM SOFTWARE\GNU\ffdshow "div3"
+  IfErrors div3More
   IntCmp $0 0 div3Equal div3Less 
+ div3More:
   SectionSetFlags 5 0x80000000
   Goto div3End
  div3Equal:
@@ -51,7 +55,9 @@ Function .onInit
  div3End:
 
   ReadRegDWORD $0 HKLM SOFTWARE\GNU\ffdshow "divx"
+  IfErrors divxMore
   IntCmp $0 0 divxEqual divxLess 
+ divxMore:
   SectionSetFlags 6 0x80000000
   Goto divxEnd
  divxEqual:
@@ -60,7 +66,9 @@ Function .onInit
  divxEnd:
 
   ReadRegDWORD $0 HKLM SOFTWARE\GNU\ffdshow "dx50"
+  IfErrors dx50More
   IntCmp $0 0 dx50Equal dx50Less 
+ dx50More:
   SectionSetFlags 7 0x80000000
   Goto dx50End
  dx50Equal:
@@ -94,6 +102,8 @@ Function .onInit
  mp41Less:
   SectionSetFlags 10 0
  mp41End:
+
+
 
 FunctionEnd
 

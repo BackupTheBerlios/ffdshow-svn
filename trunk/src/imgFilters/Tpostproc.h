@@ -30,14 +30,14 @@ public:
                      QP_STORE_T *QP_store,  int QP_stride, int mode);
  SwsContext* (*getSwsContextFromCmdLine)(int srcW,int srcH,int srcFormat,int dstW,int dstH,int dstFormat,int sws_flags,int Isws_lum_gblur,int Isws_chr_gblur,int Isws_lum_sharpen,int Isws_chr_sharpen);
  void (*freeSwsContext)(SwsContext *swsContext);
+ /*
  void (*yuy2toyv12)(const uint8_t *src, uint8_t *ydst, uint8_t *udst, uint8_t *vdst,
                     unsigned int width, unsigned int height,
                     unsigned int lumStride, unsigned int chromStride, unsigned int srcStride);
  void (*rgb24toyv12)(const uint8_t *src, uint8_t *ydst, uint8_t *udst, uint8_t *vdst,
                      unsigned int width, unsigned int height,
                      unsigned int lumStride, unsigned int chromStride, unsigned int srcStride);
-private:
- void (*setModifyPPmode)(void (*mofidyPPmodeFnc)(PPMode *ppFnc,Tconfig *cfg),const Tconfig *cfg);
+ */
 };
 
 #endif

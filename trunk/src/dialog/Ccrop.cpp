@@ -118,7 +118,9 @@ HRESULT TcropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       case IDC_ED_CROP_BOTTOM:
        if (HIWORD(wParam)==EN_CHANGE) 
         {
-         InvalidateRect(GetDlgItem(m_hwnd,LOWORD(wParam)),NULL,TRUE);
+         HWND hed=GetDlgItem(m_hwnd,LOWORD(wParam));
+         if (hed!=GetFocus()) return FALSE;
+         InvalidateRect(hed,NULL,TRUE);
          BOOL ok;
          if (cropOK(GetDlgItem(m_hwnd,IDC_ED_CROP_LEFT  ))) cfgSet(IDFF_cropLeft  ,GetDlgItemInt(m_hwnd,IDC_ED_CROP_LEFT  ,&ok,FALSE));
          if (cropOK(GetDlgItem(m_hwnd,IDC_ED_CROP_RIGHT ))) cfgSet(IDFF_cropRight ,GetDlgItemInt(m_hwnd,IDC_ED_CROP_RIGHT ,&ok,FALSE));

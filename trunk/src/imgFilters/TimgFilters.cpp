@@ -61,7 +61,7 @@ TimgFilters::~TimgFilters()
 }
 void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *cfg,TffPict *pict,TffRect &rect)
 {
- crop->process(pict,rect,cfg);
+ if (cfg->isCropNzoom) crop->process(pict,rect,cfg);
  for (int i=cfg->min_order;i<=cfg->max_order;i++)
   if (i==cfg->orderPostproc && cfg->isPostproc)
    postproc->process(pict,rect,cfg);

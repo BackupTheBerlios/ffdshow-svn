@@ -102,7 +102,7 @@ private:
  int cfgDlgHnwd;
  char AVIname[1024],AVIfourcc[10];
  int loadAVInameAndPreset(void);
- void onSubsChanged(void),onCropChanged(void),onTrayIconChanged(void),onFilterOnOff(void);
+ void onSubsChanged(void),onCropChanged(void),onTrayIconChanged(void);
  HRESULT ChangeColorspace(GUID subtype,GUID formattype,void * format);
  HWND onChangeWnd;unsigned int onChangeMsg;
  HWND onInfoWnd;unsigned int onInfoMsg1,onInfoMsg2;

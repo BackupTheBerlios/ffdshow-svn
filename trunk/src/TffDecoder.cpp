@@ -1,4 +1,3 @@
-#define FF__WMV1
 /*
  * Copyright (c) 2002 Milan Cutka
  * based on CXvidDecoder.cpp from XviD DirectShow filter
@@ -140,9 +139,6 @@ void TffDecoder::onTrayIconChanged(void)
 {
  if (!tray) return;
  if (globalSettings.trayIcon) tray->show(); else tray->hide();
-}
-void TffDecoder::onFilterOnOff(void)
-{
 }
 STDMETHODIMP TffDecoder::getNumPresets(unsigned int *value)
 {

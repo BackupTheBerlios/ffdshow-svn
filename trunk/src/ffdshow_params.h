@@ -44,7 +44,7 @@ _PARAM_OP(IDFF_isShowMV           ,globalSettings.,isShowMV           ,0,0,NULL)
 //preset settings
 _PARAM_OP(IDFF_autoLoadedFromFile ,presetSettings->,autoLoadedFromFile ,0,0,NULL)
 
-_PARAM_OP(IDFF_isPostproc         ,presetSettings->,isPostproc         ,0,0,&TffDecoder::onFilterOnOff)
+_PARAM_OP(IDFF_isPostproc         ,presetSettings->,isPostproc         ,0,0,NULL)
 _PARAM_OP(IDFF_orderPostproc      ,presetSettings->,orderPostproc      ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)
 _PARAM_OP(IDFF_fullPostproc       ,presetSettings->,fullPostproc       ,0,0,NULL)
 _PARAM_OP(IDFF_ppqual             ,presetSettings->,ppqual             ,0,6,NULL)
@@ -56,7 +56,7 @@ _PARAM_OP(IDFF_deblockStrength    ,presetSettings->,deblockStrength    ,0,512,NU
 _PARAM_OP(IDFF_levelFixLum        ,presetSettings->,levelFixLum        ,0,0,NULL)
 _PARAM_OP(IDFF_levelFixChrom      ,presetSettings->,levelFixChrom      ,0,0,NULL)
 
-_PARAM_OP(IDFF_isPictProp         ,presetSettings->,isPictProp         ,0,0,&TffDecoder::onFilterOnOff)
+_PARAM_OP(IDFF_isPictProp         ,presetSettings->,isPictProp         ,0,0,NULL)
 _PARAM_OP(IDFF_orderPictProp      ,presetSettings->,orderPictProp      ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)
 _PARAM_OP(IDFF_fullPictProp       ,presetSettings->,fullPictProp       ,0,0,NULL)
 _PARAM_OP(IDFF_lumGain            ,presetSettings->,lumGain            ,0,256,NULL)
@@ -72,13 +72,13 @@ _PARAM_OP(IDFF_saturationDef      ,TpresetSettings::,saturationDef     ,-1,-1,NU
                                                         
 _PARAM_OP(IDFF_flip               ,presetSettings->,flip               ,0,0,NULL)
 
-_PARAM_OP(IDFF_isBlur             ,presetSettings->,isBlur             ,0,0,&TffDecoder::onFilterOnOff)
+_PARAM_OP(IDFF_isBlur             ,presetSettings->,isBlur             ,0,0,NULL)
 _PARAM_OP(IDFF_orderBlur          ,presetSettings->,orderBlur          ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)
 _PARAM_OP(IDFF_fullBlur           ,presetSettings->,fullBlur           ,0,0,NULL)
 _PARAM_OP(IDFF_blurStrength       ,presetSettings->,blurStrength       ,0,255,NULL)
 _PARAM_OP(IDFF_tempSmooth         ,presetSettings->,tempSmooth         ,0,10,NULL)
 
-_PARAM_OP(IDFF_isSharpen          ,presetSettings->,isSharpen          ,0,0,&TffDecoder::onFilterOnOff)
+_PARAM_OP(IDFF_isSharpen          ,presetSettings->,isSharpen          ,0,0,NULL)
 _PARAM_OP(IDFF_orderSharpen       ,presetSettings->,orderSharpen       ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)
 _PARAM_OP(IDFF_fullSharpen        ,presetSettings->,fullSharpen        ,0,0,NULL)
 _PARAM_OP(IDFF_sharpenMethod      ,presetSettings->,sharpenMethod      ,0,1,NULL)
@@ -87,7 +87,7 @@ _PARAM_OP(IDFF_xsharp_threshold   ,presetSettings->,xsharp_threshold   ,0,255,NU
 _PARAM_OP(IDFF_unsharp_strength   ,presetSettings->,unsharp_strength   ,1,127,NULL)
 _PARAM_OP(IDFF_unsharp_threshold  ,presetSettings->,unsharp_threshold  ,0,255,NULL)
                                                 
-_PARAM_OP(IDFF_isNoise            ,presetSettings->,isNoise            ,0,0,&TffDecoder::onFilterOnOff)
+_PARAM_OP(IDFF_isNoise            ,presetSettings->,isNoise            ,0,0,NULL)
 _PARAM_OP(IDFF_orderNoise         ,presetSettings->,orderNoise         ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)
 _PARAM_OP(IDFF_fullNoise          ,presetSettings->,fullNoise          ,0,0,NULL)
 _PARAM_OP(IDFF_noiseMethod        ,presetSettings->,noiseMethod        ,0,1,NULL)
@@ -103,7 +103,7 @@ _PARAM_OP(IDFF_fullResize         ,presetSettings->,fullResize         ,0,0,NULL
 _PARAM_OP(IDFF_resizeDx           ,presetSettings->,resizeDx           ,16,2048,NULL)
 _PARAM_OP(IDFF_resizeDy           ,presetSettings->,resizeDy           ,16,2048,NULL)
 _PARAM_OP(IDFF_resizeAspect       ,presetSettings->,resizeAspect       ,0,0,NULL)
-_PARAM_OP(IDFF_resizeMethod       ,presetSettings->,resizeMethod       ,0,6,NULL)
+_PARAM_OP(IDFF_resizeMethod       ,presetSettings->,resizeMethod       ,0,TpresetSettings::resizeMethodNone,NULL)
 _PARAM_OP(IDFF_aspectRatio        ,presetSettings->,aspectRatio        ,0,0,NULL)
 _PARAM_OP(IDFF_resizeGblurLum     ,presetSettings->,resizeGblurLum     ,0,200,NULL)
 _PARAM_OP(IDFF_resizeGblurChrom   ,presetSettings->,resizeGblurChrom   ,0,200,NULL)
@@ -139,7 +139,7 @@ _PARAM_OP(IDFF_subSpeed           ,presetSettings->,subSpeed           ,0,0,&Tff
 _PARAM_OP(IDFF_subAutoFlnm        ,presetSettings->,subAutoFlnm        ,0,0,NULL)
 _PARAM_OP(IDFF_fontChanged,       ,this->          ,fontChanged        ,0,0,NULL)
 
-_PARAM_OP(IDFF_isOffset           ,presetSettings->,isOffset           ,0,0,&TffDecoder::onFilterOnOff);
+_PARAM_OP(IDFF_isOffset           ,presetSettings->,isOffset           ,0,0,NULL);
 _PARAM_OP(IDFF_orderOffset        ,presetSettings->,orderOffset        ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)
 _PARAM_OP(IDFF_fullOffset         ,presetSettings->,fullOffset         ,0,0,NULL)
 _PARAM_OP(IDFF_offsetY_X          ,presetSettings->,offsetY_X          ,-32,32,NULL);
