@@ -18,11 +18,11 @@
  */
 
 #include "TimgFilterLuma.h"
-#include "..\Tconfig.h"
+#include "TpresetSettings.h"
 #include <math.h>
 
 __declspec(align(8)) static const __int64 m64 =0x0040004000400040;
-const int Tconfig::lumGainDef=128,Tconfig::lumOffsetDef=0,Tconfig::gammaCorrectionDef=100;
+const int TpresetSettings::lumGainDef=128,TpresetSettings::lumOffsetDef=0,TpresetSettings::gammaCorrectionDef=100;
 
 TimgFilterLuma::TimgFilterLuma(void)
 {
@@ -31,7 +31,7 @@ TimgFilterLuma::TimgFilterLuma(void)
 
 void TimgFilterLuma::process(unsigned char *srcY,unsigned char *,unsigned char *,
                              unsigned char *dstY,unsigned char *,unsigned char *,
-                             Tconfig *cfg)
+                             TpresetSettings *cfg)
 {
  __declspec(align(8)) static __int64 lumGainMask;
  lumGainMask=((__int64)cfg->lumGain<<48) + ((__int64)cfg->lumGain<<32) + ((__int64)cfg->lumGain<<16) + (__int64)cfg->lumGain;

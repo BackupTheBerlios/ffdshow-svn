@@ -164,15 +164,13 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
 STDMETHODIMP TffdshowPage::Deactivate(void)
 {
  //cfg->save();
- int lastPage=deci->get_Param2(IDFF_lastPage);
  int beSaved;deci->get_Param(IDFF_presetShouldBeSaved,&beSaved);
  if (beSaved) deci->loadPreset(NULL);
- deci->put_Param(IDFF_lastPage,lastPage);
  //loadPreset();
  HRESULT res=CBasePropertyPage::Deactivate();
  for (vector<TconfPage*>::iterator i=pages->begin();i!=pages->end();i++)
   delete *i;
-
+ deci->saveDialogSettings();
  deci->put_Param(IDFF_isDlg,0);
  return res;
 }
@@ -182,6 +180,7 @@ HRESULT TffdshowPage::OnApplyChanges(void)
  applySettings();
  //deci->put_Param(IDFF_presetShouldBeSaved,1);
 // globalPage->savePreset();
+ deci->saveGlobalSettings();
  return CBasePropertyPage::OnApplyChanges();
 }
 

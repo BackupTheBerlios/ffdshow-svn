@@ -20,10 +20,10 @@
 #include "TimgFilterNoise.h" 
 #include <stdlib.h>
 #include "..\xvid\utils\mem_align.h"
-#include "..\Tconfig.h"
+#include "TpresetSettings.h"
 #include <time.h>
 
-const int Tconfig::noiseStrengthDef=15,Tconfig::noiseStrengthChromaDef=0;
+const int TpresetSettings::noiseStrengthDef=15,TpresetSettings::noiseStrengthChromaDef=0;
 
 __declspec(align(8)) static const __int64 m128=0x0080008000800080;
 __declspec(align(8)) static const __int64 m255=0x00ff00ff00ff00ff;
@@ -65,14 +65,14 @@ void TimgFilterNoise::done(void)
    noiseMaskV=NULL;
   } 
 }
-void TimgFilterNoise::noiseY(unsigned char *src,unsigned char *dst,Tconfig *cfg)
+void TimgFilterNoise::noiseY(unsigned char *src,unsigned char *dst,TpresetSettings *cfg)
 {
  noiseCountY++;
  if (noiseAvihStrenth) noiseCountY=0;
  noise0luma(src,dst,strideY,dxY,dyY,cfg->noiseStrength,cfg->uniformNoise,noiseMaskY,noiseCountY);
  noiseAvihStrenth=0;
 }
-void TimgFilterNoise::noiseUV(unsigned char *srcU,unsigned char *dstU,unsigned char *srcV,unsigned char *dstV,Tconfig *cfg)
+void TimgFilterNoise::noiseUV(unsigned char *srcU,unsigned char *dstU,unsigned char *srcV,unsigned char *dstV,TpresetSettings *cfg)
 {
  noiseCountU++;noiseCountV++;
  if (noiseAvihStrenthChroma) noiseCountU=noiseCountV=0;
@@ -95,7 +95,7 @@ void TimgFilterNoise::noise0chroma(unsigned char *src,unsigned char *dst,int str
  #include "noise_template.h"
 }
 
-void TimgFilterNoise::noiseAvihY(unsigned char *src,unsigned char *dst,Tconfig *cfg)
+void TimgFilterNoise::noiseAvihY(unsigned char *src,unsigned char *dst,TpresetSettings *cfg)
 {
  if (cfg->noiseStrength!=noiseAvihStrenth)
   {
@@ -111,7 +111,7 @@ void TimgFilterNoise::noiseAvihY(unsigned char *src,unsigned char *dst,Tconfig *
  #include "noise_avih_template.h"
  __asm {emms};
 }
-void TimgFilterNoise::noiseAvihUV(unsigned char *srcU,unsigned char *dstU,unsigned char *srcV,unsigned char *dstV,Tconfig *cfg)
+void TimgFilterNoise::noiseAvihUV(unsigned char *srcU,unsigned char *dstU,unsigned char *srcV,unsigned char *dstV,TpresetSettings *cfg)
 {
  if (cfg->noiseStrengthChroma!=noiseAvihStrenthChroma)
   {
@@ -144,7 +144,7 @@ void TimgFilterNoise::noiseAvihUV(unsigned char *srcU,unsigned char *dstU,unsign
 
 void TimgFilterNoise::process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
                               unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                              Tconfig *cfg)
+                              TpresetSettings *cfg)
 {
  if (srcY && dstY)
   {

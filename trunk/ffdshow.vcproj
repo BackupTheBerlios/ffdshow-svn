@@ -21,7 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="src;src\settings;src\dialog;src\imgFilters"
 				PreprocessorDefinitions="DEBUG,_DEBUG;WIN32;_WINDOWS;ARCH_X86"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -93,7 +93,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="src;src\settings;src\dialog;src\imgFilters"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ARCH_X86"
 				StringPooling="TRUE"
 				ExceptionHandling="TRUE"
@@ -234,7 +234,7 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AssemblerOutput="4"/>
+						AssemblerOutput="0"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -279,9 +279,6 @@
 			</File>
 			<File
 				RelativePath=".\src\xvid\utils\mem_align.h">
-			</File>
-			<File
-				RelativePath="src\presets_template.h">
 			</File>
 			<File
 				RelativePath=".\src\trayIcon.h">
@@ -687,6 +684,40 @@
 			</File>
 			<File
 				RelativePath="src\dialog\TffdshowPage.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="settings"
+			Filter="">
+			<File
+				RelativePath="src\settings\TdialogSettings.cpp">
+			</File>
+			<File
+				RelativePath="src\settings\TdialogSettings.h">
+			</File>
+			<File
+				RelativePath="src\settings\TglobalSettings.cpp">
+			</File>
+			<File
+				RelativePath="src\settings\TglobalSettings.h">
+			</File>
+			<File
+				RelativePath="src\settings\TpresetSettings.cpp">
+			</File>
+			<File
+				RelativePath="src\settings\TpresetSettings.h">
+			</File>
+			<File
+				RelativePath="src\settings\Tpresets.cpp">
+			</File>
+			<File
+				RelativePath="src\settings\Tpresets.h">
+			</File>
+			<File
+				RelativePath="src\settings\presets_template.h">
+			</File>
+			<File
+				RelativePath="src\settings\reg.h">
 			</File>
 		</Filter>
 	</Files>

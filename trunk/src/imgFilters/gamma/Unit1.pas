@@ -18,8 +18,9 @@ type
     procedure tbrChange(Sender: TObject);
   private
     exp:array[0..255] of extended;
-    fit:array[0..255] of integer;
-    procedure calc(g0: Real);
+    fit:array[0..255] of extended;
+    procedure calc1(g: Real);
+    procedure calc2(g: real);
     procedure draw;
     { Private declarations }
   public
@@ -33,19 +34,16 @@ implementation
 
 {$R *.DFM}
 
-procedure TForm1.calc(g0:Real);
+procedure TForm1.calc1(g:Real);
 var i:Integer;
     s0,s1,t0,s2,s3,s4,s5,s6,t1,t2,t3:extended;
     xx,yy:Extended;
     a11,a12,a13,a21,a22,a23:extended;
     c1,c2,c3:extended;
-    g:extended;
     c1i,c2i,c3i:integer;
     xxi,k:integer;
 begin
- lblGamma.Caption:=FloatToStr(g0);
-// g:=1/g;
- if g0<1 then g:=1/g0 else g:=g0;
+ lblGamma.Caption:=FloatToStr(g);
  for i:=0 to 255 do begin
    exp[i]:=Power(i/255.0,g);
   end;
@@ -72,36 +70,58 @@ begin
  c1:=-(a22*c2+a23)/a21;
  c3:=1-(c1+c2);
 
- c1i:=trunc(c1*256);
- c2i:=trunc(c2*256);
- c3i:=256-(c1i+c2i);
+ c1:=(t0-s2)/(s1-s2);
+ c2:=1-c1;c3:=0;
+ for i:=0 to 255 do begin
+   exp[i]:=255*Power(i/255.0,g);
+   xx:=i/255.0;
+   fit[i]:=round(255*(c3*xx*xx*xx+c2*xx*xx+c1*xx));
+  end;
 
- c1i:=c1i div 8;
- c2i:=c2i div 8;
- c3i:=c3i div 8;
+ lblA.Caption:='c3='+FloatToStr(c3);
+ lblB.Caption:='c2='+FloatToStr(c2);
+ lblC.Caption:='c1='+FloatToStr(c1);
+ draw;
+end;
 
- if g0>1 then
-  for i:=0 to 255 do begin
-    exp[i]:=255*Power(i/255.0,1/g);
-    xx:=1-i/255.0;
-    xxi:=255-i;
-//    fit[i]:=255*(1-(c3*xx*xx*xx+c2*xx*xx+c1*xx));
-    //fit[i]:=255-((c3i*(xxi div 16)*(xxi/16)*(xxi/16))/4096+(c2i*(xxi/16)*(xxi/16))/256+(c1i*(xxi/16))/16);
-   end
- else
-  for i:=0 to 255 do begin
-//    exp[i]:=255*Power(i/255.0,g);
-    fit[i]:=0;
-    k:=i;
-    inc(fit[i],(c1i*k) div 32);
-    k:=(k div 16)*i;
-    inc(fit[i],(c2i*k) div 512);
-    k:=(k div 64)*i;
-    inc(fit[i],(c3i*k) div 2048);
-   end;
- lblA.Caption:='c3='+FloatToStr(c3i);
- lblB.Caption:='c2='+FloatToStr(c2i);
- lblC.Caption:='c1='+FloatToStr(c1i);
+procedure TForm1.calc2(g: real);
+var i:integer;
+    a,a1,a2,b:real;
+    err0,err:real;
+    xx:real;
+begin
+ lblGamma.Caption:=FloatToStr(g);
+ for i:=0 to 255 do begin
+   exp[i]:=Power(i/255.0,g);
+  end;
+ a1:=-100;a2:=100;
+ err0:=0;
+ while (1=1) do begin
+   err:=0;
+   a:=(a1+a2)/2;
+   b:=1-a;
+   for i:=0 to 255 do begin
+     xx:=i/255.0;
+     fit[i]:=b*xx*xx+a*xx;
+     err:=err+(fit[i]-exp[i]);
+    end;
+   if Abs(abs(err)-abs(err0))<1e-34  then Break;
+   if err<0 then begin
+     a1:=a;
+    end
+   else begin
+     a2:=a;
+    end;
+   err0:=err; 
+  end;
+ b:=1-a;
+ for i:=0 to 255 do begin
+   exp[i]:=255*Power(i/255.0,g);
+   xx:=i/255.0;
+   fit[i]:=round(255*(b *xx*xx+a *xx));
+  end;
+ lblB.Caption:='c2='+FloatToStr(b);
+ lblC.Caption:='c1='+FloatToStr(a);
  draw;
 end;
 
@@ -117,12 +137,12 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
- calc(1);
+ calc1(1);
 end;
 
 procedure TForm1.tbrChange(Sender: TObject);
 begin
- calc(tbr.Position/10.0);
+ calc2(tbr.Position/10.0);
 end;
 
 end.

@@ -1,7 +1,7 @@
 #ifndef _IMGFILTER_H_
 #define _IMGFILTER_H_
 
-class Tconfig;
+struct TpresetSettings;
 class TimgFilter
 {
 protected:
@@ -21,7 +21,7 @@ public:
  virtual void done(void) {};
  virtual void process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
                       unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                      Tconfig *cfg)=0;
+                      TpresetSettings *cfg)=0;
 };
 
 #endif

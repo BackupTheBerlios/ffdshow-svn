@@ -13,7 +13,7 @@ public:
  TimgFilterLuma(void);
  virtual void process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
                       unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                      Tconfig *cfg);
+                      TpresetSettings *cfg);
 };
 
 #endif

@@ -1,16 +1,35 @@
 #ifndef _TPRESET_H_
 #define _TPRESET_H_
 
-struct Tpreset
+#define MIN_ORDER 1
+#define MAX_ORDER 6
+
+#define FFPRESET_EXT "ffpreset"
+
+struct TpresetSettings
 {
- char presetName[256];
+private:
+ static void normalizePresetName(char *dst,char *src)
+  {
+   char c;
+   do
+   {
+    c=*(src++);
+    if (c=='\\') c='/';
+    *(dst++)=c;
+   } while (c);
+  }
+public:
+ void loadReg(char *IpresetName),saveReg(void);
+ void loadFile(const char *flnm),saveFile(const char *flnm);
  int presetShouldBeSaved,autoloadedfromreg;
 
+ char presetName[1024];
  int isPostproc,orderPostproc;
  int ppqual;
  int autoq;int currentq;
  int ppIsCustom,ppcustom;
- int ppsetting;
+ //int ppsetting;
  int levelFixLum,levelFixChrom;
  void getPostProcDescription(char *buf);
   
@@ -41,7 +60,7 @@ struct Tpreset
  static const int noiseStrengthDef,noiseStrengthChromaDef;
  void getNoiseDescription(char *buf);
  
- int idct,idctChanged;
+ int idct;
  static const int idctDef;
  
  int isResize;

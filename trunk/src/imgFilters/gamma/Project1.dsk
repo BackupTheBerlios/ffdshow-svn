@@ -19,7 +19,7 @@ ModuleType=SourceModule
 FormState=1
 FormOnTop=0
 
-[C:\Program Files\Borland\Delphi5\Projects\ProjectGroup1.bpg]
+[C:\Program Files\Borland\Delphi6\Projects\ProjectGroup1.bpg]
 FormState=0
 FormOnTop=0
 
@@ -46,15 +46,15 @@ ClientWidth=783
 ClientHeight=520
 LeftPanelSize=0
 RightPanelSize=0
-BottomPanelSize=52
+BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400010000000B0000004D6573736167655669657700000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=C:\mydocuments\ffdshow\src\imgFilters\gamma\Unit1.pas
-CursorX=23
-CursorY=99
-TopLine=83
+CursorX=1
+CursorY=79
+TopLine=59
 LeftCol=1
 
 [Watches]
@@ -73,13 +73,13 @@ State=2
 Left=0
 Top=0
 Width=1024
-Height=133
+Height=102
 MaxLeft=-1
 MaxTop=-1
 MaxWidth=1032
-MaxHeight=118
+MaxHeight=102
 ClientWidth=1024
-ClientHeight=94
+ClientHeight=78
 
 [ProjectManager]
 Create=1
@@ -88,11 +88,11 @@ State=0
 Left=0
 Top=0
 Width=197
-Height=614
+Height=616
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=197
-ClientHeight=614
+ClientHeight=616
 TBDockHeight=303
 LRDockWidth=438
 Dockable=1
@@ -134,11 +134,11 @@ State=0
 Left=0
 Top=0
 Width=197
-Height=614
+Height=616
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=195
-ClientHeight=612
+ClientWidth=197
+ClientHeight=616
 TBDockHeight=494
 LRDockWidth=190
 Dockable=1
@@ -146,8 +146,7 @@ SplitPos=85
 ArrangeBy=Name
 SelectedItem=Caption
 ExpandedItems=
-HiddenCategories=Locale,Advanced,"File Access",Locale,Legacy
-ShowStatusBar=1
+HiddenCategories=Locale,Legacy
 
 [WatchWindow]
 Create=1
@@ -243,6 +242,22 @@ Column1Width=100
 Column2Width=155
 EntryPointPane=225
 CompUnitPane=104
+
+[ObjectTree]
+Create=1
+Visible=0
+State=0
+Left=0
+Top=0
+Width=189
+Height=367
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=181
+ClientHeight=343
+TBDockHeight=266
+LRDockWidth=190
+Dockable=1
 
 [DebugLogView]
 Create=1
@@ -371,18 +386,18 @@ State=0
 Left=0
 Top=0
 Width=197
-Height=614
+Height=616
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=197
-ClientHeight=614
+ClientHeight=616
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=1
+Visible=0
 State=0
 Left=12
 Top=0

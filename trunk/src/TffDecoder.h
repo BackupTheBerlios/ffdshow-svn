@@ -5,7 +5,11 @@
 #include <assert.h>
 #include "Tlibavcodec.h"
 #include "Tconfig.h"
-#include "imgFilters\TimgFilters.h"
+#include "TglobalSettings.h"
+#include "TdialogSettings.h"
+#include "TpresetSettings.h"
+#include "Tpresets.h"
+#include "TimgFilters.h"
 
 class TtrayIcon;
 class TresizeCtx;
@@ -72,11 +76,19 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP getRealCrop(unsigned int *left,unsigned int *top,unsigned int *right,unsigned int *bottom);
   STDMETHODIMP getMinOrder2(void);
   STDMETHODIMP getMaxOrder2(void);
+  STDMETHODIMP saveGlobalSettings(void);
+  STDMETHODIMP loadGlobalSettings(void);
+  STDMETHODIMP saveDialogSettings(void);
+  STDMETHODIMP loadDialogSettings(void);
  
  private:
   bool firstFrame;
   TtrayIcon *tray;
-  Tconfig cfg;
+  TpresetSettings presetSettings;
+  TglobalSettings globalSettings;
+  TdialogSettings dialogSettings;
+  Tpresets presets;
+  int inPlayer,isDlg;
   char AVIname[1024],AVIfourcc[10];
   void loadAVInameAndPreset(void);
   int* getIDFFvar(int paramID);
@@ -89,6 +101,12 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
      min=Imin;max=Imax;
      onNotify=IonNotify;
     }
+   Tparam(const int *Ival)
+    {
+     val=(int*)Ival;
+     min=max=-1;
+     onNotify=NULL;
+    }
    int *val;
    int min,max;
    void (TffDecoder::*onNotify)(void);
@@ -96,7 +114,8 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   #define MAX_PARAMID 1100
   Tparam params[MAX_PARAMID];
   void fillParams(void);
-  void subsChanged(void),resizeChanged(void),trayIconChanged(void),idctChanged(void);
+  void subsChanged(void),resizeChanged(void),trayIconChanged(void);
+  int idctOld;
   Tlibavcodec libavcodec;
   HRESULT ChangeColorspace(GUID subtype, GUID formattype, void * format);
   
@@ -117,9 +136,8 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   int cropLeft,cropTop,cropDx,cropDy;
   void calcCrop(void);
   TimgFilters *imgFilters;
-  Tsubtitles *sub;
+  Tsubtitles *subs;
   char *codecName;
-
 };
 
 #endif 

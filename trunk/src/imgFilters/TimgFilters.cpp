@@ -24,12 +24,13 @@ extern "C"
 }
 #include "TimgFilters.h"
 #include "..\Tconfig.h"
-#include "..\ffdebug.h"
+#include "TpresetSettings.h"
+#include "ffdebug.h"
 
-TimgFilters::TimgFilters(Tconfig *Icfg):cfg(Icfg)
+TimgFilters::TimgFilters(TpresetSettings *Icfg):cfg(Icfg)
 {
  cpus=cpu.GetCPUCount();
- postproc.init(cfg);
+ postproc.init();
  tempY=tempU=tempV=NULL;
 }
 void TimgFilters::init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY)
@@ -62,6 +63,10 @@ TimgFilters::~TimgFilters()
 {
  done();
  postproc.done();
+}
+void TimgFilters::setSubtitle(subtitle *Isub)
+{
+ subtitles.sub=Isub;
 }
 void TimgFilters::process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV,int *quant_store)
 {
@@ -104,12 +109,12 @@ void TimgFilters::process(unsigned char *srcY,unsigned char *srcU,unsigned char 
    }
   else if (i==cfg->orderPictProp && cfg->isPictProp)
    {
-    if (cfg->lumGain!=Tconfig::lumGainDef || cfg->lumOffset!=Tconfig::lumOffsetDef || cfg->gammaCorrection!=Tconfig::gammaCorrectionDef)
+    if (cfg->lumGain!=TpresetSettings::lumGainDef || cfg->lumOffset!=TpresetSettings::lumOffsetDef || cfg->gammaCorrection!=TpresetSettings::gammaCorrectionDef)
      {
       unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
       luma.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
      };
-    if (cfg->hue!=Tconfig::hueDef || cfg->saturation!=Tconfig::saturationDef) 
+    if (cfg->hue!=TpresetSettings::hueDef || cfg->saturation!=TpresetSettings::saturationDef) 
      {
       unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV;
       unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
@@ -140,7 +145,7 @@ void TimgFilters::process(unsigned char *srcY,unsigned char *srcU,unsigned char 
       noise.process(NULL,srcU,srcV,NULL,dstU,dstV,cfg);
      } 
    } 
-  else if (i==cfg->orderSubtitles && cfg->isSubtitles && cfg->sub)
+  else if (i==cfg->orderSubtitles && cfg->isSubtitles && subtitles.sub)
    {
     unsigned char *srcY=tempY->getTempCur()+diffY ,*dstY=tempY->getTempNext()+diffY ;
     unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV;

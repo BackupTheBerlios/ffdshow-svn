@@ -23,7 +23,7 @@
 #include <commctrl.h>
 #include <string.h>
 #include <stdio.h>
-#include "..\Tconfig.h"
+//#include "..\Tconfig.h"
 #include "TffdshowPage.h"
 
 void TpictPropPage::createConfig(void)
@@ -64,7 +64,7 @@ int TpictPropPage::writeLumGain(int x)
 {
  char s[256];
  sprintf(s,"Luminance gain:  %i",x);
- if (x==Tconfig::lumGainDef) strcat(s," (off)");
+ if (x==cfgGet(IDFF_lumGainDef)) strcat(s," (off)");
  SendDlgItemMessage(m_hwnd,IDC_LBL_LUMGAIN,WM_SETTEXT,0,LPARAM(s));
  return x;
 }
@@ -72,7 +72,7 @@ int TpictPropPage::writeLumOffset(int x)
 {
  char s[256];
  sprintf(s,"Luminance offset:  %i",x-256);
- if (x-256==Tconfig::lumOffsetDef) strcat(s," (off)");
+ if (x-256==cfgGet(IDFF_lumOffsetDef)) strcat(s," (off)");
  SendDlgItemMessage(m_hwnd,IDC_LBL_LUMOFFSET,WM_SETTEXT,0,LPARAM(s));
  return x;
 }
@@ -81,7 +81,7 @@ int TpictPropPage::writeGamma(int x)
  char s[256];
  __asm emms;
  sprintf(s,"Gamma correction:  %3.2f",float(x/100.0));
- if (x==Tconfig::gammaCorrectionDef) strcat(s," (off)");
+ if (x==cfgGet(IDFF_gammaCorrectionDef)) strcat(s," (off)");
  SendDlgItemMessage(m_hwnd,IDC_LBL_GAMMA,WM_SETTEXT,0,LPARAM(s));
  return x;
 }
@@ -89,7 +89,7 @@ int TpictPropPage::writeHue(int x)
 {
  char s[256];
  sprintf(s,"Hue:  %i",x);
- if (x==Tconfig::hueDef) strcat(s," (off)");
+ if (x==cfgGet(IDFF_hueDef)) strcat(s," (off)");
  SendDlgItemMessage(m_hwnd,IDC_LBL_HUE,WM_SETTEXT,0,LPARAM(s));
  return x;
 }
@@ -97,7 +97,7 @@ int TpictPropPage::writeSaturation(int x)
 {
  char s[256];
  sprintf(s,"Saturation:  %i",x);
- if (x==Tconfig::saturationDef) strcat(s," (off)");
+ if (x==cfgGet(IDFF_saturationDef)) strcat(s," (off)");
  SendDlgItemMessage(m_hwnd,IDC_LBL_SATURATION,WM_SETTEXT,0,LPARAM(s));
  return x;
 }
@@ -129,11 +129,11 @@ HRESULT TpictPropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        parent->drawInter();
        return TRUE;
       case IDC_BT_LUMRESET:
-       SendDlgItemMessage(m_hwnd,IDC_TBR_LUMGAIN   ,TBM_SETPOS,TRUE,writeLumGain(cfgSet(IDFF_lumGain,Tconfig::lumGainDef)));
-       SendDlgItemMessage(m_hwnd,IDC_TBR_LUMOFFSET ,TBM_SETPOS,TRUE,writeLumOffset(256+(cfgSet(IDFF_lumOffset,Tconfig::lumOffsetDef))));
-       SendDlgItemMessage(m_hwnd,IDC_TBR_GAMMA     ,TBM_SETPOS,TRUE,writeGamma(cfgSet(IDFF_gammaCorrection,Tconfig::gammaCorrectionDef)));
-       SendDlgItemMessage(m_hwnd,IDC_TBR_HUE       ,TBM_SETPOS,TRUE,writeHue(cfgSet(IDFF_hue,Tconfig::hueDef)));
-       SendDlgItemMessage(m_hwnd,IDC_TBR_SATURATION,TBM_SETPOS,TRUE,writeSaturation(cfgSet(IDFF_saturation,Tconfig::saturationDef)));
+       SendDlgItemMessage(m_hwnd,IDC_TBR_LUMGAIN   ,TBM_SETPOS,TRUE,writeLumGain(cfgSet(IDFF_lumGain,cfgGet(IDFF_lumGainDef))));
+       SendDlgItemMessage(m_hwnd,IDC_TBR_LUMOFFSET ,TBM_SETPOS,TRUE,writeLumOffset(256+(cfgSet(IDFF_lumOffset,cfgGet(IDFF_lumOffsetDef)))));
+       SendDlgItemMessage(m_hwnd,IDC_TBR_GAMMA     ,TBM_SETPOS,TRUE,writeGamma(cfgSet(IDFF_gammaCorrection,cfgGet(IDFF_gammaCorrectionDef))));
+       SendDlgItemMessage(m_hwnd,IDC_TBR_HUE       ,TBM_SETPOS,TRUE,writeHue(cfgSet(IDFF_hue,cfgGet(IDFF_hueDef))));
+       SendDlgItemMessage(m_hwnd,IDC_TBR_SATURATION,TBM_SETPOS,TRUE,writeSaturation(cfgSet(IDFF_saturation,cfgGet(IDFF_saturationDef))));
        return TRUE;
      }
     break;

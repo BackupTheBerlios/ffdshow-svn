@@ -17,18 +17,23 @@
  */
 
 #include "TimgFilterSubtitles.h"
-#include "..\Tconfig.h"
+#include "TpresetSettings.h"
+
+TimgFilterSubtitles::TimgFilterSubtitles(void)
+{
+ sub=NULL;
+}
 
 void TimgFilterSubtitles::process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
                                   unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                                  Tconfig *cfg)
+                                  TpresetSettings *cfg)
 {
  if (cfg->fontChanged)
   {
    cfg->fontChanged=false;
    font.init(cfg);
   }
- if (cfg->sub)
+ if (sub)
   { 
    int y;
    for (y=0;y<dyY;y++)
@@ -38,6 +43,6 @@ void TimgFilterSubtitles::process(unsigned char *srcY,unsigned char *srcU,unsign
      memcpy(dstU+y*strideUV,srcU+y*strideUV,dxUV);
      memcpy(dstV+y*strideUV,srcV+y*strideUV,dxUV);
     }; 
-   font.print(dstY,dstU,dstV,dxY,strideY,dyY,cfg->sub,cfg->subPosX,cfg->subPosY);
+   font.print(dstY,dstU,dstV,dxY,strideY,dyY,sub,cfg->subPosX,cfg->subPosY);
   }; 
 }                                  

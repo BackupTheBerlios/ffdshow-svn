@@ -19,7 +19,7 @@
 #include <windows.h>
 #include "Tpostproc.h"
 #include <math.h>
-#include "Tconfig.h"
+#include "TpresetSettings.h"
 #include <time.h>
 extern "C"
 {
@@ -32,10 +32,10 @@ void modifyPPmode(PPMode *pp,Tconfig *cfg)
  
 }
 
-void Tpostproc::init(Tconfig *cfg)
+void Tpostproc::init(void)
 {
- cfg->ppsetting=1;
- postproc_dll=new Tdll("C:\\mydocuments\\ffdshow\\src\\mplayer\\libpostproc.dll",cfg);
+ //cfg->ppsetting=1;
+ postproc_dll=new Tdll("C:\\mydocuments\\ffdshow\\src\\mplayer\\libpostproc.dll");
  postproc_dll->loadFunction((void**)&init_mplayer,"init_mplayer");
  postproc_dll->loadFunction((void**)&postprocess,"postprocess");
  postproc_dll->loadFunction((void**)&getPpModeForQuality,"getPpModeForQuality");
@@ -47,7 +47,7 @@ void Tpostproc::init(Tconfig *cfg)
  if (postproc_dll->ok)
   { 
    init_mplayer();
-   setModifyPPmode(/*modifyPPmode*/NULL,cfg);
+   //setModifyPPmode(/*modifyPPmode*/NULL,cfg);
    ok=true;
   }
  else
@@ -68,7 +68,7 @@ void Tpostproc::done(void)
  ok=false;
 };
 
-int Tpostproc::getPPmode(const Tconfig *cfg)
+int Tpostproc::getPPmode(const TpresetSettings *cfg)
 {
  int result=0;
  if (!cfg->ppIsCustom)

@@ -15,7 +15,7 @@ extern "C"
  #include "mplayer\postproc\swscale.h"
 }
  
-class Tconfig;
+struct TpresetSettings;
 class Tpostproc 
 {
 private:
@@ -35,10 +35,10 @@ public:
    postproc_dll=NULL;
    ok=false;
   }
- void init(Tconfig *cfg);
+ void init(void);
  void done(void);
  void (*init_mplayer)(void);
- static int getPPmode(const Tconfig *cfg);
+ static int getPPmode(const TpresetSettings *cfg);
  void (*postprocess)(unsigned char * src[], int src_stride,
                      unsigned char * dst[], int dst_stride,
                      int horizontal_size,   int vertical_size,

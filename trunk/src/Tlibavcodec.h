@@ -23,9 +23,9 @@ public:
    avcodec_dll=NULL;
    quant_store=NULL;
   }
- void getVersion(Tconfig *cfg,char **vers); 
+ void getVersion(char **vers); 
  bool ok,inited;
- void init(Tconfig *cfg);
+ void init(void);
  void done(void);
  void (*libavcodec_init)(void);
  AVCodec* (*avcodec_find_decoder_by_name)(const char *name);

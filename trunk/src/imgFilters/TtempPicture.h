@@ -9,7 +9,7 @@ private:
  unsigned char *temp1,*temp2;
  unsigned char *tempCur;
  unsigned char *av;
- unsigned char c;
+ int c;
 public: 
  int size;
  TtempPicture(int Isize,int Ic):size(Isize),c(Ic)

@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include "subreader.h"
 #include <math.h>
-#include "..\Tconfig.h"
+#include "TpresetSettings.h"
 
 using namespace std;
 
@@ -136,7 +136,7 @@ Tfont::~Tfont()
 {
  done();
 }
-void Tfont::init(Tconfig *cfg/*const char *fontName,int charset,int size,int weight,int spacing,int Ishadow,int color*/)
+void Tfont::init(TpresetSettings *cfg)
 {
  done();
  hf=CreateFont(cfg->fontSize*4,0,0,0,cfg->fontWeight,0,0,0,cfg->fontCharset,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,/*ANTIALIASED_QUALITY*/DEFAULT_QUALITY,DEFAULT_PITCH|FF_DONTCARE,cfg->fontName);

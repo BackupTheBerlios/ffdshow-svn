@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#if 1
+#if 0
 static inline void DEBUGS(const char *s)
 {
  char pomS[1024];strcpy(pomS,s);strcat(pomS,"\n");
@@ -22,7 +22,7 @@ static inline void DEBUGS2(const char *s,int a,int b)
 #else
 #define DEBUGS(X) 
 #define DEBUGS1(X,A) 
-#define DEBUGS1(X,A,B) 
+#define DEBUGS2(X,A,B) 
 #endif
 
 #endif

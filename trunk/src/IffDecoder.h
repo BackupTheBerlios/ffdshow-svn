@@ -38,6 +38,11 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_gammaCorrection     206  //gamma correction (*100)
 #define IDFF_hue                 203  //hue 
 #define IDFF_saturation          204  //saturation
+#define IDFF_lumGainDef          208
+#define IDFF_lumOffsetDef        209
+#define IDFF_gammaCorrectionDef  210
+#define IDFF_hueDef              211
+#define IDFF_saturationDef       212
 
 #define IDFF_flip                301 //should output video be flipped?
 
@@ -143,6 +148,10 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (getRealCrop)(unsigned int *left,unsigned int *top,unsigned int *right,unsigned int *bottom) PURE;
  STDMETHOD (getMinOrder2)(void) PURE;
  STDMETHOD (getMaxOrder2)(void) PURE;
+ STDMETHOD (saveGlobalSettings)(void) PURE;
+ STDMETHOD (loadGlobalSettings)(void) PURE;
+ STDMETHOD (saveDialogSettings)(void) PURE;
+ STDMETHOD (loadDialogSettings)(void) PURE;
 };
 
 #ifdef __cplusplus

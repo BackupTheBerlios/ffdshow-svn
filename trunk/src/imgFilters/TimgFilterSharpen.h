@@ -7,8 +7,8 @@ class TimgFilterSharpen :public TimgFilter
 {
 private:
  unsigned char *Ymin,*Ymax; 
- void xsharpen(unsigned char *src,unsigned char *dst,Tconfig *cfg);
- void unsharpen(unsigned char *src,unsigned char *dst,Tconfig *cfg);
+ void xsharpen(unsigned char *src,unsigned char *dst,TpresetSettings *cfg);
+ void unsharpen(unsigned char *src,unsigned char *dst,TpresetSettings *cfg);
 protected:
  virtual void done(void);
 public:
@@ -16,7 +16,7 @@ public:
  virtual void init(int Idx,int Istride,int Idy);
  virtual void process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
                       unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
-                      Tconfig *cfg);
+                      TpresetSettings *cfg);
 };
 
 #endif

@@ -18,16 +18,17 @@
 
 #include <windows.h>
 #include "Tlibavcodec.h"
+#include "TpresetSettings.h"
 
 #define FF_POSTPROCESS 1
 #include "ffmpeg\libavcodec\avcodec.h"
 
-const int Tconfig::idctDef=0;
+const int TpresetSettings::idctDef=0;
 
-void Tlibavcodec::init(Tconfig *cfg)
+void Tlibavcodec::init(void)
 {
  inited=true;
- avcodec_dll=new Tdll("C:\\mydocuments\\ffdshow\\src\\ffmpeg\\libavcodec\\libavcodec.dll",cfg);
+ avcodec_dll=new Tdll("C:\\mydocuments\\ffdshow\\src\\ffmpeg\\libavcodec\\libavcodec.dll");
  avcodec_dll->loadFunction((void**)&libavcodec_init,"libavcodec_init");
  avcodec_dll->loadFunction((void**)&avcodec_find_decoder_by_name,"avcodec_find_decoder_by_name");
  avcodec_dll->loadFunction((void**)&avcodec_open,"avcodec_open");
@@ -40,7 +41,7 @@ void Tlibavcodec::init(Tconfig *cfg)
   {
    libavcodec_init();
    quant_store=get_quant_store();
-   set_ff_idct((void*)1);cfg->idctChanged=1;
+   set_ff_idct((void*)1);
    ok=true;
   }
  else
@@ -63,7 +64,7 @@ void Tlibavcodec::done(void)
  quant_store=NULL;
  ok=false;
 }
-void Tlibavcodec::getVersion(Tconfig *cfg,char **vers)
+void Tlibavcodec::getVersion(char **vers)
 {
  if (!vers) return;
  static char ver[1024];
@@ -75,7 +76,7 @@ void Tlibavcodec::getVersion(Tconfig *cfg,char **vers)
   avcodec_dll->loadFunction((void**)&av_getVersion,"getVersion");
  else
   {  
-   dl=new Tdll("C:\\mydocuments\\ffdshow\\src\\ffmpeg\\libavcodec\\libavcodec.dll",cfg);
+   dl=new Tdll("C:\\mydocuments\\ffdshow\\src\\ffmpeg\\libavcodec\\libavcodec.dll");
    dl->loadFunction((void**)&av_getVersion,"getVersion");
   };
  if (av_getVersion) 

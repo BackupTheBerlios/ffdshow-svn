@@ -24,35 +24,39 @@
 #include <algorithm>
 #include <string>
 #include <stdlib.h>
+#include "settings\reg.h"
 
 using namespace std;
 
+Tconfig config;
+
 int Tconfig::cpu_flags=0;
+
+void Tconfig::init(void)
+{
+ HKEY hKey;DWORD size;
+ RegOpenKeyEx(HKEY_LOCAL_MACHINE,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,KEY_READ,&hKey);
+ char sysdir[256];
+ GetSystemDirectory(sysdir,255);
+ REG_GET_S("pth",pth,sysdir);
+ RegCloseKey(hKey);
+ 
+ if (strlen(pth) && pth[strlen(pth)-1]!='\\') strcat(pth,"\\");
+ XVID_INIT_PARAM xip;
+ xip.cpu_flags=0;
+ xvid_init(NULL, 0, &xip, NULL);
+ cpu_flags=xip.cpu_flags;
+}
+/*
 vector<string> *Tconfig::presets=NULL;
-
-/* registry stuff */
-#define XVID_REG_PARENT "Software\\GNU"
-#define XVID_REG_CHILD  "ffdshow"
-#define XVID_REG_CLASS  "config"
-
-#define REG_GET_N(X, Y, Z) size=sizeof(int);if(RegQueryValueEx(hKey, X, 0, 0, (LPBYTE)&Y, &size) != ERROR_SUCCESS) {Y=Z;}
-#define REG_GET_N_FILE(X, Y, Z) {GetPrivateProfileString(sections,X,_itoa(Z,pomS,10),propS,255,flnm);Y=atoi(propS);}
-#define REG_GET_S(X, Y, Z) size=MAX_PATH;if(RegQueryValueEx(hKey, X, 0, 0, (unsigned char*)(Y), &size) != ERROR_SUCCESS) {lstrcpy(Y, Z);}
-#define REG_GET_S_FILE(X, Y, Z) {GetPrivateProfileString(sections,X,Z,propS,255,flnm);strcpy(Y,propS);}
-#define REG_GET_B(X, Y, Z) size=sizeof((Z));if(RegQueryValueEx(hKey, X, 0, 0, Y, &size) != ERROR_SUCCESS) {memcpy(Y, Z, sizeof((Z)));}
-#define REG_SET_N(X, Y, Z) RegSetValueEx(hKey, X, 0, REG_DWORD, (LPBYTE)&Y, sizeof(int))
-#define REG_SET_N_FILE(X, Y, Z) WritePrivateProfileString(presetName,X,_itoa(Y,pomS,10),flnm)
-#define REG_SET_S(X, Y ,Z) RegSetValueEx(hKey, X, 0, REG_SZ, (unsigned char*)(Y), lstrlen(Y)+1)
-#define REG_SET_S_FILE(X, Y, Z) WritePrivateProfileString(presetName,X,Y,flnm)
-#define REG_SET_B(X, Y) RegSetValueEx(hKey, X, 0, REG_BINARY, Y, sizeof((Y)))
 
 Tconfig::Tconfig(const char *IpresetName)
 {
  init();
- isDlg=0;inPlayer=1;
+ //isDlg=0;inPlayer=1;
  sub=NULL;
  strcpy(presetName,IpresetName);
- loadLM();
+ //loadLM();
  loadPreset(NULL);
 }
 
@@ -74,10 +78,11 @@ void Tconfig::done(bool isSave)
  if (isSave)
   savePreset(NULL);
 }
+/*
 void Tconfig::loadLM(void)
 {
  HKEY hKey;DWORD size;
- RegOpenKeyEx(HKEY_LOCAL_MACHINE, XVID_REG_PARENT "\\" XVID_REG_CHILD, 0, KEY_READ, &hKey);
+ RegOpenKeyEx(HKEY_LOCAL_MACHINE, FFDSHOW_REG_PARENT "\\" FFDSHOW_REG_CHILD, 0, KEY_READ, &hKey);
  char sysdir[256];
  GetSystemDirectory(sysdir,255);
  REG_GET_S("pth",pth,sysdir);
@@ -95,7 +100,7 @@ void Tconfig::loadLM(void)
 void Tconfig::saveLM(void)
 {
  HKEY hKey;DWORD dispo;
- if (RegCreateKeyEx(HKEY_LOCAL_MACHINE,XVID_REG_PARENT "\\" XVID_REG_CHILD,0,   XVID_REG_CLASS,REG_OPTION_NON_VOLATILE, KEY_WRITE,0,&hKey, &dispo) != ERROR_SUCCESS)
+ if (RegCreateKeyEx(HKEY_LOCAL_MACHINE,FFDSHOW_REG_PARENT "\\" FFDSHOW_REG_CHILD,0,   FFDSHOW_REG_CLASS,REG_OPTION_NON_VOLATILE, KEY_WRITE,0,&hKey, &dispo) != ERROR_SUCCESS)
   return;
  REG_SET_S("pth",pth,"");
  REG_SET_N("xvid",xvid,0);
@@ -108,7 +113,6 @@ void Tconfig::saveLM(void)
  REG_SET_N("h263",h263,0);
  RegCloseKey(hKey);
 }
-
 bool Tconfig::savePreset(const char *IpresetName)
 {
  if (!presetShouldBeSaved) return true;
@@ -118,40 +122,40 @@ bool Tconfig::savePreset(const char *IpresetName)
    if (IpresetName[0]=='\0') return false;
    strcpy(presetName,IpresetName);
   }; 
- sprintf(presetRegStr,XVID_REG_PARENT"\\"XVID_REG_CHILD"\\%s",presetName);
+ sprintf(presetRegStr,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD"\\%s",presetName);
  HKEY hKey;DWORD dispo;
- if (RegCreateKeyEx(HKEY_CURRENT_USER,presetRegStr,0,XVID_REG_CLASS,REG_OPTION_NON_VOLATILE, KEY_WRITE,0,&hKey, &dispo) != ERROR_SUCCESS)
+ if (RegCreateKeyEx(HKEY_CURRENT_USER,presetRegStr,0,FFDSHOW_REG_CLASS,REG_OPTION_NON_VOLATILE, KEY_WRITE,0,&hKey, &dispo) != ERROR_SUCCESS)
   return false;
 
  #undef _REG_OP_N
  #undef _REG_OP_S
  #define _REG_OP_N REG_SET_N
  #define _REG_OP_S REG_SET_S
- #include "presets_template.h"
+ #include "settings\presets_template.h"
 
  RegCloseKey(hKey);
 
- if (RegCreateKeyEx(HKEY_CURRENT_USER,XVID_REG_PARENT "\\" XVID_REG_CHILD,0,   XVID_REG_CLASS,REG_OPTION_NON_VOLATILE, KEY_WRITE,0,&hKey, &dispo) == ERROR_SUCCESS)
+ if (RegCreateKeyEx(HKEY_CURRENT_USER,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,FFDSHOW_REG_CLASS,REG_OPTION_NON_VOLATILE, KEY_WRITE,0,&hKey,&dispo)==ERROR_SUCCESS)
   {
    if (!autoloadedfromreg) REG_SET_S("activePreset",presetName,"");
-   REG_SET_N("autoPreset",autoPreset,0);
-   REG_SET_N("autoPresetFileFirst",autoPresetFileFirst,0);
-   REG_SET_N("lastPage",lastPage,0);
-   REG_SET_N("trayIcon",trayIcon,0);
+   //REG_SET_N("autoPreset",autoPreset,0);
+   //REG_SET_N("autoPresetFileFirst",autoPresetFileFirst,0);
+   //REG_SET_N("lastPage",lastPage,0);
+   //REG_SET_N("trayIcon",trayIcon,0);
    RegCloseKey(hKey);
   }; 
  
  vector<string>::iterator i=find(presets->begin(),presets->end(),presetName);
  if (i==presets->end()) 
   presets->push_back(presetName);
- saveLM();
+ //saveLM();
  return true;
 }
 void Tconfig::loadPreset(const char *IpresetName)
 {
  char presetRegStr[256];
  if (IpresetName) strcpy(presetName,IpresetName);
- sprintf(presetRegStr,XVID_REG_PARENT"\\"XVID_REG_CHILD"\\%s",presetName);
+ sprintf(presetRegStr,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD"\\%s",presetName);
  HKEY hKey;DWORD size;
  RegOpenKeyEx(HKEY_CURRENT_USER, presetRegStr, 0, KEY_READ, &hKey);
  
@@ -159,15 +163,15 @@ void Tconfig::loadPreset(const char *IpresetName)
  #undef _REG_OP_S
  #define _REG_OP_N REG_GET_N
  #define _REG_OP_S REG_GET_S
- #include "presets_template.h"
+ #include "settings\presets_template.h"
  
  RegCloseKey(hKey);
 
- RegOpenKeyEx(HKEY_CURRENT_USER, XVID_REG_PARENT "\\" XVID_REG_CHILD, 0, KEY_READ, &hKey);
- REG_GET_N("autoPreset",autoPreset,0);
- REG_GET_N("lastPage",lastPage,0);
- REG_GET_N("trayIcon",trayIcon,0);
- REG_GET_N("autoPresetFileFirst",autoPresetFileFirst,0);
+ RegOpenKeyEx(HKEY_CURRENT_USER, FFDSHOW_REG_PARENT "\\" FFDSHOW_REG_CHILD, 0, KEY_READ, &hKey);
+ //REG_GET_N("autoPreset",autoPreset,0);
+ //REG_GET_N("lastPage",lastPage,0);
+ //REG_GET_N("trayIcon",trayIcon,0);
+ //REG_GET_N("autoPresetFileFirst",autoPresetFileFirst,0);
  RegCloseKey(hKey); 
  presetShouldBeSaved=true;
 }
@@ -175,7 +179,7 @@ void Tconfig::loadPreset(const char *IpresetName)
 void Tconfig::loadActivePreset(void)
 {
  HKEY hKey;DWORD size;
- RegOpenKeyEx(HKEY_CURRENT_USER, XVID_REG_PARENT "\\" XVID_REG_CHILD, 0, KEY_READ, &hKey);
+ RegOpenKeyEx(HKEY_CURRENT_USER, FFDSHOW_REG_PARENT "\\" FFDSHOW_REG_CHILD, 0, KEY_READ, &hKey);
  char actPresetName[256];
  REG_GET_S("activePreset",actPresetName,PRESET_DEFAULT);
  RegCloseKey(hKey); 
@@ -187,7 +191,7 @@ void Tconfig::loadAutoPresetFromReg(char *AVIname)
  char name2[1024];
  normalizeName(name2,AVIname);
  char presetRegStr[1024];
- sprintf(presetRegStr,XVID_REG_PARENT"\\"XVID_REG_CHILD"\\%s",name2);
+ sprintf(presetRegStr,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD"\\%s",name2);
  HKEY hKey;
  if (RegOpenKeyEx(HKEY_CURRENT_USER, presetRegStr, 0, KEY_READ, &hKey)==ERROR_SUCCESS)
   {
@@ -217,11 +221,11 @@ void Tconfig::autoPresetLoad(char *AVIname)
   }
  loadAutoPresetFromReg(AVIname); 
 }
-
+/*
 void Tconfig::listPresets(void)
 {
  HKEY hKey;
- RegOpenKeyEx(HKEY_CURRENT_USER, XVID_REG_PARENT "\\" XVID_REG_CHILD, 0, KEY_READ, &hKey);
+ RegOpenKeyEx(HKEY_CURRENT_USER, FFDSHOW_REG_PARENT "\\" FFDSHOW_REG_CHILD, 0, KEY_READ, &hKey);
  for (int i=0,retCode=ERROR_SUCCESS;retCode==ERROR_SUCCESS;i++) 
   { 
    char keyName[256];DWORD keyNameSize=255;
@@ -253,7 +257,7 @@ bool Tconfig::removePreset(const char *name)
  vector<string>::iterator i=find(presets->begin(),presets->end(),name);
  if (i==presets->end()) return false;
  char presetRegStr[256];presetRegStr[0]='\0';
- sprintf(presetRegStr,XVID_REG_PARENT"\\"XVID_REG_CHILD"\\%s",name);
+ sprintf(presetRegStr,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD"\\%s",name);
  if (presetRegStr[0]!='\0') RegDeleteKey(HKEY_CURRENT_USER,presetRegStr);
  presets->erase(i);
  return true;
@@ -280,7 +284,7 @@ bool Tconfig::savePresetToFile(const char *flnm)
  #undef _REG_OP_S
  #define _REG_OP_N REG_SET_N_FILE
  #define _REG_OP_S REG_SET_S_FILE
- #include "presets_template.h"
+ #include "settings\presets_template.h"
  
  return TRUE;
 }
@@ -296,7 +300,7 @@ void Tconfig::loadPresetFromFile(const char *flnm)
  #undef _REG_OP_S
  #define _REG_OP_N REG_GET_N_FILE
  #define _REG_OP_S REG_GET_S_FILE
- #include "presets_template.h"
+ #include "settings\presets_template.h"
  presetShouldBeSaved=true;
  vector<string>::iterator i=find(presets->begin(),presets->end(),presetName);
  if (i==presets->end()) 
@@ -354,3 +358,4 @@ void Tconfig::getCropDescription(char *buf)
   sprintf(pomS,"crop: left:%i, top:%i, right:%i, bottom:%i)",cropLeft,cropTop,cropRight,cropBottom);
  strcat(buf,pomS);
 }
+*/

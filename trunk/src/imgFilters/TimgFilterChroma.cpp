@@ -18,11 +18,11 @@
  */
 
 #include "TimgFilterChroma.h"
-#include "../Tconfig.h"
+#include "TpresetSettings.h"
 #include <math.h>
 
 __declspec(align(8)) static const __int64 m128=0x0080008000800080;
-const int Tconfig::hueDef=0,Tconfig::saturationDef=64;
+const int TpresetSettings::hueDef=0,TpresetSettings::saturationDef=64;
 
 TimgFilterChroma::TimgFilterChroma(void)
 {
@@ -37,7 +37,7 @@ TimgFilterChroma::TimgFilterChroma(void)
 
 void TimgFilterChroma::process(unsigned char *,unsigned char *srcU,unsigned char *srcV,
                                unsigned char *,unsigned char *dstU,unsigned char *dstV,
-                               Tconfig *cfg)
+                               TpresetSettings *cfg)
 {
  int hue=cfg->hue;          //-180 ... 0 ... 180
  int sat = cfg->saturation ;//0 (BW) - 64 (normal) - 128 (too much color);

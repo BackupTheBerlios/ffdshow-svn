@@ -1,15 +1,14 @@
 #ifndef _TRESIZECTX_H_
 #define _TRESIZECTX_H_
 
-class Tconfig;
 struct SwsContext;
 class TresizeCtx
 {
 private:
- Tconfig *cfg;
+ TpresetSettings *cfg;
  int sizeY,sizeUV;
 public:
- TresizeCtx(Tconfig *Icfg)
+ TresizeCtx(TpresetSettings *Icfg)
   {
    cfg=Icfg;
    isResize=cfg->isResize;

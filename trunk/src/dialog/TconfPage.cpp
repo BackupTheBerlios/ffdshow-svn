@@ -84,9 +84,7 @@ TconfPage::~TconfPage()
 
 int TconfPage::cfgGet(unsigned int i)
 {
- int val=0;
- deci->get_Param(i,&val);
- return val;
+ return deci->get_Param2(i);
 };
 int TconfPage::cfgSet(unsigned int i,int val)
 {

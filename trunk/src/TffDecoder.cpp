@@ -226,102 +226,110 @@ CUnknown * WINAPI TffDecoder::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 }
 void TffDecoder::fillParams(void)
 {
- params[IDFF_autoPreset         ]=Tparam(&cfg.autoPreset         ,0,0);
- params[IDFF_lastPage           ]=Tparam(&cfg.lastPage           ,0,0);
- params[IDFF_trayIcon           ]=Tparam(&cfg.trayIcon           ,0,0);
- params[IDFF_isDlg              ]=Tparam(&cfg.isDlg              ,0,0);
- params[IDFF_autoPresetFileFirst]=Tparam(&cfg.autoPresetFileFirst,0,0);
- params[IDFF_presetShouldBeSaved]=Tparam(&cfg.presetShouldBeSaved,0,0);
- params[IDFF_inPlayer           ]=Tparam(&cfg.inPlayer           ,0,0);
- params[IDFF_autoloadedfromreg  ]=Tparam(&cfg.autoloadedfromreg  ,0,0);
+ //state variables
+ params[IDFF_inPlayer           ]=Tparam(&inPlayer               ,0,0);
+ params[IDFF_isDlg              ]=Tparam(&isDlg                  ,0,0);
+ //dialog settings
+ params[IDFF_lastPage           ]=Tparam(&dialogSettings.lastPage,0,0);
+ //global settings
+ params[IDFF_autoPreset         ]=Tparam(&globalSettings.autoPreset         ,0,0);
+ params[IDFF_trayIcon           ]=Tparam(&globalSettings.trayIcon           ,0,0,&TffDecoder::trayIconChanged);
+ params[IDFF_autoPresetFileFirst]=Tparam(&globalSettings.autoPresetFileFirst,0,0);
+ params[IDFF_xvid               ]=Tparam(&globalSettings.xvid               ,0,0);
+ params[IDFF_div3               ]=Tparam(&globalSettings.div3               ,0,0);
+ params[IDFF_divx               ]=Tparam(&globalSettings.divx               ,0,0);
+ params[IDFF_dx50               ]=Tparam(&globalSettings.dx50               ,0,0);
+ params[IDFF_mp43               ]=Tparam(&globalSettings.mp43               ,0,0);
+ params[IDFF_mp42               ]=Tparam(&globalSettings.mp42               ,0,0);
+ params[IDFF_mp41               ]=Tparam(&globalSettings.mp41               ,0,0);
+ params[IDFF_h263               ]=Tparam(&globalSettings.h263               ,0,0);
 
- params[IDFF_isPostproc         ]=Tparam(&cfg.isPostproc         ,0,0);
- params[IDFF_orderPostproc      ]=Tparam(&cfg.orderPostproc      ,MIN_ORDER,MAX_ORDER);
- params[IDFF_ppqual             ]=Tparam(&cfg.ppqual             ,0,6);
- params[IDFF_autoq              ]=Tparam(&cfg.autoq              ,0,0);
- params[IDFF_ppIsCustom         ]=Tparam(&cfg.ppIsCustom         ,0,0);
- params[IDFF_ppcustom           ]=Tparam(&cfg.ppcustom           ,0,0);
- params[IDFF_currentq           ]=Tparam(&cfg.currentq           ,0,6);
- params[IDFF_levelFixLum        ]=Tparam(&cfg.levelFixLum        ,0,0);
- params[IDFF_levelFixChrom      ]=Tparam(&cfg.levelFixChrom      ,0,0);
+ params[IDFF_presetShouldBeSaved]=Tparam(&presetSettings.presetShouldBeSaved,0,0);
+ params[IDFF_autoloadedfromreg  ]=Tparam(&presetSettings.autoloadedfromreg  ,0,0);
 
- params[IDFF_isPictProp         ]=Tparam(&cfg.isPictProp         ,0,0);
- params[IDFF_orderPictProp      ]=Tparam(&cfg.orderPictProp      ,MIN_ORDER,MAX_ORDER);
- params[IDFF_lumGain            ]=Tparam(&cfg.lumGain            ,0,256);
- params[IDFF_lumOffset          ]=Tparam(&cfg.lumOffset          ,-256,256);
- params[IDFF_gammaCorrection    ]=Tparam(&cfg.gammaCorrection    ,1,400);
- params[IDFF_hue                ]=Tparam(&cfg.hue                ,-180,180);
- params[IDFF_saturation         ]=Tparam(&cfg.saturation         ,0,128);
-                                                         
- params[IDFF_flip               ]=Tparam(&cfg.flip               ,0,0);
+ params[IDFF_isPostproc         ]=Tparam(&presetSettings.isPostproc         ,0,0);
+ params[IDFF_orderPostproc      ]=Tparam(&presetSettings.orderPostproc      ,MIN_ORDER,MAX_ORDER);
+ params[IDFF_ppqual             ]=Tparam(&presetSettings.ppqual             ,0,6);
+ params[IDFF_autoq              ]=Tparam(&presetSettings.autoq              ,0,0);
+ params[IDFF_ppIsCustom         ]=Tparam(&presetSettings.ppIsCustom         ,0,0);
+ params[IDFF_ppcustom           ]=Tparam(&presetSettings.ppcustom           ,0,0);
+ params[IDFF_currentq           ]=Tparam(&presetSettings.currentq           ,0,6);
+ params[IDFF_levelFixLum        ]=Tparam(&presetSettings.levelFixLum        ,0,0);
+ params[IDFF_levelFixChrom      ]=Tparam(&presetSettings.levelFixChrom      ,0,0);
 
- params[IDFF_isBlur             ]=Tparam(&cfg.isBlur             ,0,0);
- params[IDFF_orderBlur          ]=Tparam(&cfg.orderBlur          ,MIN_ORDER,MAX_ORDER);
- params[IDFF_blurStrength       ]=Tparam(&cfg.blurStrength       ,1,255);
+ params[IDFF_isPictProp         ]=Tparam(&presetSettings.isPictProp         ,0,0);
+ params[IDFF_orderPictProp      ]=Tparam(&presetSettings.orderPictProp      ,MIN_ORDER,MAX_ORDER);
+ params[IDFF_lumGain            ]=Tparam(&presetSettings.lumGain            ,0,256);
+ params[IDFF_lumOffset          ]=Tparam(&presetSettings.lumOffset          ,-256,256);
+ params[IDFF_gammaCorrection    ]=Tparam(&presetSettings.gammaCorrection    ,1,400);
+ params[IDFF_hue                ]=Tparam(&presetSettings.hue                ,-180,180);
+ params[IDFF_saturation         ]=Tparam(&presetSettings.saturation         ,0,128);
+ params[IDFF_lumGainDef         ]=Tparam(&TpresetSettings::lumGainDef);
+ params[IDFF_lumOffsetDef       ]=Tparam(&TpresetSettings::lumOffsetDef);
+ params[IDFF_gammaCorrectionDef ]=Tparam(&TpresetSettings::gammaCorrectionDef);
+ params[IDFF_hueDef             ]=Tparam(&TpresetSettings::hueDef);
+ params[IDFF_saturationDef      ]=Tparam(&TpresetSettings::saturationDef);
+                                                         
+ params[IDFF_flip               ]=Tparam(&presetSettings.flip               ,0,0);
 
- params[IDFF_isSharpen          ]=Tparam(&cfg.isSharpen          ,0,0);
- params[IDFF_orderSharpen       ]=Tparam(&cfg.orderSharpen       ,MIN_ORDER,MAX_ORDER);
- params[IDFF_sharpenMethod      ]=Tparam(&cfg.sharpenMethod      ,0,1);
- params[IDFF_xsharp_strength    ]=Tparam(&cfg.xsharp_strength    ,1,127);
- params[IDFF_xsharp_threshold   ]=Tparam(&cfg.xsharp_threshold   ,0,255);
- params[IDFF_unsharp_strength   ]=Tparam(&cfg.unsharp_strength   ,1,127);
- params[IDFF_unsharp_threshold  ]=Tparam(&cfg.unsharp_threshold  ,0,255);
-                                                         
- params[IDFF_isNoise            ]=Tparam(&cfg.isNoise            ,0,0);
- params[IDFF_orderNoise         ]=Tparam(&cfg.orderNoise         ,MIN_ORDER,MAX_ORDER);
- params[IDFF_noiseMethod        ]=Tparam(&cfg.noiseMethod        ,0,1);
- params[IDFF_uniformNoise       ]=Tparam(&cfg.uniformNoise       ,0,0);
- params[IDFF_noiseStrength      ]=Tparam(&cfg.noiseStrength      ,0,255);
- params[IDFF_noiseStrengthChroma]=Tparam(&cfg.noiseStrengthChroma,0,127);
-                                                         
- params[IDFF_idct               ]=Tparam(&cfg.idct               ,0,3,&TffDecoder::idctChanged);
-                                                         
- params[IDFF_isResize           ]=Tparam(&cfg.isResize           ,0,0);
- params[IDFF_resizeDx           ]=Tparam(&cfg.resizeDx           ,8,2048);
- params[IDFF_resizeDy           ]=Tparam(&cfg.resizeDy           ,8,2048);
- params[IDFF_resizeAspect       ]=Tparam(&cfg.resizeAspect       ,0,0,&TffDecoder::resizeChanged);
- params[IDFF_resizeFirst        ]=Tparam(&cfg.resizeFirst        ,0,0,&TffDecoder::resizeChanged);
- params[IDFF_resizeMethod       ]=Tparam(&cfg.resizeMethod       ,0,5,&TffDecoder::resizeChanged);
- params[IDFF_aspectRatio        ]=Tparam(&cfg.aspectRatio        ,0,0,&TffDecoder::resizeChanged);
- params[IDFF_resizeGblurLum     ]=Tparam(&cfg.resizeGblurLum     ,0,200,&TffDecoder::resizeChanged);
- params[IDFF_resizeGblurChrom   ]=Tparam(&cfg.resizeGblurChrom   ,0,200,&TffDecoder::resizeChanged);
- params[IDFF_resizeSharpenLum   ]=Tparam(&cfg.resizeSharpenLum   ,0,200,&TffDecoder::resizeChanged);
- params[IDFF_resizeSharpenChrom ]=Tparam(&cfg.resizeSharpenChrom ,0,200,&TffDecoder::resizeChanged);
- params[IDFF_isCropNzoom        ]=Tparam(&cfg.isCropNzoom        ,0,0,&TffDecoder::resizeChanged);
- params[IDFF_isZoom             ]=Tparam(&cfg.isZoom             ,0,0,&TffDecoder::resizeChanged);
- params[IDFF_magnificationX     ]=Tparam(&cfg.magnificationX     ,0,100,&TffDecoder::resizeChanged);
- params[IDFF_magnificationY     ]=Tparam(&cfg.magnificationY     ,0,100,&TffDecoder::resizeChanged);
- params[IDFF_magnificationLocked]=Tparam(&cfg.magnificationLocked,0,0,&TffDecoder::resizeChanged);
- params[IDFF_cropLeft           ]=Tparam(&cfg.cropLeft           ,0,2048,&TffDecoder::resizeChanged);
- params[IDFF_cropRight          ]=Tparam(&cfg.cropRight          ,0,2048,&TffDecoder::resizeChanged);
- params[IDFF_cropTop            ]=Tparam(&cfg.cropTop            ,0,2048,&TffDecoder::resizeChanged);
- params[IDFF_cropBottom         ]=Tparam(&cfg.cropBottom         ,0,2048,&TffDecoder::resizeChanged);
- params[IDFF_autocrop           ]=Tparam(&cfg.autocrop           ,0,0,&TffDecoder::resizeChanged);
+ params[IDFF_isBlur             ]=Tparam(&presetSettings.isBlur             ,0,0);
+ params[IDFF_orderBlur          ]=Tparam(&presetSettings.orderBlur          ,MIN_ORDER,MAX_ORDER);
+ params[IDFF_blurStrength       ]=Tparam(&presetSettings.blurStrength       ,1,255);
 
- params[IDFF_isSubtitles        ]=Tparam(&cfg.isSubtitles        ,0,0,&TffDecoder::subsChanged);
- params[IDFF_orderSubtitles     ]=Tparam(&cfg.orderSubtitles     ,MIN_ORDER,MAX_ORDER);
- params[IDFF_fontCharset        ]=Tparam(&cfg.fontCharset        ,0,0,&TffDecoder::subsChanged);
- params[IDFF_fontSize           ]=Tparam(&cfg.fontSize           ,2,255,&TffDecoder::subsChanged);
- params[IDFF_fontWeight         ]=Tparam(&cfg.fontWeight         ,0,1000,&TffDecoder::subsChanged);
- params[IDFF_fontColor          ]=Tparam(&cfg.fontColor          ,0,0,&TffDecoder::subsChanged);
- params[IDFF_fontShadowStrength ]=Tparam(&cfg.fontShadowStrength ,0,100,&TffDecoder::subsChanged);
- params[IDFF_fontShadowRadius   ]=Tparam(&cfg.fontShadowRadius   ,1,100,&TffDecoder::subsChanged);
- params[IDFF_fontAutosize       ]=Tparam(&cfg.fontAutosize       ,0,0,&TffDecoder::subsChanged);
- params[IDFF_fontSpacing        ]=Tparam(&cfg.fontSpacing        ,-10,10,&TffDecoder::subsChanged);
- params[IDFF_subPosX            ]=Tparam(&cfg.subPosX            ,0,100,&TffDecoder::subsChanged);
- params[IDFF_subPosY            ]=Tparam(&cfg.subPosY            ,0,100,&TffDecoder::subsChanged);
- params[IDFF_subDelay           ]=Tparam(&cfg.subDelay           ,0,0,&TffDecoder::subsChanged);
- params[IDFF_subSpeed           ]=Tparam(&cfg.subSpeed           ,0,0,&TffDecoder::subsChanged);
- params[IDFF_subAutoFlnm        ]=Tparam(&cfg.subAutoFlnm        ,0,0);
+ params[IDFF_isSharpen          ]=Tparam(&presetSettings.isSharpen          ,0,0);
+ params[IDFF_orderSharpen       ]=Tparam(&presetSettings.orderSharpen       ,MIN_ORDER,MAX_ORDER);
+ params[IDFF_sharpenMethod      ]=Tparam(&presetSettings.sharpenMethod      ,0,1);
+ params[IDFF_xsharp_strength    ]=Tparam(&presetSettings.xsharp_strength    ,1,127);
+ params[IDFF_xsharp_threshold   ]=Tparam(&presetSettings.xsharp_threshold   ,0,255);
+ params[IDFF_unsharp_strength   ]=Tparam(&presetSettings.unsharp_strength   ,1,127);
+ params[IDFF_unsharp_threshold  ]=Tparam(&presetSettings.unsharp_threshold  ,0,255);
                                                          
- params[IDFF_xvid               ]=Tparam(&cfg.xvid               ,0,0);
- params[IDFF_div3               ]=Tparam(&cfg.div3               ,0,0);
- params[IDFF_divx               ]=Tparam(&cfg.divx               ,0,0);
- params[IDFF_dx50               ]=Tparam(&cfg.dx50               ,0,0);
- params[IDFF_mp43               ]=Tparam(&cfg.mp43               ,0,0);
- params[IDFF_mp42               ]=Tparam(&cfg.mp42               ,0,0);
- params[IDFF_mp41               ]=Tparam(&cfg.mp41               ,0,0);
- params[IDFF_h263               ]=Tparam(&cfg.h263               ,0,0);
+ params[IDFF_isNoise            ]=Tparam(&presetSettings.isNoise            ,0,0);
+ params[IDFF_orderNoise         ]=Tparam(&presetSettings.orderNoise         ,MIN_ORDER,MAX_ORDER);
+ params[IDFF_noiseMethod        ]=Tparam(&presetSettings.noiseMethod        ,0,1);
+ params[IDFF_uniformNoise       ]=Tparam(&presetSettings.uniformNoise       ,0,0);
+ params[IDFF_noiseStrength      ]=Tparam(&presetSettings.noiseStrength      ,0,255);
+ params[IDFF_noiseStrengthChroma]=Tparam(&presetSettings.noiseStrengthChroma,0,127);
+                                                         
+ params[IDFF_idct               ]=Tparam(&presetSettings.idct               ,0,3);
+                                                         
+ params[IDFF_isResize           ]=Tparam(&presetSettings.isResize           ,0,0);
+ params[IDFF_resizeDx           ]=Tparam(&presetSettings.resizeDx           ,8,2048);
+ params[IDFF_resizeDy           ]=Tparam(&presetSettings.resizeDy           ,8,2048);
+ params[IDFF_resizeAspect       ]=Tparam(&presetSettings.resizeAspect       ,0,0,&TffDecoder::resizeChanged);
+ params[IDFF_resizeFirst        ]=Tparam(&presetSettings.resizeFirst        ,0,0,&TffDecoder::resizeChanged);
+ params[IDFF_resizeMethod       ]=Tparam(&presetSettings.resizeMethod       ,0,5,&TffDecoder::resizeChanged);
+ params[IDFF_aspectRatio        ]=Tparam(&presetSettings.aspectRatio        ,0,0,&TffDecoder::resizeChanged);
+ params[IDFF_resizeGblurLum     ]=Tparam(&presetSettings.resizeGblurLum     ,0,200,&TffDecoder::resizeChanged);
+ params[IDFF_resizeGblurChrom   ]=Tparam(&presetSettings.resizeGblurChrom   ,0,200,&TffDecoder::resizeChanged);
+ params[IDFF_resizeSharpenLum   ]=Tparam(&presetSettings.resizeSharpenLum   ,0,200,&TffDecoder::resizeChanged);
+ params[IDFF_resizeSharpenChrom ]=Tparam(&presetSettings.resizeSharpenChrom ,0,200,&TffDecoder::resizeChanged);
+ params[IDFF_isCropNzoom        ]=Tparam(&presetSettings.isCropNzoom        ,0,0,&TffDecoder::resizeChanged);
+ params[IDFF_isZoom             ]=Tparam(&presetSettings.isZoom             ,0,0,&TffDecoder::resizeChanged);
+ params[IDFF_magnificationX     ]=Tparam(&presetSettings.magnificationX     ,0,100,&TffDecoder::resizeChanged);
+ params[IDFF_magnificationY     ]=Tparam(&presetSettings.magnificationY     ,0,100,&TffDecoder::resizeChanged);
+ params[IDFF_magnificationLocked]=Tparam(&presetSettings.magnificationLocked,0,0,&TffDecoder::resizeChanged);
+ params[IDFF_cropLeft           ]=Tparam(&presetSettings.cropLeft           ,0,2048,&TffDecoder::resizeChanged);
+ params[IDFF_cropRight          ]=Tparam(&presetSettings.cropRight          ,0,2048,&TffDecoder::resizeChanged);
+ params[IDFF_cropTop            ]=Tparam(&presetSettings.cropTop            ,0,2048,&TffDecoder::resizeChanged);
+ params[IDFF_cropBottom         ]=Tparam(&presetSettings.cropBottom         ,0,2048,&TffDecoder::resizeChanged);
+ params[IDFF_autocrop           ]=Tparam(&presetSettings.autocrop           ,0,0,&TffDecoder::resizeChanged);
+
+ params[IDFF_isSubtitles        ]=Tparam(&presetSettings.isSubtitles        ,0,0,&TffDecoder::subsChanged);
+ params[IDFF_orderSubtitles     ]=Tparam(&presetSettings.orderSubtitles     ,MIN_ORDER,MAX_ORDER);
+ params[IDFF_fontCharset        ]=Tparam(&presetSettings.fontCharset        ,0,0,&TffDecoder::subsChanged);
+ params[IDFF_fontSize           ]=Tparam(&presetSettings.fontSize           ,2,255,&TffDecoder::subsChanged);
+ params[IDFF_fontWeight         ]=Tparam(&presetSettings.fontWeight         ,0,1000,&TffDecoder::subsChanged);
+ params[IDFF_fontColor          ]=Tparam(&presetSettings.fontColor          ,0,0,&TffDecoder::subsChanged);
+ params[IDFF_fontShadowStrength ]=Tparam(&presetSettings.fontShadowStrength ,0,100,&TffDecoder::subsChanged);
+ params[IDFF_fontShadowRadius   ]=Tparam(&presetSettings.fontShadowRadius   ,1,100,&TffDecoder::subsChanged);
+ params[IDFF_fontAutosize       ]=Tparam(&presetSettings.fontAutosize       ,0,0,&TffDecoder::subsChanged);
+ params[IDFF_fontSpacing        ]=Tparam(&presetSettings.fontSpacing        ,-10,10,&TffDecoder::subsChanged);
+ params[IDFF_subPosX            ]=Tparam(&presetSettings.subPosX            ,0,100,&TffDecoder::subsChanged);
+ params[IDFF_subPosY            ]=Tparam(&presetSettings.subPosY            ,0,100,&TffDecoder::subsChanged);
+ params[IDFF_subDelay           ]=Tparam(&presetSettings.subDelay           ,0,0,&TffDecoder::subsChanged);
+ params[IDFF_subSpeed           ]=Tparam(&presetSettings.subSpeed           ,0,0,&TffDecoder::subsChanged);
+ params[IDFF_subAutoFlnm        ]=Tparam(&presetSettings.subAutoFlnm        ,0,0);
 }                                                                      
 STDMETHODIMP TffDecoder::get_Param(unsigned int paramID, int* value)
 {
@@ -333,15 +341,15 @@ STDMETHODIMP TffDecoder::get_Param(unsigned int paramID, int* value)
 }
 STDMETHODIMP TffDecoder::get_Param2(unsigned int paramID)
 {
- int val;
- HRESULT res=get_Param(paramID,&val);
- return (res==S_OK)?val:0;
+ if (paramID<0 || paramID>=MAX_PARAMID) return 0;
+ if (!params[paramID].val) return 0;
+ return *params[paramID].val;
 }
 STDMETHODIMP TffDecoder::put_Param(unsigned int paramID, int  value)
 {
  if (paramID<0 || paramID>=MAX_PARAMID) return S_FALSE;
  Tparam &p=params[paramID];
- if (!p.val) return S_FALSE;
+ if (!p.val || (p.min==-1 && p.max==-1)) return S_FALSE;
  if (p.min || p.max)
   {
    if (value<p.min) value=p.min;
@@ -356,47 +364,42 @@ STDMETHODIMP TffDecoder::notifyParamsChanged(void)
  subsChanged();
  resizeChanged();
  trayIconChanged();
- idctChanged();
  return S_OK;
 }
 void TffDecoder::subsChanged(void)
 {
- cfg.fontChanged=true;
+ presetSettings.fontChanged=true;
 }
 void TffDecoder::resizeChanged(void)
 {
  if (resizeCtx) resizeCtx->resizeChanged=true;
- if (cfg.magnificationLocked) cfg.magnificationY=cfg.magnificationX;
+ if (presetSettings.magnificationLocked) presetSettings.magnificationY=presetSettings.magnificationX;
  //if (AVIdx && AVIdy) calcCrop();
 }
 void TffDecoder::trayIconChanged(void)
 {
- if (cfg.trayIcon) tray->show(); else tray->hide();
-}
-void TffDecoder::idctChanged(void)
-{
- cfg.idctChanged=true;
+ if (globalSettings.trayIcon) tray->show(); else tray->hide();
 }
 STDMETHODIMP TffDecoder::get_numPresets(unsigned int *value)
 {
  *value=0;
- if (!value || !cfg.presets) return E_POINTER;
- *value=cfg.presets->size();
+ if (!value) return E_POINTER;
+ *value=presets.size();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::get_presetName(unsigned int i,char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
- if (!cfg.presets || i>=cfg.presets->size()) return S_FALSE;
- if (len<(*cfg.presets)[i].size()) return E_OUTOFMEMORY;
- strcpy(buf,(*cfg.presets)[i].c_str());
+ if (i>=presets.size()) return S_FALSE;
+ if (len<strlen(presets[i].presetName)+1) return E_OUTOFMEMORY;
+ strcpy(buf,presets[i].presetName);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::get_activePresetName(char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
- if (len<strlen(cfg.presetName)+1) return E_OUTOFMEMORY;
- strcpy(buf,cfg.presetName);
+ if (len<strlen(presetSettings.presetName)+1) return E_OUTOFMEMORY;
+ strcpy(buf,presetSettings.presetName);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::get_AVIname(char *buf,unsigned int len)
@@ -421,37 +424,40 @@ STDMETHODIMP TffDecoder::get_AVIfps(unsigned int *fps)
 }
 STDMETHODIMP TffDecoder::loadPreset(const char *name)
 {
- cfg.loadPreset(name);
+ presetSettings=presets.loadPreset(name);
  notifyParamsChanged();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::savePreset(const char *name)
 {
- return cfg.savePreset(name);
+ presets.savePreset(presetSettings,name);
+ return S_OK;
 }
 STDMETHODIMP TffDecoder::savePresetToFile(const char *flnm)
 {
  //TODO: check save success
  if (!flnm) return S_FALSE;
- cfg.savePresetToFile(flnm);
+ presetSettings.saveFile(flnm);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::loadPresetFromFile(const char *flnm)
 {
  //TODO: check load success
  if (!flnm) return S_FALSE;
- cfg.loadPresetFromFile(flnm);
+ presetSettings.loadFile(flnm);
+ presets.storePreset(presetSettings);
  notifyParamsChanged();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::removePreset(const char *name)
 {
- return Tconfig::removePreset(name);
+ presets.removePreset(name);
+ return S_OK;
 }
 STDMETHODIMP TffDecoder::get_avcodec_version(char *buf,unsigned int len)
 {
  char *vers;
- libavcodec.getVersion(&cfg,&vers);
+ libavcodec.getVersion(&vers);
  if (!vers) return S_FALSE;
  if (len<strlen(vers)+1) return E_OUTOFMEMORY;
  strcpy(buf,vers);
@@ -471,77 +477,77 @@ STDMETHODIMP TffDecoder::getPPmode(unsigned int *ppmode)
    *ppmode=0;
    return S_FALSE;
   }
- *ppmode=Tpostproc::getPPmode(&cfg);  
+ *ppmode=Tpostproc::getPPmode(&presetSettings);  
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getPostProcDescription(char *buf,unsigned int len)
 {
  if (!buf || len<1000) return S_FALSE;
- cfg.getPostProcDescription(buf);
+ presetSettings.getPostProcDescription(buf);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getPictPropDescription(char *buf,unsigned int len)
 {
  if (!buf || len<1000) return S_FALSE;
- cfg.getPictPropDescription(buf);
+ presetSettings.getPictPropDescription(buf);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getNoiseDescription(char *buf,unsigned int len)
 {
  if (!buf || len<1000) return S_FALSE;
- cfg.getNoiseDescription(buf);
+ presetSettings.getNoiseDescription(buf);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getBlurDescription(char *buf,unsigned int len)
 {
  if (!buf || len<1000) return S_FALSE;
- cfg.getBlurDescription(buf);
+ presetSettings.getBlurDescription(buf);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getSharpenDescription(char *buf,unsigned int len)
 {
  if (!buf || len<1000) return S_FALSE;
- cfg.getSharpenDescription(buf);
+ presetSettings.getSharpenDescription(buf);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getCropDescription(char *buf,unsigned int len)
 {
  if (!buf || len<1000) return S_FALSE;
- cfg.getCropDescription(buf);
+ presetSettings.getCropDescription(buf);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getFontName(char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
- if (len<strlen(cfg.fontName)+1) return E_OUTOFMEMORY;
- strcpy(buf,cfg.fontName);
+ if (len<strlen(presetSettings.fontName)+1) return E_OUTOFMEMORY;
+ strcpy(buf,presetSettings.fontName);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::setFontName(const char *name)
 {
  if (!name) return E_POINTER;
  if (strlen(name)>255) return  S_FALSE;
- strcpy(cfg.fontName,name);
- notifyParamsChanged();
+ strcpy(presetSettings.fontName,name);
+ subsChanged();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getSubFlnm(char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
- if (len<strlen(cfg.subFlnm)+1) return E_OUTOFMEMORY;
- strcpy(buf,cfg.subFlnm);
+ if (len<strlen(presetSettings.subFlnm)+1) return E_OUTOFMEMORY;
+ strcpy(buf,presetSettings.subFlnm);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::loadSubtitles(const char *flnm)
 {
  if (!flnm) return E_POINTER;
  if (strlen(flnm)>255) return  S_FALSE;
- if (sub)
+ if (subs)
   {
-   sub->init(NULL,flnm,AVIfps);
-   strcpy(cfg.subFlnm,sub->flnm);
+   subs->init(NULL,flnm,AVIfps);
+   strcpy(presetSettings.subFlnm,subs->flnm);
   }
- else strcpy(cfg.subFlnm,flnm);  
+ else strcpy(presetSettings.subFlnm,flnm);  
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getRealCrop(unsigned int *left,unsigned int *top,unsigned int *right,unsigned int *bottom)
@@ -549,7 +555,7 @@ STDMETHODIMP TffDecoder::getRealCrop(unsigned int *left,unsigned int *top,unsign
  if (!left || !top || !right || !bottom) return E_POINTER;
  if (!AVIdx || !AVIdy)
   {
-   *left=cfg.cropLeft;*top=cfg.cropTop;*right=cfg.cropRight;*bottom=cfg.cropBottom;
+   *left=presetSettings.cropLeft;*top=presetSettings.cropTop;*right=presetSettings.cropRight;*bottom=presetSettings.cropBottom;
   }
  else
   {
@@ -565,6 +571,26 @@ STDMETHODIMP TffDecoder::getMinOrder2(void)
 STDMETHODIMP TffDecoder::getMaxOrder2(void)
 {
  return MAX_ORDER;
+}
+STDMETHODIMP TffDecoder::saveGlobalSettings(void)
+{
+ globalSettings.save();
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::loadGlobalSettings(void)
+{
+ globalSettings.load();
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::saveDialogSettings(void)
+{
+ dialogSettings.save();
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::loadDialogSettings(void)
+{
+ dialogSettings.load();
+ return S_OK;
 }
 
 // query interfaces 
@@ -601,19 +627,22 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  
  AVIname[0]=AVIfourcc[0]='\0';
  AVIdx=AVIdy=cropLeft=cropTop=cropDx=cropDy=AVIfps=0;
+ isDlg=0;inPlayer=1;idctOld=-1;
  
  fillParams();
- cfg.init();
- cfg.fontChanged=true;
- cfg.loadActivePreset();
+ config.init();
+ presetSettings.fontChanged=true;
+ //TODO: load active preset
+ //cfg.loadActivePreset();
  
  tray=new TtrayIcon(this,g_hInst);
  
  avctx=NULL;
 
  resizeCtx=NULL;
- imgFilters=(cfg.inPlayer)?new TimgFilters(&cfg):NULL;
- sub=(cfg.inPlayer)?new Tsubtitles:NULL;
+ //TODO: prevent creating of imgFilters and sub in cfg dialog only mode
+ imgFilters=new TimgFilters(&presetSettings);
+ subs=new Tsubtitles;
 }
 
 // destructor 
@@ -629,9 +658,9 @@ TffDecoder::~TffDecoder()
   }; 
  if (imgFilters) delete imgFilters;
  libavcodec.done();
- cfg.done(true);
+ //cfg.done(false);
  if (resizeCtx) delete resizeCtx;
- if (sub) delete sub;
+ if (subs) delete subs;
  delete tray;
 }
 
@@ -686,10 +715,10 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
  loadAVInameAndPreset();
  if (!resizeCtx)
   {
-   if (!imgFilters->postproc.ok) cfg.isResize=false;
-   resizeCtx=new TresizeCtx(&cfg);
-   if (cfg.isResize)
-    resizeCtx->allocate(cfg.resizeDx,cfg.resizeDy);
+   if (!imgFilters->postproc.ok) presetSettings.isResize=false;
+   resizeCtx=new TresizeCtx(&presetSettings);
+   if (presetSettings.isResize)
+    resizeCtx->allocate(presetSettings.resizeDx,presetSettings.resizeDy);
    else
     resizeCtx->allocate(AVIdx,AVIdy);
   };  
@@ -699,7 +728,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
   {
   case FOURCC_XVID:
   case FOURCC_xvid:
-   if (cfg.xvid) 
+   if (globalSettings.xvid) 
     {
      codecName="mpeg4";strcpy(AVIfourcc,"XVID");
      return S_OK;
@@ -707,7 +736,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    break;
   case FOURCC_DIVX:
   case FOURCC_divx:
-   if (cfg.divx) 
+   if (globalSettings.divx) 
     {
      codecName="mpeg4";strcpy(AVIfourcc,"DIVX");
      return S_OK;
@@ -715,7 +744,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    break;
   case FOURCC_DX50:
   case FOURCC_dx50:
-   if (cfg.dx50) 
+   if (globalSettings.dx50) 
     {
      codecName="mpeg4";strcpy(AVIfourcc,"DX50");
      return S_OK;
@@ -723,7 +752,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    break;
   case FOURCC_DIV3:
   case FOURCC_div3:
-   if (cfg.div3) 
+   if (globalSettings.div3) 
     {
      codecName="msmpeg4";strcpy(AVIfourcc,"DIV3");
      return S_OK;
@@ -731,7 +760,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    break;
   case FOURCC_MP43:
   case FOURCC_mp43:
-   if (cfg.mp43)
+   if (globalSettings.mp43)
     {
      codecName="msmpeg4";strcpy(AVIfourcc,"MP43");
      return S_OK;
@@ -739,7 +768,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    break;
   case FOURCC_MP42:
   case FOURCC_mp42:
-   if (cfg.mp42)
+   if (globalSettings.mp42)
     {
      codecName="msmpeg4v2";strcpy(AVIfourcc,"MP42");
      return S_OK;
@@ -747,7 +776,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    break;
   case FOURCC_MP41:
   case FOURCC_mp41:
-   if (cfg.mp41)
+   if (globalSettings.mp41)
     {
      codecName="msmpeg4v1";strcpy(AVIfourcc,"MP41");
      return S_OK;
@@ -755,7 +784,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    break;
   case FOURCC_H263:
   case FOURCC_h263:
-   if (cfg.h263)
+   if (globalSettings.h263)
     {
      codecName="h263";strcpy(AVIfourcc,"H263");
      return S_OK;
@@ -790,8 +819,8 @@ HRESULT TffDecoder::GetMediaType(int iPosition, CMediaType *mtOut)
 
  ZeroMemory(vih, sizeof (VIDEOINFOHEADER));
  vih->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
- vih->bmiHeader.biWidth  = (cfg.isResize)?cfg.resizeDx:AVIdx;
- vih->bmiHeader.biHeight = (cfg.isResize)?cfg.resizeDy:AVIdy;
+ vih->bmiHeader.biWidth  = (presetSettings.isResize)?presetSettings.resizeDx:AVIdx;
+ vih->bmiHeader.biHeight = (presetSettings.isResize)?presetSettings.resizeDy:AVIdy;
  vih->bmiHeader.biPlanes = 1;
 
  if (iPosition < 0) return E_INVALIDARG;
@@ -993,8 +1022,9 @@ void TffDecoder::loadAVInameAndPreset(void)
        ifsf->GetCurFile(&aviNameL,NULL);
        ifsf->Release();
        WideCharToMultiByte(CP_ACP,0,aviNameL,-1,AVIname,511, NULL, NULL );
-       if (cfg.autoPreset) cfg.autoPresetLoad(AVIname);
-       sub->init(AVIname,NULL,AVIfps);strcpy(cfg.subFlnm,sub->flnm);
+       //TODO: auto preset load
+       //if (globalSettings.autoPreset) cfg.autoPresetLoad(AVIname);
+       subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings.subFlnm,subs->flnm);
       }
      if (iff.pGraph) iff.pGraph->Release();
      bff->Release();
@@ -1004,24 +1034,24 @@ void TffDecoder::loadAVInameAndPreset(void)
 }
 void TffDecoder::calcCrop(void)
 {
- if (!cfg.isCropNzoom)
+ if (!presetSettings.isCropNzoom)
   {
    cropLeft=cropTop=0;
    cropDx=AVIdx;cropDy=AVIdy;
    return;
   }
- if (cfg.isZoom)
+ if (presetSettings.isZoom)
   {
-   cropDx=((100-cfg.magnificationX)*AVIdx)/100;
-   cropDy=((100-cfg.magnificationY)*AVIdy)/100;
+   cropDx=((100-presetSettings.magnificationX)*AVIdx)/100;
+   cropDy=((100-presetSettings.magnificationY)*AVIdy)/100;
    cropLeft=(AVIdx-cropDx)/2;
    cropTop =(AVIdy-cropDy)/2;
   }
  else
   { 
-   cropDx=AVIdx-(cfg.cropLeft+cfg.cropRight);
-   cropDy=AVIdy-(cfg.cropTop+cfg.cropBottom);
-   cropLeft=cfg.cropLeft;cropTop=cfg.cropTop;
+   cropDx=AVIdx-(presetSettings.cropLeft+presetSettings.cropRight );
+   cropDy=AVIdy-(presetSettings.cropTop +presetSettings.cropBottom);
+   cropLeft=presetSettings.cropLeft;cropTop=presetSettings.cropTop;
   }; 
  cropDx&=~7;cropDy&=~7;if (cropDx==0) cropDx=8;if (cropDy==0) cropDy=8;
  if (cropLeft+cropDx>=AVIdx) cropLeft=AVIdx-cropDx;if (cropTop+cropDy>=AVIdy) cropTop=AVIdy-cropDy;
@@ -1034,8 +1064,8 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
  //DEBUGS("Transform");
  if (!libavcodec.inited) 
   {
-   libavcodec.init(&cfg);
-   if (cfg.trayIcon) tray->show();
+   libavcodec.init();
+   if (globalSettings.trayIcon) tray->show();
   }; 
   
  LONGLONG t1,t2;pIn->GetMediaTime(&t1,&t2);
@@ -1064,10 +1094,10 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    DEBUGS("avcodec_open after");
    firstFrame=true;
   };
- if (cfg.idctChanged)
+ if (idctOld!=presetSettings.idct)
   {
-   cfg.idctChanged=0;
-   switch (cfg.idct)
+   idctOld=presetSettings.idct;
+   switch (presetSettings.idct)
     {  
      case 2:libavcodec.set_ff_idct(idct_xref);break;
      case 3:libavcodec.set_ff_idct((void*)3);break;
@@ -1131,14 +1161,14 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
  OutputDebugString(pomS);
  #endif
  
- cfg.sub=sub->getSubtitle(t1);
+ imgFilters->setSubtitle(subs->getSubtitle(t1));
  if (resizeCtx->resizeChanged)
   {
    resizeCtx->resizeChanged=false;
    calcCrop();
-   if (resizeCtx->isResize || cfg.resizeAspect==2 || cfg.isCropNzoom) 
+   if (resizeCtx->isResize || presetSettings.resizeAspect==2 || presetSettings.isCropNzoom) 
     {
-     if (!cfg.resizeAspect)
+     if (!presetSettings.resizeAspect)
       {
        resizeCtx->imgDx=resizeCtx->FFdx;
        resizeCtx->imgDy=resizeCtx->FFdy;
@@ -1147,14 +1177,14 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
      else
       {
        int ax,ay;
-       if (cfg.resizeAspect==1)
+       if (presetSettings.resizeAspect==1)
         {
          ax=AVIdx;
          ay=AVIdy;
         }
        else
         { 
-         ax=cfg.aspectRatio;
+         ax=presetSettings.aspectRatio;
          ay=1<<16;
         }; 
        resizeCtx->imgDx=resizeCtx->FFdx;
@@ -1169,7 +1199,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
        resizeCtx->diffY=(resizeCtx->FFdy-resizeCtx->imgDy)/2;resizeCtx->diffY&=~3;
       }
       
-     if (cfg.resizeFirst)
+     if (presetSettings.resizeFirst)
       imgFilters->init(resizeCtx->FFdx,resizeCtx->strideY,resizeCtx->FFdy,resizeCtx->diffX,resizeCtx->diffY);
      else
       imgFilters->init(cropDx,avpict.linesize[0],cropDy,0,0);
@@ -1181,10 +1211,10 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
     imgFilters->init(AVIdx,avpict.linesize[0],AVIdy,0,0);
   };  
  IMAGE destPict;
- if ((resizeCtx->isResize || cfg.resizeAspect==2 || cfg.isCropNzoom) && imgFilters->postproc.ok)
+ if ((resizeCtx->isResize || presetSettings.resizeAspect==2 || presetSettings.isCropNzoom) && imgFilters->postproc.ok)
   {
    int cropDiffY=avpict.linesize[0]*cropTop+cropLeft,cropDiffUV=avpict.linesize[1]*(cropTop/2)+(cropLeft/2);
-   if (cfg.resizeFirst)
+   if (presetSettings.resizeFirst)
     {
      resizeCtx->resize(avpict.data[0]+cropDiffY,avpict.data[1]+cropDiffUV,avpict.data[2]+cropDiffUV,
                        avpict.linesize[0],avpict.linesize[1],avpict.linesize[2],
@@ -1213,7 +1243,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
                 resizeCtx->FFdx,resizeCtx->FFdy,resizeCtx->strideY,
                 (unsigned char*)m_frame.image,
                 m_frame.stride,
-                m_frame.colorspace^(cfg.flip?XVID_CSP_VFLIP:0));
+                m_frame.colorspace^(presetSettings.flip?XVID_CSP_VFLIP:0));
   }
  else   
   {
@@ -1227,7 +1257,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
                 AVIdx,AVIdy,avpict.linesize[0],
                 (unsigned char*)m_frame.image,
                 m_frame.stride,
-                m_frame.colorspace^(cfg.flip?XVID_CSP_VFLIP:0));
+                m_frame.colorspace^(presetSettings.flip?XVID_CSP_VFLIP:0));
   }; 
  return S_OK;
 }
@@ -1237,7 +1267,7 @@ STDMETHODIMP TffDecoder::GetPages(CAUUID * pPages)
 {
  DEBUGS("GetPages");
  
- if (cfg.trayIcon) tray->show();
+ if (globalSettings.trayIcon) tray->show();
 
  pPages->cElems = 1;
  pPages->pElems = (GUID *)CoTaskMemAlloc(pPages->cElems * sizeof(GUID));

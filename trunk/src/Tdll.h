@@ -11,7 +11,7 @@ private:
  void loadDll(const char *dllName);
 public:
  bool ok;
- Tdll(const char *dllName1,const Tconfig *cfg)
+ Tdll(const char *dllName1)
   {
    hdll=LoadLibrary(dllName1);
    if (!hdll)
@@ -24,7 +24,7 @@ public:
     if (!hdll)
      {
       char pomS[256];
-      sprintf(pomS,"%s%s",cfg->pth,dllName2);
+      sprintf(pomS,"%s%s",config.pth,dllName2);
       hdll=LoadLibrary(pomS);
      }
    }

@@ -18,12 +18,13 @@
  */
 
 #include "TimgFilterSharpen.h"
-#include "..\Tconfig.h"
+#include "TpresetSettings.h"
+#include "Tconfig.h"
 #include "..\xvid\utils\mem_align.h"
 #include "..\xvid\xvid.h"
 
-const int Tconfig::xsharp_strengthDef=20,Tconfig::xsharp_thresholdDef=150;
-const int Tconfig::unsharp_strengthDef=40,Tconfig::unsharp_thresholdDef=0;
+const int TpresetSettings::xsharp_strengthDef=20,TpresetSettings::xsharp_thresholdDef=150;
+const int TpresetSettings::unsharp_strengthDef=40,TpresetSettings::unsharp_thresholdDef=0;
 
 __declspec(align(8)) static const __int64 m255=0x00ff00ff00ff00ff;
 __declspec(align(8)) static const __int64 ones=0xffffffffffffffff;
@@ -52,7 +53,7 @@ void TimgFilterSharpen::init(int Idx,int Istride,int Idy)
  Ymax=(unsigned char*)xvid_malloc(strideY*dyY,MCACHE_LINE);
 }
 
-void TimgFilterSharpen::xsharpen(unsigned char *src,unsigned char *dst,Tconfig *cfg)
+void TimgFilterSharpen::xsharpen(unsigned char *src,unsigned char *dst,TpresetSettings *cfg)
 {
  int dx=dxY,stride=strideY,dy=dyY;
  unsigned char *srcLnEnd=src+stride*dy;
@@ -261,7 +262,7 @@ void TimgFilterSharpen::xsharpen(unsigned char *src,unsigned char *dst,Tconfig *
  __asm {emms}; 
 }
 
-void TimgFilterSharpen::unsharpen(unsigned char *src,unsigned char *dst,Tconfig *cfg)
+void TimgFilterSharpen::unsharpen(unsigned char *src,unsigned char *dst,TpresetSettings *cfg)
 {
  int dx=dxY,stride=strideY,dy=dyY;
  memcpy(dst,src,dx);
@@ -427,11 +428,11 @@ void TimgFilterSharpen::unsharpen(unsigned char *src,unsigned char *dst,Tconfig 
 
 void TimgFilterSharpen::process(unsigned char *srcY,unsigned char *,unsigned char *,
                                 unsigned char *dstY,unsigned char *,unsigned char *,
-                                Tconfig *cfg)
+                                TpresetSettings *cfg)
 {
  if (cfg->sharpenMethod==0)
   {
-   if (cfg->cpu_flags&XVID_CPU_MMXEXT)
+   if (config.cpu_flags&XVID_CPU_MMXEXT)
     xsharpen(srcY,dstY,cfg);
   }
  else if (cfg->sharpenMethod==1)
