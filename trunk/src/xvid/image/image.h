@@ -12,9 +12,9 @@ extern "C" {
 
 typedef struct
 {
-	uint8_t * y;
-	uint8_t * u;
-	uint8_t * v;
+    uint8_t * y;
+    uint8_t * u;
+    uint8_t * v;
 } IMAGE;
 
 void init_image(uint32_t cpu_flags);
@@ -26,14 +26,14 @@ void image_swap(IMAGE * image1, IMAGE * image2);
 void image_copy(IMAGE *image1, IMAGE * image2, uint32_t edged_width, uint32_t height);
 void image_setedges(IMAGE * image, uint32_t edged_width, uint32_t edged_height, uint32_t width, uint32_t height, uint32_t interlacing);
 void image_interpolate(const IMAGE * refn, 
-					   IMAGE * refh, IMAGE * refv,	IMAGE * refhv, 
-					   uint32_t edged_width, uint32_t edged_height, uint32_t rounding);
+                       IMAGE * refh, IMAGE * refv,  IMAGE * refhv, 
+                       uint32_t edged_width, uint32_t edged_height, uint32_t rounding);
 
 int image_input(IMAGE * image, uint32_t width, int height, uint32_t edged_width,
-			const uint8_t * src, int csp);
+                const uint8_t * src, int csp);
 
 int image_output(IMAGE * image, uint32_t width, int height, uint32_t edged_width,
-			uint8_t * dst, uint32_t dst_stride, int csp);
+                 uint8_t * dst, uint32_t dst_stride, int csp);
 
 #ifdef __cplusplus
 }

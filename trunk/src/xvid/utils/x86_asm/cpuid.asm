@@ -47,41 +47,41 @@
 
 bits 32
 
-%define CPUID_TSC				0x00000010
-%define CPUID_MMX				0x00800000
-%define CPUID_SSE				0x02000000
-%define CPUID_SSE2				0x04000000
+%define CPUID_TSC               0x00000010
+%define CPUID_MMX               0x00800000
+%define CPUID_SSE               0x02000000
+%define CPUID_SSE2              0x04000000
 
-%define EXT_CPUID_3DNOW			0x80000000
-%define EXT_CPUID_AMD_3DNOWEXT	0x40000000
-%define EXT_CPUID_AMD_MMXEXT	0x00400000
+%define EXT_CPUID_3DNOW         0x80000000
+%define EXT_CPUID_AMD_3DNOWEXT  0x40000000
+%define EXT_CPUID_AMD_MMXEXT    0x00400000
 
-%define XVID_CPU_MMX			0x00000001
-%define XVID_CPU_MMXEXT			0x00000002
-%define XVID_CPU_SSE	        0x00000004
-%define XVID_CPU_SSE2			0x00000008
+%define XVID_CPU_MMX            0x00000001
+%define XVID_CPU_MMXEXT         0x00000002
+%define XVID_CPU_SSE            0x00000004
+%define XVID_CPU_SSE2           0x00000008
 %define XVID_CPU_3DNOW          0x00000010
-%define XVID_CPU_3DNOWEXT		0x00000020
+%define XVID_CPU_3DNOWEXT       0x00000020
 %define XVID_CPU_TSC            0x00000040
 
 
 %macro cglobal 1 
-	%ifdef PREFIX
-		global _%1 
-		%define %1 _%1
-	%else
-		global %1
-	%endif
+    %ifdef PREFIX
+        global _%1 
+        %define %1 _%1
+    %else
+        global %1
+    %endif
 %endmacro
 
 ALIGN 32
 
 section .data
 
-features	dd 0
+features    dd 0
 
-vendor		dd 0,0,0
-vendorAMD	db "AuthenticAMD"
+vendor      dd 0,0,0
+vendorAMD   db "AuthenticAMD"
 
 %macro  CHECK_FEATURE         3
 
@@ -100,24 +100,24 @@ section .text
 
 cglobal check_cpu_features
 check_cpu_features:
-	
-	pushad
-	pushfd	                        
+    
+    pushad
+    pushfd                          
 
-	; CPUID command ?
-	pop		eax
-	mov		ecx, eax
-	xor		eax, 0x200000
-	push	eax
-	popfd
-	pushfd
-	pop		eax
-	cmp		eax, ecx
+    ; CPUID command ?
+    pop     eax
+    mov     ecx, eax
+    xor     eax, 0x200000
+    push    eax
+    popfd
+    pushfd
+    pop     eax
+    cmp     eax, ecx
 
-	jz		near .cpu_quit		; no CPUID command -> exit
+    jz      near .cpu_quit      ; no CPUID command -> exit
 
 
-	; get vendor string, used later
+    ; get vendor string, used later
     xor     eax, eax
     cpuid           
     mov     [vendor], ebx       ; vendor string 
@@ -132,19 +132,19 @@ check_cpu_features:
 
 
     ; RDTSC command ?
-	CHECK_FEATURE CPUID_TSC, XVID_CPU_TSC, features
+    CHECK_FEATURE CPUID_TSC, XVID_CPU_TSC, features
 
     ; MMX support ?
-	CHECK_FEATURE CPUID_MMX, XVID_CPU_MMX, features
+    CHECK_FEATURE CPUID_MMX, XVID_CPU_MMX, features
 
     ; SSE support ?
-	CHECK_FEATURE CPUID_SSE, (XVID_CPU_MMXEXT+XVID_CPU_SSE), features
+    CHECK_FEATURE CPUID_SSE, (XVID_CPU_MMXEXT+XVID_CPU_SSE), features
 
-	; SSE2 support?
-	CHECK_FEATURE CPUID_SSE2, XVID_CPU_SSE2, features
+    ; SSE2 support?
+    CHECK_FEATURE CPUID_SSE2, XVID_CPU_SSE2, features
 
 
-	; extended functions?
+    ; extended functions?
     mov     eax, 0x80000000
     cpuid
     cmp     eax, 0x80000000
@@ -154,9 +154,9 @@ check_cpu_features:
     cpuid
          
     ; 3DNow! support ?
-	CHECK_FEATURE EXT_CPUID_3DNOW, XVID_CPU_3DNOW, features
+    CHECK_FEATURE EXT_CPUID_3DNOW, XVID_CPU_3DNOW, features
 
-	; AMD cpu ?
+    ; AMD cpu ?
     lea     esi, [vendorAMD]
     lea     edi, [vendor]
     mov     ecx, 12
@@ -164,16 +164,16 @@ check_cpu_features:
     repe    cmpsb
     jnz     .cpu_quit
 
-	; 3DNOW extended ?
-	CHECK_FEATURE EXT_CPUID_AMD_3DNOWEXT, XVID_CPU_3DNOWEXT, features
+    ; 3DNOW extended ?
+    CHECK_FEATURE EXT_CPUID_AMD_3DNOWEXT, XVID_CPU_3DNOWEXT, features
 
-	; extended MMX ?
-	CHECK_FEATURE EXT_CPUID_AMD_MMXEXT, XVID_CPU_MMXEXT, features
+    ; extended MMX ?
+    CHECK_FEATURE EXT_CPUID_AMD_MMXEXT, XVID_CPU_MMXEXT, features
         
 .cpu_quit:  
 
-	popad
-	
-	mov eax, [features]
-	
-	ret
+    popad
+    
+    mov eax, [features]
+    
+    ret

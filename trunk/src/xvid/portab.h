@@ -27,11 +27,11 @@
 
 #if _MSC_VER <= 1200
 #define DECLARE_ALIGNED_MATRIX(name,sizex,sizey,type,alignment) \
-	type name##_storage[(sizex)*(sizey)+(alignment)-1]; \
-	type * name = (type *) (((int32_t) name##_storage+(alignment - 1)) & ~((int32_t)(alignment)-1))
+    type name##_storage[(sizex)*(sizey)+(alignment)-1]; \
+    type * name = (type *) (((int32_t) name##_storage+(alignment - 1)) & ~((int32_t)(alignment)-1))
 #else
 #define DECLARE_ALIGNED_MATRIX(name,sizex,sizey,type,alignment) \
-	__declspec(align(alignment)) type name[(sizex)*(sizey)]
+    __declspec(align(alignment)) type name[(sizex)*(sizey)]
 #endif
 
 // needed for bitstream.h
@@ -39,18 +39,18 @@
 
 // needed for timer.c
 static __inline int64_t read_counter() {
-	int64_t ts;
-	uint32_t ts1, ts2;
+    int64_t ts;
+    uint32_t ts1, ts2;
 
-	__asm {
-		rdtsc
-		mov  ts1, eax
-		mov  ts2, edx
-	}
-	
-	ts = ((uint64_t) ts2 << 32) | ((uint64_t) ts1);
+    __asm {
+        rdtsc
+        mov  ts1, eax
+        mov  ts2, edx
+    }
     
-	return ts;
+    ts = ((uint64_t) ts2 << 32) | ((uint64_t) ts1);
+    
+    return ts;
 }
 
 #elif defined(LINUX) || defined(DJGPP)
@@ -60,7 +60,7 @@ static __inline int64_t read_counter() {
 
 #include <stdio.h>
 #define DEBUG_WHERE               stdout
-#define DEBUGSX(S)                  fprintf(DEBUG_WHERE, "%s\n", (S));
+#define DEBUGSX(S)                fprintf(DEBUG_WHERE, "%s\n", (S));
 #define DEBUG1(S,I)               fprintf(DEBUG_WHERE, "%s %i\n", (S), (I))
 #define DEBUG2(S,A,B)             fprintf(DEBUG_WHERE, "%s%i=%i\n", (S), (A), (B))
 #define DEBUG3(S,A,B,C)           fprintf(DEBUG_WHERE, "%s %i %x %x\n", (S), (A), (B), (C))
@@ -80,44 +80,44 @@ static __inline int64_t read_counter() {
 #include <stdint.h>
 
 #define DECLARE_ALIGNED_MATRIX(name,sizex,sizey,type,alignment) \
-	type name##_storage[(sizex)*(sizey)+(alignment)-1]; \
-	type * name = (type *) (((int32_t) name##_storage+(alignment - 1)) & ~((int32_t)(alignment)-1))
+    type name##_storage[(sizex)*(sizey)+(alignment)-1]; \
+    type * name = (type *) (((int32_t) name##_storage+(alignment - 1)) & ~((int32_t)(alignment)-1))
 
 #else
 
 #define #define #define DECLARE_ALIGNED_MATRIX(name,sizex,sizey,type,alignment) \
-	__attribute__ ((__aligned__(CACHE_LINE))) type name[(sizex)*(sizey)]
+    __attribute__ ((__aligned__(CACHE_LINE))) type name[(sizex)*(sizey)]
 
 #endif
 
 
 // needed for bitstream.h
 #ifdef ARCH_PPC
-	#define BSWAP(a) __asm__ __volatile__ ( "lwbrx %0,0,%1; eieio" : "=r" (a) : \
-		"r" (&(a)), "m" (a));
-	#define EMMS()
+    #define BSWAP(a) __asm__ __volatile__ ( "lwbrx %0,0,%1; eieio" : "=r" (a) : \
+        "r" (&(a)), "m" (a));
+    #define EMMS()
 
-	static __inline unsigned long get_tbl(void) {
-		unsigned long tbl;
-		asm volatile("mftb %0" : "=r" (tbl));
-		return tbl;
-	}
-	static __inline unsigned long get_tbu(void) {
-		unsigned long tbl;
-		asm volatile("mftbu %0" : "=r" (tbl));
-		return tbl;
-	}
-	static __inline int64_t read_counter() {
-		unsigned long tb, tu;
-		do {
-			tu = get_tbu();
-			tb = get_tbl();
-		} while(tb != get_tbl());
-		return (((int64_t)tu) << 32) | (int64_t)tb;
-	}
+    static __inline unsigned long get_tbl(void) {
+        unsigned long tbl;
+        asm volatile("mftb %0" : "=r" (tbl));
+        return tbl;
+    }
+    static __inline unsigned long get_tbu(void) {
+        unsigned long tbl;
+        asm volatile("mftbu %0" : "=r" (tbl));
+        return tbl;
+    }
+    static __inline int64_t read_counter() {
+        unsigned long tb, tu;
+        do {
+            tu = get_tbu();
+            tb = get_tbl();
+        } while(tb != get_tbl());
+        return (((int64_t)tu) << 32) | (int64_t)tb;
+    }
 #else
-	#define BSWAP(a) __asm__ ( "bswapl %0\n" : "=r" (a) : "0" (a) )
-	#define EMMS() __asm__("emms\n\t")
+    #define BSWAP(a) __asm__ ( "bswapl %0\n" : "=r" (a) : "0" (a) )
+    #define EMMS() __asm__("emms\n\t")
 
 
 // needed for timer.c
@@ -148,12 +148,12 @@ static __inline int64_t read_counter() {
 
 // needed for bitstream.h
 #define BSWAP(a) \
-	 ((a) = ( ((a)&0xff)<<24) | (((a)&0xff00)<<8) | (((a)>>8)&0xff00) | (((a)>>24)&0xff))
+     ((a) = ( ((a)&0xff)<<24) | (((a)&0xff00)<<8) | (((a)>>8)&0xff00) | (((a)>>24)&0xff))
 
 // rdtsc command most likely not supported,
 // so just dummy code here
 static __inline int64_t read_counter() {
-	return 0;
+    return 0;
 }
 
 #define CACHE_LINE  16

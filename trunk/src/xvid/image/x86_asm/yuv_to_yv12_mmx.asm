@@ -48,12 +48,12 @@
 BITS 32
 
 %macro cglobal 1 
-	%ifdef PREFIX
-		global _%1 
-		%define %1 _%1
-	%else
-		global %1
-	%endif
+    %ifdef PREFIX
+        global _%1 
+        %define %1 _%1
+    %else
+        global %1
+    %endif
 %endmacro
 
 SECTION .data
@@ -67,40 +67,40 @@ ALIGN 64
 ; This function probably also runs on PentiumII class cpu's
 
 ;;void yuv_to_yv12_xmm(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out, uint8_t *src,
-;;				   int width, int height, int stride);
+;;                 int width, int height, int stride);
 cglobal yuv_to_yv12_xmm
 yuv_to_yv12_xmm:
-	
+    
     push ebx
     push esi
     push edi
-	push ebp
+    push ebp
 
-    mov eax, [esp + 40]		; height -> eax
-    mov ebx, [esp + 44]		; stride -> ebx
-    mov esi, [esp + 32] 	; src -> esi 
-    mov edi, [esp + 20] 	; y_out -> edi 
-    mov ecx, [esp + 36] 	; width -> ecx
+    mov eax, [esp + 40]     ; height -> eax
+    mov ebx, [esp + 44]     ; stride -> ebx
+    mov esi, [esp + 32]     ; src -> esi 
+    mov edi, [esp + 20]     ; y_out -> edi 
+    mov ecx, [esp + 36]     ; width -> ecx
 
-    sub ebx, ecx			; stride - width -> ebx
+    sub ebx, ecx            ; stride - width -> ebx
 
-	mov edx, ecx
-	mov ebp, ecx
-	shr edx, 6				
-	mov ecx, edx			; 64 bytes copied per iteration
-	shl edx, 6
-	sub ebp, edx			; remainder -> ebp
-	shr ebp, 4				; 16 bytes per iteration
-	add ebp, 1			
-	mov [remainder], ebp
+    mov edx, ecx
+    mov ebp, ecx
+    shr edx, 6              
+    mov ecx, edx            ; 64 bytes copied per iteration
+    shl edx, 6
+    sub ebp, edx            ; remainder -> ebp
+    shr ebp, 4              ; 16 bytes per iteration
+    add ebp, 1          
+    mov [remainder], ebp
 
-	mov edx, ecx			
+    mov edx, ecx            
 
 .y_inner_loop:
-	prefetchnta [esi + 64]	; non temporal prefetch 
+    prefetchnta [esi + 64]  ; non temporal prefetch 
     prefetchnta [esi + 96] 
 
-    movq mm1, [esi]			; read from src 
+    movq mm1, [esi]         ; read from src 
     movq mm2, [esi + 8] 
     movq mm3, [esi + 16] 
     movq mm4, [esi + 24] 
@@ -109,7 +109,7 @@ yuv_to_yv12_xmm:
     movq mm7, [esi + 48] 
     movq mm0, [esi + 56] 
 
-    movntq [edi], mm1		; write to y_out 
+    movntq [edi], mm1       ; write to y_out 
     movntq [edi + 8], mm2 
     movntq [edi + 16], mm3 
     movntq [edi + 24], mm4 
@@ -122,58 +122,58 @@ yuv_to_yv12_xmm:
     add edi, 64 
     dec ecx
     jnz .y_inner_loop    
-	
-	dec ebp
-	jz .y_outer_loop
+    
+    dec ebp
+    jz .y_outer_loop
 
 .y_remainder_loop:
-    movq mm1, [esi]			; read from src 
+    movq mm1, [esi]         ; read from src 
     movq mm2, [esi + 8] 
 
-    movntq [edi], mm1		; write to y_out 
+    movntq [edi], mm1       ; write to y_out 
     movntq [edi + 8], mm2 
 
     add esi, 16
     add edi, 16 
-	dec ebp
-	jnz .y_remainder_loop
-	
+    dec ebp
+    jnz .y_remainder_loop
+    
 .y_outer_loop:
-	mov ebp, [remainder]	
+    mov ebp, [remainder]    
     mov ecx, edx
     add edi, ebx
     
     dec eax
-	jnz near .y_inner_loop
+    jnz near .y_inner_loop
 
-    mov eax, [esp + 40]		; height -> eax
-    mov ebx, [esp + 44]		; stride -> ebx
-    mov ecx, [esp + 36]	 	; width -> ecx
-    mov edi, [esp + 24] 	; u_out -> edi 
+    mov eax, [esp + 40]     ; height -> eax
+    mov ebx, [esp + 44]     ; stride -> ebx
+    mov ecx, [esp + 36]     ; width -> ecx
+    mov edi, [esp + 24]     ; u_out -> edi 
 
-	shr ecx, 1				; width / 2 -> ecx
-	shr ebx, 1				; stride / 2 -> ebx
-	shr eax, 1				; height / 2 -> eax
+    shr ecx, 1              ; width / 2 -> ecx
+    shr ebx, 1              ; stride / 2 -> ebx
+    shr eax, 1              ; height / 2 -> eax
 
-    sub ebx, ecx			; stride / 2 - width / 2 -> ebx
+    sub ebx, ecx            ; stride / 2 - width / 2 -> ebx
 
-	mov edx, ecx
-	mov ebp, ecx
-	shr edx, 6				
-	mov ecx, edx			; 64 bytes copied per iteration
-	shl edx, 6
-	sub ebp, edx			; remainder -> ebp
-	shr ebp, 3				; 8 bytes per iteration
-	add ebp, 1			
-	mov [remainder], ebp
-	
-	mov edx, ecx			
+    mov edx, ecx
+    mov ebp, ecx
+    shr edx, 6              
+    mov ecx, edx            ; 64 bytes copied per iteration
+    shl edx, 6
+    sub ebp, edx            ; remainder -> ebp
+    shr ebp, 3              ; 8 bytes per iteration
+    add ebp, 1          
+    mov [remainder], ebp
+    
+    mov edx, ecx            
 
 .u_inner_loop:
-	prefetchnta [esi + 64]	; non temporal prefetch 
+    prefetchnta [esi + 64]  ; non temporal prefetch 
     prefetchnta [esi + 96] 
 
-    movq mm1, [esi]			; read from src 
+    movq mm1, [esi]         ; read from src 
     movq mm2, [esi + 8] 
     movq mm3, [esi + 16] 
     movq mm4, [esi + 24] 
@@ -182,7 +182,7 @@ yuv_to_yv12_xmm:
     movq mm7, [esi + 48] 
     movq mm0, [esi + 56] 
 
-    movntq [edi], mm1		; write to u_out 
+    movntq [edi], mm1       ; write to u_out 
     movntq [edi + 8], mm2 
     movntq [edi + 16], mm3 
     movntq [edi + 24], mm4 
@@ -197,50 +197,50 @@ yuv_to_yv12_xmm:
     dec ecx
     jnz .u_inner_loop    
 
-	dec ebp
-	jz .u_outer_loop
+    dec ebp
+    jz .u_outer_loop
 
 .u_remainder_loop:
-    movq mm1, [esi]			; read from src 
-    movntq [edi], mm1		; write to y_out 
+    movq mm1, [esi]         ; read from src 
+    movntq [edi], mm1       ; write to y_out 
 
     add esi, 8
     add edi, 8 
-	dec ebp
-	jnz .u_remainder_loop
+    dec ebp
+    jnz .u_remainder_loop
 
 .u_outer_loop:
-	mov ebp, [remainder]	
+    mov ebp, [remainder]    
     mov ecx, edx
     add edi, ebx
     
     dec eax
-	jnz .u_inner_loop
+    jnz .u_inner_loop
 
-    mov eax, [esp + 40]		; height -> eax
-    mov ecx, [esp + 36] 	; width -> ecx
-    mov edi, [esp + 28] 	; v_out -> edi 
+    mov eax, [esp + 40]     ; height -> eax
+    mov ecx, [esp + 36]     ; width -> ecx
+    mov edi, [esp + 28]     ; v_out -> edi 
 
-	shr ecx, 1				; width / 2 -> ecx
-	shr eax, 1				; height / 2 -> eax
+    shr ecx, 1              ; width / 2 -> ecx
+    shr eax, 1              ; height / 2 -> eax
 
-	mov edx, ecx
-	mov ebp, ecx
-	shr edx, 6				
-	mov ecx, edx			; 64 bytes copied per iteration
-	shl edx, 6
-	sub ebp, edx			; remainder -> ebp
-	shr ebp, 3				; 8 bytes per iteration
-	add ebp, 1			
-	mov [remainder], ebp
-	
-	mov edx, ecx			
+    mov edx, ecx
+    mov ebp, ecx
+    shr edx, 6              
+    mov ecx, edx            ; 64 bytes copied per iteration
+    shl edx, 6
+    sub ebp, edx            ; remainder -> ebp
+    shr ebp, 3              ; 8 bytes per iteration
+    add ebp, 1          
+    mov [remainder], ebp
+    
+    mov edx, ecx            
 
 .v_inner_loop:
-	prefetchnta [esi + 64]	; non temporal prefetch 
+    prefetchnta [esi + 64]  ; non temporal prefetch 
     prefetchnta [esi + 96] 
 
-    movq mm1, [esi]			; read from src 
+    movq mm1, [esi]         ; read from src 
     movq mm2, [esi + 8] 
     movq mm3, [esi + 16] 
     movq mm4, [esi + 24] 
@@ -249,7 +249,7 @@ yuv_to_yv12_xmm:
     movq mm7, [esi + 48] 
     movq mm0, [esi + 56] 
 
-    movntq [edi], mm1		; write to u_out 
+    movntq [edi], mm1       ; write to u_out 
     movntq [edi + 8], mm2 
     movntq [edi + 16], mm3 
     movntq [edi + 24], mm4 
@@ -264,27 +264,27 @@ yuv_to_yv12_xmm:
     dec ecx
     jnz .v_inner_loop    
 
-	dec ebp
-	jz .v_outer_loop
+    dec ebp
+    jz .v_outer_loop
 
 .v_remainder_loop:
-    movq mm1, [esi]			; read from src 
-    movntq [edi], mm1		; write to y_out 
+    movq mm1, [esi]         ; read from src 
+    movntq [edi], mm1       ; write to y_out 
 
     add esi, 8
     add edi, 8 
-	dec ebp
-	jnz .v_remainder_loop
+    dec ebp
+    jnz .v_remainder_loop
 
 .v_outer_loop:
-	mov ebp, [remainder]	
+    mov ebp, [remainder]    
     mov ecx, edx
     add edi, ebx
     
     dec eax
-	jnz .v_inner_loop
+    jnz .v_inner_loop
 
-	pop ebp
+    pop ebp
     pop edi
     pop esi
     pop ebx
@@ -297,37 +297,37 @@ yuv_to_yv12_xmm:
 
 ; Attention: This code assumes that width is a multiple of 16
 ;;void yuv_to_yv12_mmx(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out, uint8_t *src,
-;;				   int width, int height, int stride);
+;;                 int width, int height, int stride);
 cglobal yuv_to_yv12_mmx
 yuv_to_yv12_mmx:
-	
+    
     push ebx
     push esi
     push edi
-	push ebp
+    push ebp
 
-    mov eax, [esp + 40]		; height -> eax
-    mov ebx, [esp + 44]		; stride -> ebx
-    mov esi, [esp + 32] 	; src -> esi 
-    mov edi, [esp + 20] 	; y_out -> edi 
-    mov ecx, [esp + 36] 	; width -> ecx
+    mov eax, [esp + 40]     ; height -> eax
+    mov ebx, [esp + 44]     ; stride -> ebx
+    mov esi, [esp + 32]     ; src -> esi 
+    mov edi, [esp + 20]     ; y_out -> edi 
+    mov ecx, [esp + 36]     ; width -> ecx
 
-    sub ebx, ecx			; stride - width -> ebx
+    sub ebx, ecx            ; stride - width -> ebx
 
-	mov edx, ecx
-	mov ebp, ecx
-	shr edx, 6				
-	mov ecx, edx			; 64 bytes copied per iteration
-	shl edx, 6
-	sub ebp, edx			; remainder -> ebp
-	shr ebp, 4				; 16 bytes per iteration
-	add ebp, 1			
-	mov [remainder], ebp
+    mov edx, ecx
+    mov ebp, ecx
+    shr edx, 6              
+    mov ecx, edx            ; 64 bytes copied per iteration
+    shl edx, 6
+    sub ebp, edx            ; remainder -> ebp
+    shr ebp, 4              ; 16 bytes per iteration
+    add ebp, 1          
+    mov [remainder], ebp
 
-	mov edx, ecx			
+    mov edx, ecx            
 
 .y_inner_loop:
-    movq mm1, [esi]			; read from src 
+    movq mm1, [esi]         ; read from src 
     movq mm2, [esi + 8] 
     movq mm3, [esi + 16] 
     movq mm4, [esi + 24] 
@@ -336,7 +336,7 @@ yuv_to_yv12_mmx:
     movq mm7, [esi + 48] 
     movq mm0, [esi + 56] 
 
-    movq [edi], mm1			; write to y_out 
+    movq [edi], mm1         ; write to y_out 
     movq [edi + 8], mm2 
     movq [edi + 16], mm3 
     movq [edi + 24], mm4 
@@ -349,55 +349,55 @@ yuv_to_yv12_mmx:
     add edi, 64 
     dec ecx
     jnz .y_inner_loop    
-	
-	dec ebp
-	jz .y_outer_loop
+    
+    dec ebp
+    jz .y_outer_loop
 
 .y_remainder_loop:
-    movq mm1, [esi]			; read from src 
+    movq mm1, [esi]         ; read from src 
     movq mm2, [esi + 8] 
 
-    movq [edi], mm1			; write to y_out 
+    movq [edi], mm1         ; write to y_out 
     movq [edi + 8], mm2 
 
     add esi, 16
     add edi, 16 
-	dec ebp
-	jnz .y_remainder_loop
-	
+    dec ebp
+    jnz .y_remainder_loop
+    
 .y_outer_loop:
-	mov ebp, [remainder]	
+    mov ebp, [remainder]    
     mov ecx, edx
     add edi, ebx
     
     dec eax
-	jnz near .y_inner_loop
+    jnz near .y_inner_loop
 
-    mov eax, [esp + 40]		; height -> eax
-    mov ebx, [esp + 44]		; stride -> ebx
-    mov ecx, [esp + 36]	 	; width -> ecx
-    mov edi, [esp + 24] 	; u_out -> edi 
+    mov eax, [esp + 40]     ; height -> eax
+    mov ebx, [esp + 44]     ; stride -> ebx
+    mov ecx, [esp + 36]     ; width -> ecx
+    mov edi, [esp + 24]     ; u_out -> edi 
 
-	shr ecx, 1				; width / 2 -> ecx
-	shr ebx, 1				; stride / 2 -> ebx
-	shr eax, 1				; height / 2 -> eax
+    shr ecx, 1              ; width / 2 -> ecx
+    shr ebx, 1              ; stride / 2 -> ebx
+    shr eax, 1              ; height / 2 -> eax
 
-    sub ebx, ecx			; stride / 2 - width / 2 -> ebx
+    sub ebx, ecx            ; stride / 2 - width / 2 -> ebx
 
-	mov edx, ecx
-	mov ebp, ecx
-	shr edx, 6				
-	mov ecx, edx			; 64 bytes copied per iteration
-	shl edx, 6
-	sub ebp, edx			; remainder -> ebp
-	shr ebp, 3				; 8 bytes per iteration
-	add ebp, 1			
-	mov [remainder], ebp
-	
-	mov edx, ecx			
+    mov edx, ecx
+    mov ebp, ecx
+    shr edx, 6              
+    mov ecx, edx            ; 64 bytes copied per iteration
+    shl edx, 6
+    sub ebp, edx            ; remainder -> ebp
+    shr ebp, 3              ; 8 bytes per iteration
+    add ebp, 1          
+    mov [remainder], ebp
+    
+    mov edx, ecx            
 
 .u_inner_loop:
-    movq mm1, [esi]			; read from src 
+    movq mm1, [esi]         ; read from src 
     movq mm2, [esi + 8] 
     movq mm3, [esi + 16] 
     movq mm4, [esi + 24] 
@@ -406,7 +406,7 @@ yuv_to_yv12_mmx:
     movq mm7, [esi + 48] 
     movq mm0, [esi + 56] 
 
-    movq [edi], mm1		; write to u_out 
+    movq [edi], mm1     ; write to u_out 
     movq [edi + 8], mm2 
     movq [edi + 16], mm3 
     movq [edi + 24], mm4 
@@ -421,47 +421,47 @@ yuv_to_yv12_mmx:
     dec ecx
     jnz .u_inner_loop    
 
-	dec ebp
-	jz .u_outer_loop
+    dec ebp
+    jz .u_outer_loop
 
 .u_remainder_loop:
-    movq mm1, [esi]			; read from src 
-    movq [edi], mm1		; write to y_out 
+    movq mm1, [esi]         ; read from src 
+    movq [edi], mm1     ; write to y_out 
 
     add esi, 8
     add edi, 8 
-	dec ebp
-	jnz .u_remainder_loop
+    dec ebp
+    jnz .u_remainder_loop
 
 .u_outer_loop:
-	mov ebp, [remainder]	
+    mov ebp, [remainder]    
     mov ecx, edx
     add edi, ebx
     
     dec eax
-	jnz .u_inner_loop
+    jnz .u_inner_loop
 
-    mov eax, [esp + 40]		; height -> eax
-    mov ecx, [esp + 36] 	; width -> ecx
-    mov edi, [esp + 28] 	; v_out -> edi 
+    mov eax, [esp + 40]     ; height -> eax
+    mov ecx, [esp + 36]     ; width -> ecx
+    mov edi, [esp + 28]     ; v_out -> edi 
 
-	shr ecx, 1				; width / 2 -> ecx
-	shr eax, 1				; height / 2 -> eax
+    shr ecx, 1              ; width / 2 -> ecx
+    shr eax, 1              ; height / 2 -> eax
 
-	mov edx, ecx
-	mov ebp, ecx
-	shr edx, 6				
-	mov ecx, edx			; 64 bytes copied per iteration
-	shl edx, 6
-	sub ebp, edx			; remainder -> ebp
-	shr ebp, 3				; 8 bytes per iteration
-	add ebp, 1			
-	mov [remainder], ebp
-	
-	mov edx, ecx			
+    mov edx, ecx
+    mov ebp, ecx
+    shr edx, 6              
+    mov ecx, edx            ; 64 bytes copied per iteration
+    shl edx, 6
+    sub ebp, edx            ; remainder -> ebp
+    shr ebp, 3              ; 8 bytes per iteration
+    add ebp, 1          
+    mov [remainder], ebp
+    
+    mov edx, ecx            
 
 .v_inner_loop:
-    movq mm1, [esi]			; read from src 
+    movq mm1, [esi]         ; read from src 
     movq mm2, [esi + 8] 
     movq mm3, [esi + 16] 
     movq mm4, [esi + 24] 
@@ -470,7 +470,7 @@ yuv_to_yv12_mmx:
     movq mm7, [esi + 48] 
     movq mm0, [esi + 56] 
 
-    movq [edi], mm1		; write to u_out 
+    movq [edi], mm1     ; write to u_out 
     movq [edi + 8], mm2 
     movq [edi + 16], mm3 
     movq [edi + 24], mm4 
@@ -485,27 +485,27 @@ yuv_to_yv12_mmx:
     dec ecx
     jnz .v_inner_loop    
 
-	dec ebp
-	jz .v_outer_loop
+    dec ebp
+    jz .v_outer_loop
 
 .v_remainder_loop:
-    movq mm1, [esi]			; read from src 
-    movq [edi], mm1		; write to y_out 
+    movq mm1, [esi]         ; read from src 
+    movq [edi], mm1     ; write to y_out 
 
     add esi, 8
     add edi, 8 
-	dec ebp
-	jnz .v_remainder_loop
+    dec ebp
+    jnz .v_remainder_loop
 
 .v_outer_loop:
-	mov ebp, [remainder]	
+    mov ebp, [remainder]    
     mov ecx, edx
     add edi, ebx
     
     dec eax
-	jnz .v_inner_loop
+    jnz .v_inner_loop
 
-	pop ebp
+    pop ebp
     pop edi
     pop esi
     pop ebx
