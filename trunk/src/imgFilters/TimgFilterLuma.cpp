@@ -37,13 +37,13 @@ void TimgFilterLuma::process(unsigned char *srcY,unsigned char *srcU,unsigned ch
  lumGainMask=((__int64)cfg->lumGain<<48) + ((__int64)cfg->lumGain<<32) + ((__int64)cfg->lumGain<<16) + (__int64)cfg->lumGain;
  __declspec(align(8)) static __int64 lumOffsetMask;
  lumOffsetMask=((__int64)cfg->lumOffset<<48) + ((__int64)cfg->lumOffset<<32) + ((__int64)cfg->lumOffset<<16) + (__int64)cfg->lumOffset;
- for (unsigned char *srcYend=srcY+strideY*dyY;srcY<srcYend;srcY+=strideY,dstY+=strideY)
+ for (unsigned char *src=srcY,*srcYend=src+strideY*dyY,*dst=dstY;src<srcYend;src+=strideY,dst+=strideY)
   {
    int LUM_AREA=dxY;
    __asm
     {
-     mov         eax, [srcY]
-     mov         ebx, [dstY]
+     mov         eax, [src]
+     mov         ebx, [dst]
      mov         esi, 0x00
      mov         edi, [LUM_AREA]
      pxor        mm0, mm0
@@ -89,6 +89,7 @@ void TimgFilterLuma::process(unsigned char *srcY,unsigned char *srcU,unsigned ch
     gammaTab[i]=255.0*pow((i/255.0),gamma);
   };
  if (cfg->gammaCorrection!=cfg->gammaCorrectionDef)
-  for (int i=0;i<strideY*dyY;i++)
-   dstY[i]=gammaTab[dstY[i]];
+  for (int y=0;y<dyY;y++)
+   for (unsigned char *dst=dstY+strideY*y,*dstEnd=dst+dxY;dst<dstEnd;dst++)
+    *dst=gammaTab[*dst];
 };
