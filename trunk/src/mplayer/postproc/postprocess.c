@@ -531,6 +531,7 @@ int use_old_pp=0;
 /* -pp Command line Help
 NOTE/FIXME: put this at an appropriate place (--help, html docs, man mplayer)?
 */
+/*
 char *help=
 "-npp <filterName>[:<option>[:<option>...]][,[-]<filterName>[:<option>...]]...\n"
 "long form example:\n"
@@ -567,7 +568,7 @@ char *help=
 "			1. <= 2. <= 3.		larger -> stronger filtering\n"
 "fq	forceQuant	<quantizer>		Force quantizer\n"
 ;
-
+*/
 /**
  * returns a PPMode struct which will have a non 0 error variable if an error occured
  * name is the string after "-pp" on the command line
@@ -639,7 +640,7 @@ struct PPMode getPPModeByNameAndQuality(char *name, int quality)
 				else p--, *p=',';		//not last filter
 
 				plen= strlen(p);
-				spaceLeft= (int)p - (int)temp + plen;
+				spaceLeft= p - temp + plen;
 				if(spaceLeft + newlen  >= GET_MODE_BUFFER_SIZE)
 				{
 					ppMode.error++;

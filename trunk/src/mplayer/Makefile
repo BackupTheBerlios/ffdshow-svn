@@ -6,8 +6,7 @@ SOLIBNAME = libpostproc.dll
 
 SRCS=   \
 	postproc/postprocess.c postproc/swscale.c postproc/rgb2rgb.c postproc/yuv2rgb.c \
-	libmpcodecs/img_format.c \
-	mplayer.c cpudetect.c mem_align.c mp_msg.c
+	mplayer.c cpudetect.c mem_align.c
 OBJS=$(SRCS:.c=.o)
 
 CFLAGS  = -w -Dsnprintf=_snprintf -mno-cygwin $(OPTFLAGS) $(MLIB_INC) -I. -I.. -Wall $(EXTRA_INC)

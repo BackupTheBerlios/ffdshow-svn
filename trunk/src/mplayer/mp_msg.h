@@ -2,8 +2,6 @@
 #ifndef _MP_MSG_H
 #define _MP_MSG_H
 
-extern int verbose; // defined in mplayer.c
-
 // verbosity elevel:
 
 // stuff from level MSGL_FATAL-MSGL_HINT should be translated.
@@ -80,46 +78,6 @@ extern int verbose; // defined in mplayer.c
 
 #define MSGT_MAX 64
 
-void mp_msg_init();
-void mp_msg_set_level(int verbose);
+#define mp_msg(mod,lev, args... ) 
 
-#include "config.h"
-
-#ifdef TARGET_OS2
-// va_start/vsnprintf seems to be broken under OS2 :(
-#define mp_msg(mod,lev, fmt, args... ) do{if(lev<=mp_msg_levels[mod]) printf( fmt, ## args );}while(0)
-#define mp_dbg(mod,lev, args... ) 
-#else
-
-#ifdef USE_I18N
-#include <libintl.h>
-#include <locale.h>
-#define mp_gettext(String) gettext(String)
-#else
-#define mp_gettext(String) String
-#endif
-
-void mp_msg_c( int x, const char *format, ... );
-
-#ifdef __GNUC__
-#define mp_msg(mod,lev, args... ) mp_msg_c((mod<<8)|lev, ## args )
-
-#ifdef MP_DEBUG
-#define mp_dbg(mod,lev, args... ) mp_msg_c((mod<<8)|lev, ## args )
-#else
-// these messages are only usefull for developers, disable them
-#define mp_dbg(mod,lev, args... ) 
-#endif
-#else // not GNU C
-#define mp_msg(mod,lev, ... ) mp_msg_c((mod<<8)|lev, __VA_ARGS__)
-
-#ifdef MP_DEBUG
-#define mp_dbg(mod,lev, ... ) mp_msg_c((mod<<8)|lev, __VA_ARGS__)
-#else
-// these messages are only usefull for developers, disable them
-#define mp_dbg(mod,lev, ... ) 
-#endif
-#endif
-
-#endif
 #endif

@@ -63,7 +63,6 @@ untested special converters
 #include "../bswap.h"
 #include "../libvo/img_format.h"
 #include "rgb2rgb.h"
-//#include "../libvo/fastmemcpy.h"
 #include "../mp_msg.h"
 #undef MOVNTQ
 #undef PAVGB
