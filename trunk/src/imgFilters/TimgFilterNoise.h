@@ -20,7 +20,7 @@ protected:
  virtual void done(void);
 public:
  TimgFilterNoise(void);
- void init(int Idx,int Istride,int Idy);
+ virtual void init(int Idx,int Istride,int Idy);
  virtual void process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
                       unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
                       Tconfig *cfg);

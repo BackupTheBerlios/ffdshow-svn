@@ -12,7 +12,7 @@ public:
   {
    done();
   }
- void init(int Idx,int Istride,int Idy)
+ virtual void init(int Idx,int Istride,int Idy)
   {
    done();
    dxY=Idx;dyY=Idy;strideY=Istride;
