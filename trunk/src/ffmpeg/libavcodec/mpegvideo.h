@@ -392,6 +392,7 @@ typedef struct MpegEncContext {
     UINT8 *intra_h_scantable;
     /* [mb_intra][isChroma][level][run][last] */
     int ac_stats[2][2][MAX_LEVEL+1][MAX_RUN+1][2];
+    int inter_intra_pred;
     
 
     /* decompression specific */
@@ -450,6 +451,9 @@ void MPV_frame_start(MpegEncContext *s);
 void MPV_frame_end(MpegEncContext *s);
 #ifdef HAVE_MMX
 void MPV_common_init_mmx(MpegEncContext *s);
+#endif
+#ifdef ARCH_ALPHA
+void MPV_common_init_axp(MpegEncContext *s);
 #endif
 extern int (*dct_quantize)(MpegEncContext *s, DCTELEM *block, int n, int qscale, int *overflow);
 extern void (*draw_edges)(UINT8 *buf, int wrap, int width, int height, int w);

@@ -28,7 +28,7 @@ extern "C" {
 #define CODEC_ID_MSMPEG4V1 10
 #define CODEC_ID_MSMPEG4V2 11
 #define CODEC_ID_MSMPEG4V3 12
-#define CODEC_ID_MSMPEG4 CODEC_ID_MSMPEG4V3
+#define CODEC_ID_MSMPEG4   CODEC_ID_MSMPEG4V3
 #define CODEC_ID_WMV1      13
 #define CODEC_ID_WMV2      14
 #define CODEC_ID_H263P     15
@@ -309,22 +309,6 @@ extern AVCodec rv10_decoder;
 extern AVCodec mjpeg_decoder;
 extern AVCodec mp2_decoder;
 extern AVCodec mp3_decoder;
-
-/* pcm codecs */
-#define PCM_CODEC(id, name) \
-extern AVCodec name ## _decoder; \
-extern AVCodec name ## _encoder;
-
-PCM_CODEC(CODEC_ID_PCM_S16LE, pcm_s16le)
-PCM_CODEC(CODEC_ID_PCM_S16BE, pcm_s16be)
-PCM_CODEC(CODEC_ID_PCM_U16LE, pcm_u16le)
-PCM_CODEC(CODEC_ID_PCM_U16BE, pcm_u16be)
-PCM_CODEC(CODEC_ID_PCM_S8, pcm_s8)
-PCM_CODEC(CODEC_ID_PCM_U8, pcm_u8)
-PCM_CODEC(CODEC_ID_PCM_ALAW, pcm_alaw)
-PCM_CODEC(CODEC_ID_PCM_MULAW, pcm_mulaw)
-
-#undef PCM_CODEC
 
 /* dummy raw video codec */
 extern AVCodec rawvideo_codec;
