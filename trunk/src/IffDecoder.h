@@ -114,6 +114,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_mp41               1007
 #define IDFF_h263               1008
 
+struct TpresetSettings;
 DECLARE_INTERFACE_(IffDecoder, IUnknown)
 {
  STDMETHOD (getParam)(unsigned int paramID, int* value) PURE;
@@ -151,8 +152,8 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (loadGlobalSettings)(void) PURE;
  STDMETHOD (saveDialogSettings)(void) PURE;
  STDMETHOD (loadDialogSettings)(void) PURE;
- STDMETHOD (getPreset)(unsigned int i,void *buf) PURE;
- STDMETHOD (setPreset)(const void *buf) PURE;
+ STDMETHOD (getPreset)(unsigned int i,TpresetSettings **preset) PURE;
+ STDMETHOD (setPreset)(TpresetSettings *preset) PURE;
 };
 
 #ifdef __cplusplus

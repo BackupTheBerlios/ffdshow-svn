@@ -19,8 +19,7 @@ public:
  ~TtrayIcon();
  IffDecoder *deci;
  void show(void),hide(void);
- int cfgGet(int i),cfgSet(int i,int val);
- int negate_Param(int id);
+ int cfgGet(int id),cfgSet(int id,int val),negate_Param(int id);
  HMENU createMenu(void);
 };
 

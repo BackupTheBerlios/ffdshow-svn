@@ -79,42 +79,19 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP loadGlobalSettings(void);
   STDMETHODIMP saveDialogSettings(void);
   STDMETHODIMP loadDialogSettings(void);
-  STDMETHODIMP getPreset(unsigned int i,void *buf);
-  STDMETHODIMP setPreset(const void *buf);
+  STDMETHODIMP getPreset(unsigned int i,TpresetSettings **preset);
+  STDMETHODIMP setPreset(TpresetSettings *preset);
  
  private:
   bool firstFrame;
   TtrayIcon *tray;
-  TpresetSettings presetSettings;
+  TpresetSettings *presetSettings;
   TglobalSettings globalSettings;
   TdialogSettings dialogSettings;
   Tpresets presets;
   int inPlayer,isDlg;
   char AVIname[1024],AVIfourcc[10];
   void loadAVInameAndPreset(void);
-  int* getIDFFvar(int paramID);
-  struct Tparam
-  {
-   Tparam(void):val(NULL) {};
-   Tparam(int *Ival,int Imin,int Imax,void (TffDecoder::*IonNotify)(void)=NULL)
-    {
-     val=Ival;
-     min=Imin;max=Imax;
-     onNotify=IonNotify;
-    }
-   Tparam(const int *Ival)
-    {
-     val=(int*)Ival;
-     min=max=-1;
-     onNotify=NULL;
-    }
-   int *val;
-   int min,max;
-   void (TffDecoder::*onNotify)(void);
-  };                          
-  #define MAX_PARAMID 1100
-  Tparam params[MAX_PARAMID];
-  void fillParams(void);
   void subsChanged(void),resizeChanged(void),trayIconChanged(void);
   int idctOld;
   Tlibavcodec libavcodec;

@@ -27,7 +27,7 @@ extern "C"
 #include "TpresetSettings.h"
 #include "ffdebug.h"
 
-TimgFilters::TimgFilters(TpresetSettings *Icfg):cfg(Icfg)
+TimgFilters::TimgFilters(void)
 {
  cpus=cpu.GetCPUCount();
  postproc.init();
@@ -68,7 +68,7 @@ void TimgFilters::setSubtitle(subtitle *Isub)
 {
  subtitles.sub=Isub;
 }
-void TimgFilters::process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV,int *quant_store)
+void TimgFilters::process(TpresetSettings *cfg,unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV,int *quant_store)
 {
  tempY->reset(srcY);tempU->reset(srcU);tempV->reset(srcV);
  for (int i=cfg->min_order;i<=cfg->max_order;i++)

@@ -38,16 +38,27 @@ void TpresetsPage::init(void)
  unsigned int len;deci->getNumPresets(&len);
  for (unsigned int i=0;i<len;i++) 
   {
-   TpresetSettings preset;
+   TpresetSettings *preset;
    deci->getPreset(i,&preset);
-   localPresets.storePreset(preset);
+   localPresets.storePreset(new TpresetSettings(*preset));
   }
  ListView_SetExtendedListViewStyleEx(hlv,LVS_EX_FULLROWSELECT,LVS_EX_FULLROWSELECT);
  addCol(300,"preset name",false);
  ListView_SetItemCountEx(hlv,localPresets.size(),0);
+ deci->getActivePresetName(oldActivePresetName,260);
+ lvSelectPreset(oldActivePresetName);
  cfg2dlg();
 }
-
+void TpresetsPage::lvSelectPreset(const char *presetName)
+{
+ for (int i=0;i<localPresets.size();i++)
+  if (_stricmp(presetName,localPresets[i]->presetName)==0)
+   {
+    ListView_SetItemState(hlv,i,LVIS_SELECTED,LVIS_SELECTED);
+    deci->setPreset(localPresets[i]);
+    return;
+   }
+}
 void TpresetsPage::addCol(int w,const char *txt,bool right)
 {
  LVCOLUMN lvc;
@@ -104,23 +115,26 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           //if (di->item.mask&LVIF_IMAGE) di->item.iImage=items[i]->getImageIndex();
           if (nmdi->item.mask&LVIF_TEXT)
            {
-            strcpy(nmdi->item.pszText,localPresets[i].presetName);
+            strcpy(nmdi->item.pszText,localPresets[i]->presetName);
            }
           return TRUE;
          };
         case NM_CLICK:
          {
           NMITEMACTIVATE *nmia=LPNMITEMACTIVATE(lParam);
-          DEBUGS1("lv",nmia->iItem);
           if (nmia->iItem==-1) 
            {
-            ListView_SetItemState(hlv,0,LVIS_SELECTED,LVIS_SELECTED);
+            //ListView_SetItemState(hlv,0,LVIS_SELECTED,LVIS_SELECTED);
+            char activePresetName[260];
+            deci->getActivePresetName(activePresetName,260);
+            DEBUGS1(activePresetName,nmia->iItem);
+            lvSelectPreset(activePresetName);
            }
           else
            {
             char presetName[1024];
             ListView_GetItemText(hlv,nmia->iItem,0,presetName,1023);
-            deci->setPreset(&localPresets.loadPreset(presetName));
+            deci->setPreset(localPresets.getPreset(presetName));
             parent->presetChanged();
            }
           return TRUE;
@@ -130,6 +144,12 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     } 
   };
  return FALSE;
+}
+
+void TpresetsPage::applySettings(void)
+{
+ 
+ strcpy(oldActivePresetName,localPresets[ListView_GetNextItem(hlv,-1,LVNI_SELECTED)]->presetName);
 }
 
 void TpresetsPage::getTip(char *tipS,int len)

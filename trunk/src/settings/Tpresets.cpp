@@ -5,9 +5,15 @@
 #include "Tpresets.h"
 #include "reg.h"
 
+Tpresets::~Tpresets()
+{
+ for (iterator i=begin();i!=end();i++)
+  delete *i;
+}
 void Tpresets::init(void)
 {
- TpresetSettings def;def.loadDefault();
+ TpresetSettings *def=new TpresetSettings;
+ def->loadDefault();
  push_back(def);
 
  HKEY hKey;
@@ -28,51 +34,46 @@ void Tpresets::init(void)
                          ); 
    if (retCode==ERROR_SUCCESS) 
     {
-     TpresetSettings preset(keyName);
-     preset.loadReg();
+     TpresetSettings *preset=new TpresetSettings(keyName);
+     preset->loadReg();
      push_back(preset);
     }
    else break;
   };
  RegCloseKey(hKey);
  if (i==0)
-  (*begin()).saveReg();
+  (*begin())->saveReg();
 }
 
 Tpresets::iterator Tpresets::findPreset(const char *presetName)
 {
  for (iterator i=begin();i!=end();i++)
-  if (_stricoll(presetName,i->presetName)==0)
+  if (_stricoll(presetName,(*i)->presetName)==0)
    return i;
  return end();  
 }
 
-void Tpresets::storePreset(const TpresetSettings &preset)
+void Tpresets::storePreset(TpresetSettings *preset)
 {
- iterator i=findPreset(preset.presetName);
+ iterator i=findPreset(preset->presetName);
  if (i!=end())
   *i=preset;
  else
   push_back(preset);
 }
 
-TpresetSettings Tpresets::loadPreset(const char *presetName)
+TpresetSettings* Tpresets::getPreset(const char *presetName)
 {
  iterator i=findPreset(presetName);
  if (i!=end()) return *i;
- else 
-  {
-   TpresetSettings presetSettings=*begin();
-   strcpy(presetSettings.presetName,presetName);
-   return presetSettings;
-  }
+ else return NULL;
 }
 
-void Tpresets::savePreset(TpresetSettings &preset,const char *presetName)
+void Tpresets::savePreset(TpresetSettings *preset,const char *presetName)
 {
  if (presetName)
-  strcpy(preset.presetName,presetName);
- preset.saveReg();
+  strcpy(preset->presetName,presetName);
+ preset->saveReg();
  storePreset(preset);
 }
 

@@ -24,7 +24,7 @@ public:
  void loadFile(const char *flnm),saveFile(const char *flnm);
  int presetShouldBeSaved,autoloadedfromreg;
 
- char presetName[1024];
+ char presetName[260];
  int isPostproc,orderPostproc;
  int ppqual;
  int autoq;int currentq;
@@ -84,7 +84,7 @@ public:
  int fontAutosize;
  int subPosX,subPosY,subDelay,subSpeed;
  int subAutoFlnm;
- char subFlnm[256];
+ char subFlnm[260];
 
  static int min_order,max_order;
 };

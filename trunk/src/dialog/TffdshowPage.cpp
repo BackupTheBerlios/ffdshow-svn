@@ -98,7 +98,7 @@ TconfPage* TffdshowPage::hti2page(HTREEITEM hti)
 }
 void TffdshowPage::presetChanged(void)
 {
- for (int i=0;i<pages.size();i++)
+ for (unsigned int i=0;i<pages.size();i++)
   pages[i]->cfg2dlg();
  InvalidateRect(htv,NULL,FALSE);
 }

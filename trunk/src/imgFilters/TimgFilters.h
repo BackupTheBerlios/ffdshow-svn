@@ -17,7 +17,6 @@ struct subtitle;
 class TimgFilters
 {
 private:
- TpresetSettings *cfg;
  int dxY ,diffY ,strideY;
  int dxUV,diffUV,strideUV;
  int dy;
@@ -31,12 +30,13 @@ private:
  TimgFilterSharpen sharpen;
  TimgFilterSubtitles subtitles;
 public:
- TimgFilters(TpresetSettings *Icfg);
+ TimgFilters(void);
  ~TimgFilters();
  void init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY);
  void done(void);
  void setSubtitle(subtitle *Isub);
- void process(unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
+ void process(TpresetSettings *cfg,
+              unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
               unsigned char**dstY,unsigned char**dstU,unsigned char**dstV,
               int *quant_store);
  Tpostproc postproc;

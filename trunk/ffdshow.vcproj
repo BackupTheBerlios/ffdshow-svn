@@ -224,6 +224,19 @@
 			</File>
 			<File
 				RelativePath="src\TffDecoder.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						GeneratePreprocessedFile="0"
+						AssemblerOutput="0"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AssemblerOutput="4"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\src\Tlibavcodec.cpp">
@@ -270,9 +283,6 @@
 			</File>
 			<File
 				RelativePath=".\src\Tpostproc.h">
-			</File>
-			<File
-				RelativePath="src\TresizeCtx.h">
 			</File>
 			<File
 				RelativePath="src\ffdebug.h">
@@ -611,6 +621,9 @@
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilters.h">
+			</File>
+			<File
+				RelativePath="src\TresizeCtx.h">
 			</File>
 			<File
 				RelativePath="src\imgFilters\TtempPicture.h">
