@@ -1042,7 +1042,7 @@ STDMETHODIMP_(ULONG) TffDecoder::Release()
 
 STDMETHODIMP TffDecoder::JoinFilterGraph(IFilterGraph *pGraph,LPCWSTR pName)
 {
- if (!pName) 
+ if (!pGraph) 
   if (cfgDlgHnwd) SendMessage(HWND(cfgDlgHnwd),WM_CLOSE,0,0);
  return CVideoTransformFilter::JoinFilterGraph(pGraph,pName);
 }

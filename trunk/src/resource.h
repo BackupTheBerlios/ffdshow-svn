@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
+// Microsoft Developer Studio generated include file.
 // Used by ffdshow.rc
 //
 #define VERSION_RES_MINOR_VER           0
@@ -71,6 +71,7 @@
 #define IDC_CHB_MP43                    1024
 #define IDC_TBR_BLUR_TEMPSMOOTH         1024
 #define IDC_LBL_HUE                     1025
+#define IDC_CHB_MP41                    1025
 #define IDC_LBL_SATURATION              1026
 #define IDC_RBT_PPPRESETS               1027
 #define IDC_RBT_PPCUSTOM                1028
