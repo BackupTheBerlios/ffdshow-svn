@@ -1,0 +1,30 @@
+Preset
+
+Load - 
+ *nacita parametre presetu s menom zadanym v cbx z registrov 
+ *nastavi podla nich dialog a cfg.
+ *Ak taky preset v registroch neexistuje nestane sa nic.
+Save - 
+ *ulozi aktualne nastavenia do registrov do presetu s menom v cbx.
+  Ak zadane meno nie je platne, nic sa nedeje
+ *Ak je vsetko v poriadku, meno presetu sa prida do cbx a vnutorneho zoznamu presetov
+Remove - 
+ *vymaze aktivny preset z registrov
+ *nastavi ako aktivny default preset
+ *ak sa maze neexistujuci preset, nic sa nedeje
+ *Preset defult nie je mozne vymazat.
+ *Preset vymaze z cbx aj z vnutorneho zoznamu presetov
+Load from file -
+ *nahra preset zo suboru.
+ *Meno presetu sa berie z nazvu prvej sekcie v ini subore.
+ *Skontroluje sa spravnost mena.
+ *Preset sa prida do cbx a vnutorneho zoznamu presetov a hned sa aktivuje
+ *nacita sa do  premennej cfg a hned sa aj zapise do registrov
+Save to file - 
+ *ulozi aktivny preset na disk
+   
+
+
+Poznamky:
+
+Platne mena presetov - hocico okrem \
