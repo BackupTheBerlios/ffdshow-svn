@@ -24,8 +24,8 @@
 #define IDB_CLEAR                       128
 #define IDB_CHB_MASK                    129
 #define IDD_FONT                        132
-#define IDD_RESIZE                      133
-#define IDD_ASPECTNCROP                 134
+#define IDD_RESIZEASPECT                133
+#define IDD_CROP                        134
 #define IDD_DLGMISC                     136
 #define IDD_OFFSET                      137
 #define IDD_RESIZESETTINGS              138

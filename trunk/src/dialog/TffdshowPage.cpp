@@ -39,9 +39,9 @@
 #include "Cblur.h"
 #include "Csubtitles.h"
 #include "Cfont.h"
-#include "Cresize.h"
+#include "CresizeAspect.h"
 #include "CresizeSettings.h"
-#include "CaspectNcrop.h"
+#include "Ccrop.h"
 #include "Cmisc.h"
 #include "Cabout.h"
 #include "Coffset.h"
@@ -196,13 +196,13 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  tvis.hParent=htiPresets;
  sortOrder();
  tvis.item.cChildren=1;
- HTREEITEM htiResize=addTI(tvis,new TresizePage(this,m_hwnd,deci));
+ HTREEITEM htiResizeAspect=addTI(tvis,new TresizeAspectPage(this,m_hwnd,deci));
  tvis.item.cChildren=0;
- tvis.hParent=htiResize;
+ tvis.hParent=htiResizeAspect;
  addTI(tvis,new TresizeSettingsPage(this,m_hwnd,deci));
- TreeView_Expand(htv,htiResize,TVE_EXPAND);
+ TreeView_Expand(htv,htiResizeAspect,TVE_EXPAND);
  tvis.hParent=htiPresets;
- addTI(tvis,new TaspectNcropPage(this,m_hwnd,deci));
+ addTI(tvis,new TcropPage(this,m_hwnd,deci));
  addTI(tvis,new TmiscPage(this,m_hwnd,deci));
  tvis.hParent=NULL;
  addTI(tvis,new TaboutPage(this,m_hwnd,deci));

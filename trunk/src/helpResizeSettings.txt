@@ -1,4 +1,4 @@
-Resizing can be applied before or after other filters. This is controled with "Resizing is applied before other filters" checkbox. Note: if cropping or zoom is selected, it is applied always first
+Resizing can be applied before or after other filters. This is controled with "Resizing is applied before other filters" checkbox.
 Resize algorithms:
   Fast bilinear - fast with acceptable quality
   Bilinear - quality slighty better than previous, but a little bit slower

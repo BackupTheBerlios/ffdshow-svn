@@ -98,15 +98,15 @@ LINK32=xilink6.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\src\helpAspectNcrop.txt
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\helpBlur.txt
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\helpCodecs.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpCrop.txt
 # End Source File
 # Begin Source File
 
@@ -138,7 +138,11 @@ SOURCE=.\src\helpPostproc.txt
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\helpResize.txt
+SOURCE=.\src\helpResizeAspect.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpResizeSettings.txt
 # End Source File
 # Begin Source File
 
@@ -833,23 +837,6 @@ SOURCE=.\src\dialog\Cabout.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\dialog\CaspectNcrop.cpp
-
-!IF  "$(CFG)" == "ffdshow - Win32 Release"
-
-# ADD CPP /O1
-
-!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\dialog\CaspectNcrop.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\dialog\Cblur.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
@@ -881,6 +868,14 @@ SOURCE=.\src\dialog\Ccodecs.cpp
 # Begin Source File
 
 SOURCE=.\src\dialog\Ccodecs.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Ccrop.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Ccrop.h
 # End Source File
 # Begin Source File
 
@@ -1020,20 +1015,11 @@ SOURCE=.\src\dialog\Cpresets.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\dialog\Cresize.cpp
-
-!IF  "$(CFG)" == "ffdshow - Win32 Release"
-
-# ADD CPP /O1
-
-!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
-
-!ENDIF 
-
+SOURCE=.\src\dialog\CresizeAspect.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\dialog\Cresize.h
+SOURCE=.\src\dialog\CresizeAspect.h
 # End Source File
 # Begin Source File
 
@@ -1253,9 +1239,5 @@ SOURCE=.\src\movie_source\TmovieSourceXviD.h
 SOURCE=.\src\idct\xIdctref.c
 # End Source File
 # End Group
-# Begin Source File
-
-SOURCE=.\src\helpResizeSettings.txt
-# End Source File
 # End Target
 # End Project

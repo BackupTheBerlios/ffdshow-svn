@@ -50,7 +50,7 @@ END
 IDD_FFDSHOW DIALOGEX 0, 0, 349, 168
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     CONTROL         "",IDC_TV_TREE,"SysTreeView32",TVS_DISABLEDRAGDROP | 
                     TVS_SHOWSELALWAYS | TVS_INFOTIP | TVS_FULLROWSELECT | 
@@ -360,7 +360,7 @@ BEGIN
                     NOT WS_BORDER | WS_VSCROLL
 END
 
-IDD_RESIZE DIALOGEX 0, 0, 254, 165
+IDD_RESIZEASPECT DIALOGEX 0, 0, 254, 165
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg"
@@ -375,53 +375,53 @@ BEGIN
                     WS_EX_RIGHT
     LTEXT           "Warning: settings will be applied when the file will be reopened",
                     IDC_STATIC,8,26,201,8
-    EDITTEXT        IDC_ED_HELP,0,115,253,49,ES_MULTILINE | ES_READONLY | 
-                    NOT WS_BORDER | WS_VSCROLL
+    EDITTEXT        IDC_ED_HELP,0,92,253,72,ES_MULTILINE | ES_READONLY | NOT 
+                    WS_BORDER | WS_VSCROLL
+    GROUPBOX        "Aspect ratio",IDC_STATIC,0,38,253,54
+    CONTROL         "No aspect ratio correction",IDC_RBT_ASPECT_NO,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,4,48,99,10
+    LTEXT           "1:1",IDC_LBL_ASPECT_USER,222,80,27,8
+    CONTROL         "Keep original aspect ratio",IDC_RBT_ASPECT_KEEP,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,4,58,191,10
+    CONTROL         "Set aspect ratio manually",IDC_RBT_ASPECT_USER,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,4,68,97,10
+    CONTROL         "",IDC_TBR_ASPECT_USER,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,11,78,205,12
 END
 
-IDD_ASPECTNCROP DIALOGEX 0, 0, 254, 165
+IDD_CROP DIALOGEX 0, 0, 254, 165
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    GROUPBOX        "Aspect ratio",IDC_STATIC,0,0,253,54
-    CONTROL         "No aspect ratio correction",IDC_RBT_ASPECT_NO,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,4,10,99,10
-    CONTROL         "Keep original aspect ratio",IDC_RBT_ASPECT_KEEP,"Button",
-                    BS_AUTORADIOBUTTON | WS_TABSTOP,4,20,191,10
-    CONTROL         "Set aspect ratio manually",IDC_RBT_ASPECT_USER,"Button",
-                    BS_AUTORADIOBUTTON | WS_TABSTOP,4,30,97,10
-    CONTROL         "",IDC_TBR_ASPECT_USER,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,11,40,205,12
-    LTEXT           "1:1",IDC_LBL_ASPECT_USER,222,42,27,8
-    GROUPBOX        "",IDC_STATIC,0,54,253,61
+    GROUPBOX        "",IDC_STATIC,0,0,253,61
     CONTROL         "Crop && zoom",IDC_CHB_CROP,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,4,54,55,10
+                    WS_TABSTOP,4,0,55,10
     CONTROL         "Zoom",IDC_RBT_ZOOM,"Button",BS_AUTORADIOBUTTON | 
-                    WS_GROUP | WS_TABSTOP,4,65,33,10
+                    WS_GROUP | WS_TABSTOP,4,11,33,10
     CONTROL         "Crop",IDC_RBT_CROP,"Button",BS_AUTORADIOBUTTON | 
-                    WS_TABSTOP,135,65,31,10
-    LTEXT           "Horizontal magnification",IDC_LBL_ZOOMX,6,74,99,8
+                    WS_TABSTOP,135,11,31,10
+    LTEXT           "Horizontal magnification",IDC_LBL_ZOOMX,6,20,99,8
     CONTROL         "",IDC_TBR_ZOOMX,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,4,83,125,10
-    LTEXT           "Vertical magnification",IDC_LBL_ZOOMY,6,94,96,8
+                    TBS_NOTICKS | WS_TABSTOP,4,29,125,10
+    LTEXT           "Vertical magnification",IDC_LBL_ZOOMY,6,40,96,8
     CONTROL         "",IDC_TBR_ZOOMY,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,4,103,125,10
+                    TBS_NOTICKS | WS_TABSTOP,4,49,125,10
     CONTROL         "Lock",IDC_CHB_MAGNIFICATION_LOCKED,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,102,93,23,10
-    LTEXT           "Top",IDC_STATIC,170,70,13,8
-    EDITTEXT        IDC_ED_CROP_TOP,185,68,31,13,ES_AUTOHSCROLL | ES_NUMBER,
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,102,39,23,10
+    LTEXT           "Top",IDC_STATIC,170,16,13,8
+    EDITTEXT        IDC_ED_CROP_TOP,185,14,31,13,ES_AUTOHSCROLL | ES_NUMBER,
                     WS_EX_RIGHT
-    LTEXT           "Left",IDC_STATIC,137,84,14,8
-    EDITTEXT        IDC_ED_CROP_LEFT,153,82,31,13,ES_AUTOHSCROLL | ES_NUMBER,
+    LTEXT           "Left",IDC_STATIC,137,30,14,8
+    EDITTEXT        IDC_ED_CROP_LEFT,153,28,31,13,ES_AUTOHSCROLL | ES_NUMBER,
                     WS_EX_RIGHT
-    LTEXT           "Right",IDC_STATIC,198,84,18,8
-    EDITTEXT        IDC_ED_CROP_RIGHT,218,82,31,13,ES_AUTOHSCROLL | 
+    LTEXT           "Right",IDC_STATIC,198,30,18,8
+    EDITTEXT        IDC_ED_CROP_RIGHT,218,28,31,13,ES_AUTOHSCROLL | 
                     ES_NUMBER,WS_EX_RIGHT
-    LTEXT           "Bottom",IDC_STATIC,160,98,24,8
-    EDITTEXT        IDC_ED_CROP_BOTTOM,186,96,31,13,ES_AUTOHSCROLL | 
+    LTEXT           "Bottom",IDC_STATIC,160,44,24,8
+    EDITTEXT        IDC_ED_CROP_BOTTOM,186,42,31,13,ES_AUTOHSCROLL | 
                     ES_NUMBER,WS_EX_RIGHT
-    EDITTEXT        IDC_ED_HELP,0,115,253,49,ES_MULTILINE | ES_READONLY | 
+    EDITTEXT        IDC_ED_HELP,0,62,253,102,ES_MULTILINE | ES_READONLY | 
                     NOT WS_BORDER | WS_VSCROLL
 END
 
@@ -470,7 +470,7 @@ END
 IDD_RESIZESETTINGS DIALOGEX 0, 0, 254, 165
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     GROUPBOX        "Resize settings",-1,0,0,253,76
     CONTROL         "Resizing is applied before other filters",
@@ -493,8 +493,8 @@ BEGIN
                     8
     CONTROL         "",IDC_TBR_RESIZE_SHARPEN_CHROM,"msctls_trackbar32",
                     TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,129,65,122,10
-    EDITTEXT        IDC_ED_HELP,0,115,253,49,ES_MULTILINE | ES_READONLY | 
-                    NOT WS_BORDER | WS_VSCROLL
+    EDITTEXT        IDC_ED_HELP,0,76,253,88,ES_MULTILINE | ES_READONLY | NOT 
+                    WS_BORDER | WS_VSCROLL
 END
 
 
@@ -514,14 +514,14 @@ IDI_FFDSHOW             ICON    DISCARDABLE     "ffdshow.ico"
 
 IDD_ABOUT               TEXT    MOVEABLE PURE   "readme.txt"
 IDD_PICTPROP            TEXT    MOVEABLE PURE   "helpPictprop.txt"
-IDD_ASPECTNCROP         TEXT    MOVEABLE PURE   "helpAspectNcrop.txt"
+IDD_CROP                TEXT    MOVEABLE PURE   "helpCrop.txt"
 IDD_SHARPEN             TEXT    MOVEABLE PURE   "helpSharpen.txt"
 IDD_CODECS              TEXT    MOVEABLE PURE   "helpCodecs.txt"
 IDD_FONT                TEXT    MOVEABLE PURE   "helpFont.txt"
 IDD_INFO                TEXT    MOVEABLE PURE   "helpInfo.txt"
 IDD_NOISE               TEXT    MOVEABLE PURE   "helpNoise.txt"
 IDD_POSTPROC            TEXT    MOVEABLE PURE   "helpPostproc.txt"
-IDD_RESIZE              TEXT    MOVEABLE PURE   "helpResize.txt"
+IDD_RESIZEASPECT        TEXT    MOVEABLE PURE   "helpResizeAspect.txt"
 IDD_BLUR                TEXT    MOVEABLE PURE   "helpBlur.txt"
 IDD_DLGMISC             TEXT    MOVEABLE PURE   "helpTray.txt"
 IDD_SUBTITLES           TEXT    MOVEABLE PURE   "helpSubtitles.txt"
@@ -583,8 +583,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDD_BLUR                "Blur"
     IDD_FONT                "Font"
-    IDD_RESIZE              "Resize"
-    IDD_ASPECTNCROP         "Aspect & crop"
+    IDD_RESIZEASPECT        "Resize & aspect"
+    IDD_CROP                "Crop"
     IDD_DLGMISC             "Tray & dialog settings"
     IDD_OFFSET              "Offset"
     IDD_RESIZESETTINGS      "Settings"

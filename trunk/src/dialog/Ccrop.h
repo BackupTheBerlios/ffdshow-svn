@@ -1,16 +1,16 @@
-#ifndef _CASPECTNCROPPAGE_H_
-#define _CASPECTNCROPPAGE_H_
+#ifndef _CCROPPAGE_H_
+#define _CCROPPAGE_H_
 
 #include "TconfPage.h"
 
-class TaspectNcropPage : public TconfPage
+class TcropPage : public TconfPage
 {
  private:
-  void aspect2dlg(void),crop2dlg(void);
+  void crop2dlg(void);
   bool cropOK(HWND hed);
   HBRUSH red;
  public:
-  TaspectNcropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+  TcropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
   virtual void init(void);
   virtual void cfg2dlg(void);

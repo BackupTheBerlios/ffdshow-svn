@@ -21,30 +21,57 @@
 #include <string.h>
 #include <stdio.h>
 #pragma hdrstop
-#include "Cresize.h"
+#include "CresizeAspect.h"
 #include "resource.h"
 #include "IffDecoder.h"
 #include "TffdshowPage.h"
 
-void TresizePage::init(void)
+void TresizeAspectPage::init(void)
 {
  red=NULL;
+
+ SendDlgItemMessage(m_hwnd,IDC_TBR_ASPECT_USER,TBM_SETRANGE,TRUE,MAKELPARAM(0.1*256,5*256));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_ASPECT_USER,TBM_SETLINESIZE,0,0.1*256);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_ASPECT_USER,TBM_SETPAGESIZE,0,1.6*256); 
+
  cfg2dlg();
 }
 
-void TresizePage::cfg2dlg(void)
+void TresizeAspectPage::cfg2dlg(void)
 {
  resize2dlg();
+ aspect2dlg();
 }
 
-void TresizePage::resize2dlg(void)
+void TresizeAspectPage::resize2dlg(void)
 {
  setCheck(IDC_CHB_RESIZE,cfgGet(IDFF_isResize));
  SetDlgItemInt(m_hwnd,IDC_ED_RESIZEDX,cfgGet(IDFF_resizeDx),0);
  SetDlgItemInt(m_hwnd,IDC_ED_RESIZEDY,cfgGet(IDFF_resizeDy),0);
 }
 
-bool TresizePage::applyResizeXY(bool checkOnly)
+void TresizeAspectPage::aspect2dlg(void)
+{
+ int ra=cfgGet(IDFF_resizeAspect);
+ setCheck(IDC_RBT_ASPECT_NO  ,ra==0);
+ setCheck(IDC_RBT_ASPECT_KEEP,ra==1);
+ setCheck(IDC_RBT_ASPECT_USER,ra==2);
+ char pomS[256];
+ unsigned int dx,dy;
+ deci->getAVIdimensions(&dx,&dy);
+ __asm emms;
+ if (dx!=0 && dy!=0)
+  {
+   sprintf(pomS,"Keep original aspect ratio (%3.2f:1)",float(dx)/dy);
+   SendDlgItemMessage(m_hwnd,IDC_RBT_ASPECT_KEEP,WM_SETTEXT,0,LPARAM(pomS));
+  };
+ int aspectI=cfgGet(IDFF_aspectRatio);
+ sprintf(pomS,"%3.2f:1",float(aspectI/65536.0));
+ SendDlgItemMessage(m_hwnd,IDC_LBL_ASPECT_USER,WM_SETTEXT,0,LPARAM(pomS));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_ASPECT_USER,TBM_SETPOS,TRUE,aspectI/256);
+}
+
+bool TresizeAspectPage::applyResizeXY(bool checkOnly)
 {
  BOOL ok;
  int x=GetDlgItemInt(m_hwnd,IDC_ED_RESIZEDX,&ok,FALSE);
@@ -59,7 +86,7 @@ bool TresizePage::applyResizeXY(bool checkOnly)
  parent->setChange(); 
  return true;
 }
-bool TresizePage::sizeOK(HWND hed)
+bool TresizeAspectPage::sizeOK(HWND hed)
 {
  char pomS[256];
  SendMessage(hed,WM_GETTEXT,255,LPARAM(pomS));
@@ -69,13 +96,23 @@ bool TresizePage::sizeOK(HWND hed)
  return true;
 }
 
-HRESULT TresizePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
+HRESULT TresizeAspectPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
    case WM_DESTROY:
     if (red) DeleteObject(red);
     return TRUE;
+   case WM_HSCROLL:
+    if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_ASPECT_USER))
+     {
+      int a=SendDlgItemMessage(m_hwnd,IDC_TBR_ASPECT_USER,TBM_GETPOS,0,0);
+      cfgSet(IDFF_aspectRatio,a*256);
+      aspect2dlg();
+      return TRUE;
+     }
+    else 
+     break;
    case WM_COMMAND:
     switch (LOWORD(wParam))  
      {
@@ -91,6 +128,18 @@ HRESULT TresizePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
          return TRUE;  
         };
        break;
+      case IDC_RBT_ASPECT_NO:
+       cfgSet(IDFF_resizeAspect,0);
+       aspect2dlg();
+       return TRUE;
+      case IDC_RBT_ASPECT_KEEP:
+       cfgSet(IDFF_resizeAspect,1);
+       aspect2dlg();
+       return TRUE;
+      case IDC_RBT_ASPECT_USER:
+       cfgSet(IDFF_resizeAspect,2);
+       aspect2dlg();
+       return TRUE;
      }   
     break;
    case WM_CTLCOLOREDIT:
@@ -110,7 +159,7 @@ HRESULT TresizePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
-TresizePage::TresizePage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
+TresizeAspectPage::TresizeAspectPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_RESIZE);
+ createWindow(IDD_RESIZEASPECT);
 }

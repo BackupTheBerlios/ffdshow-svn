@@ -1,17 +1,17 @@
-#ifndef _CRESIZEPAGE_H_
-#define _CRESIZEPAGE_H_
+#ifndef _CRESIZEASPECTPAGE_H_
+#define _CRESIZEASPECTPAGE_H_
 
 #include "TconfPage.h"
 
-class TresizePage : public TconfPage
+class TresizeAspectPage : public TconfPage
 {
  private:
-  void resize2dlg(void);
+  void resize2dlg(void),aspect2dlg(void);
   bool applyResizeXY(bool checkOnly);
   HBRUSH red;
   bool sizeOK(HWND hed);
  public:
-  TresizePage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+  TresizeAspectPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
   virtual void init(void);
   virtual void cfg2dlg(void);
