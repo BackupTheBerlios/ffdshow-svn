@@ -82,7 +82,7 @@ public:
  int isSubtitles;
  int fontChanged;
  char fontName[256];
- int fontCharset,fontSize,fontSpacing,fontWeight,fontColor,fontShadow;
+ int fontCharset,fontSize,fontSpacing,fontWeight,fontColor,fontShadowStrength,fontShadowRadius;
  int fontAutosize;
  int subPosX,subPosY,subDelay,subSpeed;
  char subFlnm[256];

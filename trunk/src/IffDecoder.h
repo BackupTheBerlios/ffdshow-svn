@@ -68,14 +68,15 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_fontCharset         802
 #define IDFF_fontSize            803
 #define IDFF_fontWeight          804
-#define IDFF_fontShadow          805 //shadow strength (0..100) 100 - subtitles aren't transparent
-#define IDFF_fontAutosize        806
-#define IDFF_fontSpacing         807
-#define IDFF_fontColor           808
-#define IDFF_subPosX             809
-#define IDFF_subPosY             810
-#define IDFF_subDelay            811
-#define IDFF_subSpeed            812
+#define IDFF_fontShadowStrength  805  //shadow strength (0..100) 100 - subtitles aren't transparent
+#define IDFF_fontShadowRadius    806  //shadow radius  
+#define IDFF_fontAutosize        807
+#define IDFF_fontSpacing         808
+#define IDFF_fontColor           809
+#define IDFF_subPosX             810
+#define IDFF_subPosY             811
+#define IDFF_subDelay            812
+#define IDFF_subSpeed            813
               
 #define IDFF_xvid               1001 //are AVIs with this FOURCC played by ffdshow?
 #define IDFF_div3               1002

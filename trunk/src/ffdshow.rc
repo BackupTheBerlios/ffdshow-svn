@@ -1,4 +1,4 @@
-// Microsoft Visual C++ generated resource script.
+//Microsoft Developer Studio generated resource script.
 //
 #include "resource.h"
 
@@ -27,7 +27,7 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO 
+GUIDELINES DESIGNINFO MOVEABLE PURE 
 BEGIN
     IDD_ABOUT, DIALOG
     BEGIN
@@ -83,7 +83,7 @@ END
 //
 
 IDD_ABOUT DIALOGEX 0, 0, 258, 229
-STYLE DS_SETFONT | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
@@ -98,7 +98,7 @@ BEGIN
 END
 
 IDD_FILTERS DIALOGEX 0, 0, 259, 234
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -189,7 +189,7 @@ BEGIN
 END
 
 IDD_GLOBAL DIALOGEX 0, 0, 259, 232
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -253,7 +253,7 @@ BEGIN
 END
 
 IDD_FFDSHOW DIALOGEX 0, 0, 272, 260
-STYLE DS_SETFONT | DS_CENTER | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+STYLE DS_CENTER | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "",IDC_HEADER,"SysTabControl32",TCS_BUTTONS | 
@@ -262,7 +262,7 @@ BEGIN
 END
 
 IDD_RESIZE DIALOGEX 0, 0, 259, 234
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -311,14 +311,14 @@ BEGIN
 END
 
 IDD_SUBTITLES DIALOGEX 0, 0, 259, 234
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX        "",IDC_STATIC,0,0,259,85
     CONTROL         "Subtitles",IDC_CHB_SUBTITLES,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,8,0,43,10
-    GROUPBOX        "Font",IDC_STATIC,0,85,259,83
+    GROUPBOX        "Font",IDC_STATIC,0,85,259,100
     LTEXT           "Weight",IDC_LBL_FONT_WEIGHT,136,116,24,8
     COMBOBOX        IDC_CBX_FONT_WEIGHT,164,114,90,62,CBS_DROPDOWNLIST | 
                     WS_VSCROLL | WS_TABSTOP
@@ -332,16 +332,17 @@ BEGIN
     LTEXT           "Charset",IDC_LBL_FONT_CHARSET,136,96,26,8
     CONTROL         "Automatically reduce font size",IDC_CHB_FONT_AUTOSIZE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,131,112,10
-    LTEXT           "Spacing",IDC_LBL_FONT_SPACING,8,145,111,8
+    LTEXT           "Spacing",IDC_LBL_FONT_SPACING,8,144,111,8
     CONTROL         "",IDC_TBR_FONT_SPACING,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,8,155,118,10
+                    TBS_NOTICKS | WS_TABSTOP,8,154,118,10
     LTEXT           "File",IDC_STATIC,8,15,12,8
     PUSHBUTTON      "Load",IDC_BT_SUB_LOADFILE,232,13,22,12
     COMBOBOX        IDC_CBX_SUB_FLNM,23,13,208,124,CBS_DROPDOWN | WS_VSCROLL | 
                     WS_TABSTOP
-    LTEXT           "Shadow intensity",IDC_LBL_FONT_SHADOW,136,144,111,8
-    CONTROL         "",IDC_TBR_FONT_SHADOW,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,136,155,119,10
+    LTEXT           "Shadow strength",IDC_LBL_FONT_SHADOW_STRENGTH,136,144,
+                    111,8
+    CONTROL         "",IDC_TBR_FONT_SHADOW_STRENGTH,"msctls_trackbar32",
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,136,154,119,10
     LTEXT           "Horizontal position",IDC_LBL_SUB_POSX,8,31,111,8
     CONTROL         "",IDC_TBR_SUB_POSX,"msctls_trackbar32",TBS_BOTH | 
                     TBS_NOTICKS | WS_TABSTOP,8,41,118,10
@@ -355,6 +356,10 @@ BEGIN
     LTEXT           "Delay",IDC_STATIC,136,40,19,8
     EDITTEXT        IDC_ED_SUB_SPEED,164,58,40,13,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "Speed",IDC_STATIC,136,61,22,8
+    LTEXT           "Shadow radius",IDC_LBL_FONT_SHADOW_RADIUS,136,164,
+                    111,8
+    CONTROL         "",IDC_TBR_FONT_SHADOW_RADIUS,"msctls_trackbar32",
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,136,174,119,10
 END
 
 
@@ -365,21 +370,21 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_FFDSHOW             ICON                    "ffdshow.ico"
+IDI_FFDSHOW             ICON    DISCARDABLE     "ffdshow.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // TEXT
 //
 
-IDR_README              TEXT                    "readme.txt"
+IDR_README              TEXT    MOVEABLE PURE   "readme.txt"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_ABOUT               "About"
     IDS_CONFIGURATION       "Config"
@@ -392,7 +397,7 @@ BEGIN
     IDS_FFDSHOW             "Configuration"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDC_BT_PRESET_SAVE      "Stores settings to selected preset"
     IDC_CBX_PRESETS         "Lists available presets"
@@ -403,7 +408,7 @@ BEGIN
     IDC_CHB_AUTOPRESET      "If checked, preset for played movie will be automatically loaded"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDC_CHB_AUTOQ           "Activates automatic quality control: ffdshow automatically lowers postprocessing settings when CPU load is high and raises it again, when CPU load get lower"
     IDC_BT_LUMRESET         "Resets luminance, hue and suturation settings"
@@ -416,7 +421,7 @@ BEGIN
     IDC_CHB_MP42            "If checked MSMPEG4v2 movies will be decoded by ffdshow"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDC_CHB_MP43            "If checked MSMPEG4v3 movies will be decoded by ffdshow"
     IDC_RBT_PPCUSTOM        "If checked, you can select custom postprocessing filters"
@@ -450,18 +455,18 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE 
+1 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE 
+2 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "#include <windows.h>\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE 
+3 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "\r\n"
     "\0"

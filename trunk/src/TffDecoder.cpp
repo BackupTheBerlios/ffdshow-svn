@@ -283,7 +283,8 @@ void TffDecoder::fillParams(void)
  params[IDFF_fontSize           ]=Tparam(&cfg.fontSize           ,2,255,&TffDecoder::subsChanged);
  params[IDFF_fontWeight         ]=Tparam(&cfg.fontWeight         ,0,1000,&TffDecoder::subsChanged);
  params[IDFF_fontColor          ]=Tparam(&cfg.fontColor          ,0,0,&TffDecoder::subsChanged);
- params[IDFF_fontShadow         ]=Tparam(&cfg.fontShadow         ,0,100,&TffDecoder::subsChanged);
+ params[IDFF_fontShadowStrength ]=Tparam(&cfg.fontShadowStrength ,0,100,&TffDecoder::subsChanged);
+ params[IDFF_fontShadowRadius   ]=Tparam(&cfg.fontShadowRadius   ,0,100,&TffDecoder::subsChanged);
  params[IDFF_fontAutosize       ]=Tparam(&cfg.fontAutosize       ,0,0,&TffDecoder::subsChanged);
  params[IDFF_fontSpacing        ]=Tparam(&cfg.fontSpacing        ,-10,10,&TffDecoder::subsChanged);
  params[IDFF_subPosX            ]=Tparam(&cfg.subPosX            ,0,100,&TffDecoder::subsChanged);
@@ -300,7 +301,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_mp41               ]=Tparam(&cfg.mp41               ,0,0);
  params[IDFF_h263               ]=Tparam(&cfg.h263               ,0,0);
 }                                                                      
-#endif
+#else
 int* TffDecoder::getIDFFvar(int paramID)                               
 {                                                                      
  switch (paramID)                                                      
@@ -362,7 +363,8 @@ int* TffDecoder::getIDFFvar(int paramID)
    case IDFF_fontSize           :return &cfg.fontSize;     
    case IDFF_fontWeight         :return &cfg.fontWeight;   
    case IDFF_fontColor          :return &cfg.fontColor; 
-   case IDFF_fontShadow         :return &cfg.fontShadow;   
+   case IDFF_fontShadowStrength :return &cfg.fontShadowStrength;
+   case IDFF_fontShadowRadius   :return &cfg.fontShadowRadius;
    case IDFF_fontAutosize       :return &cfg.fontAutosize;
    case IDFF_fontSpacing        :return &cfg.fontSpacing;
    case IDFF_subPosX            :return &cfg.subPosX;
@@ -381,6 +383,7 @@ int* TffDecoder::getIDFFvar(int paramID)
    default                      :return NULL;
   }
 }
+#endif
 #ifndef TPARAM
 STDMETHODIMP TffDecoder::get_Param(int paramID, int* value)
 {

@@ -21,11 +21,12 @@
 #include <stdlib.h>
 #include "subreader.h"
 #include <math.h>
+#include "..\Tconfig.h"
 
 using namespace std;
 
 //========================== Tchar ===========================
-Tchar::Tchar(HDC hdc,const char *s,int shadow,int colorY,int colorU,int colorV)
+Tchar::Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int colorV)
 {
  SIZE sz;
  GetTextExtentPoint32(hdc,s,strlen(s),&sz);
@@ -69,20 +70,12 @@ Tchar::Tchar(HDC hdc,const char *s,int shadow,int colorY,int colorU,int colorV)
    }
  free(bmp16);
  dxY=_dx;dyY=_dy;
- if (shadow==100)
+ if (!matrix)
   memset(mskY,255,dxY*dyY);
  else
   { 
-   __asm emms;
    memcpy(mskY,bmpY,dxY*dyY);
-   int matrix[5][5];
-   for (y=-2;y<=2;y++)
-    for (int x=-2;x<=2;x++)
-     {
-      int d=8-(x*x+y*y);
-      matrix[y+2][x+2]=1.55*shadow*pow(d/8.0,2-shadow/50.0);
-     }; 
-   for (y=0;y<dyY;y++)
+   for (int y=0;y<dyY;y++)
     for (int x=0;x<dxY;x++)
      {
       int s=0,cnt=0;;
@@ -143,13 +136,13 @@ Tfont::~Tfont()
 {
  done();
 }
-void Tfont::init(const char *fontName,int charset,int size,int weight,int spacing,int Ishadow,int color)
+void Tfont::init(Tconfig *cfg/*const char *fontName,int charset,int size,int weight,int spacing,int Ishadow,int color*/)
 {
  done();
- hf=CreateFont(size*4,0,0,0,weight,0,0,0,charset,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,/*ANTIALIASED_QUALITY*/DEFAULT_QUALITY,DEFAULT_PITCH|FF_DONTCARE,fontName);
- shadow=Ishadow;
+ hf=CreateFont(cfg->fontSize*4,0,0,0,cfg->fontWeight,0,0,0,cfg->fontCharset,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,/*ANTIALIASED_QUALITY*/DEFAULT_QUALITY,DEFAULT_PITCH|FF_DONTCARE,cfg->fontName);
+ shadowStrength=cfg->fontShadowStrength;shadowRadius=cfg->fontShadowRadius;
  __asm emms;
- double R=GetRValue(color)/255.0,G=GetGValue(color)/255.0,B=GetBValue(color)/255.0;
+ double R=GetRValue(cfg->fontColor)/255.0,G=GetGValue(cfg->fontColor)/255.0,B=GetBValue(cfg->fontColor)/255.0;
  double Y=0.299*R + 0.587*G + 0.114*B;
  double U=(B-Y)*0.565;
  double V=(R-Y)*0.713;
@@ -158,7 +151,18 @@ void Tfont::init(const char *fontName,int charset,int size,int weight,int spacin
  hdc=CreateCompatibleDC(NULL);
  if (!hdc) return;
  SelectObject(hdc,hf);
- SetTextCharacterExtra(hdc,spacing);
+ SetTextCharacterExtra(hdc,cfg->fontSpacing);
+ if (cfg->fontShadowStrength<100)
+  {
+   __asm emms;
+   for (int y=-2;y<=2;y++)
+    for (int x=-2;x<=2;x++)
+     {
+      int d=8-(x*x+y*y);
+      matrix[y+2][x+2]=1.55*cfg->fontShadowStrength*pow(d/8.0,2-cfg->fontShadowRadius/50.0);
+     }; 
+  }
+ else matrix[0][0]=-100;
 }
 void Tfont::done(void)
 {
@@ -176,7 +180,7 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,in
    for (i=0;i<c.size();i++) delete c[i];c.clear();
    if (!sub) return;
    for (i=0;i<sub->lines;i++)
-    c.push_back(new Tchar(hdc,sub->text[i],shadow,colorY,colorU,colorV));
+    c.push_back(new Tchar(hdc,sub->text[i],(matrix[0][0]==-100)?NULL:matrix,colorY,colorU,colorV));
   }; 
  if (c.empty()) return;
  unsigned int i;

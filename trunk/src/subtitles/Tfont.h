@@ -7,7 +7,7 @@
 class Tchar
 {
 public:
- Tchar(HDC hdc,const char *s,int shadow,int colorY,int colorU,int colorV);
+ Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int colorV);
  ~Tchar();
  int dxY ,dyY ;unsigned char *bmpY ,*mskY ;
  int dxUV,dyUV;unsigned char *bmpU, *bmpV,*mskUV;
@@ -15,18 +15,20 @@ public:
 };
 
 struct subtitle;
+class Tconfig;
 class Tfont
 {
 private:
  HFONT hf;HDC hdc;
  std::vector<Tchar*> c;
  subtitle *oldsub;
- int shadow;
+ int shadowStrength,shadowRadius;
  int colorY,colorU,colorV;
+ int matrix[5][5];
 public:
  Tfont(void);
  ~Tfont();
- void init(const char *fontName,int charset,int size,int weight,int spacing,int shadow,int color);
+ void init(Tconfig *cfg);
  void print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,int dx,int stride,int dy,subtitle *sub,int posX,int posY);
  void done(void);
 };

@@ -8,7 +8,7 @@ void TimgFilterSubtitles::process(unsigned char *srcY,unsigned char *srcU,unsign
  if (cfg->fontChanged)
   {
    cfg->fontChanged=false;
-   font.init(cfg->fontName,cfg->fontCharset,cfg->fontSize,cfg->fontWeight,cfg->fontSpacing,cfg->fontShadow,cfg->fontColor);
+   font.init(cfg);
   }
  if (cfg->sub)
   { 

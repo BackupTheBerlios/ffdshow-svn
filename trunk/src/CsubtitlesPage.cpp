@@ -114,10 +114,14 @@ void TsubtitlesPage::font2dlg(void)
  sprintf(s,"Spacing:  %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_FONT_SPACING,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SPACING,TBM_SETPOS,TRUE,x);
- x=cfgGet(IDFF_fontShadow);
+ x=cfgGet(IDFF_fontShadowStrength);
  sprintf(s,"Shadow intensity:  %i",x);
- SendDlgItemMessage(m_hwnd,IDC_LBL_FONT_SHADOW,WM_SETTEXT,0,LPARAM(s));
- SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW,TBM_SETPOS,TRUE,x);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_FONT_SHADOW_STRENGTH,WM_SETTEXT,0,LPARAM(s));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH,TBM_SETPOS,TRUE,x);
+ x=cfgGet(IDFF_fontShadowRadius);
+ sprintf(s,"Shadow radius:  %i",x);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_FONT_SHADOW_RADIUS,WM_SETTEXT,0,LPARAM(s));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETPOS,TRUE,x);
 
  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_SETCURSEL,cfgGet(IDFF_fontWeight)/100-1,0);
  char fontname[256];deci->getFontName(fontname,255);
@@ -173,9 +177,12 @@ void TsubtitlesPage::createConfig(void)
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SPACING,TBM_SETRANGE,TRUE,MAKELPARAM(-10,10));
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SPACING,TBM_SETLINESIZE,0,1);
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SPACING,TBM_SETPAGESIZE,0,2); 
- SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW,TBM_SETRANGE,TRUE,MAKELPARAM(0,100));
- SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW,TBM_SETLINESIZE,0,1);
- SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW,TBM_SETPAGESIZE,0,2); 
+ SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH,TBM_SETRANGE,TRUE,MAKELPARAM(0,100));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH,TBM_SETLINESIZE,0,1);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH,TBM_SETPAGESIZE,0,2); 
+ SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETRANGE,TRUE,MAKELPARAM(0,100));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETLINESIZE,0,1);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETPAGESIZE,0,2); 
  
  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("thin"));
  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("extralight"));
@@ -231,9 +238,10 @@ HRESULT TsubtitlesPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
      font2dlg();
      return TRUE;
     }
-   else if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_FONT_SHADOW))
+   else if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH) || HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS))
     {
-     cfgSet(IDFF_fontShadow,SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW,TBM_GETPOS,0,0));
+     cfgSet(IDFF_fontShadowStrength,SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH,TBM_GETPOS,0,0));
+     cfgSet(IDFF_fontShadowRadius  ,SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS  ,TBM_GETPOS,0,0));
      font2dlg();
      return TRUE;
     }
