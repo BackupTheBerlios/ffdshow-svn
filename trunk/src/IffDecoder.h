@@ -141,6 +141,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (getSubFlnm)(char *buf,unsigned int len) PURE;
  STDMETHOD (loadSubtitles)(const char *flnm) PURE;
  STDMETHOD (getRealCrop)(unsigned int *left,unsigned int *top,unsigned int *right,unsigned int *bottom) PURE;
+ STDMETHOD (getMinOrder2)(void) PURE;
  STDMETHOD (getMaxOrder2)(void) PURE;
 };
 

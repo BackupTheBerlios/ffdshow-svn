@@ -558,6 +558,10 @@ STDMETHODIMP TffDecoder::getRealCrop(unsigned int *left,unsigned int *top,unsign
   } 
  return S_OK; 
 }
+STDMETHODIMP TffDecoder::getMinOrder2(void)
+{
+ return MIN_ORDER;
+}
 STDMETHODIMP TffDecoder::getMaxOrder2(void)
 {
  return MAX_ORDER;

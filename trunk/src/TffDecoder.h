@@ -70,6 +70,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP getSubFlnm(char *buf,unsigned int len);
   STDMETHODIMP loadSubtitles(const char *flnm);
   STDMETHODIMP getRealCrop(unsigned int *left,unsigned int *top,unsigned int *right,unsigned int *bottom);
+  STDMETHODIMP getMinOrder2(void);
   STDMETHODIMP getMaxOrder2(void);
  
  private:

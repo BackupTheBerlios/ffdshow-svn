@@ -21,7 +21,7 @@
 #include <commctrl.h>
 #include "TffdshowPage.h"
 #include "..\resource.h"
-#include "..\Tconfig.h"
+//#include "..\Tconfig.h"
 #include <assert.h>
 #include "..\IffDecoder.h"
 #include "..\ffdebug.h"
@@ -120,13 +120,14 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  HTREEITEM pagePresets=addTI(tvis,new TpresetsPage(this,m_hwnd,deci));
  tvis.hParent=pagePresets;
  tvis.item.cChildren=0;
- for (int i=MIN_ORDER;i<=MAX_ORDER;i++)
+ for (int i=deci->getMinOrder2();i<=deci->getMaxOrder2();i++)
   if      (i==deci->get_Param2(IDFF_orderPostproc))  addTI(tvis,new TpostProcPage(this,m_hwnd,deci));
   else if (i==deci->get_Param2(IDFF_orderPictProp))  addTI(tvis,new TpictPropPage(this,m_hwnd,deci));
   else if (i==deci->get_Param2(IDFF_orderNoise))     addTI(tvis,new TnoisePage(this,m_hwnd,deci));
   else if (i==deci->get_Param2(IDFF_orderSharpen))   addTI(tvis,new TsharpenPage(this,m_hwnd,deci));
   else if (i==deci->get_Param2(IDFF_orderBlur))      addTI(tvis,new TblurPage(this,m_hwnd,deci));
-  else if (i==deci->get_Param2(IDFF_orderSubtitles))
+  else if (i==deci->get_Param2(IDFF_orderSubtitles)) addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
+  /*
    {
     tvis.item.cChildren=1;
     HTREEITEM pageSubtitles=addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
@@ -134,8 +135,10 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
     tvis.hParent=pageSubtitles;
     addTI(tvis,new TfontPage(this,m_hwnd,deci));
     TreeView_Expand(htv,pageSubtitles,TVE_EXPAND);
+    tvis.hParent=pagePresets;
    };
- tvis.hParent=pagePresets;
+ */
+ addTI(tvis,new TfontPage(this,m_hwnd,deci));
  addTI(tvis,new TresizePage(this,m_hwnd,deci));
  addTI(tvis,new TaspectNcropPage(this,m_hwnd,deci));
  addTI(tvis,new TmiscPage(this,m_hwnd,deci));
@@ -263,7 +266,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             if (page->getOrder()!=-1 && (tvcd->nmcd.uItemState&CDIS_SELECTED)) 
              {
               int img;
-              if (page->getOrder()==1) img=4;
+              if (page->getOrder()==deci->getMinOrder2()) img=4;
               else if (page->getOrder()==deci->getMaxOrder2()) img=3;
               else img=2;
               ImageList_DrawEx(hil,img,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+2,tvcd->nmcd.rc.top,5,16,CLR_DEFAULT,CLR_DEFAULT,ILD_TRANSPARENT);
@@ -291,7 +294,22 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
            }
           else if (ps.x>=2 && ps.x<=7)
            {
-            
+            if (ps.y>r.top+2 && ps.y<r.bottom-8 && page->getOrder()>deci->getMinOrder2())
+             {
+              HTREEITEM hti0=TreeView_GetPrevSibling(htv,hti);
+              OutputDebugString("up\n");
+              swap(hti,hti0);
+              SetWindowLong(m_hwnd,DWL_MSGRESULT,1);
+              return TRUE;
+             }
+            else if (ps.y>r.top+10 && ps.y<r.bottom-2 && page->getOrder()<deci->getMaxOrder2())
+             {
+              HTREEITEM hti0=TreeView_GetNextSibling(htv,hti);
+              OutputDebugString("down\n");
+              swap(hti,hti0);
+              SetWindowLong(m_hwnd,DWL_MSGRESULT,1);
+              return TRUE;
+             }
            }
           return FALSE;
          }
@@ -299,6 +317,24 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
     }
   }
  return CBasePropertyPage::OnReceiveMessage(hwnd, uMsg, wParam, lParam);
+}
+void TffdshowPage::swap(HTREEITEM hti1,HTREEITEM hti2)
+{
+ char str1[256],str2[256];
+ TVITEM tvi1;
+ tvi1.mask=TVIF_CHILDREN|TVIF_HANDLE|TVIF_PARAM|TVIF_STATE|TVIF_TEXT;
+ tvi1.cchTextMax=255;
+ TVITEM tvi2=tvi1;
+ tvi1.hItem=hti1;tvi2.hItem=hti2;
+ tvi1.pszText=str1;tvi2.pszText=str2;
+ TreeView_GetItem(htv,&tvi1);TreeView_GetItem(htv,&tvi2);
+ tvi1.hItem=hti2;tvi2.hItem=hti1;
+ TreeView_SetItem(htv,&tvi1);TreeView_SetItem(htv,&tvi2);
+ //HTREEITEM htic1=TreeView_GetChild(htv,hti1),htic2=TreeView_GetChild(htv,hti2);
+ TreeView_SelectItem(htv,hti2);
+ int o1=hti2page(hti1)->getOrder(),o2=hti2page(hti2)->getOrder();
+ hti2page(hti1)->setOrder(o2);hti2page(hti2)->setOrder(o1);
+ InvalidateRect(htv,NULL,FALSE);
 }
 void TffdshowPage::applySettings(void)
 {
@@ -308,7 +344,6 @@ void TffdshowPage::drawInter(void)
 {
  InvalidateRect(htv,NULL,FALSE);
 }
-
 
 #ifdef DEBUG
 static int refcnt=0;
