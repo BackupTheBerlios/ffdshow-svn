@@ -16,14 +16,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include "dsputil.h"
 #include "avcodec.h"
+#include "dsputil.h"
 #include "mpegvideo.h"
 
 //#define DEBUG
+//#define PRINT_FRAME_TIME
+#ifdef PRINT_FRAME_TIME
+static inline long long rdtsc()
+{
+	long long l;
+	asm volatile(	"rdtsc\n\t"
+		: "=A" (l)
+	);
+//	printf("%d\n", int(l/1000));
+	return l;
+}
+#endif
 
 static int h263_decode_init(AVCodecContext *avctx)
 {
@@ -103,7 +112,9 @@ static int h263_decode_frame(AVCodecContext *avctx,
     MpegEncContext *s = avctx->priv_data;
     int ret;
     AVPicture *pict = data; 
-
+#ifdef PRINT_FRAME_TIME
+uint64_t time= rdtsc();
+#endif
 #ifdef DEBUG
     printf("*****frame %d size=%d\n", avctx->frame_number, buf_size);
     printf("bytes=%x %x %x %x\n", buf[0], buf[1], buf[2], buf[3]);
@@ -322,7 +333,9 @@ static int h263_decode_frame(AVCodecContext *avctx,
        note we allready added +1 for the current pix in MPV_frame_end(s) */
     if(s->num_available_buffers>=2 || (!s->has_b_frames))
     *data_size = sizeof(AVPicture);
-
+#ifdef PRINT_FRAME_TIME
+printf("%Ld\n", rdtsc()-time);
+#endif
     return buf_size;
 }
 

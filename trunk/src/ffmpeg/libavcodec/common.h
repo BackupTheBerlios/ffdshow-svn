@@ -17,18 +17,19 @@
 
 #ifdef HAVE_AV_CONFIG_H
 /* only include the following when compiling package */
-#include "../config.h"
+#include "config.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <math.h>
 
 #ifndef ENODATA
 #define ENODATA  61
 #endif
 
-#endif
+#endif /* HAVE_AV_CONFIG_H */
 
 #ifdef CONFIG_WIN32
 
@@ -117,7 +118,7 @@ typedef signed long long INT64;
 #define UINT64_C(c)    (c ## ULL)
 #endif
 
-#include "../bswap.h"
+#include "bswap.h"
 
 #ifdef USE_FASTMEMCPY
 #include "fastmemcpy.h"
@@ -893,8 +894,10 @@ static inline int clip(int a, int amin, int amax)
 }
 
 /* memory */
+void *av_malloc(int size);
 void *av_mallocz(int size);
-void av_free(void *);
+void av_free(void *ptr);
+#define av_freep(p) do { av_free(*p); *p = NULL; } while (0)
 
 /* math */
 int ff_gcd(int a, int b);

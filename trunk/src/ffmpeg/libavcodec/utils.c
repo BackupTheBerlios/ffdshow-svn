@@ -16,17 +16,11 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include "common.h"
-#include "dsputil.h"
 #include "avcodec.h"
+#include "dsputil.h"
 #include "mpegvideo.h"
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
-#else
-#include <stdlib.h>
 #endif
 
 static void *xvid_malloc(size_t size, uint8_t alignment)
@@ -88,9 +82,8 @@ static void *xvid_malloc(size_t size, uint8_t alignment)
 	return NULL;
 
 }
-#include <malloc.h>
 /* memory alloc */
-void *av_mallocz(int size)
+void *av_malloc(int size)
 {
     void *ptr;
 #if defined ( ARCH_X86 ) && defined ( HAVE_MEMALIGN )
@@ -113,17 +106,29 @@ void *av_mallocz(int size)
     return ptr;
 }
 
+void *av_mallocz(int size)
+{
+    void *ptr;
+    ptr = av_malloc(size);
+    if (!ptr)
+        return NULL;
+    memset(ptr, 0, size);
+    return ptr;
+}
+
 static void xvid_free(void *mem_ptr)
 {
  /* *(mem_ptr - 1) give us the offset to the real malloc block */
  free((uint8_t*)mem_ptr - *((uint8_t*)mem_ptr - 1));
 }
 
-
-void av_free(void *p)
+/* NOTE: ptr = NULL is explicetly allowed */
+void av_free(void *ptr)
 {
- xvid_free(p);
-};
+    /* XXX: this test should not be needed on most libcs */
+    if (ptr)
+        xvid_free(ptr);
+}
 
 /* encoder management */
 AVCodec *first_avcodec;
@@ -152,9 +157,7 @@ int avcodec_open(AVCodecContext *avctx, AVCodec *codec)
     }
     ret = avctx->codec->init(avctx);
     if (ret < 0) {
-        if (avctx->priv_data)
-            av_free(avctx->priv_data);
-        avctx->priv_data = NULL;
+        av_freep(&avctx->priv_data);
         return ret;
     }
     return 0;
@@ -216,8 +219,7 @@ int avcodec_close(AVCodecContext *avctx)
 {
     if (avctx->codec->close)
         avctx->codec->close(avctx);
-    av_free(avctx->priv_data);
-    avctx->priv_data = NULL;
+    av_freep(&avctx->priv_data);
     avctx->codec = NULL;
     return 0;
 }
