@@ -21,7 +21,6 @@
 #include <commctrl.h>
 #include "TffdshowPage.h"
 #include "..\resource.h"
-//#include "..\Tconfig.h"
 #include <assert.h>
 #include "..\IffDecoder.h"
 #include "..\ffdebug.h"
@@ -292,7 +291,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             page->invInter();
             InvalidateRect(htv,&r,FALSE);
            }
-          else if (ps.x>=2 && ps.x<=7)
+          else if (ps.x>=2 && ps.x<=7 && TreeView_GetSelection(htv)==tvhti.hItem)
            {
             if (ps.y>r.top+2 && ps.y<r.bottom-8 && page->getOrder()>deci->getMinOrder2())
              {
