@@ -32,10 +32,10 @@ void TsubtitlesPage::init(void)
  SendDlgItemMessage(m_hwnd,IDC_CBX_SUB_FLNM,CB_LIMITTEXT,1023,0);
  
  SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSX,TBM_SETRANGE,TRUE,MAKELPARAM(0,100));
- SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSX,TBM_SETLINESIZE,0,1);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSX,TBM_SETLINESIZE,0,2);
  SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSX,TBM_SETPAGESIZE,0,10); 
  SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSY,TBM_SETRANGE,TRUE,MAKELPARAM(0,100));
- SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSY,TBM_SETLINESIZE,0,1);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSY,TBM_SETLINESIZE,0,2);
  SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSY,TBM_SETPAGESIZE,0,10); 
  
  cfg2dlg();

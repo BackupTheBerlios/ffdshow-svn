@@ -52,7 +52,3 @@ TmovieSource* TmovieSource::initSource(int codecId,int AVIdx,int AVIdy)
  TESTSOURCE(TmovieSourceUncompressed)
  return NULL; 
 }
-TmovieSource::~TmovieSource()
-{
- if (quant) free(quant);
-}

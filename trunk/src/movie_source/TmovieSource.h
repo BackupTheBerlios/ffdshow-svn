@@ -8,7 +8,7 @@ class TmovieSource
 {
 public:
  TmovieSource(void):quantDx(128),quantDy(96) {};
- virtual ~TmovieSource();
+ virtual ~TmovieSource() {};
  static TmovieSource* initSource(int codecId,int AVIdx,int AVIdy);
  int dx,dy;
  virtual bool init(int codecId,int AVIdx,int AVIdy)=0;
@@ -21,7 +21,7 @@ public:
    TmotionVectors(void):dx(0),dy(0),vectors(NULL) {};
    int dx,dy;
    char *vectors;
-  };
+  };                         
  virtual TmotionVectors getMV(void) {TmotionVectors v;return v;};  
 };
 

@@ -167,10 +167,6 @@ SOURCE=.\copying.txt
 # End Source File
 # Begin Source File
 
-SOURCE=.\konfiguracia.txt
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\readme.txt
 # End Source File
 # Begin Source File
