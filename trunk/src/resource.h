@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by ffdshow.rc
 //
 #define VERSION_RES_MINOR_VER           0
@@ -117,6 +117,7 @@
 #define IDC_LBL_FFDSHOWVERSION          1072
 #define IDC_CHB_PICTPROP                1072
 #define IDC_CHB_POSTPROC                1073
+#define IDC_LBL_XVIDVERSION             1073
 #define IDC_CHB_SHOWMV                  1074
 #define IDC_CHB_AUTOPRESET_FILEFIRST    1080
 #define IDC_CHB_RESIZE                  1083
@@ -187,6 +188,8 @@
 #define IDC_BT_PRESET_SAVETOFILE        1155
 #define IDC_BT_PRESET_READFROMFILE      1156
 #define IDC_BT_PRESET_HELP              1157
+#define IDC_LBL_DEBLOCKSTRENGTH         1158
+#define IDC_TBR_DEBLOCKSTRENGTH         1159
 #define VERSION_RES_CHARSET             1252
 #define ID_MNI_PRESET_NEWFROMDEFAULT    40004
 #define ID_MNI_PRESET_NEWFROMSELECTED   40005
@@ -200,7 +203,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        151
 #define _APS_NEXT_COMMAND_VALUE         40009
-#define _APS_NEXT_CONTROL_VALUE         1158
+#define _APS_NEXT_CONTROL_VALUE         1160
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

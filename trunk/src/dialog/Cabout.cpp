@@ -36,17 +36,11 @@ HRESULT TaboutPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void TaboutPage::init(void)
 {
-/*
- HMODULE hm=(HMODULE)GetWindowLong(m_hwnd,GWL_HINSTANCE);
- HRSRC rsrc=FindResource(hm,MAKEINTRESOURCE(IDR_README),"TEXT");
- HGLOBAL hglb=LoadResource(hm,rsrc);
- char *credits=(char*)LockResource(hglb);
- SendDlgItemMessage(m_hwnd,IDC_ED_CREDITS,WM_SETTEXT,0,LPARAM(credits));
- SendDlgItemMessage(m_hwnd,IDC_ED_CREDITS,EM_SETSEL,0,-1);
-*/ 
  char vers[1024];vers[0]='\0';
  deci->getAVcodecVersion(vers,1023);
  SendDlgItemMessage(m_hwnd,IDC_LBL_AVVERSION,WM_SETTEXT,0,LPARAM(vers));
+ deci->getXvidVersion(vers,1023);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_XVIDVERSION,WM_SETTEXT,0,LPARAM(vers));
  strcpy(vers,"DirectShow filter build date: "__DATE__" , "__TIME__);
  SendDlgItemMessage(m_hwnd,IDC_LBL_FFDSHOWVERSION,WM_SETTEXT,0,LPARAM(vers));
 }

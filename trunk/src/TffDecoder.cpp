@@ -41,7 +41,6 @@
 #include <olectlid.h>
 #endif
 #include <dvdmedia.h>   // VIDEOINFOHEADER2
-#include <assert.h>
 #include <time.h>
 
 #include "Tconfig.h"
@@ -51,6 +50,7 @@
 #include "xvid\image\image.h"
 #include "TmovieSource.h"
 #include "TmovieSourceLibavcodec.h"
+#include "TmovieSourceXviD.h"
 
 #include "TffdshowPage.h"
 #include "TffDecoder.h"
@@ -197,7 +197,7 @@ STDMETHODIMP TffDecoder::getActivePresetName(char *buf,unsigned int len)
  strcpy(buf,presetSettings->presetName);
  return S_OK;
 }
-STDMETHODIMP TffDecoder::setActivePresetName(const char *name)
+STDMETHODIMP TffDecoder::setActivePreset(const char *name)
 {
  if (!name) return S_FALSE;
  TpresetSettings *preset=presets.getPreset(name);
@@ -246,12 +246,6 @@ STDMETHODIMP TffDecoder::getAVIfps(unsigned int *fps)
  *fps=1000*AVIfps;
  return S_OK;
 }
-STDMETHODIMP TffDecoder::loadPreset(const char *name)
-{
- presetSettings=presets.getPreset((name)?name:presetSettings->presetName);
- notifyParamsChanged();
- return S_OK;
-}
 STDMETHODIMP TffDecoder::saveActivePreset(const char *name)
 {
  if (!presetSettings) return S_FALSE;
@@ -265,7 +259,7 @@ STDMETHODIMP TffDecoder::saveActivePresetToFile(const char *flnm)
  presets.savePresetFile(presetSettings,flnm);
  return S_OK;
 }
-STDMETHODIMP TffDecoder::loadPresetFromFile(const char *flnm)
+STDMETHODIMP TffDecoder::loadActivePresetFromFile(const char *flnm)
 {
  //TODO: check load success
  if (!flnm) return S_FALSE;
@@ -285,6 +279,15 @@ STDMETHODIMP TffDecoder::getAVcodecVersion(char *buf,unsigned int len)
 {
  char *vers;
  TmovieSourceLibavcodec::getVersion(&vers);
+ if (!vers) return S_FALSE;
+ if (len<strlen(vers)+1) return E_OUTOFMEMORY;
+ strcpy(buf,vers);
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::getXvidVersion(char *buf,unsigned int len)
+{
+ char *vers;
+ TmovieSourceXviD::getVersion(&vers);
  if (!vers) return S_FALSE;
  if (len<strlen(vers)+1) return E_OUTOFMEMORY;
  strcpy(buf,vers);
@@ -451,7 +454,7 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  globalSettings.load();
  dialogSettings.load();
  presets.init();
- loadPreset(globalSettings.defaultPreset);
+ setActivePreset(globalSettings.defaultPreset);
  
  tray=new TtrayIcon(this,g_hInst);
  
@@ -1006,6 +1009,12 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
 STDMETHODIMP TffDecoder::GetPages(CAUUID * pPages)
 {
  DEBUGS("GetPages");
+ if (cfgDlgHnwd)
+  {
+   pPages->cElems=0;
+   pPages->pElems=NULL;
+   return S_FALSE;
+  }; 
  
  if (globalSettings.trayIcon) tray->show();
 

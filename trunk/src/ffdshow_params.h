@@ -51,6 +51,7 @@ _PARAM_OP(IDFF_autoq              ,presetSettings->,autoq              ,0,0,NULL
 _PARAM_OP(IDFF_ppIsCustom         ,presetSettings->,ppIsCustom         ,0,0,NULL)
 _PARAM_OP(IDFF_ppcustom           ,presetSettings->,ppcustom           ,0,0,NULL)
 _PARAM_OP(IDFF_currentq           ,presetSettings->,currentq           ,0,6,NULL)
+_PARAM_OP(IDFF_deblockStrength    ,presetSettings->,deblockStrength    ,0,512,NULL);
 _PARAM_OP(IDFF_levelFixLum        ,presetSettings->,levelFixLum        ,0,0,NULL)
 _PARAM_OP(IDFF_levelFixChrom      ,presetSettings->,levelFixChrom      ,0,0,NULL)
 

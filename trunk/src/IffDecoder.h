@@ -32,6 +32,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_ppIsCustom          103  //custom postprocessing settings are enabled
 #define IDFF_ppcustom            104  //custom postprocessing settings
 #define IDFF_currentq            105
+#define IDFF_deblockStrength     110
 #define IDFF_levelFixLum         107
 #define IDFF_levelFixChrom       108
 
@@ -138,15 +139,14 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (getNumPresets)(unsigned int *value) PURE;
  STDMETHOD (getPresetName)(unsigned int i,char *buf,unsigned int len) PURE;
  STDMETHOD (getActivePresetName)(char *buf,unsigned int len) PURE;
- STDMETHOD (setActivePresetName)(const char *name) PURE;
+ STDMETHOD (setActivePreset)(const char *name) PURE;
  STDMETHOD (getAVIname)(char *buf,unsigned int len) PURE;
  STDMETHOD (getAVIfourcc)(char *buf,unsigned int len) PURE;
  STDMETHOD (getAVIdimensions)(unsigned int *x,unsigned int *y) PURE;
  STDMETHOD (getAVIfps)(unsigned int *fps) PURE;
  STDMETHOD (saveActivePreset)(const char *name) PURE;
  STDMETHOD (saveActivePresetToFile)(const char *flnm) PURE;
- STDMETHOD (loadPreset)(const char *name) PURE;
- STDMETHOD (loadPresetFromFile)(const char *flnm) PURE;
+ STDMETHOD (loadActivePresetFromFile)(const char *flnm) PURE;
  STDMETHOD (removePreset)(const char *name) PURE;
  STDMETHOD (notifyParamsChanged)(void) PURE;
  STDMETHOD (getAVcodecVersion)(char *buf,unsigned int len) PURE;
@@ -173,6 +173,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (setDefaultPresetName)(const char *presetName) PURE;
  STDMETHOD (isDefaultPreset)(const char *presetName) PURE;
  STDMETHOD (showCfgDlg)(HWND owner) PURE;
+ STDMETHOD (getXvidVersion)(char *buf,unsigned int len) PURE;
 };
 
 #ifdef __cplusplus

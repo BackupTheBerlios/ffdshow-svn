@@ -148,7 +148,7 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
           mii.fMask=MIIM_TYPE;
           mii.dwTypeData=preset;
           GetMenuItemInfo(hm,i,TRUE,&mii);
-          ti->deci->loadPreset(preset);
+          ti->deci->setActivePreset(preset);
          }
         else 
          switch (cmd)

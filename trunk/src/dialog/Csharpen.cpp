@@ -37,7 +37,7 @@ void TsharpenPage::init(void)
  SendDlgItemMessage(m_hwnd,IDC_TBR_XSHARPENTHRESH,TBM_SETLINESIZE,0,1);
  SendDlgItemMessage(m_hwnd,IDC_TBR_XSHARPENTHRESH,TBM_SETPAGESIZE,0,16); 
  if ((config.cpu_flags&XVID_CPU_MMXEXT)==0)
-  SendDlgItemMessage(m_hwnd,IDC_RBT_SHARPEN_XSHARPEN,WM_SETTEXT,0,LPARAM("xsharpen (will be disabled, because of no MMXEXT support)"));
+  SendDlgItemMessage(m_hwnd,IDC_RBT_SHARPEN_XSHARPEN,WM_SETTEXT,0,LPARAM("xsharpen (will be disabled because of no MMXEXT support)"));
  cfg2dlg();
 }
 
@@ -127,7 +127,7 @@ void TsharpenPage::getTip(char *tipS,int len)
 {
  char tstr[256];
  sprintf(tstr," threshold: %i",cfgGet(IDFF_xsharp_threshold));
- sprintf(tipS,"Sharpen (method:%s, strength:%i%s)",(cfgGet(IDFF_sharpenMethod)==0)?"xsharpen":"unsharp mask",(cfgGet(IDFF_sharpenMethod)==0)?cfgGet(IDFF_xsharp_strength):cfgGet(IDFF_unsharp_strength),(cfgGet(IDFF_sharpenMethod)==0)?tstr:"");
+ sprintf(tipS,"method:%s, strength:%i%s",(cfgGet(IDFF_sharpenMethod)==0)?"xsharpen":"unsharp mask",(cfgGet(IDFF_sharpenMethod)==0)?cfgGet(IDFF_xsharp_strength):cfgGet(IDFF_unsharp_strength),(cfgGet(IDFF_sharpenMethod)==0)?tstr:"");
 }
 TsharpenPage::TsharpenPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {

@@ -72,6 +72,7 @@ Section "Documentation (optional)"
   File "..\help\ffmpeg-button.gif"
   File "..\help\index.html"
   File "..\help\presets.html"
+  File "..\help\compilation.html"
 SectionEnd
 
 ; uninstall stuff
@@ -90,6 +91,7 @@ Section "Uninstall"
   ; remove directories used.
   RMDir "$SMPROGRAMS\ffdshow"
   ; remove files
+  RMDir "$INSTDIR\help"
   Delete "$INSTDIR\ffdshow.ax"
   Delete "$INSTDIR\libavcodec.dll"
   Delete "$INSTDIR\libavcodec_normal.dll"

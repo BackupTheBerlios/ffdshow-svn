@@ -148,7 +148,7 @@ void TpictPropPage::interDlg(void)
 void TpictPropPage::getTip(char *tipS,int len)
 {
  __asm emms;
- sprintf(tipS,"Picture properties (lum gain:%i, lum offset:%i, gamma:%5.2f, hue:%i, saturation:%i)",cfgGet(IDFF_lumGain),cfgGet(IDFF_lumOffset),float(cfgGet(IDFF_gammaCorrection)/100.0),cfgGet(IDFF_hue),cfgGet(IDFF_saturation));
+ sprintf(tipS,"luma gain:%i, luma offset:%i, gamma:%5.2f, hue:%i, saturation:%i",cfgGet(IDFF_lumGain),cfgGet(IDFF_lumOffset),float(cfgGet(IDFF_gammaCorrection)/100.0),cfgGet(IDFF_hue),cfgGet(IDFF_saturation));
 }
 TpictPropPage::TpictPropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {

@@ -90,7 +90,7 @@ void TblurPage::interDlg(void)
 }
 void TblurPage::getTip(char *tipS,int len)
 {
- sprintf(tipS,"Blur (strength:%i)",cfgGet(IDFF_blurStrength));
+ sprintf(tipS,"blur: %i, temporal smooth: %i",cfgGet(IDFF_blurStrength),cfgGet(IDFF_tempSmooth));
 }
 TblurPage::TblurPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {

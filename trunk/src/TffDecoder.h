@@ -2,7 +2,6 @@
 #define _TFFDECODER_H_
 
 #include "IffDecoder.h"
-#include <assert.h>
 #include "TglobalSettings.h"
 #include "TdialogSettings.h"
 #include "TpresetSettings.h"
@@ -51,7 +50,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP putParam(unsigned int paramID, int  value);
   STDMETHODIMP getPresetName(unsigned int i,char *buf,unsigned int len);
   STDMETHODIMP getNumPresets(unsigned int *value);
-  STDMETHODIMP setActivePresetName(const char *name);
+  STDMETHODIMP setActivePreset(const char *name);
   STDMETHODIMP getActivePresetName(char *buf,unsigned int len);
   STDMETHODIMP getAVIname(char *buf,unsigned int len);
   STDMETHODIMP getAVIfourcc(char *buf,unsigned int len);
@@ -59,11 +58,11 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP getAVIfps(unsigned int *fps);
   STDMETHODIMP saveActivePreset(const char *name);
   STDMETHODIMP saveActivePresetToFile(const char *flnm);
-  STDMETHODIMP loadPreset(const char *name);
-  STDMETHODIMP loadPresetFromFile(const char *flnm);
+  STDMETHODIMP loadActivePresetFromFile(const char *flnm);
   STDMETHODIMP removePreset(const char *name);
   STDMETHODIMP notifyParamsChanged(void);
   STDMETHODIMP getAVcodecVersion(char *buf,unsigned int len);
+  STDMETHODIMP getXvidVersion(char *buf,unsigned int len);
   STDMETHODIMP getPPmode(unsigned int *ppmode);
   STDMETHODIMP getFontName(char *buf,unsigned int len);
   STDMETHODIMP setFontName(const char *name);
@@ -76,7 +75,6 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP loadGlobalSettings(void);
   STDMETHODIMP saveDialogSettings(void);
   STDMETHODIMP loadDialogSettings(void);
-  //STDMETHODIMP getPreset(unsigned int i,TpresetSettings **preset);
   STDMETHODIMP getPresets(Tpresets *presets2);
   STDMETHODIMP setPresets(const Tpresets *presets2);
   STDMETHODIMP savePresets(void);

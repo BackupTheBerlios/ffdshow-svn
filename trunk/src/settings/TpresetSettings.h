@@ -31,7 +31,8 @@ public:
  int ppqual;
  int autoq;int currentq;
  int ppIsCustom,ppcustom;
- //int ppsetting;
+ int deblockStrength;
+ static const int deblockStrengthDef;
  int levelFixLum,levelFixChrom;
   
  int isPictProp,orderPictProp; 

@@ -108,7 +108,7 @@ void TnoisePage::interDlg(void)
 }
 void TnoisePage::getTip(char *tipS,int len)
 {
- sprintf(tipS,"Noise (method:%s, %sluma strength:%i, chroma strength:%i)",(cfgGet(IDFF_noiseMethod)==0)?"old":"avih",cfgGet(IDFF_uniformNoise)?"uniform, ":"",cfgGet(IDFF_noiseStrength),cfgGet(IDFF_noiseStrengthChroma));
+ sprintf(tipS,"method:%s, %sluma strength:%i, chroma strength:%i",(cfgGet(IDFF_noiseMethod)==0)?"old":"avih",cfgGet(IDFF_uniformNoise)?"uniform, ":"",cfgGet(IDFF_noiseStrength),cfgGet(IDFF_noiseStrengthChroma));
 }
 
 TnoisePage::TnoisePage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)

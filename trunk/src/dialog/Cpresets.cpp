@@ -227,7 +227,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       case IDC_BT_PRESET_REMOVE:
        {
         int i=ListView_GetNextItem(hlv,-1,LVNI_SELECTED);
-        if (i!=0 && MessageBox(m_hwnd,"Do you realy want to remove selected preset?","Removing preset",MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2)==IDYES)
+        if (i!=0 && MessageBox(m_hwnd,"Do you really want to remove selected preset?","Removing preset",MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2)==IDYES)
          {
           char presetName[1024];
           ListView_GetItemText(hlv,i,0,presetName,1023);
@@ -401,7 +401,7 @@ void TpresetsPage::applySettings(void)
 }
 TpresetsPage::~TpresetsPage()
 {
- deci->loadPreset(oldActivePresetName);
+ deci->setActivePreset(oldActivePresetName);
 }
 
 TpresetsPage::TpresetsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)

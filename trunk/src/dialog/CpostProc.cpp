@@ -36,6 +36,9 @@ void TpostProcPage::init(void)
  SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_SETSEL  ,TRUE,MAKELONG(0,6));
  SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_SETSELSTART,TRUE,0);
  SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_SETSELEND,TRUE,0);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH,TBM_SETRANGE,TRUE,MAKELPARAM(0,512));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH,TBM_SETLINESIZE,0,8);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH,TBM_SETPAGESIZE,0,32); 
  cfg2dlg();
 }
 
@@ -52,6 +55,9 @@ void TpostProcPage::postProc2dlg(void)
  setCheck(IDC_RBT_PPCUSTOM , cfgGet(IDFF_ppIsCustom));
  setCheck(IDC_CHB_LEVELFIX_LUM  ,cfgGet(IDFF_levelFixLum));
  setCheck(IDC_CHB_LEVELFIX_CHROM,cfgGet(IDFF_levelFixChrom));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH,TBM_SETPOS,TRUE,cfgGet(IDFF_deblockStrength));
+ char pomS[256];
+ sprintf(pomS,"Processing strength: %i%%",100*cfgGet(IDFF_deblockStrength)/256);SendDlgItemMessage(m_hwnd,IDC_LBL_DEBLOCKSTRENGTH,WM_SETTEXT,0,LPARAM(pomS));
  setPPchbs();
 }
 
@@ -96,6 +102,12 @@ HRESULT TpostProcPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       cfgSet(IDFF_ppqual,SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_GETPOS,0,0));
       cfgSet(IDFF_currentq,cfgGet(IDFF_ppqual));
       setPPchbs();
+      return TRUE;
+     }
+    else if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH))
+     {
+      cfgSet(IDFF_deblockStrength,SendDlgItemMessage(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH,TBM_GETPOS,0,0));
+      postProc2dlg();
       return TRUE;
      }
     break;  
@@ -166,7 +178,7 @@ void TpostProcPage::interDlg(void)
 void TpostProcPage::getTip(char *tipS,int len)
 {
  char pomS[256];
- strcpy(tipS,"Postprocessing (");
+ tipS[0]='\0';
  if (cfgGet(IDFF_ppIsCustom))
   {
    strcat(tipS,"custom");
@@ -178,7 +190,6 @@ void TpostProcPage::getTip(char *tipS,int len)
    if (cfgGet(IDFF_autoq)) strcat(tipS," automatic");
   } 
  if (cfgGet(IDFF_levelFixChrom) || cfgGet(IDFF_levelFixLum)) strcat(tipS,", level fix"); 
- strcat(tipS,")");
 }
 TpostProcPage::TpostProcPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {

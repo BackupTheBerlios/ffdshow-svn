@@ -195,15 +195,29 @@ HRESULT TaspectNcropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 void TaspectNcropPage::getTip(char *tipS,int len)
 {
- strcpy(tipS,"Crop & zoom (");
+ strcpy(tipS,"Aspect ratio: ");
+ switch (cfgGet(IDFF_resizeAspect ))
+  { 
+   case 0:strcat(tipS,"no change");break;
+   case 1:strcat(tipS,"keeping original aspect ratio");break;
+   case 2:
+    {
+     __asm emms;
+     int aspectI=cfgGet(IDFF_aspectRatio);
+     char pomS[256];sprintf(pomS,"set to %3.2f:1",float(aspectI/65536.0));
+     strcat(tipS,pomS);
+     break;
+    }; 
+  }
+ strcat(tipS,"\nCrop & zoom: ");
  char pomS[256];
  if (cfgGet(IDFF_isZoom))
   if (cfgGet(IDFF_magnificationLocked))
-   sprintf(pomS,"zoom: %i%%)",cfgGet(IDFF_magnificationX));
+   sprintf(pomS,"zoom: %i%%",cfgGet(IDFF_magnificationX));
   else
-   sprintf(pomS,"horizontal zoom: %i%%, vertical zoom: %i%%)",cfgGet(IDFF_magnificationX),cfgGet(IDFF_magnificationY));
+   sprintf(pomS,"horizontal zoom: %i%%, vertical zoom: %i%%",cfgGet(IDFF_magnificationX),cfgGet(IDFF_magnificationY));
  else
-  sprintf(pomS,"crop: left:%i, top:%i, right:%i, bottom:%i)",cfgGet(IDFF_cropLeft),cfgGet(IDFF_cropTop),cfgGet(IDFF_cropRight),cfgGet(IDFF_cropBottom));
+  sprintf(pomS,"crop: left:%i, top:%i, right:%i, bottom:%i",cfgGet(IDFF_cropLeft),cfgGet(IDFF_cropTop),cfgGet(IDFF_cropRight),cfgGet(IDFF_cropBottom));
  strcat(tipS,pomS);
 }
 TaspectNcropPage::TaspectNcropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)

@@ -22,7 +22,6 @@
 #include <string.h>
 #include <stdio.h>
 #pragma hdrstop
-#include <assert.h>
 #include "Tconfig.h"
 #include "TffdshowPage.h"
 #include "resource.h"

@@ -3,8 +3,9 @@
 ffdshow is a DirectShow decoding filter for decompressing DIVX movies.
 It uses libavcodec from ffmpeg project or for video decompression (it can use
 xvid.dll installed with xvid codec too), postprocessing code from mplayer to 
-enhance visual quality of low bitrate movies, and is based on original DirectShow
-filter from XviD, which is GPL'ed educational implementation of MPEG4 encoder.
+enhance visual quality of low bitrate movies, and is based on original
+DirectShow filter from XviD, which is GPL'ed educational implementation
+of MPEG4 encoder.
 
 2. Features
 

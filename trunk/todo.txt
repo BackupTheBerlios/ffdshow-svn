@@ -47,6 +47,6 @@ better noise
 less memory
 config dialog on tray icon doubleclick [DONE]
 hardware overlay
-check and write xvid version
+check and write xvid version [DISPLAYING DONE]
 subtitles
 better changeOrder COM functions

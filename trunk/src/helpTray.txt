@@ -1,8 +1,7 @@
-Tray
+Tray icon
   shows icon in system tray area 
-  after right click on it menu with basic settings is displayer
-  TODO: show configuration dialog after doubleclick
-Dialog position
+  doubleclick shows configuration dialog
+  after right click on it menu with basic settings is displayed
+Restore dialog position
   remembers position of configuration dialog (doesn't work in graphedt)
-ShowMV
-  shows motion vectors - try this, it looks nice
+Show motion vectors - try this, it looks nice
