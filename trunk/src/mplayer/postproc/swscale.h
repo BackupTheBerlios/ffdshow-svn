@@ -16,6 +16,13 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+#ifndef _SWSCALE_H_
+#define _SWSCALE_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* values for the flags, the stuff on the command line is different */
 #define SWS_FAST_BILINEAR 1
 #define SWS_BILINEAR 2
@@ -135,3 +142,8 @@ SwsVector *cloneVec(SwsVector *a);
 void printVec(SwsVector *a);
 void freeVec(SwsVector *a);
 
+#ifdef __cplusplus
+}
+#endif
+
+#endif

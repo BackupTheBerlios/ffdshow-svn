@@ -22,6 +22,7 @@
 #include "TimgFilterBlur.h"
 #include "TpresetSettings.h"
 #include "xvid\utils\mem_align.h"
+#include "ffdebug.h"
 
 TimgFilterBlur::TimgFilterBlur(void)
 {
@@ -45,6 +46,8 @@ void TimgFilterBlur::process(unsigned char *srcY,unsigned char *,unsigned char *
                              unsigned char *dstY,unsigned char *,unsigned char *,
                              TpresetSettings *cfg)
 {
+ DEBUGS1("src",int(srcY));
+
  if (oldStrength!=cfg->blurStrength)
   {
    oldStrength=cfg->blurStrength;

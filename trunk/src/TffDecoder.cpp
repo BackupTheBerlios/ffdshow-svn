@@ -50,14 +50,8 @@
 #include "ffdebug.h"
 #define FF_POSTPROCESS
 #include "ffmpeg\libavcodec\avcodec.h"
-extern "C"
-{
- #include "mplayer\libmpcodecs\img_format.h"
-}
-extern "C" 
-{
- #include "xvid\image\image.h"
-}
+#include "mplayer\libmpcodecs\img_format.h"
+#include "xvid\image\image.h"
 #include "xvid\xvid.h"
 #include "xvid\dct\idct.h"
 
@@ -843,7 +837,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   }
  avctx->showMV=globalSettings.showMV;
  int ret=libavcodec.avcodec_decode_video(avctx,&avpict,&got_picture,(UINT8*)m_frame.bitstream,m_frame.length);
- //char pomS[256];sprintf(pomS,"framelen:%i ret:%i gotpicture:%i\n",m_frame.length,ret,got_picture);OutputDebugString(pomS);
+ char pomS[256];sprintf(pomS,"framelen:%i ret:%i gotpicture:%i\n",m_frame.length,ret,got_picture);OutputDebugString(pomS);
  if (pIn->IsPreroll()==S_OK) 
   {
    DEBUGS("avcodec_decode_video preroll==S_OK");

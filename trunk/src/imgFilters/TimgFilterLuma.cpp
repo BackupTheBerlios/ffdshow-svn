@@ -17,6 +17,7 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+#include <windows.h>
 #pragma hdrstop
 #include <math.h>
 #include "TimgFilterLuma.h"
@@ -34,18 +35,20 @@ void TimgFilterLuma::process(unsigned char *srcY,unsigned char *,unsigned char *
                              unsigned char *dstY,unsigned char *,unsigned char *,
                              TpresetSettings *cfg)
 {
- __declspec(align(8)) static __int64 lumGainMask;
- lumGainMask=((__int64)cfg->lumGain<<48) + ((__int64)cfg->lumGain<<32) + ((__int64)cfg->lumGain<<16) + (__int64)cfg->lumGain;
- __declspec(align(8)) static __int64 lumOffsetMask;
- lumOffsetMask=((__int64)cfg->lumOffset<<48) + ((__int64)cfg->lumOffset<<32) + ((__int64)cfg->lumOffset<<16) + (__int64)cfg->lumOffset;
- for (unsigned char *src=srcY,*srcYend=src+strideY*dyY,*dst=dstY;src<srcYend;src+=strideY,dst+=strideY)
+ __declspec(align(8)) static __int64 lumGainMask,lumOffsetMask;
+ __int64 lumGain=cfg->lumGain,lumOffset=cfg->lumOffset;
+ //DEBUGS2("lum gain,lumOffset",lumGain,lumOffset);
+ lumGainMask=(lumGain<<48) + (lumGain<<32) + (lumGain<<16) + lumGain;
+ lumOffsetMask=(lumOffset<<48) + (lumOffset<<32) + (lumOffset<<16) + lumOffset;
+ //DEBUGS2("src dst",int(srcY),int(dstY));
+ int LUM_AREA=dxY;
+ for (unsigned char *src=srcY,*srcYend=srcY+strideY*dyY,*dst=dstY;src<srcYend;src+=strideY,dst+=strideY)
   {
-   int LUM_AREA=dxY;
    __asm
     {
      mov         eax, [src]
      mov         ebx, [dst]
-     mov         esi, 0x00
+     mov         edx, 0x00       
      mov         edi, [LUM_AREA]
      pxor        mm0, mm0
      movq        mm5, [lumOffsetMask]
@@ -53,8 +56,8 @@ void TimgFilterLuma::process(unsigned char *srcY,unsigned char *,unsigned char *
      movq        mm7, [m64]
  
     lumconv:
-     movq        mm1, [eax+esi]
-     movq        mm2, mm1
+     movq        mm1, [eax+edx]
+     movq        mm2, mm1              
  
      punpcklbw   mm1, mm0
      punpckhbw   mm2, mm0
@@ -73,11 +76,11 @@ void TimgFilterLuma::process(unsigned char *srcY,unsigned char *,unsigned char *
 
      packuswb    mm1, mm0
      packuswb    mm2, mm0
-
-     add         esi, 0x08
-     cmp         esi, edi
-     movq        [ebx+esi-8], mm1
-     movq        [ebx+esi-4], mm2
+                                                       
+     add         edx, 0x08
+     cmp         edx, edi
+     movq        [ebx+edx-8], mm1
+     movq        [ebx+edx-4], mm2
      jl          lumconv
     };
   };  

@@ -20,6 +20,10 @@
 #ifndef NEWPOSTPROCESS_H
 #define NEWPOSTPROCESS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define BLOCK_SIZE 8
 #define TEMP_STRIDE 8
 //#define NUM_BLOCKS_AT_ONCE 16 //not used yet
@@ -121,5 +125,9 @@ int getPpModeForQuality(int quality);
 struct PPMode getPPModeByNameAndQuality(char *name, int quality);
 
 int readPPOpt(void *conf, char *arg);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

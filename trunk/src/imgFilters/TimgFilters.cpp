@@ -22,7 +22,6 @@
 #include "ffmpeg\libavcodec\avcodec.h"
 #include "TimgFilters.h"
 #include "TpresetSettings.h"
-#include "ffdebug.h"
 
 using namespace std;
 
@@ -77,7 +76,7 @@ void TimgFilters::process(TpresetSettings *cfg,unsigned char *srcY,unsigned char
  for (int i=cfg->min_order;i<=cfg->max_order;i++)
   if (i==cfg->orderPostproc && postproc.ok && cfg->isPostproc)
    {
-    if (cpus>0 && cfg->autoq && cfg->ppqual /*&& (avctx->frame_number%2)==0*/)
+    if (cpus>0 && cfg->autoq && cfg->ppqual)
      {
       cpu.CollectCPUData();
       if (cpu.GetCPUUsage(0)>90)
@@ -104,9 +103,9 @@ void TimgFilters::process(TpresetSettings *cfg,unsigned char *srcY,unsigned char
                                   tempU->getTempNext(),//+diffUV,
                                   tempV->getTempNext(),//+diffUV
                                  };
-      postproc.postprocess(tempPict1,strideY/*avpict.linesize[0]*/,
-                           tempPict2,strideY/*avpict.linesize[0]*/,
-                           dxY/*AVIdx*/,dy/*AVIdy*/,
+      postproc.postprocess(tempPict1,strideY,
+                           tempPict2,strideY,
+                           dxY,dy,
                            quant_store,MBC+1,ppmode);
      }
    }
@@ -114,7 +113,8 @@ void TimgFilters::process(TpresetSettings *cfg,unsigned char *srcY,unsigned char
    {
     if (cfg->lumGain!=TpresetSettings::lumGainDef || cfg->lumOffset!=TpresetSettings::lumOffsetDef || cfg->gammaCorrection!=TpresetSettings::gammaCorrectionDef)
      {
-      unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
+      unsigned char *srcY=tempY->getTempCur()+diffY;
+      unsigned char *dstY=tempY->getTempNext()+diffY;
       luma.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
      };
     if (cfg->hue!=TpresetSettings::hueDef || cfg->saturation!=TpresetSettings::saturationDef) 
@@ -162,7 +162,6 @@ void TimgFilters::process(TpresetSettings *cfg,unsigned char *srcY,unsigned char
     unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
     offset.process(srcY,srcU,srcV,dstY,dstU,dstV,cfg);
    } 
-  
  *dstY=tempY->getTempCur();
  *dstU=tempU->getTempCur();
  *dstV=tempV->getTempCur();

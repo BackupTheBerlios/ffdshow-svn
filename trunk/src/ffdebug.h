@@ -2,6 +2,7 @@
 #define _FFDEBUG_H_
 
 #include <stdio.h>
+#include <string.h>
 
 #if 1
 static inline void DEBUGS(const char *s)

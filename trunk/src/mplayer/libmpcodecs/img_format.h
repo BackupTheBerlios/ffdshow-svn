@@ -1,6 +1,9 @@
-
 #ifndef __IMG_FORMAT_H
 #define __IMG_FORMAT_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* RGB/BGR Formats */
 
@@ -72,5 +75,9 @@ typedef struct {
 } vo_mpegpes_t;
 
 char *vo_format_name(int format);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
