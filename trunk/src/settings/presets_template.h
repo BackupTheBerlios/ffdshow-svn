@@ -37,7 +37,7 @@ _REG_OP_N("noiseStrength",noiseStrength,noiseStrengthDef);
 _REG_OP_N("noiseStrengthChroma",noiseStrengthChroma,noiseStrengthChromaDef);
 _REG_OP_N("uniformNoise",uniformNoise,0);
 
-_REG_OP_N("idct",idct,idctDef);
+_REG_OP_N("idct",idct,0);
 
 _REG_OP_N("isResize",isResize,0);
 _REG_OP_N("resizeDx",resizeDx,640);

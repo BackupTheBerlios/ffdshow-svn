@@ -18,7 +18,6 @@
 
 #pragma hdrstop
 #include <assert.h>
-#define FF_POSTPROCESS
 #include "ffmpeg\libavcodec\avcodec.h"
 #include "TimgFilters.h"
 #include "TpresetSettings.h"

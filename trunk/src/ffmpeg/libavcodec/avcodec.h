@@ -5,7 +5,10 @@
 extern "C" {
 #endif 
 
+#ifndef _MSC_VER
 #include "common.h"
+#endif
+#include "inttypes.h"
 
 #define LIBAVCODEC_VERSION_INT 0x000406
 #define LIBAVCODEC_VERSION     "0.4.6"
@@ -32,6 +35,8 @@ extern "C" {
 
 #define CODEC_ID_YUY2      100
 #define CODEC_ID_RGB2      101
+
+#define FF_POSTPROCESS 1
 
 enum CodecType {
     CODEC_TYPE_UNKNOWN = -1,
@@ -133,7 +138,7 @@ typedef struct AVCodecContext {
        all codecs can do that. You must check the codec capabilities
        before */
     void (*draw_horiz_band)(struct AVCodecContext *s,
-                            UINT8 **src_ptr, int linesize,
+                            uint8_t **src_ptr, int linesize,
                             int y, int width, int height);
 
     /* audio only */
@@ -229,35 +234,6 @@ typedef struct AVCodecContext {
     unsigned int codec_tag;  /* codec tag, only used if unknown codec */
     
     int workaround_bugs;       /* workaround bugs in encoders which cannot be detected automatically */
-    /*
-	Note: Below are located reserved fields for further usage
-	It requires for ABI !!!
-	If you'll perform some changes then borrow new space from these fields
-	(void * can be safety replaced with struct * ;)
-	P L E A S E ! ! !
-	IMPORTANT: Never change order of already declared fields!!!
-    */
-    UINT64 
-	    ull_res0,ull_res1,ull_res2,ull_res3,ull_res4,ull_res5,
-	    ull_res6,ull_res7,ull_res8,ull_res9,ull_res10,ull_res11,ull_res12;
-    float
-	    flt_res0,flt_res1,flt_res2,flt_res3,flt_res4,flt_res5,
-	    flt_res6,flt_res7,flt_res8,flt_res9,flt_res10,flt_res11,flt_res12;
-    void
-	    *ptr_res0,*ptr_res1,*ptr_res2,*ptr_res3,*ptr_res4,*ptr_res5,
-	    *ptr_res6,*ptr_res7,*ptr_res8,*ptr_res9,*ptr_res10,*ptr_res11,*ptr_res12;
-    unsigned long int
-	    ul_res0,ul_res1,ul_res2,ul_res3,ul_res4,ul_res5,
-	    ul_res6,ul_res7,ul_res8,ul_res9,ul_res10,ul_res11,ul_res12;
-    unsigned int
-	    ui_res0,ui_res1,ui_res2,ui_res3,ui_res4,ui_res5,
-	    ui_res6,ui_res7,ui_res8,ui_res9,ui_res10,ui_res11;
-    unsigned short int
-	    us_res0,us_res1,us_res2,us_res3,us_res4,us_res5,
-	    us_res6,us_res7,us_res8,us_res9,us_res10,us_res11,us_res12;
-    unsigned char
-	    uc_res0,uc_res1,uc_res2,uc_res3,uc_res4,uc_res5,
-	    uc_res6,uc_res7,uc_res8,uc_res9,uc_res10,uc_res11,uc_res12;    
 } AVCodecContext;
 
 typedef struct AVCodec {
@@ -266,34 +242,17 @@ typedef struct AVCodec {
     int id;
     int priv_data_size;
     int (*init)(AVCodecContext *);
-    int (*encode)(AVCodecContext *, UINT8 *buf, int buf_size, void *data);
+    int (*encode)(AVCodecContext *, uint8_t *buf, int buf_size, void *data);
     int (*close)(AVCodecContext *);
     int (*decode)(AVCodecContext *, void *outdata, int *outdata_size, 
-                  UINT8 *buf, int buf_size);
+                  uint8_t *buf, int buf_size);
     int capabilities;
     struct AVCodec *next;
-    /*
-	Note: Below are located reserved fields for further usage
-	It requires for ABI !!!
-	If you'll perform some changes then borrow new space from these fields
-	(void * can be safety replaced with struct * ;)
-	P L E A S E ! ! !
-	IMPORTANT: Never change order of already declared fields!!!
-    */
-    UINT64
-	    ull_res0,ull_res1,ull_res2,ull_res3,ull_res4,ull_res5,
-	    ull_res6,ull_res7,ull_res8,ull_res9,ull_res10,ull_res11,ull_res12;
-    float
-	    flt_res0,flt_res1,flt_res2,flt_res3,flt_res4,flt_res5,
-	    flt_res6,flt_res7,flt_res8,flt_res9,flt_res10,flt_res11,flt_res12;
-    void
-	    *ptr_res0,*ptr_res1,*ptr_res2,*ptr_res3,*ptr_res4,*ptr_res5,
-	    *ptr_res6,*ptr_res7,*ptr_res8,*ptr_res9,*ptr_res10,*ptr_res11,*ptr_res12;
 } AVCodec;
 
 /* three components are given, that's all */
 typedef struct AVPicture {
-    UINT8 *data[3];
+    uint8_t *data[3];
     int linesize[3];
 } AVPicture;
 
@@ -369,7 +328,7 @@ void img_resample(ImgReSampleContext *s,
 
 void img_resample_close(ImgReSampleContext *s);
 
-void avpicture_fill(AVPicture *picture, UINT8 *ptr,
+void avpicture_fill(AVPicture *picture, uint8_t *ptr,
                     int pix_fmt, int width, int height);
 int avpicture_get_size(int pix_fmt, int width, int height);
 
@@ -400,16 +359,9 @@ AVCodec *avcodec_find_decoder_by_name(const char *name);
 void avcodec_string(char *buf, int buf_size, AVCodecContext *enc, int encode);
 
 int avcodec_open(AVCodecContext *avctx, AVCodec *codec);
-int avcodec_decode_audio(AVCodecContext *avctx, INT16 *samples, 
-                         int *frame_size_ptr,
-                         UINT8 *buf, int buf_size);
 int avcodec_decode_video(AVCodecContext *avctx, AVPicture *picture, 
                          int *got_picture_ptr,
-                         UINT8 *buf, int buf_size);
-int avcodec_encode_audio(AVCodecContext *avctx, UINT8 *buf, int buf_size, 
-                         const short *samples);
-int avcodec_encode_video(AVCodecContext *avctx, UINT8 *buf, int buf_size, 
-                         const AVPicture *pict);
+                         uint8_t *buf, int buf_size);
 
 int avcodec_close(AVCodecContext *avctx);
 

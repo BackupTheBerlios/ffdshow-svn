@@ -258,41 +258,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\src\Tlibavcodec.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						EnableIntrinsicFunctions="FALSE"
-						FavorSizeOrSpeed="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\src\Tpostproc.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						EnableIntrinsicFunctions="FALSE"
-						FavorSizeOrSpeed="2"
-						AssemblerOutput="0"/>
-				</FileConfiguration>
+				RelativePath="src\TtrayIcon.cpp">
 			</File>
 			<File
 				RelativePath=".\src\xvid\utils\mem_align.c">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="1"
-						EnableIntrinsicFunctions="FALSE"
-						FavorSizeOrSpeed="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\src\trayIcon.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -325,10 +294,7 @@
 				RelativePath="src\TffDecoder.h">
 			</File>
 			<File
-				RelativePath=".\src\Tlibavcodec.h">
-			</File>
-			<File
-				RelativePath=".\src\Tpostproc.h">
+				RelativePath="src\TtrayIcon.h">
 			</File>
 			<File
 				RelativePath="src\ffdebug.h">
@@ -341,9 +307,6 @@
 			</File>
 			<File
 				RelativePath=".\src\xvid\utils\mem_align.h">
-			</File>
-			<File
-				RelativePath=".\src\trayIcon.h">
 			</File>
 		</Filter>
 		<Filter
@@ -700,7 +663,13 @@
 				RelativePath="src\imgFilters\TimgFilters.h">
 			</File>
 			<File
-				RelativePath="src\TresizeCtx.h">
+				RelativePath="src\imgFilters\Tpostproc.cpp">
+			</File>
+			<File
+				RelativePath="src\imgFilters\Tpostproc.h">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TresizeCtx.h">
 			</File>
 			<File
 				RelativePath="src\imgFilters\TtempPicture.h">
@@ -1062,6 +1031,34 @@
 			</File>
 			<File
 				RelativePath="src\settings\reg.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="movie_source"
+			Filter="">
+			<File
+				RelativePath="src\movie_source\TmovieSource.cpp">
+			</File>
+			<File
+				RelativePath="src\movie_source\TmovieSource.h">
+			</File>
+			<File
+				RelativePath="src\movie_source\TmovieSourceLibavcodec.cpp">
+			</File>
+			<File
+				RelativePath="src\movie_source\TmovieSourceLibavcodec.h">
+			</File>
+			<File
+				RelativePath="src\movie_source\TmovieSourceUncompressed.cpp">
+			</File>
+			<File
+				RelativePath="src\movie_source\TmovieSourceUncompressed.h">
+			</File>
+			<File
+				RelativePath="src\movie_source\TmovieSourceXviD.cpp">
+			</File>
+			<File
+				RelativePath="src\movie_source\TmovieSourceXviD.h">
 			</File>
 		</Filter>
 	</Files>

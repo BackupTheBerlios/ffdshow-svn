@@ -104,7 +104,7 @@ int32_t R_V_tab[256];
 
 /* rgb555 -> yuv 4:2:0 planar */
 void rgb555_to_yv12_c(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
-					uint8_t *src, int width, int height, int y_stride)
+					const uint8_t *src, int width, int height, int y_stride)
 {
 	int32_t src_stride = width * 2;
 	uint32_t y_dif = y_stride - width;
@@ -189,7 +189,7 @@ void rgb555_to_yv12_c(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
 			not tested */
 
 void rgb565_to_yv12_c(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
-					uint8_t *src, int width, int height, int y_stride)
+					const uint8_t *src, int width, int height, int y_stride)
 {
 	int32_t src_stride = width * 2;
 
@@ -277,7 +277,7 @@ void rgb565_to_yv12_c(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
 */
 
 void rgb24_to_yv12_c(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
-					uint8_t *src, int width, int height, int stride)
+					const uint8_t *src, int width, int height, int stride)
 {
     uint32_t width3 = (width << 1) + width;		/* width * 3 */
 	uint32_t src_dif = (width << 3) + width;		/* width3 * 3 */
@@ -353,7 +353,7 @@ void rgb24_to_yv12_c(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
 */
 
 void rgb32_to_yv12_c(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
-					uint8_t *src, int width, int height, int stride)
+					const uint8_t *src, int width, int height, int stride)
 {
     uint32_t width4 = (width << 2);		/* width * 4 */
 	uint32_t src_dif = 3 * width4;
@@ -425,7 +425,7 @@ void rgb32_to_yv12_c(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
 	NOTE: does not flip */
 
 void yuv_to_yv12_c(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
-				uint8_t *src, int width, int height, int stride)
+				const uint8_t *src, int width, int height, int stride)
 {
 	uint32_t stride2 = stride >> 1;
 	uint32_t width2 = width >> 1;
@@ -457,7 +457,7 @@ void yuv_to_yv12_c(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
    NOTE: does not flip */
 
 void yuyv_to_yv12_c(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
-					uint8_t *src, int width, int height, int stride)
+					const uint8_t *src, int width, int height, int stride)
 {
 	uint32_t width2 = width + width;
 	uint32_t y_dif = stride - width;
@@ -501,7 +501,7 @@ void yuyv_to_yv12_c(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
 
 
 void uyvy_to_yv12_c(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
-					uint8_t *src, int width, int height, int stride)
+					const uint8_t *src, int width, int height, int stride)
 {
 	uint32_t width2 = width + width;
 	uint32_t y_dif = stride - width;
@@ -576,7 +576,7 @@ void colorspace_init(void) {
 
 
 void yv12_to_rgb555_c(uint8_t *dst, int dst_stride,
-				 uint8_t *y_src, uint8_t *u_src, uint8_t * v_src, 
+				 const uint8_t *y_src,const  uint8_t *u_src,const  uint8_t * v_src, 
 				 int y_stride, int uv_stride,
 				 int width, int height)
 {
@@ -584,7 +584,7 @@ void yv12_to_rgb555_c(uint8_t *dst, int dst_stride,
 	int32_t y_dif = 2 * y_stride - width;
 	
 	uint8_t *dst2 = dst + 2 * dst_stride;
-	uint8_t *y_src2 = y_src + y_stride;
+	const uint8_t *y_src2 = y_src + y_stride;
 	uint32_t x, y;
 	
 	if (height < 0) {
@@ -671,7 +671,7 @@ void yv12_to_rgb555_c(uint8_t *dst, int dst_stride,
 							((MAX(0,MIN(255, B)) >> 3) & 0x001f)
 
 void yv12_to_rgb565_c(uint8_t *dst, int dst_stride,
-				 uint8_t *y_src, uint8_t *u_src, uint8_t * v_src, 
+				 const uint8_t *y_src,const  uint8_t *u_src,const  uint8_t * v_src, 
 				 int y_stride, int uv_stride,
 				 int width, int height)
 {
@@ -679,7 +679,7 @@ void yv12_to_rgb565_c(uint8_t *dst, int dst_stride,
 	int32_t y_dif = 2 * y_stride - width;
 	
 	uint8_t *dst2 = dst + 2 * dst_stride;
-	uint8_t *y_src2 = y_src + y_stride;
+	const uint8_t *y_src2 = y_src + y_stride;
 	uint32_t x, y;
 	
 	if (height < 0) { // flip image?
@@ -761,7 +761,7 @@ void yv12_to_rgb565_c(uint8_t *dst, int dst_stride,
 /* yuv 4:2:0 planar -> rgb24 */
 
 void yv12_to_rgb24_c(uint8_t *dst, int dst_stride,
-				 uint8_t *y_src, uint8_t *u_src, uint8_t * v_src, 
+				 const uint8_t *y_src,const  uint8_t *u_src,const  uint8_t * v_src, 
 				 int y_stride, int uv_stride,
 				 int width, int height)
 {
@@ -769,7 +769,7 @@ void yv12_to_rgb24_c(uint8_t *dst, int dst_stride,
 	int32_t y_dif = 2 * y_stride - width;
 	
 	uint8_t *dst2 = dst + 3 * dst_stride;
-	uint8_t *y_src2 = y_src + y_stride;
+	const uint8_t *y_src2 = y_src + y_stride;
 	uint32_t x, y;
 	
 	if (height < 0) { // flip image?
@@ -854,7 +854,7 @@ void yv12_to_rgb24_c(uint8_t *dst, int dst_stride,
 /* yuv 4:2:0 planar -> rgb32 */
 
 void yv12_to_rgb32_c(uint8_t *dst, int dst_stride,
-				 uint8_t *y_src, uint8_t *v_src, uint8_t * u_src,
+				 const uint8_t *y_src,const  uint8_t *v_src,const  uint8_t * u_src,
 				 int y_stride, int uv_stride,
 				 int width, int height)
 {
@@ -862,7 +862,7 @@ void yv12_to_rgb32_c(uint8_t *dst, int dst_stride,
 	int32_t y_dif = 2 * y_stride - width;
 	
 	uint8_t *dst2 = dst + 4 * dst_stride;
-	uint8_t *y_src2 = y_src + y_stride;
+	const uint8_t *y_src2 = y_src + y_stride;
 	uint32_t x, y;
 	
 	if (height < 0) { // flip image?
@@ -951,7 +951,7 @@ void yv12_to_rgb32_c(uint8_t *dst, int dst_stride,
 /*	yuv 4:2:0 planar -> yuv planar */
 
 void yv12_to_yuv_c(uint8_t *dst, int dst_stride,
-				 uint8_t *y_src, uint8_t *u_src, uint8_t * v_src, 
+				 const uint8_t *y_src,const  uint8_t *u_src,const  uint8_t * v_src, 
 				 int y_stride, int uv_stride,
 				 int width, int height)
 {
@@ -993,7 +993,7 @@ void yv12_to_yuv_c(uint8_t *dst, int dst_stride,
 /* yuv 4:2:0 planar -> yuyv (yuv2) packed */
 
 void yv12_to_yuyv_c(uint8_t *dst, int dst_stride,
-				 uint8_t *y_src, uint8_t *u_src, uint8_t * v_src, 
+				 const uint8_t *y_src,const  uint8_t *u_src,const  uint8_t * v_src, 
 				 int y_stride, int uv_stride,
 				 int width, int height)
 {
@@ -1034,7 +1034,7 @@ void yv12_to_yuyv_c(uint8_t *dst, int dst_stride,
 /* yuv 4:2:0 planar -> uyvy packed */
 
 void yv12_to_uyvy_c(uint8_t *dst, int dst_stride,
-				 uint8_t *y_src, uint8_t *u_src, uint8_t * v_src, 
+				 const uint8_t *y_src,const  uint8_t *u_src, const uint8_t * v_src, 
 				 int y_stride, int uv_stride,
 				 int width, int height)
 {

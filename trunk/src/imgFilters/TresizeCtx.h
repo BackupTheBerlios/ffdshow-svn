@@ -1,6 +1,8 @@
 #ifndef _TRESIZECTX_H_
 #define _TRESIZECTX_H_
 
+#include "mplayer\libmpcodecs\img_format.h"
+
 struct SwsContext;
 class TresizeCtx
 {

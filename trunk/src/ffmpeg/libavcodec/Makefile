@@ -1,7 +1,7 @@
 include ../config.mak
 
 CFLAGS= $(OPTFLAGS) -Wall -DHAVE_AV_CONFIG_H \
--pipe -mno-cygwin -I/usr/local/include -I. -I.. 
+-pipe -mno-cygwin -I/usr/local/include -I. -I.. -I../..
        
 LDFLAGS= 
 

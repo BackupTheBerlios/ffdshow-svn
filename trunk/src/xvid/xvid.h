@@ -53,6 +53,42 @@ typedef struct
 int xvid_init(void *handle, int opt,
 			  void *param1, void *param2);
 
+// ==========================================
+//	decoder
+// ==========================================
+
+#define XVID_QUICK_DECODE		0x00000010 /* increases decoding speed but reduces quality */
+
+typedef struct 
+{
+	int width;
+	int height;
+	void *handle;
+} XVID_DEC_PARAM;
+
+
+typedef struct
+{
+	int general;			
+	void * bitstream;
+	int length;
+
+	void * image;
+	int stride;
+	int colorspace;
+} XVID_DEC_FRAME;
+
+
+// decoder options
+#define XVID_DEC_DECODE		0
+#define XVID_DEC_CREATE		1
+#define XVID_DEC_DESTROY	2
+
+int xvid_decore(void * handle,
+		int opt,
+		void * param1,
+		void * param2);
+
 #ifdef __cplusplus
 }
 #endif 

@@ -4,11 +4,6 @@
 #include "Tdll.h"
 #include "mplayer\cpudetect.h"
 #include "mplayer\postproc\postprocess.h"
-#ifndef uint8_t
-typedef unsigned char uint8_t;
-typedef short int int16_t;
-typedef int int32_t;
-#endif
 #define __attribute__(x) 
 #include "mplayer\postproc\swscale.h"
  

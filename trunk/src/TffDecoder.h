@@ -3,7 +3,6 @@
 
 #include "IffDecoder.h"
 #include <assert.h>
-#include "Tlibavcodec.h"
 #include "TglobalSettings.h"
 #include "TdialogSettings.h"
 #include "TpresetSettings.h"
@@ -13,6 +12,7 @@
 class TtrayIcon;
 class TresizeCtx;
 class Tsubtitles;
+class TmovieSource;
 class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpecifyPropertyPages
 {
  public:
@@ -87,7 +87,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP showCfgDlg(void);
   
  private:
-  bool firstFrame;
+  bool firstFrame,firstTransform;
   TtrayIcon *tray;
   TpresetSettings *presetSettings;
   TglobalSettings globalSettings;
@@ -97,8 +97,6 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   char AVIname[1024],AVIfourcc[10];
   int loadAVInameAndPreset(void);
   void subsChanged(void),resizeChanged(void),trayIconChanged(void);
-  int idctOld;
-  Tlibavcodec libavcodec;
   HRESULT ChangeColorspace(GUID subtype, GUID formattype, void * format);
   HWND onChangeWnd;unsigned int onChangeMsg;
   HWND onInfoWnd;unsigned int onInfoMsg;
@@ -115,15 +113,14 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
     void *bitstream;
     void *image;
    } m_frame;
-   
-  AVCodecContext *avctx;
-  TresizeCtx*resizeCtx;
+  
+  TmovieSource *movie; 
+  TresizeCtx *resizeCtx;
   int cropLeft,cropTop,cropDx,cropDy;
   void calcCrop(void);
   TimgFilters *imgFilters;
   Tsubtitles *subs;
   int codecId;
-  unsigned char *yuvY,*yuvU,*yuvV;
   CCritSec lock;
   clock_t lastTime;
 };

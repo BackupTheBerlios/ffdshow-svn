@@ -29,8 +29,6 @@
     C:\DXVCSDK\samples\Multimedia\DirectShow\BaseClasses\Release
 */
 
-//#define FF__MPEG
-
 #include <windows.h>
 #include <commctrl.h>
 #include <string.h>
@@ -48,17 +46,16 @@
 
 #include "Tconfig.h"
 #include "ffdebug.h"
-#define FF_POSTPROCESS
 #include "ffmpeg\libavcodec\avcodec.h"
-#include "mplayer\libmpcodecs\img_format.h"
-#include "xvid\image\image.h"
 #include "xvid\xvid.h"
-#include "xvid\dct\idct.h"
+#include "xvid\image\image.h"
+#include "movie_source\TmovieSource.h"
+#include "movie_source\TmovieSourceLibavcodec.h"
 
 #include "TffdshowPage.h"
 #include "TffDecoder.h"
 #include "TresizeCtx.h"
-#include "trayIcon.h"
+#include "TtrayIcon.h"
 #include "subtitles\Tsubtitles.h"
 
 #include "ffdshow_mediaguids.h"
@@ -267,7 +264,7 @@ STDMETHODIMP TffDecoder::removePreset(const char *name)
 STDMETHODIMP TffDecoder::getAVcodecVersion(char *buf,unsigned int len)
 {
  char *vers;
- libavcodec.getVersion(&vers);
+ TmovieSourceLibavcodec::getVersion(&vers);
  if (!vers) return S_FALSE;
  if (len<strlen(vers)+1) return E_OUTOFMEMORY;
  strcpy(buf,vers);
@@ -429,13 +426,14 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  
  AVIname[0]=AVIfourcc[0]='\0';
  AVIdx=AVIdy=cropLeft=cropTop=cropDx=cropDy=AVIfps=0;
- isDlg=0;inPlayer=1;idctOld=-1;
- avctx=NULL;resizeCtx=NULL;tray=NULL;
+ isDlg=0;inPlayer=1;
+ movie=NULL;
+ resizeCtx=NULL;tray=NULL;
  onChangeWnd=NULL;onChangeMsg=0;
  onInfoWnd=NULL;onInfoMsg=0;
- yuvY=yuvU=yuvV=NULL;
  codecId=CODEC_ID_NONE;
  lastTime=clock();
+ firstFrame=firstTransform=true;
  
  presets.init();
  config.init();
@@ -453,20 +451,12 @@ TffDecoder::~TffDecoder()
 {
  __asm {emms};
  DEBUGS("Destructor");
- if (avctx)
+ if (movie)
   {
-   if (codecId<CODEC_ID_YUY2) libavcodec.avcodec_close(avctx);
-   free(avctx);
-   avctx=NULL;
+   delete movie;
+   movie=NULL;
   }; 
- if (yuvY)
-  {
-   free(yuvY);yuvY=NULL;
-   free(yuvU);yuvU=NULL;
-   free(yuvV);yuvV=NULL;
-  } 
  if (imgFilters) delete imgFilters;
- libavcodec.done();
  if (resizeCtx) delete resizeCtx;
  if (subs) delete subs;
  delete tray;
@@ -813,50 +803,26 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    lastTime=t;
   }; 
  //DEBUGS("Transform");
- if (!libavcodec.inited) 
+ if (firstTransform) 
   {
-   libavcodec.init();
+   firstTransform=false;
    if (globalSettings.trayIcon) tray->show();
   }; 
   
- if (t1==0 && avctx) 
+ if (t1==0 && movie) 
   {
    //char pomS[256];sprintf(pomS,"time: %i\n",int(t1));OutputDebugString(pomS);
-   if (codecId<CODEC_ID_YUY2) libavcodec.avcodec_close(avctx);
-   free(avctx);
-   avctx=NULL;
+   delete movie;
+   movie=NULL;
   }
 
- if (!avctx)
+ if (!movie)
   {
-   DEBUGS("creating avctx");
-   if (!libavcodec.ok) return S_FALSE;
-   avctx=(AVCodecContext*)malloc(sizeof(AVCodecContext));
-   memset(avctx,0,sizeof(AVCodecContext));
-   avctx->width =AVIdx;
-   avctx->height=AVIdy;
-   DEBUGS("avcodec_find_decoder_by_name before");
-   AVCodec *avcodec=libavcodec.avcodec_find_decoder(codecId);
-   DEBUGS("avcodec_find_decoder_by_name after");
-   DEBUGS("avcodec_open before");
-   if (codecId<CODEC_ID_YUY2 && libavcodec.avcodec_open(avctx,avcodec)<0) return S_FALSE;
-   DEBUGS("avcodec_open after");
+   DEBUGS("creating movie source");
+   movie=TmovieSource::initSource(codecId,AVIdx,AVIdy);
+   if (!movie) return S_FALSE;
    firstFrame=true;
   };
- if (idctOld!=presetSettings->idct)
-  {
-   idctOld=presetSettings->idct;
-   switch (presetSettings->idct)
-    {  
-     case 2:libavcodec.set_ff_idct(idct_ref);break;
-     case 4:libavcodec.set_ff_idct(xvid_idct_ptr);break;
-     //case 3:libavcodec.set_ff_idct((void*)3);break;
-     case 1:libavcodec.set_ff_idct((void*)2);break;
-     case 0:
-     case 3:
-     default:libavcodec.set_ff_idct((void*)1);break;
-    }
-  } 
 
  AM_MEDIA_TYPE * mtOut;
  pOut->GetMediaType(&mtOut);
@@ -890,42 +856,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    if (AVIname[0]=='\0') loadAVInameAndPreset();
    subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings->subFlnm,subs->flnm);
   }
- avctx->showMV=globalSettings.showMV;
- int ret;
- if (codecId<CODEC_ID_YUY2)
-  ret=libavcodec.avcodec_decode_video(avctx,&avpict,&got_picture,(UINT8*)m_frame.bitstream,m_frame.length);
- else
-  {
-   libavcodec.quant_store=NULL;
-   avpict.linesize[0]=(avctx->width/16+4)*16;
-   avpict.linesize[1]=avpict.linesize[2]=avpict.linesize[0]/2;
-   if (!yuvY)
-    {
-     yuvY=(unsigned char*)malloc(avpict.linesize[0]*avctx->height  );
-     yuvU=(unsigned char*)malloc(avpict.linesize[1]*avctx->height/2);
-     yuvV=(unsigned char*)malloc(avpict.linesize[2]*avctx->height/2);
-    }
-   avpict.data[0]=yuvY;avpict.data[1]=yuvU;avpict.data[2]=yuvV;
-   IMAGE img={avpict.data[0],avpict.data[1],avpict.data[2]};
-   int csp=0;
-   switch (codecId)
-    {
-     case CODEC_ID_YUY2:csp=XVID_CSP_YUY2;break;
-     case CODEC_ID_RGB2:csp=XVID_CSP_RGB24;break;
-    }
-   image_input(&img,avctx->width,avctx->height,avpict.linesize[0],(unsigned char*)m_frame.bitstream,csp);
-   /*
-   if (codecId==CODEC_ID_YUY2)
-    imgFilters->postproc.yuy2toyv12((const unsigned char*)m_frame.bitstream,avpict.data[0],avpict.data[1],avpict.data[2],
-                                    avctx->width,avctx->height,
-                                    avpict.linesize[0],avpict.linesize[1],avctx->width*2);
-   else if (codecId==CODEC_ID_RGB2)
-    imgFilters->postproc.rgb24toyv12((const unsigned char*)m_frame.bitstream,avpict.data[0]+avpict.linesize[0]*(avctx->height-1),avpict.data[1]+avpict.linesize[1]*(avctx->height-2)/2,avpict.data[2]+avpict.linesize[2]*(avctx->height-2)/2,
-                                     avctx->width,avctx->height,
-                                     -avpict.linesize[0],-avpict.linesize[1],avctx->width*3);
-   */                                     
-   ret=m_frame.length;got_picture=24;
-  }; 
+ int ret=movie->getFrame(&globalSettings,presetSettings,(unsigned char*)m_frame.bitstream,m_frame.length,&avpict,got_picture);
  //char pomS[256];sprintf(pomS,"framelen:%i ret:%i gotpicture:%i\n",m_frame.length,ret,got_picture);OutputDebugString(pomS);
  if (pIn->IsPreroll()==S_OK) 
   {
@@ -1026,7 +957,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
      imgFilters->process(presetSettings,
                          avpict.data[0]+cropDiffY,avpict.data[1]+cropDiffUV,avpict.data[2]+cropDiffUV,
                          &src[0],&src[1],&src[2],
-                         libavcodec.quant_store);
+                         movie->getQuant());
      resizeCtx->resize(src[0],src[1],src[2],
                        avpict.linesize[0],avpict.linesize[1],avpict.linesize[2],
                        AVIdy);
@@ -1047,10 +978,10 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   {
    if (m_frame.stride<AVIdx) 
     {
-     char pomS[256];sprintf(pomS,"bola by chyba: stride:%i, AVIdx:%i\n",m_frame.stride,AVIdx);DEBUGS(pomS);
+     char pomS[256];sprintf(pomS,"there would be an error: stride:%i, AVIdx:%i\n",m_frame.stride,AVIdx);DEBUGS(pomS);
      return S_FALSE;
     }; 
-   imgFilters->process(presetSettings,avpict.data[0],avpict.data[1],avpict.data[2],&destPict.y,&destPict.u,&destPict.v,libavcodec.quant_store);
+   imgFilters->process(presetSettings,avpict.data[0],avpict.data[1],avpict.data[2],&destPict.y,&destPict.u,&destPict.v,movie->getQuant());
    image_output(&destPict,
                 AVIdx,AVIdy,avpict.linesize[0],
                 (unsigned char*)m_frame.image,

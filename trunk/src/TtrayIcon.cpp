@@ -18,7 +18,7 @@
 
 #include <windows.h>
 #include <shellapi.h>
-#include "trayIcon.h"
+#include "TtrayIcon.h"
 #include "resource.h"
 #include <stdio.h>
 #include "IffDecoder.h"

@@ -62,7 +62,6 @@ public:
  static const int noiseStrengthDef,noiseStrengthChromaDef;
  
  int idct;
- static const int idctDef;
  
  int isResize;
  int resizeDx,resizeDy;

@@ -1,5 +1,5 @@
-#ifndef _TRAYICON_H_
-#define _TRAYICON_H_
+#ifndef _TTRAYICON_H_
+#define _TTRAYICON_H_
 
 struct IffDecoder;
 class TtrayIcon

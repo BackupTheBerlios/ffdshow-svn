@@ -4,6 +4,7 @@
 #if defined(WIN32)
 
 #include <windows.h>
+#include "inttypes.h"
 
 #ifdef _DEBUG
 #define DEBUGSX(S) OutputDebugString((S));
@@ -19,15 +20,6 @@
 #define DEBUG8(X,A,B,C,D,E,F,G,H)
 #endif
 
-
-#define int8_t char
-#define uint8_t unsigned char
-#define int16_t short
-#define uint16_t unsigned short
-#define int32_t int
-#define uint32_t unsigned int
-#define int64_t __int64
-#define uint64_t unsigned __int64
 
 #define EMMS() __asm {emms}
 
@@ -95,15 +87,6 @@ static __inline int64_t read_counter() {
 
 #define #define #define DECLARE_ALIGNED_MATRIX(name,sizex,sizey,type,alignment) \
 	__attribute__ ((__aligned__(CACHE_LINE))) type name[(sizex)*(sizey)]
-
-#define int8_t   char
-#define uint8_t  unsigned char
-#define int16_t  short
-#define uint16_t unsigned short
-#define int32_t  int
-#define uint32_t unsigned int
-#define int64_t  long long
-#define uint64_t unsigned long long
 
 #endif
 

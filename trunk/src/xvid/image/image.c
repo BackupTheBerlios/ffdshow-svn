@@ -48,7 +48,6 @@
 
 #include "../portab.h"
 #include "../xvid.h"       // XVID_CSP_XXX's
-//#include "../divx4.h"
 #include "image.h"
 #include "colorspace.h"
 
@@ -56,7 +55,7 @@
 #define EDGE_SIZE2  (EDGE_SIZE/2)
 
 int image_input(IMAGE * image, uint32_t width, int height, uint32_t edged_width,
-			uint8_t * src, int csp)
+			const uint8_t * src, int csp)
 {
 
 /*	if (csp & XVID_CSP_VFLIP)

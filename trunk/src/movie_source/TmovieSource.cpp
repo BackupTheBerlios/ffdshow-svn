@@ -16,32 +16,29 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <windows.h>
-#include "Txvid.h"
+#include <stddef.h>
+#include "TmovieSource.h"
+#include "TmovieSourceLibavcodec.h"
+#include "TmovieSourceUncompressed.h"
+#include "TmovieSourceXvid.h"
 
-#define XVID_PATH "C:\\mydocuments\\ffdshow\\src\\ffmpeg\\xvid\\xvid.dll"
-
-void Txvid::init(void)
+TmovieSource* TmovieSource::initSource(int codecId,int AVIdx,int AVIdy)
 {
- inited=true;
- xvid_dll=new Tdll(XVID_PATH);
- if (xvid_dll->ok)
-  {
-   xvid_dll->loadFunction((void**)&xvid_init,"xvid_init");
-   xvid_dll->loadFunction((void**)&xvid_decore,"xvid_decore");
-   ok=true;
-  }
+ TmovieSource *movie;
+ movie=new TmovieSourceLibavcodec;
+ if (movie->init(codecId,AVIdx,AVIdy))
+  return movie;
+ else 
+  delete movie; 
+ movie=new TmovieSourceUncompressed;
+ if (movie->init(codecId,AVIdx,AVIdy))
+  return movie;
  else
-  ok=false; 
-}
-void Txvid::done(void)
-{
- if (xvid_dll)
-  {
-   delete xvid_dll;
-   xvid_dll=NULL;
-   xvid_init=NULL;
-   xvid_decore=NULL;
-  }; 
- ok=false;
+  delete movie; 
+ movie=new TmovieSourceXviD;
+ if (movie->init(codecId,AVIdx,AVIdy))
+  return movie;
+ else
+  delete movie; 
+ return NULL; 
 }

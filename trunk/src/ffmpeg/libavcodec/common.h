@@ -44,13 +44,6 @@ typedef signed char INT8;
 typedef signed int INT32;
 typedef signed __int64 INT64;
 
-typedef UINT8 uint8_t;
-typedef INT8 int8_t;
-typedef UINT16 uint16_t;
-typedef INT16 int16_t;
-typedef UINT32 uint32_t;
-typedef INT32 int32_t;
-
 #ifndef __MINGW32__
 #define INT64_C(c)     (c ## i64)
 #define UINT64_C(c)    (c ## i64)

@@ -30,7 +30,7 @@ void image_interpolate(const IMAGE * refn,
 					   uint32_t edged_width, uint32_t edged_height, uint32_t rounding);
 
 int image_input(IMAGE * image, uint32_t width, int height, uint32_t edged_width,
-			uint8_t * src, int csp);
+			const uint8_t * src, int csp);
 
 int image_output(IMAGE * image, uint32_t width, int height, uint32_t edged_width,
 			uint8_t * dst, uint32_t dst_stride, int csp);

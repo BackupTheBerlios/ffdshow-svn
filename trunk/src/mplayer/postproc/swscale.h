@@ -23,6 +23,8 @@
 extern "C" {
 #endif
 
+#include "inttypes.h"
+
 /* values for the flags, the stuff on the command line is different */
 #define SWS_FAST_BILINEAR 1
 #define SWS_BILINEAR 2

@@ -19,7 +19,6 @@
 #include <windows.h>
 #include "Tconfig.h"
 #include "xvid\xvid.h"
-#include "Tlibavcodec.h"
 #include <stdlib.h>
 #include "settings\reg.h"
 

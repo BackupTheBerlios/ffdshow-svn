@@ -12,7 +12,7 @@ void colorspace_init(void);
 /* input color conversion functions (encoder) */
 
 typedef void  (color_inputFunc)(uint8_t *y_out, uint8_t *u_out, uint8_t *v_out,
-							uint8_t *src, int width, int height, int stride);
+							const uint8_t *src, int width, int height, int stride);
 
 typedef color_inputFunc *color_inputFuncPtr;	
 
@@ -47,8 +47,8 @@ color_inputFunc yuv_to_yv12_xmm;
 /* output color conversion functions (decoder) */
  
 typedef void (color_outputFunc)(uint8_t *dst, int dst_stride,
-							 uint8_t *y_src, uint8_t *v_src,
-							 uint8_t * u_src, int y_stride,
+							 const uint8_t *y_src, const uint8_t *v_src,
+							 const uint8_t * u_src, int y_stride,
 							 int uv_stride, int width, int height);
 
 typedef color_outputFunc* color_outputFuncPtr;	
