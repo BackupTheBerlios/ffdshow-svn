@@ -1,0 +1,28 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ffdshow", "ffdshow.vcproj", "{30A21C7F-035D-41E2-95BE-B4FFA5F5176B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libavcodec", "src\ffmpeg\libavcodec.vcproj", "{CA15257B-FCDC-4482-9C0F-47A3C86BADF4}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+		{30A21C7F-035D-41E2-95BE-B4FFA5F5176B}.0 = {CA15257B-FCDC-4482-9C0F-47A3C86BADF4}
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{30A21C7F-035D-41E2-95BE-B4FFA5F5176B}.Debug.ActiveCfg = Debug|Win32
+		{30A21C7F-035D-41E2-95BE-B4FFA5F5176B}.Debug.Build.0 = Debug|Win32
+		{30A21C7F-035D-41E2-95BE-B4FFA5F5176B}.Release.ActiveCfg = Release|Win32
+		{30A21C7F-035D-41E2-95BE-B4FFA5F5176B}.Release.Build.0 = Release|Win32
+		{CA15257B-FCDC-4482-9C0F-47A3C86BADF4}.Debug.ActiveCfg = Debug|Win32
+		{CA15257B-FCDC-4482-9C0F-47A3C86BADF4}.Debug.Build.0 = Debug|Win32
+		{CA15257B-FCDC-4482-9C0F-47A3C86BADF4}.Release.ActiveCfg = Release|Win32
+		{CA15257B-FCDC-4482-9C0F-47A3C86BADF4}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

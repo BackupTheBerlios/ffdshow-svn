@@ -1,0 +1,53 @@
+urgent
+
+- fix beginnig of playing and sometimes corrupted seeking [mostly fixed]
+- correct one frame shift [done when no b-frames]
+
+todo
+
+- automatic postprocessing quality adjustment (as in mplayer) [DONE]
+- use colorspace conversion routines from xvid [DONE]
+- play DIVX: decoding works, but how register filter also for DIVX FOURCC [DONE]
+- play DX50: only if ffmpeg supports all pro features of divx 5 [DONE - USER CHOICE]
+- play DIV3: decoding works (msmpeg4), need register for DIV3 FOURCC [DONE]
+- place itself before other codecs [DONE]
+- brightness, contrast, gamma correction [DONE]
+- memory align [DONE]
+- nice installer (NSIS) [DONE]
+- independend configuration dialog (started by shortcut in windows start menu) [DONE]
+- chroma noise and some dependancy on last frame [DONE]
+- interlacing
+- postprocessing strength [CAN ONLY STRENGTHEN THE EFFECT]
+- information about played file [DONE]
+- split configuration dialog to more property pages [DONE]
+- support for video with dimensions not multiples of 16
+- complete configuration through IffDecoder interface [DONE]
+- test with many players
+- version number in About page [DONE]
+- DIVX 5.0.1 b frames and ogm [DONE]
+- tray icon [DONE]
+
+not important
+
+- unsharp mask [DONE], warpsharp
+- aspect ratio [DONE] => internal resizing [DONE|
+
+wishes
+
+- maybe it could play also mpeg1 and mpeg2 (DVD)
+- statically linked
+
+=======================================================================
+priorities
+dscaler
+add black borders
+documentation
+compilation instructions
+better noise
+less memory
+config dialog on tray icon doubleclick [DONE]
+hardware overlay
+check and write xvid version [DISPLAYING DONE]
+subtitles
+better changeOrder COM functions
+full keyboard control in cfg dialog [DONE]

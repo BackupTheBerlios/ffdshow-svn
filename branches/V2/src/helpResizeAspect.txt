@@ -1,0 +1,5 @@
+Resize
+Dimensions must be multiplies of 16.
+If you enter invalid value, edit line will have red background and that value won't be saved
+
+Aspect ratio

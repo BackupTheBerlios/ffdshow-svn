@@ -1,0 +1,729 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "resource.h"
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1250)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUT DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CTEXT           "ffdshow MPEG-4 VIDEO DECODER",IDC_STATIC,0,1,253,13,
+                    SS_CENTERIMAGE | SS_SUNKEN
+    CTEXT           "ffdshow version",IDC_LBL_FFDSHOWVERSION,0,15,253,10,
+                    SS_CENTERIMAGE
+    CTEXT           "libavcodec version",IDC_LBL_AVVERSION,0,24,253,9,
+                    SS_CENTERIMAGE
+    CTEXT           "xvid version",IDC_LBL_XVIDVERSION,0,33,253,9,
+                    SS_CENTERIMAGE
+    EDITTEXT        IDC_ED_HELP,0,44,253,120,ES_MULTILINE | ES_READONLY | 
+                    NOT WS_BORDER | WS_VSCROLL
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,1,43,252,1
+END
+
+IDD_FFDSHOW DIALOGEX 0, 0, 348, 184
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_TV_TREE,"SysTreeView32",TVS_DISABLEDRAGDROP | 
+                    TVS_SHOWSELALWAYS | TVS_FULLROWSELECT | WS_BORDER | 
+                    WS_TABSTOP | 0x800,0,1,90,183,WS_EX_CLIENTEDGE
+    COMBOBOX        IDC_CBX_PRESETS,93,1,98,68,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    CONTROL         "Process whole image",IDC_CHB_PROCESSFULL,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,195,3,82,10
+    PUSHBUTTON      "Reset",IDC_BT_RESET,278,2,34,12
+    PUSHBUTTON      "Help",IDC_BT_HELP,314,2,34,12
+    CONTROL         "",IDC_TOPLINE,"Static",SS_BLACKRECT,92,16,257,1
+END
+
+IDD_CODECS DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Supported codecs",-1,0,0,126,145
+    CONTROL         "XVID",IDC_CHB_XVID,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,10,33,10
+    CONTROL         "Decode using XviD",IDC_CHB_XVID_XVID,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,47,10,74,10
+    CONTROL         "DivX 3",IDC_CHB_DIV3,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,20,37,10
+    CONTROL         "DivX 4",IDC_CHB_DIVX,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,30,37,10
+    CONTROL         "Decode using XviD",IDC_CHB_DIVX_XVID,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,47,30,74,10
+    CONTROL         "DivX 5",IDC_CHB_DX50,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,40,37,10
+    CONTROL         "Decode using XviD",IDC_CHB_DX50_XVID,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,47,40,74,10
+    CONTROL         "BLZ0",IDC_CHB_BLZ0,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,50,37,10
+    CONTROL         "Decode using XviD",IDC_CHB_BLZ0_XVID,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,47,50,74,10
+    CONTROL         "MP43",IDC_CHB_MP43,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,60,35,10
+    CONTROL         "MP42",IDC_CHB_MP42,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,70,35,10
+    CONTROL         "MP41, MPG4",IDC_CHB_MP41,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,80,59,10
+    CONTROL         "WMV1",IDC_CHB_WMV1,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,90,38,10
+    CONTROL         "H.263+",IDC_CHB_H263,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,100,37,10
+    CONTROL         "MPEG1",IDC_CHB_H264,"Button",BS_AUTOCHECKBOX | 
+                    WS_DISABLED | WS_TABSTOP,5,111,37,10
+    CONTROL         "MPEG2",IDC_CHB_H265,"Button",BS_AUTOCHECKBOX | 
+                    WS_DISABLED | WS_TABSTOP,5,121,37,10
+    CONTROL         "Raw video",IDC_CHB_RAWV,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,132,48,10
+    GROUPBOX        "Supported output colorspaces",-1,127,0,126,145
+    CONTROL         "YV12",IDC_CHB_YV12,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,10,33,10
+    CONTROL         "YUY2",IDC_CHB_YUY2,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,20,35,10
+    CONTROL         "YVYU",IDC_CHB_YVYU,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,30,35,10
+    CONTROL         "UYVY",IDC_CHB_UYVY,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,40,35,10
+    CONTROL         "RGB32",IDC_CHB_RGB32,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,50,37,10
+    CONTROL         "RGB24",IDC_CHB_RGB24,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,60,39,10
+    CONTROL         "RGB16",IDC_CHB_RGB16,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,70,39,10
+    CONTROL         "RGB15",IDC_CHB_RGB15,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,80,39,10
+    CONTROL         "Don't register unchecked codecs",IDC_CHB_CODECS_DONTREG,
+                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,5,
+                    148,121,10
+END
+
+IDD_PICTPROP DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "",IDC_STATIC,0,0,253,114
+    CONTROL         "Picture properties",IDC_CHB_PICTPROP,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,4,0,73,10
+    LTEXT           "Luminance gain",IDC_LBL_LUMGAIN,5,11,99,8
+    CONTROL         "",IDC_TBR_LUMGAIN,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,21,244,10
+    LTEXT           "Luminance offset",IDC_LBL_LUMOFFSET,5,31,111,8
+    CONTROL         "",IDC_TBR_LUMOFFSET,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,41,244,10
+    LTEXT           "Gamma correction",IDC_LBL_GAMMA,5,51,111,8
+    CONTROL         "",IDC_TBR_GAMMA,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,61,244,10
+    LTEXT           "Hue",IDC_LBL_HUE,5,71,99,8
+    CONTROL         "",IDC_TBR_HUE,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,81,244,10
+    LTEXT           "Saturation",IDC_LBL_SATURATION,5,91,111,8
+    CONTROL         "",IDC_TBR_SATURATION,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,101,244,10
+    EDITTEXT        IDC_ED_HELP,0,115,253,49,ES_MULTILINE | ES_READONLY | 
+                    NOT WS_BORDER | WS_VSCROLL
+END
+
+IDD_MISC DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Miscellaneous",IDC_STATIC,0,0,253,48
+    CONTROL         "Flip video",IDC_CHB_FLIP,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,12,45,10
+    LTEXT           "IDCT",IDC_LBL_IDCT,5,29,17,8
+    COMBOBOX        IDC_CBX_IDCT,27,27,219,91,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    EDITTEXT        IDC_ED_HELP,0,48,253,116,ES_MULTILINE | ES_READONLY | 
+                    NOT WS_BORDER | WS_VSCROLL
+END
+
+IDD_PRESETS DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Presets",IDC_STATIC,0,0,253,165
+    PUSHBUTTON      "New",IDC_BT_PRESET_NEW,6,10,35,12
+    PUSHBUTTON      "v",IDC_BT_PRESET_NEW_MENU,41,10,8,12
+    PUSHBUTTON      "Read from file...",IDC_BT_PRESET_READFROMFILE,51,10,60,
+                    12
+    PUSHBUTTON      "Save to file...",IDC_BT_PRESET_SAVETOFILE,113,10,51,12
+    PUSHBUTTON      "Rename",IDC_BT_PRESET_RENAME,166,10,35,12
+    PUSHBUTTON      "v",IDC_BT_PRESET_RENAME_MENU,201,10,8,12
+    PUSHBUTTON      "Remove",IDC_BT_PRESET_REMOVE,212,10,35,12
+    CONTROL         "",IDC_LV_PRESETS,"SysListView32",LVS_REPORT | 
+                    LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
+                    LVS_ALIGNLEFT | LVS_OWNERDATA | LVS_NOSORTHEADER | 
+                    WS_BORDER | WS_TABSTOP,6,25,242,127
+    CONTROL         "Automatic preset loading",IDC_CHB_AUTOPRESET,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,153,94,9
+    CONTROL         "Try to load preset from file first",
+                    IDC_CHB_AUTOPRESET_FILEFIRST,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,129,153,117,10
+END
+
+IDD_POSTPROC DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "",IDC_STATIC,0,0,253,96
+    CONTROL         "Postprocessing",IDC_CHB_POSTPROC,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,4,0,64,10
+    CONTROL         "Presets",IDC_RBT_PPPRESETS,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP | WS_TABSTOP,5,13,40,10
+    CONTROL         "",IDC_TBR_PPQUAL,"msctls_trackbar32",TBS_AUTOTICKS | 
+                    TBS_BOTH | TBS_ENABLESELRANGE | WS_TABSTOP,7,24,112,25
+    CONTROL         "Automatic quality control",IDC_CHB_AUTOQ,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,11,49,91,10
+    CONTROL         "Custom",IDC_RBT_PPCUSTOM,"Button",BS_AUTORADIOBUTTON | 
+                    WS_TABSTOP,131,13,40,10
+    LTEXT           "Luminance",IDC_STATIC,175,21,36,8
+    LTEXT           "Chroma",IDC_STATIC,217,21,26,8
+    LTEXT           "Deblock (H)",IDC_STATIC,137,32,38,8
+    CONTROL         "",IDC_CHB_DEBLOCKH_LUM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,189,32,16,8
+    CONTROL         "",IDC_CHB_DEBLOCKH_CHROM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,223,32,16,8
+    LTEXT           "Deblock (V)",IDC_STATIC,137,41,37,8
+    CONTROL         "",IDC_CHB_DEBLOCKV_LUM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,189,41,16,8
+    CONTROL         "",IDC_CHB_DEBLOCKV_CHROM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,223,41,16,8
+    LTEXT           "Dering",IDC_STATIC,137,50,40,8,SS_CENTERIMAGE
+    CONTROL         "",IDC_CHB_DERING_LUM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,189,50,16,8
+    CONTROL         "",IDC_CHB_DERING_CHROM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,223,50,16,8
+    LTEXT           "Level fix",IDC_STATIC,5,63,40,9
+    CONTROL         "Luminance",IDC_CHB_LEVELFIX_LUM,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,11,73,56,8
+    CONTROL         "Chroma (not implemented yet)",IDC_CHB_LEVELFIX_CHROM,
+                    "Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,11,
+                    83,109,8
+    EDITTEXT        IDC_ED_HELP,0,96,253,68,ES_MULTILINE | ES_READONLY | NOT 
+                    WS_BORDER | WS_VSCROLL
+    LTEXT           "Processing strength",IDC_LBL_DEBLOCKSTRENGTH,132,73,109,
+                    8
+    CONTROL         "",IDC_TBR_DEBLOCKSTRENGTH,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,130,83,122,10
+    CONTROL         "Deinterlace",IDC_CHB_DEINTERLACE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,132,63,56,8
+END
+
+IDD_INFO DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Info",IDC_STATIC,0,0,253,55
+    CONTROL         "Now playing",IDC_LBL_NOW_PLAYING,"Static",
+                    SS_LEFTNOWORDWRAP | SS_NOPREFIX | SS_PATHELLIPSIS | 
+                    WS_GROUP,5,10,239,8
+    LTEXT           "Codec",IDC_LBL_NOW_CODEC,6,20,67,8
+    LTEXT           "Dimensions:",IDC_LBL_NOW_DIMENSIONS,5,31,109,8
+    LTEXT           "",IDC_LBL_NOW_FPS,143,31,95,8
+    LTEXT           "Current frame:",IDC_LBL_NOW_FRAME,5,41,85,8
+    LTEXT           "",IDC_LBL_NOW_DECODERFPS,143,41,27,8
+    LTEXT           "Bitrate:",IDC_LBL_NOW_BITRATE,173,41,73,8
+    EDITTEXT        IDC_ED_HELP,0,56,253,108,ES_MULTILINE | ES_READONLY | 
+                    NOT WS_BORDER | WS_VSCROLL
+    LTEXT           "",IDC_LBL_NOW_OUTPUTCOLORSPACE,143,20,103,8
+    RTEXT           "Decoder FPS:",IDC_STATIC,87,41,52,8
+    RTEXT           "FPS:",IDC_STATIC,117,31,22,8
+    RTEXT           "Output colorspace:",IDC_STATIC,77,20,62,8
+END
+
+IDD_NOISE DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "",IDC_STATIC,0,0,253,87
+    CONTROL         "Noise",IDC_CHB_NOISE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,4,0,31,10
+    CONTROL         "Old noise algorithm",IDC_RBT_NOISE_MOJ,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,4,11,80,10
+    CONTROL         "New noise algorithm (avih)",IDC_RBT_NOISE_AVIH,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,4,22,99,10
+    CONTROL         "Uniform noise",IDC_CHB_NOISE_UNIFORM,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,4,33,59,10
+    LTEXT           "Luminance noise strength",IDC_LBL_NOISESTRENGTH,5,45,
+                    111,8
+    CONTROL         "",IDC_TBR_NOISESTRENGTH,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,55,244,10
+    LTEXT           "Chroma noise strength",IDC_LBL_NOISESTRENGTH_CHROMA,5,
+                    65,112,8
+    CONTROL         "",IDC_TBR_NOISESTRENGTH_CHROMA,"msctls_trackbar32",
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,4,75,244,10
+    EDITTEXT        IDC_ED_HELP,0,88,253,76,ES_MULTILINE | ES_READONLY | NOT 
+                    WS_BORDER | WS_VSCROLL
+END
+
+IDD_SHARPEN DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "",IDC_STATIC,0,0,253,87
+    CONTROL         "Sharpen",IDC_CHB_SHARPEN,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,4,0,43,10
+    CONTROL         "xsharpen",IDC_RBT_SHARPEN_XSHARPEN,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,4,11,242,10
+    CONTROL         "Unsharp mask",IDC_RBT_SHARPEN_UNSHARPMASK,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,4,22,61,10
+    CONTROL         "Warpsharp",IDC_RBT_SHARPEN_WARPSHARP,"Button",
+                    BS_AUTORADIOBUTTON | WS_DISABLED,4,33,51,10
+    LTEXT           "Strength",IDC_LBL_XSHARPENSTRENGTH,5,45,99,8
+    CONTROL         "",IDC_TBR_XSHARPENSTRENGTH,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,55,244,10
+    LTEXT           "Threshold",IDC_LBL_XSHARPENTHRESH,5,65,111,8
+    CONTROL         "",IDC_TBR_XSHARPENTHRESH,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,75,244,10
+    EDITTEXT        IDC_ED_HELP,0,88,253,76,ES_MULTILINE | ES_READONLY | NOT 
+                    WS_BORDER | WS_VSCROLL
+END
+
+IDD_BLUR DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "",IDC_STATIC,0,0,253,53
+    CONTROL         "Blur",IDC_CHB_BLUR,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,4,0,28,10
+    CONTROL         "Soften",IDC_LBL_BLUR_STRENGTH,"Static",
+                    SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,6,11,110,8
+    CONTROL         "",IDC_TBR_BLUR_STRENGTH,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,21,244,10
+    EDITTEXT        IDC_ED_HELP,0,78,253,86,ES_MULTILINE | ES_READONLY | NOT 
+                    WS_BORDER | WS_VSCROLL
+    CONTROL         "Temporal smooth",IDC_LBL_BLUR_TEMPSMOOTH,"Static",
+                    SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,6,31,110,8
+    CONTROL         "",IDC_TBR_BLUR_TEMPSMOOTH,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,41,244,10
+END
+
+IDD_SUBTITLES DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "",IDC_STATIC,0,0,253,93
+    CONTROL         "Subtitles",IDC_CHB_SUBTITLES,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,4,0,43,10
+    CONTROL         "Automatic search",IDC_CHB_SUB_AUTOFLNM,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,4,12,71,10
+    LTEXT           "File",IDC_STATIC,4,26,12,8
+    COMBOBOX        IDC_CBX_SUB_FLNM,16,24,205,124,CBS_DROPDOWN | 
+                    CBS_AUTOHSCROLL | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Load",IDC_BT_SUB_LOADFILE,222,24,25,12
+    LTEXT           "Horizontal position",IDC_LBL_SUB_POSX,4,47,111,8
+    CONTROL         "",IDC_TBR_SUB_POSX,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,8,57,168,10
+    LTEXT           "Vertical position",IDC_LBL_SUB_POSY,4,67,111,8
+    CONTROL         "",IDC_TBR_SUB_POSY,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,8,77,168,10
+    LTEXT           "Delay",IDC_STATIC,183,56,19,8
+    EDITTEXT        IDC_ED_SUB_DELAY,208,54,40,13,ES_AUTOHSCROLL,WS_EX_RIGHT
+    LTEXT           "Speed",IDC_STATIC,183,77,22,8
+    EDITTEXT        IDC_ED_SUB_SPEED,208,74,40,13,ES_AUTOHSCROLL,WS_EX_RIGHT
+    EDITTEXT        IDC_ED_HELP,0,94,253,70,ES_MULTILINE | ES_READONLY | NOT 
+                    WS_BORDER | WS_VSCROLL
+END
+
+IDD_FONT DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Font",IDC_STATIC,0,0,253,100
+    COMBOBOX        IDC_CBX_FONT_NAME,8,10,117,118,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Size",IDC_LBL_FONT_SIZE,8,23,111,8
+    CONTROL         "",IDC_TBR_FONT_SIZE,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,8,33,118,10
+    LTEXT           "Spacing",IDC_LBL_FONT_SPACING,8,59,111,8
+    CONTROL         "",IDC_TBR_FONT_SPACING,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,8,69,118,10
+    LTEXT           "Charset",IDC_LBL_FONT_CHARSET,132,11,26,8
+    COMBOBOX        IDC_CBX_FONT_CHARSET,160,10,90,59,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Weight",IDC_LBL_FONT_WEIGHT,132,31,24,8
+    COMBOBOX        IDC_CBX_FONT_WEIGHT,160,29,90,62,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Color",IDC_LBL_FONT_COLOR,132,46,17,9,SS_CENTERIMAGE
+    CONTROL         "",IDC_IMG_FONT_COLOR,"Static",SS_OWNERDRAW | SS_NOTIFY,
+                    160,45,28,12,WS_EX_DLGMODALFRAME
+    LTEXT           "Shadow strength",IDC_LBL_FONT_SHADOW_STRENGTH,132,59,
+                    111,8
+    CONTROL         "",IDC_TBR_FONT_SHADOW_STRENGTH,"msctls_trackbar32",
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,131,69,120,10
+    LTEXT           "Shadow radius",IDC_LBL_FONT_SHADOW_RADIUS,132,79,111,8
+    CONTROL         "",IDC_TBR_FONT_SHADOW_RADIUS,"msctls_trackbar32",
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,131,89,120,10
+    EDITTEXT        IDC_ED_HELP,0,100,253,64,ES_MULTILINE | ES_READONLY | 
+                    NOT WS_BORDER | WS_VSCROLL
+END
+
+IDD_RESIZEASPECT DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "",IDC_STATIC,0,0,253,38
+    CONTROL         "Resize",IDC_CHB_RESIZE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,4,0,37,10
+    LTEXT           "New size",IDC_STATIC,8,13,29,8
+    EDITTEXT        IDC_ED_RESIZEDX,39,11,31,13,ES_AUTOHSCROLL | ES_NUMBER,
+                    WS_EX_RIGHT
+    EDITTEXT        IDC_ED_RESIZEDY,72,11,31,13,ES_AUTOHSCROLL | ES_NUMBER,
+                    WS_EX_RIGHT
+    LTEXT           "Warning: settings will be applied when the file will be reopened",
+                    IDC_STATIC,8,26,201,8
+    GROUPBOX        "Aspect ratio",IDC_STATIC,0,38,253,54
+    CONTROL         "No aspect ratio correction",IDC_RBT_ASPECT_NO,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,4,48,99,10
+    CONTROL         "Keep original aspect ratio",IDC_RBT_ASPECT_KEEP,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,4,58,191,10
+    CONTROL         "Set aspect ratio manually",IDC_RBT_ASPECT_USER,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,4,68,97,10
+    CONTROL         "",IDC_TBR_ASPECT_USER,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,11,78,205,12
+    LTEXT           "1:1",IDC_LBL_ASPECT_USER,222,80,27,8
+    EDITTEXT        IDC_ED_HELP,0,92,253,72,ES_MULTILINE | ES_READONLY | NOT 
+                    WS_BORDER | WS_VSCROLL
+END
+
+IDD_CROP DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "",IDC_STATIC,0,0,253,61
+    CONTROL         "Crop && zoom",IDC_CHB_CROP,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,4,0,55,10
+    CONTROL         "Zoom",IDC_RBT_ZOOM,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP | WS_TABSTOP,4,11,33,10
+    CONTROL         "Crop",IDC_RBT_CROP,"Button",BS_AUTORADIOBUTTON | 
+                    WS_TABSTOP,135,11,31,10
+    LTEXT           "Horizontal magnification",IDC_LBL_ZOOMX,6,20,99,8
+    CONTROL         "",IDC_TBR_ZOOMX,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,29,125,10
+    LTEXT           "Vertical magnification",IDC_LBL_ZOOMY,6,40,96,8
+    CONTROL         "",IDC_TBR_ZOOMY,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,49,125,10
+    CONTROL         "Lock",IDC_CHB_MAGNIFICATION_LOCKED,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,102,39,23,10
+    LTEXT           "Top",IDC_STATIC,170,16,13,8
+    EDITTEXT        IDC_ED_CROP_TOP,185,14,31,13,ES_AUTOHSCROLL | ES_NUMBER,
+                    WS_EX_RIGHT
+    LTEXT           "Left",IDC_STATIC,137,30,14,8
+    EDITTEXT        IDC_ED_CROP_LEFT,153,28,31,13,ES_AUTOHSCROLL | ES_NUMBER,
+                    WS_EX_RIGHT
+    LTEXT           "Right",IDC_STATIC,198,30,18,8
+    EDITTEXT        IDC_ED_CROP_RIGHT,218,28,31,13,ES_AUTOHSCROLL | 
+                    ES_NUMBER,WS_EX_RIGHT
+    LTEXT           "Bottom",IDC_STATIC,160,44,24,8
+    EDITTEXT        IDC_ED_CROP_BOTTOM,186,42,31,13,ES_AUTOHSCROLL | 
+                    ES_NUMBER,WS_EX_RIGHT
+    EDITTEXT        IDC_ED_HELP,0,62,253,102,ES_MULTILINE | ES_READONLY | 
+                    NOT WS_BORDER | WS_VSCROLL
+END
+
+IDD_DLGMISC DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Tray icon",IDC_STATIC,0,0,253,26
+    CONTROL         "Show tray icon",IDC_CHB_TRAYICON,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,11,117,8
+    GROUPBOX        "Configuration dialog",IDC_STATIC,0,26,253,26
+    CONTROL         "Restore position",IDC_CHB_DLG_RESTOREPOS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,37,117,8
+    CONTROL         "Show hints",IDC_CHB_DLG_SHOWHINTS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,133,37,117,8
+    EDITTEXT        IDC_ED_HELP,0,52,253,112,ES_MULTILINE | ES_READONLY | 
+                    NOT WS_BORDER | WS_VSCROLL
+END
+
+IDD_OFFSET DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "",IDC_STATIC,0,0,253,93
+    CONTROL         "Offset",IDC_CHB_OFFSET,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,4,0,37,10
+    LTEXT           "Luma offset X",IDC_LBL_OFFSETY_X,5,11,111,8
+    CONTROL         "",IDC_TBR_OFFSETY_X,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,21,244,10
+    LTEXT           "Luma offset Y",IDC_LBL_OFFSETY_Y,5,31,112,8
+    CONTROL         "",IDC_TBR_OFFSETY_Y,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,41,244,10
+    LTEXT           "Chroma offset X",IDC_LBL_OFFSETUV_X,5,51,111,8
+    CONTROL         "",IDC_TBR_OFFSETUV_X,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,61,244,10
+    LTEXT           "Chroma offset Y",IDC_LBL_OFFSETUV_Y,6,71,111,8
+    CONTROL         "",IDC_TBR_OFFSETUV_Y,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,81,244,10
+    EDITTEXT        IDC_ED_HELP,0,94,253,70,ES_MULTILINE | ES_READONLY | NOT 
+                    WS_BORDER | WS_VSCROLL
+END
+
+IDD_RESIZESETTINGS DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Resize settings",-1,0,0,253,68
+    LTEXT           "Resize algorithm",-1,8,13,53,8
+    COMBOBOX        IDC_CBX_RESIZE_METHOD,64,11,81,140,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Luma gaussian blur",IDC_LBL_RESIZE_GBLUR_LUM,7,26,99,8
+    CONTROL         "",IDC_TBR_RESIZE_GBLUR_LUM,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,5,36,122,10
+    LTEXT           "Chroma gaussian blur",IDC_LBL_RESIZE_GBLUR_CHROM,7,46,
+                    111,8
+    CONTROL         "",IDC_TBR_RESIZE_GBLUR_CHROM,"msctls_trackbar32",
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,5,56,122,10
+    LTEXT           "Luma sharpen",IDC_LBL_RESIZE_SHARPEN_LUM,133,26,99,8
+    CONTROL         "",IDC_TBR_RESIZE_SHARPEN_LUM,"msctls_trackbar32",
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,129,36,122,10
+    LTEXT           "Chroma sharpen",IDC_LBL_RESIZE_SHARPEN_CHROM,133,46,111,
+                    8
+    CONTROL         "",IDC_TBR_RESIZE_SHARPEN_CHROM,"msctls_trackbar32",
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,129,56,122,10
+    EDITTEXT        IDC_ED_HELP,0,68,253,96,ES_MULTILINE | ES_READONLY | NOT 
+                    WS_BORDER | WS_VSCROLL
+END
+
+IDD_SHOWMV DIALOGEX 0, 0, 254, 165
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "",IDC_STATIC,0,0,253,53
+    CONTROL         "Show motion vectors",IDC_CHB_SHOWMV,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,4,0,83,10
+    EDITTEXT        IDC_ED_HELP,0,54,253,110,ES_MULTILINE | ES_READONLY | 
+                    NOT WS_BORDER | WS_VSCROLL
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_FFDSHOW             ICON                    "ffdshow.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXT
+//
+
+IDD_ABOUT               TEXT                    "readme.txt"
+IDD_PICTPROP            TEXT                    "helpPictprop.txt"
+IDD_CROP                TEXT                    "helpCrop.txt"
+IDD_SHARPEN             TEXT                    "helpSharpen.txt"
+IDD_FONT                TEXT                    "helpFont.txt"
+IDD_INFO                TEXT                    "helpInfo.txt"
+IDD_NOISE               TEXT                    "helpNoise.txt"
+IDD_POSTPROC            TEXT                    "helpPostproc.txt"
+IDD_RESIZEASPECT        TEXT                    "helpResizeAspect.txt"
+IDD_BLUR                TEXT                    "helpBlur.txt"
+IDD_DLGMISC             TEXT                    "helpTray.txt"
+IDD_SUBTITLES           TEXT                    "helpSubtitles.txt"
+IDD_MISC                TEXT                    "helpMisc.txt"
+IDD_OFFSET              TEXT                    "helpOffset.txt"
+IDD_RESIZESETTINGS      TEXT                    "helpResizeSettings.txt"
+IDD_SHOWMV              TEXT                    "helpShowMV.txt"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_CHECKED             BITMAP                  "checked.bmp"
+IDB_CLEAR               BITMAP                  "empty.bmp"
+IDB_CHB_MASK            BITMAP                  "mask.bmp"
+IDB_ARROWS              BITMAP                  "arrows.bmp"
+IDB_ARROWS_MASK_UD      BITMAP                  "arrows_mask_ud.bmp"
+IDB_ARROWS_MASK_U       BITMAP                  "arrows_mask_u.bmp"
+IDB_ARROWS_MASK_D       BITMAP                  "arrows_mask_d.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU_PRESET MENU 
+BEGIN
+    POPUP "New"
+    BEGIN
+        MENUITEM "From default",                ID_MNI_PRESET_NEWFROMDEFAULT
+        MENUITEM "From selected",               ID_MNI_PRESET_NEWFROMSELECTED
+
+        MENUITEM "From file...",                ID_MNI_PRESET_NEW_FROMFILE
+    END
+    POPUP "Rename"
+    BEGIN
+        MENUITEM "Rename",                      ID_MNI_PRESET_RENAME
+        MENUITEM "Insert file name",            ID_MNI_PRESET_RENAMETOFILE
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_FFDSHOW, DIALOG
+    BEGIN
+        TOPMARGIN, 1
+    END
+
+    IDD_CODECS, DIALOG
+    BEGIN
+        VERTGUIDE, 5
+        VERTGUIDE, 199
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_FFDSHOW             "Configuration"
+END
+
+STRINGTABLE 
+BEGIN
+    IDD_ABOUT               "About"
+END
+
+STRINGTABLE 
+BEGIN
+    IDD_BLUR                "Blur"
+    IDD_FONT                "Font"
+    IDD_RESIZEASPECT        "Resize & aspect"
+    IDD_CROP                "Crop"
+    IDD_DLGMISC             "Tray & dialog settings"
+    IDD_OFFSET              "Offset"
+    IDD_RESIZESETTINGS      "Settings"
+    IDD_SHOWMV              "Show MV"
+END
+
+STRINGTABLE 
+BEGIN
+    IDD_SUBTITLES           "Subtitles"
+    IDD_CODECS              "Codecs"
+    IDD_INFO                "Info"
+    IDD_MISC                "Miscellaneous"
+    IDD_PRESETS             "Image settings"
+    IDD_POSTPROC            "Postprocessing"
+    IDD_PICTPROP            "Picture properties"
+    IDD_NOISE               "Noise"
+    IDD_SHARPEN             "Sharpen"
+END
+
+#endif    // Neutral resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Slovak resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_SKY)
+#ifdef _WIN32
+LANGUAGE LANG_SLOVAK, SUBLANG_DEFAULT
+#pragma code_page(1250)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""resource.h""\r\n"
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Slovak resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

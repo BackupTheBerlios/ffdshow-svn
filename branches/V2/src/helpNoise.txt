@@ -1,0 +1,6 @@
+Adds noise to movie, which might enhance perceptual quality
+
+Old noise algorithm - random noise pattern generated every second frame
+New noise algorithm - one noise pattern displayed on different places on every frame
+
+Uniform noise - when checked noise strength doesn't depend on original brightness, otherwise less noise is added to dark areas

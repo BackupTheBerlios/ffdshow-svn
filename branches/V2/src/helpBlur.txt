@@ -1,0 +1,2 @@
+Simple 3x3 blur
+With maximum strength, pixels are replaced with average of their neighbours
