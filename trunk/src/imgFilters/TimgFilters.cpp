@@ -107,10 +107,14 @@ void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSou
                                   tempU->getTempNext(),//+diffUV,
                                   tempV->getTempNext(),//+diffUV
                                  };
+      int *quant=movie->getQuant();
+      for (int y=0;y<MBR+1;y++)
+       for (int x=0;x<MBC+1;x++)
+        quant[y*(MBC+1)+x]*=6;
       postproc.postprocess(tempPict1,strideY,
                            tempPict2,strideY,
                            dxY,dy,
-                           (afterResize)?NULL:movie->getQuant(),MBC+1,ppmode);
+                           quant,MBC+1,ppmode);
      }
    }
   else if (i==cfg->orderPictProp && cfg->isPictProp)

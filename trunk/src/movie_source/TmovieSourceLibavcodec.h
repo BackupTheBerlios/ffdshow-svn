@@ -9,7 +9,6 @@ class TmovieSourceLibavcodec :public TmovieSource
 {
 private:
  Tdll *dll;
- int* (*get_quant_store)(void);
  void (*libavcodec_init)(void);
  AVCodec* (*avcodec_find_decoder)(int codecId);
  int  (*avcodec_open)(AVCodecContext *avctx, AVCodec *codec);
@@ -19,7 +18,6 @@ private:
  void (*avcodec_flush_buffers)(AVCodecContext *avctx);
  int  (*avcodec_close)(AVCodecContext *avctx);
  void (*set_ff_idct)(void*);
- int *quant_store; 
  AVCodecContext *avctx;
  int idctOld;
 public:
@@ -29,7 +27,7 @@ public:
  virtual void done(void);
  virtual int  getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen, AVPicture *avpict,int &got_picture);
  static  bool getVersion(char **vers);
- virtual int* getQuant(void) {return quant_store;};
+ virtual int* getQuant(void) {return (avctx)?avctx->quant_store:NULL;};
  virtual TmotionVectors getMV(void);
 };
 

@@ -26,11 +26,11 @@
 #include "TpresetSettings.h"
 #include "xvid\dct\idct.h"
 
-#define AVCODEC_PATH "C:\\mydocuments\\ffdshow\\src\\ffmpeg\\libavcodec\\libavcodec.dll"
+#define AVCODEC_PATH "C:\\mydocuments\\ffdshow\\src\\ffmpeg\\libavcodec.dll"
 
 TmovieSourceLibavcodec::TmovieSourceLibavcodec(void)
 {
- dll=NULL;avctx=NULL;quant_store=NULL;
+ dll=NULL;avctx=NULL;
 }
 bool TmovieSourceLibavcodec::init(int codecId,int AVIdx,int AVIdy)
 {
@@ -42,15 +42,15 @@ bool TmovieSourceLibavcodec::init(int codecId,int AVIdx,int AVIdy)
  dll->loadFunction((void**)&avcodec_decode_video,"avcodec_decode_video");
  dll->loadFunction((void**)&avcodec_flush_buffers,"avcodec_flush_buffers");
  dll->loadFunction((void**)&avcodec_close,"avcodec_close");
- dll->loadFunction((void**)&get_quant_store,"get_quant_store");
  dll->loadFunction((void**)&set_ff_idct,"set_ff_idct");
  if (dll->ok)
   {
    libavcodec_init();
-   quant_store=get_quant_store();
    set_ff_idct((void*)1);
    avctx=(AVCodecContext*)malloc(sizeof(AVCodecContext));
    memset(avctx,0,sizeof(AVCodecContext));
+   avctx->quant_store=(int*)calloc((MBC+1)*(MBR+1),sizeof(int));avctx->qstride=MBC+1;
+   //for (int i=0;i<MBC+1;i++) for (int j=0;j<MBR+1,j++) quant_store
    avctx->width =AVIdx;
    avctx->height=AVIdy;
    DEBUGS("avcodec_find_decoder_by_name before");
@@ -69,6 +69,7 @@ void TmovieSourceLibavcodec::done(void)
  if (avctx)
   {
    avcodec_close(avctx);
+   free(avctx->quant_store);
    free(avctx);
    avctx=NULL;  
   };
@@ -82,9 +83,7 @@ void TmovieSourceLibavcodec::done(void)
  avcodec_open=NULL;
  avcodec_decode_video=NULL;
  avcodec_close=NULL;
- get_quant_store=NULL;
  set_ff_idct=NULL;
- quant_store=NULL;
 }
 int TmovieSourceLibavcodec::getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen, AVPicture *avpict,int &got_picture)
 {
