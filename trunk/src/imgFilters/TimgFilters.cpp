@@ -98,14 +98,14 @@ void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSou
     if (ppmode)
      {
       unsigned char *tempPict1[3]={
-                                  tempY->getTempCur()+diffY,
-                                  tempU->getTempCur()+diffUV,
-                                  tempV->getTempCur()+diffUV
+                                  tempY->getTempCur(),//+diffY,
+                                  tempU->getTempCur(),//+diffUV,
+                                  tempV->getTempCur(),//+diffUV
                                  },
                    *tempPict2[3]={
-                                  tempY->getTempNext()+diffY,
-                                  tempU->getTempNext()+diffUV,
-                                  tempV->getTempNext()+diffUV
+                                  tempY->getTempNext(),//+diffY,
+                                  tempU->getTempNext(),//+diffUV,
+                                  tempV->getTempNext(),//+diffUV
                                  };
       if (movie->quant && cfg->deblockStrength!=TpresetSettings::deblockStrengthDef || afterResize)
        {
