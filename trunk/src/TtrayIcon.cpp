@@ -127,7 +127,7 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
     switch (lprm)
      {                      
       case WM_LBUTTONDBLCLK:
-       //ti->deci->showCfgDlg(hwnd);
+       ti->deci->showCfgDlg(hwnd);
        break;
       case WM_RBUTTONUP:
       case WM_CONTEXTMENU:

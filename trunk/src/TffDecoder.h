@@ -32,6 +32,8 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   TffDecoder(LPUNKNOWN punk, HRESULT *phr);
   virtual ~TffDecoder();
 
+  STDMETHODIMP JoinFilterGraph(IFilterGraph * pGraph,LPCWSTR pName);
+  
   HRESULT CheckInputType(const CMediaType * mtIn);
   HRESULT GetMediaType(int iPos, CMediaType * pmt);
   HRESULT SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt);

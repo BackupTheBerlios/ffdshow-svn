@@ -45,7 +45,7 @@ documentation
 compilation instructions
 better noise
 less memory
-config dialog on tray icon doubleclick [HOW TO CLOSE IT WHEN PLAYER CLOSES?]
+config dialog on tray icon doubleclick [DONE]
 hardware overlay
 check and write xvid version
 subtitles

@@ -214,7 +214,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
      break;
     }
   }
- deci->putParam(IDFF_cfgDlgHnwd,int(m_hwnd));
+ deci->putParam(IDFF_cfgDlgHnwd,int(dlg));
  m_bDirty=true;//m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
  deci->setOnChangeMsg(m_hwnd,WM_FFONCHANGE);
  return NOERROR;
