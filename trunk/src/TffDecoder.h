@@ -120,6 +120,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   TimgFilters *imgFilters;
   Tsubtitles *subs;
   int  codecId;
+  CCritSec lock;
 };
 
 #endif 

@@ -151,17 +151,29 @@ void Tpresets::saveRegAll(void)
     RegDeleteKey(HKEY_CURRENT_USER,presetRegStr);
    }
 }
-TpresetSettings* Tpresets::getAutoPreset(const char *flnm,bool filefirst)
+TpresetSettings* Tpresets::getAutoPreset(const char *AVIname,bool filefirst)
 {
  if (filefirst) 
   {
+   char drive[10],path[255],name[256];
+   _splitpath(AVIname,drive,path,name,NULL);
+   char presetFlnm[1024];
+   _makepath(presetFlnm,drive,path,name,FFPRESET_EXT);
+   if (GetFileAttributes(presetFlnm)!=INVALID_FILE_ATTRIBUTES)
+    {
+     TpresetSettings *preset=new TpresetSettings(AVIname);
+     preset->autoLoadedFromFile=true;
+     nextUniqueName(preset);
+     push_back(preset);
+     return preset;
+    }
   }
  char name2[260],ext[260];iterator i;
- TpresetSettings::normalizePresetName(name2,flnm);
+ TpresetSettings::normalizePresetName(name2,AVIname);
  i=findPreset(name2);if (i!=end()) return *i;
- _splitpath(flnm,NULL,NULL,name2,ext);strcat(name2,ext);
+ _splitpath(AVIname,NULL,NULL,name2,ext);strcat(name2,ext);
  i=findPreset(name2);if (i!=end()) return *i;
- _splitpath(flnm,NULL,NULL,name2,NULL);
+ _splitpath(AVIname,NULL,NULL,name2,NULL);
  i=findPreset(name2);if (i!=end()) return *i;
  return NULL;
 }

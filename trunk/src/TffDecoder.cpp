@@ -106,6 +106,7 @@ STDMETHODIMP TffDecoder::getParam2(unsigned int paramID)
 }
 STDMETHODIMP TffDecoder::putParam(unsigned int paramID, int  val)
 {
+ CAutoLock cAutolock(&lock);
  switch (paramID)
   {
    #undef _PARAM_OP
@@ -164,6 +165,7 @@ STDMETHODIMP TffDecoder::getPresets(Tpresets *presets2)
 STDMETHODIMP TffDecoder::setPresets(const Tpresets *presets2)
 {
  if (!presets2) return E_POINTER;
+ CAutoLock cAutolock(&lock);
  presets.done();
  for (Tpresets::const_iterator i=presets2->begin();i!=presets2->end();i++)
   presets.push_back(new TpresetSettings(**i));
@@ -177,6 +179,7 @@ STDMETHODIMP TffDecoder::savePresets(void)
 STDMETHODIMP TffDecoder::setPresetPtr(TpresetSettings *preset)
 {
  if (!preset) return E_POINTER;
+ CAutoLock cAutolock(&lock);
  presetSettings=preset;
  notifyParamsChanged();
  sendOnChange();
@@ -758,6 +761,7 @@ void TffDecoder::calcCrop(void)
 // decode frame 
 HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
 {
+ CAutoLock cAutolock(&lock);
  //DEBUGS("Transform");
  if (!libavcodec.inited) 
   {
