@@ -276,6 +276,22 @@ SOURCE=.\src\TresizeCtx.h
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # Begin Source File
 
+SOURCE=.\src\arrows.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\arrows_m.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\arrows_mask_d.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\arrows_mask_u.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\checked.bmp
 # End Source File
 # Begin Source File

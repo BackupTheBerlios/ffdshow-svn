@@ -15,6 +15,7 @@ class TaspectNcropPage : public TconfPage
   virtual void interDlg(void);
   virtual int getInter(void) {return cfgGet(IDFF_isCropNzoom);};
   virtual int invInter(void) {return cfgInv(IDFF_isCropNzoom);};
+  virtual void getTip(char *tipS,int len) {deci->getCropDescription(tipS,len);};
 };
 
 #endif 

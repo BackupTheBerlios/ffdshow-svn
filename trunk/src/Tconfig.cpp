@@ -324,7 +324,8 @@ void Tconfig::getPostProcDescription(char *buf)
 }
 void Tconfig::getPictPropDescription(char *buf)
 {
- sprintf(buf,"Picture properties (lum gain:%i, lum offset:%i, hue:%i, saturation:%i)",lumGain,lumOffset,hue,saturation);
+ __asm emms;
+ sprintf(buf,"Picture properties (lum gain:%i, lum offset:%i, gamma:%5.2f, hue:%i, saturation:%i)",lumGain,lumOffset,float(gammaCorrection/100.0),hue,saturation);
 }
 void Tconfig::getNoiseDescription(char *buf)
 {

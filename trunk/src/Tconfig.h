@@ -39,7 +39,7 @@ public:
  void autoPresetLoad(char *AVIname);
  int presetShouldBeSaved,autoloadedfromreg;
  
- int isPostproc;
+ int isPostproc,orderPostproc;
  int ppqual;
  int autoq;int currentq;
  int ppIsCustom,ppcustom;
@@ -47,7 +47,7 @@ public:
  int levelFixLum,levelFixChrom;
  void getPostProcDescription(char *buf);
   
- int isPictProp; 
+ int isPictProp,orderPictProp; 
  int lumGain,lumOffset,gammaCorrection;
  static const int lumGainDef,lumOffsetDef,gammaCorrectionDef;
  int hue,saturation;
@@ -58,18 +58,20 @@ public:
  
  int flip;
 
- int isBlur;
+ int isBlur,orderBlur;
  int blurStrength;
  void getBlurDescription(char *buf);
  
- int isSharpen,sharpenMethod;
+ int isSharpen,orderSharpen;
+ int sharpenMethod;
  int xsharp_strength,xsharp_threshold;
  static const int xsharp_strengthDef,xsharp_thresholdDef;
  int unsharp_strength,unsharp_threshold;
  static const int unsharp_strengthDef,unsharp_thresholdDef;
  void getSharpenDescription(char *buf);
  
- int isNoise,noiseMethod,uniformNoise;
+ int isNoise,orderNoise;
+ int noiseMethod,uniformNoise;
  int noiseStrength,noiseStrengthChroma;
  static const int noiseStrengthDef,noiseStrengthChromaDef;
  void getNoiseDescription(char *buf);
@@ -91,7 +93,7 @@ public:
  int autocrop;
  void getCropDescription(char *buf);
 
- int isSubtitles;
+ int isSubtitles,orderSubtitles;
  int fontChanged;
  char fontName[256];
  int fontCharset,fontSize,fontSpacing,fontWeight,fontColor,fontShadowStrength,fontShadowRadius;

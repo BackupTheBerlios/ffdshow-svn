@@ -22,6 +22,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_autoloadedfromreg     8
 
 #define IDFF_isPostproc          106  
+#define IDFF_orderPostproc       109
 #define IDFF_ppqual              101  //postprocessing quality set by user (active when not autoq)
 #define IDFF_autoq               102  //is automatic postprocessing control enabled?
 #define IDFF_ppIsCustom          103  //custom postprocessing settings are enabled
@@ -31,6 +32,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_levelFixChrom       108
 
 #define IDFF_isPictProp          205 
+#define IDFF_orderPictProp       207
 #define IDFF_lumGain             201  //luminance gain
 #define IDFF_lumOffset           202  //luminance offset
 #define IDFF_gammaCorrection     206  //gamma correction (*100)
@@ -40,6 +42,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_flip                301 //should output video be flipped?
 
 #define IDFF_isSharpen           401 //is xshapen filter active?
+#define IDFF_orderSharpen        407
 #define IDFF_sharpenMethod       406 //0 - xsharpen, 1 - unsharp
 #define IDFF_xsharp_strength     402 //xsharpen filter strength
 #define IDFF_xsharp_threshold    403 //xsharpen filter threshold
@@ -47,6 +50,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_unsharp_threshold   405 //xsharpen filter threshold
  
 #define IDFF_isNoise             501 //is noising filter active?
+#define IDFF_orderNoise          506
 #define IDFF_noiseMethod         505 //0 - my noise, 1 - avih noise
 #define IDFF_uniformNoise        502 //is uniform noise active (applies only to luma noise now)?
 #define IDFF_noiseStrength       503 //luma noise strength
@@ -77,6 +81,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_magnificationLocked 721
 
 #define IDFF_isSubtitles         801
+#define IDFF_orderSubtitles      815
 #define IDFF_fontCharset         802
 #define IDFF_fontSize            803
 #define IDFF_fontWeight          804
@@ -93,6 +98,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 
 #define IDFF_isBlur              901
 #define IDFF_blurStrength        902
+#define IDFF_orderBlur           903
               
 #define IDFF_xvid               1001 //are AVIs with this FOURCC played by ffdshow?
 #define IDFF_div3               1002
@@ -102,6 +108,8 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_mp42               1006
 #define IDFF_mp41               1007
 #define IDFF_h263               1008
+
+#define MAX_ORDER 6
 
 DECLARE_INTERFACE_(IffDecoder, IUnknown)
 {
@@ -134,6 +142,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (getSubFlnm)(char *buf,unsigned int len) PURE;
  STDMETHOD (loadSubtitles)(const char *flnm) PURE;
  STDMETHOD (getRealCrop)(unsigned int *left,unsigned int *top,unsigned int *right,unsigned int *bottom) PURE;
+ STDMETHOD (getMaxOrder2)(void) PURE;
 };
 
 #ifdef __cplusplus

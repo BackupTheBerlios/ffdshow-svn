@@ -236,6 +236,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_autoloadedfromreg  ]=Tparam(&cfg.autoloadedfromreg  ,0,0);
 
  params[IDFF_isPostproc         ]=Tparam(&cfg.isPostproc         ,0,0);
+ params[IDFF_orderPostproc      ]=Tparam(&cfg.orderPostproc      ,0,100,&TffDecoder::orderChanged);
  params[IDFF_ppqual             ]=Tparam(&cfg.ppqual             ,0,6);
  params[IDFF_autoq              ]=Tparam(&cfg.autoq              ,0,0);
  params[IDFF_ppIsCustom         ]=Tparam(&cfg.ppIsCustom         ,0,0);
@@ -245,6 +246,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_levelFixChrom      ]=Tparam(&cfg.levelFixChrom      ,0,0);
 
  params[IDFF_isPictProp         ]=Tparam(&cfg.isPictProp         ,0,0);
+ params[IDFF_orderPictProp      ]=Tparam(&cfg.orderPictProp      ,0,100,&TffDecoder::orderChanged);
  params[IDFF_lumGain            ]=Tparam(&cfg.lumGain            ,0,256);
  params[IDFF_lumOffset          ]=Tparam(&cfg.lumOffset          ,-256,256);
  params[IDFF_gammaCorrection    ]=Tparam(&cfg.gammaCorrection    ,1,400);
@@ -254,9 +256,11 @@ void TffDecoder::fillParams(void)
  params[IDFF_flip               ]=Tparam(&cfg.flip               ,0,0);
 
  params[IDFF_isBlur             ]=Tparam(&cfg.isBlur             ,0,0);
+ params[IDFF_orderBlur          ]=Tparam(&cfg.orderBlur          ,0,100,&TffDecoder::orderChanged);
  params[IDFF_blurStrength       ]=Tparam(&cfg.blurStrength       ,1,255);
 
  params[IDFF_isSharpen          ]=Tparam(&cfg.isSharpen          ,0,0);
+ params[IDFF_orderSharpen       ]=Tparam(&cfg.orderSharpen       ,0,100,&TffDecoder::orderChanged);
  params[IDFF_sharpenMethod      ]=Tparam(&cfg.sharpenMethod      ,0,1);
  params[IDFF_xsharp_strength    ]=Tparam(&cfg.xsharp_strength    ,1,127);
  params[IDFF_xsharp_threshold   ]=Tparam(&cfg.xsharp_threshold   ,0,255);
@@ -264,6 +268,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_unsharp_threshold  ]=Tparam(&cfg.unsharp_threshold  ,0,255);
                                                          
  params[IDFF_isNoise            ]=Tparam(&cfg.isNoise            ,0,0);
+ params[IDFF_orderNoise         ]=Tparam(&cfg.orderNoise         ,0,100,&TffDecoder::orderChanged);
  params[IDFF_noiseMethod        ]=Tparam(&cfg.noiseMethod        ,0,1);
  params[IDFF_uniformNoise       ]=Tparam(&cfg.uniformNoise       ,0,0);
  params[IDFF_noiseStrength      ]=Tparam(&cfg.noiseStrength      ,0,255);
@@ -294,6 +299,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_autocrop           ]=Tparam(&cfg.autocrop           ,0,0,&TffDecoder::resizeChanged);
 
  params[IDFF_isSubtitles        ]=Tparam(&cfg.isSubtitles        ,0,0,&TffDecoder::subsChanged);
+ params[IDFF_orderSubtitles     ]=Tparam(&cfg.orderSubtitles     ,0,100,&TffDecoder::orderChanged);
  params[IDFF_fontCharset        ]=Tparam(&cfg.fontCharset        ,0,0,&TffDecoder::subsChanged);
  params[IDFF_fontSize           ]=Tparam(&cfg.fontSize           ,2,255,&TffDecoder::subsChanged);
  params[IDFF_fontWeight         ]=Tparam(&cfg.fontWeight         ,0,1000,&TffDecoder::subsChanged);
@@ -370,6 +376,9 @@ void TffDecoder::trayIconChanged(void)
 void TffDecoder::idctChanged(void)
 {
  cfg.idctChanged=true;
+}
+void TffDecoder::orderChanged(void)
+{
 }
 STDMETHODIMP TffDecoder::get_numPresets(unsigned int *value)
 {
@@ -551,6 +560,10 @@ STDMETHODIMP TffDecoder::getRealCrop(unsigned int *left,unsigned int *top,unsign
    *right=AVIdx-(cropLeft+cropDx);*bottom=AVIdy-(cropTop+cropDy);
   } 
  return S_OK; 
+}
+STDMETHODIMP TffDecoder::getMaxOrder2(void)
+{
+ return MAX_ORDER;
 }
 
 // query interfaces 

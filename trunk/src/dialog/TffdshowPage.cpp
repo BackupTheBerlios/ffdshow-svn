@@ -102,9 +102,11 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  htv=GetDlgItem(m_hwnd,IDC_TV_TREE);
  hil=ImageList_Create(16,16,ILC_COLOR|ILC_MASK,2,2);
  HINSTANCE hi=(HMODULE)GetWindowLong(m_hwnd,GWL_HINSTANCE);
- int ret;
- ret=ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_CLEAR  )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHB_MASK)));
- ret=ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHECKED)),LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHB_MASK))); 
+ ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_CLEAR  )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHB_MASK)));
+ ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHECKED)),LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHB_MASK))); 
+ ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS_MASK_UD)));
+ ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS_MASK_U)));
+ ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS_MASK_D)));
  
  TVINSERTSTRUCT tvis;
  tvis.hParent=NULL;
@@ -218,6 +220,17 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           deci->put_Param(IDFF_lastPage,page->dialogId);
           return TRUE;
          }
+        case TVN_GETINFOTIP:
+         {
+          NMTVGETINFOTIP *nmtvit=LPNMTVGETINFOTIP(lParam);
+          TconfPage *page=(TconfPage*)nmtvit->lParam;
+          char tipS[1024];
+          page->getTip(tipS,1023);
+          if (tipS[0]=='\0') return FALSE;
+          memset(nmtvit->pszText,0,nmtvit->cchTextMax);
+          strncpy(nmtvit->pszText,tipS,nmtvit->cchTextMax-1);
+          return TRUE;
+         }
         case TVN_ITEMEXPANDING:
          {
           NMTREEVIEW *nmtv=LPNMTREEVIEW(lParam);
@@ -243,6 +256,14 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
            {
             TconfPage *page=(TconfPage*)tvcd->nmcd.lItemlParam;
             ImageList_Draw(hil,page->getInter()?1:0,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+8,tvcd->nmcd.rc.top,ILD_TRANSPARENT);
+            if (page->getOrder()!=-1 && (tvcd->nmcd.uItemState&CDIS_SELECTED)) 
+             {
+              int img;
+              if (page->getOrder()==1) img=4;
+              else if (page->getOrder()==deci->getMaxOrder2()) img=3;
+              else img=2;
+              ImageList_DrawEx(hil,img,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+2,tvcd->nmcd.rc.top,5,16,CLR_DEFAULT,CLR_DEFAULT,ILD_TRANSPARENT);
+             }
             return TRUE;
            } 
          }
@@ -258,10 +279,16 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           if (!hti) return FALSE;
           RECT r;
           TreeView_GetItemRect(htv,hti,&r,FALSE);
-          if (ps.x<8 || ps.x>16+8) return FALSE;
-          TconfPage *page=hti2page(hti);
-          page->invInter();
-          InvalidateRect(htv,&r,FALSE);
+          if (ps.x>=8 && ps.x<=16+8) 
+           {
+            TconfPage *page=hti2page(hti);
+            page->invInter();
+            InvalidateRect(htv,&r,FALSE);
+           }
+          else if (ps.x>=2 && ps.x<=7)
+           {
+            
+           }
           return FALSE;
          }
        }  

@@ -27,6 +27,9 @@ class TconfPage
   virtual void interDlg(void) {};
   virtual int getInter(void) {return -1;};
   virtual int invInter(void) {return -1;};
+  virtual int getOrder(void) {return -1;};
+  virtual void getTip(char *tipS,int len) {tipS[0]='\0';};
+  virtual void setOrder(int o) {};
   virtual void applySettings(void) {};
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)=0;
 };

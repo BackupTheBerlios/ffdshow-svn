@@ -16,6 +16,9 @@ class TnoisePage : public TconfPage
   virtual void interDlg(void);
   virtual int getInter(void) {return cfgGet(IDFF_isNoise);};
   virtual int invInter(void) {return cfgInv(IDFF_isNoise);};
+  virtual int getOrder(void) {return cfgGet(IDFF_orderNoise);};
+  virtual void setOrder(int o) {cfgSet(IDFF_orderNoise,o);};
+  virtual void getTip(char *tipS,int len) {deci->getNoiseDescription(tipS,len);};
 };
 
 #endif 

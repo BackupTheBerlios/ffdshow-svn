@@ -70,6 +70,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP getSubFlnm(char *buf,unsigned int len);
   STDMETHODIMP loadSubtitles(const char *flnm);
   STDMETHODIMP getRealCrop(unsigned int *left,unsigned int *top,unsigned int *right,unsigned int *bottom);
+  STDMETHODIMP getMaxOrder2(void);
  
  private:
   bool firstFrame;
@@ -94,7 +95,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   #define MAX_PARAMID 1100
   Tparam params[MAX_PARAMID];
   void fillParams(void);
-  void subsChanged(void),resizeChanged(void),trayIconChanged(void),idctChanged(void);
+  void subsChanged(void),resizeChanged(void),trayIconChanged(void),idctChanged(void),orderChanged(void);
   Tlibavcodec libavcodec;
   HRESULT ChangeColorspace(GUID subtype, GUID formattype, void * format);
   

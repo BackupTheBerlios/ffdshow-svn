@@ -17,6 +17,8 @@ class TsubtitlesPage : public TconfPage
   virtual void applySettings(void);
   virtual int getInter(void) {return cfgGet(IDFF_isSubtitles);};
   virtual int invInter(void) {return cfgInv(IDFF_isSubtitles);};
+  virtual int getOrder(void) {return cfgGet(IDFF_orderSubtitles);};
+  virtual void setOrder(int o) {cfgSet(IDFF_orderSubtitles,o);};
 };
 
 #endif 
