@@ -149,13 +149,29 @@ void TsubtitlesPage::sub2dlg(void)
  s[0]='\0';
  deci->getSubFlnm(s,255);
  SendDlgItemMessage(m_hwnd,IDC_CBX_SUB_FLNM,WM_SETTEXT,0,LPARAM(s));
+ setCheck(IDC_CHB_SUB_AUTOFLNM,cfgGet(IDFF_subAutoFlnm));
 }
 void TsubtitlesPage::cfg2dlg(void)
 {
- setCheck(IDC_CHB_SUBTITLES,cfgGet(IDFF_isSubtitles));
+ interDlg();
  font2dlg();
  sub2dlg();
 }                  
+void TsubtitlesPage::interDlg(void)
+{
+ setCheck(IDC_CHB_SUBTITLES,cfgGet(IDFF_isSubtitles));
+}
+void TsubtitlesPage::applySettings(void)
+{
+ loadSubtitles();
+}
+void TsubtitlesPage::loadSubtitles(void)
+{
+ char flnm[1024];
+ SendDlgItemMessage(m_hwnd,IDC_CBX_SUB_FLNM,WM_GETTEXT,1023,LPARAM(flnm));
+ deci->loadSubtitles(flnm);
+ sub2dlg(); 
+}
 
 static int CALLBACK EnumFamCallBackFonts(CONST LOGFONT *lpelf,CONST TEXTMETRIC *lpntm,DWORD FontType,LPARAM lParam)
 {
@@ -181,10 +197,10 @@ void TsubtitlesPage::createConfig(void)
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SPACING,TBM_SETPAGESIZE,0,2); 
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH,TBM_SETRANGE,TRUE,MAKELPARAM(0,100));
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH,TBM_SETLINESIZE,0,1);
- SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH,TBM_SETPAGESIZE,0,2); 
- SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETRANGE,TRUE,MAKELPARAM(0,100));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH,TBM_SETPAGESIZE,0,10); 
+ SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETRANGE,TRUE,MAKELPARAM(1,100));
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETLINESIZE,0,1);
- SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETPAGESIZE,0,2); 
+ SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETPAGESIZE,0,10); 
  
  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("thin"));
  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("extralight"));
@@ -201,6 +217,8 @@ void TsubtitlesPage::createConfig(void)
  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("heavy"));
  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("black"));
 
+ SendDlgItemMessage(m_hwnd,IDC_CBX_SUB_FLNM,CB_LIMITTEXT,1023,0);
+ 
  SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSX,TBM_SETRANGE,TRUE,MAKELPARAM(0,100));
  SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSX,TBM_SETLINESIZE,0,1);
  SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSX,TBM_SETPAGESIZE,0,10); 
@@ -315,6 +333,12 @@ HRESULT TsubtitlesPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         return TRUE; 
        }
       else break; 
+     case IDC_CHB_SUB_AUTOFLNM:
+      cfgSet(IDFF_subAutoFlnm,getCheck(IDC_CHB_SUB_AUTOFLNM));
+      return TRUE;
+     case IDC_BT_SUB_LOADFILE:
+      loadSubtitles();
+      return TRUE;
     };
    break;
   case WM_DRAWITEM:

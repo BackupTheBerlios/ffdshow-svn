@@ -65,6 +65,8 @@ void TglobalPage::interDlg(void)
  setCheck(IDC_CHB_GLOBAL_SHARPEN ,cfgGet(IDFF_isSharpen ));
  deci->getSharpenDescription(pomS,1023);
  SendDlgItemMessage(m_hwnd,IDC_CHB_GLOBAL_SHARPEN,WM_SETTEXT,0,LPARAM(pomS));
+
+ setCheck(IDC_CHB_GLOBAL_SUBTITLES,cfgGet(IDFF_isSubtitles));
 }
 void TglobalPage::cfg2dlg(void)
 {

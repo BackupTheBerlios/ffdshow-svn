@@ -155,11 +155,13 @@ void Tfont::init(Tconfig *cfg/*const char *fontName,int charset,int size,int wei
  if (cfg->fontShadowStrength<100)
   {
    __asm emms;
+   double den=2*3.14159*cfg->fontShadowRadius/100.0;
    for (int y=-2;y<=2;y++)
     for (int x=-2;x<=2;x++)
      {
-      int d=8-(x*x+y*y);
-      matrix[y+2][x+2]=1.55*cfg->fontShadowStrength*pow(d/8.0,2-cfg->fontShadowRadius/50.0);
+      double d=8-(x*x+y*y);
+      matrix[y+2][x+2]=2.55*cfg->fontShadowStrength*pow(d/8,2-cfg->fontShadowRadius/50.0);
+      //matrix[y+2][x+2]=5*cfg->fontShadowStrength*exp(-d/den);
      }; 
   }
  else matrix[0][0]=-100;

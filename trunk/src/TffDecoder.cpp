@@ -284,13 +284,14 @@ void TffDecoder::fillParams(void)
  params[IDFF_fontWeight         ]=Tparam(&cfg.fontWeight         ,0,1000,&TffDecoder::subsChanged);
  params[IDFF_fontColor          ]=Tparam(&cfg.fontColor          ,0,0,&TffDecoder::subsChanged);
  params[IDFF_fontShadowStrength ]=Tparam(&cfg.fontShadowStrength ,0,100,&TffDecoder::subsChanged);
- params[IDFF_fontShadowRadius   ]=Tparam(&cfg.fontShadowRadius   ,0,100,&TffDecoder::subsChanged);
+ params[IDFF_fontShadowRadius   ]=Tparam(&cfg.fontShadowRadius   ,1,100,&TffDecoder::subsChanged);
  params[IDFF_fontAutosize       ]=Tparam(&cfg.fontAutosize       ,0,0,&TffDecoder::subsChanged);
  params[IDFF_fontSpacing        ]=Tparam(&cfg.fontSpacing        ,-10,10,&TffDecoder::subsChanged);
  params[IDFF_subPosX            ]=Tparam(&cfg.subPosX            ,0,100,&TffDecoder::subsChanged);
  params[IDFF_subPosY            ]=Tparam(&cfg.subPosY            ,0,100,&TffDecoder::subsChanged);
  params[IDFF_subDelay           ]=Tparam(&cfg.subDelay           ,0,0,&TffDecoder::subsChanged);
  params[IDFF_subSpeed           ]=Tparam(&cfg.subSpeed           ,0,0,&TffDecoder::subsChanged);
+ params[IDFF_subAutoFlnm        ]=Tparam(&cfg.subAutoFlnm        ,0,0);
                                                          
  params[IDFF_xvid               ]=Tparam(&cfg.xvid               ,0,0);
  params[IDFF_div3               ]=Tparam(&cfg.div3               ,0,0);
@@ -372,6 +373,7 @@ int* TffDecoder::getIDFFvar(int paramID)
    case IDFF_subPosY            :return &cfg.subPosY; 
    case IDFF_subDelay           :return &cfg.subDelay;
    case IDFF_subSpeed           :return &cfg.subSpeed;
+   case IDFF_subAutoFlnm        :return &cfg.subAutoFlnm;
    
    case IDFF_xvid               :return &cfg.xvid;
    case IDFF_div3               :return &cfg.div3;
@@ -613,7 +615,12 @@ STDMETHODIMP TffDecoder::loadSubtitles(const char *flnm)
 {
  if (!flnm) return E_POINTER;
  if (strlen(flnm)>255) return  S_FALSE;
- //TODO: loadSubtitles
+ if (sub)
+  {
+   sub->init(NULL,flnm,AVIfps);
+   strcpy(cfg.subFlnm,sub->flnm);
+  }
+ else strcpy(cfg.subFlnm,flnm);  
  return S_OK;
 }
 

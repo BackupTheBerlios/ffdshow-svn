@@ -33,7 +33,7 @@ Tsubtitles::~Tsubtitles()
 void Tsubtitles::init(const char *aviFlnm,const char *subFlnm,float Ifps)
 {
  done();
- if (aviFlnm[0]!='\0')
+ if (aviFlnm)
   {
    char dsk[256],dir[256],name[256],ext[256];
    _splitpath(aviFlnm,dsk,dir,name,ext);

@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by ffdshow.rc
 //
 #define VERSION_RES_MINOR_VER           0
@@ -174,8 +174,11 @@
 #define IDC_TBR_SUB_POSY                1127
 #define IDC_ED_SUB_DELAY                1128
 #define IDC_ED_SUB_SPEED                1129
+#define IDC_CHB_GLOBAL_SUBTITLES        1129
 #define IDC_LBL_FONT_SHADOW_RADIUS      1130
 #define IDC_TBR_FONT_SHADOW_RADIUS      1131
+#define IDC_CHB_SUB_AUTO                1133
+#define IDC_CHB_SUB_AUTOFLNM            1133
 #define VERSION_RES_CHARSET             1252
 #define IDC_STATIC                      -1
 
@@ -185,7 +188,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        125
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1129
+#define _APS_NEXT_CONTROL_VALUE         1134
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

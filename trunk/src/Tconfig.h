@@ -85,6 +85,7 @@ public:
  int fontCharset,fontSize,fontSpacing,fontWeight,fontColor,fontShadowStrength,fontShadowRadius;
  int fontAutosize;
  int subPosX,subPosY,subDelay,subSpeed;
+ int subAutoFlnm;
  char subFlnm[256];
  subtitle *sub;
 };
