@@ -37,7 +37,6 @@ public:
                      unsigned int width, unsigned int height,
                      unsigned int lumStride, unsigned int chromStride, unsigned int srcStride);
 private:
- int (*getPpModeForQuality)(int quality);
  void (*setModifyPPmode)(void (*mofidyPPmodeFnc)(PPMode *ppFnc,Tconfig *cfg),const Tconfig *cfg);
 };
 

@@ -35,7 +35,6 @@ void Tpostproc::init(void)
  postproc_dll=new Tdll("C:\\mydocuments\\ffdshow\\src\\mplayer\\libpostproc.dll");
  postproc_dll->loadFunction((void**)&init_mplayer,"init_mplayer");
  postproc_dll->loadFunction((void**)&postprocess,"postprocess");
- postproc_dll->loadFunction((void**)&getPpModeForQuality,"getPpModeForQuality");
  postproc_dll->loadFunction((void**)&setModifyPPmode,"setModifyPPmode");
  postproc_dll->loadFunction((void**)&freeSwsContext,"freeSwsContext");
  postproc_dll->loadFunction((void**)&getSwsContextFromCmdLine,"getSwsContextFromCmdLine");
@@ -61,7 +60,6 @@ void Tpostproc::done(void)
   }; 
  init_mplayer=NULL;
  postprocess=NULL;
- getPpModeForQuality=NULL;
  setModifyPPmode=NULL;
  ok=false;
 };

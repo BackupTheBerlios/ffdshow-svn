@@ -28,45 +28,34 @@ void TimgFilterShowMV::init(int Idx,int Istride,int Idy)
 {
  TimgFilter::init(Idx,Istride,Idy);
  firsttime=true;
- mv_dx=mv_dy=0;mv=NULL;
+ mv_dx=mv_dy=0;
+ mv=NULL;
 }
 void TimgFilterShowMV::setMV(int Imv_dx,int Imv_dy,char *Imv)
 {
- mv_dx=Imv_dx;mv_dy=Imv_dy;
+ mv_dx=Imv_dx;
+ mv_dy=Imv_dy;
  mv=Imv;
 }
 void TimgFilterShowMV::process(const unsigned char *srcY,const unsigned char *,const unsigned char *,
                                unsigned char *dstY,unsigned char *,unsigned char *,
                                const TpresetSettings *cfg)
 {
- for (int y=0;y<dyY;y++)
-  memcpy(dstY+y*strideY,srcY+y*strideY,dxY);
- if (!mv) return; 
+ for (int y=0;y<dyY;y++) memcpy(dstY+y*strideY,srcY+y*strideY,dxY);
+ if (!mv) return;
  for(int mb_y=0;mb_y<mv_dy;mb_y++)
   {
-   int y=mb_y*16+8;if (y>=dyY) break;
+   int y=mb_y*16+8;
+   if (y>=dyY) break;
    for(int mb_x=0;mb_x<mv_dx;mb_x++)
     {
-     int x=mb_x*16+8;if (x>=dxY) break;
-     int mx= mv[2*(mb_y*mv_dx+mb_x)+0]+x;
-     int my= mv[2*(mb_y*mv_dx+mb_x)+1]+y;
-     if (mx<0) mx=0;
-     if (my<0) my=0;
-     if (mx>=dxY) mx= dxY-1;
-     if (my>=dyY) my= dyY-1;
+     int x=mb_x*16+8;
+     if (x>=dxY) break;
+     int mx=mv[2*(mb_y*mv_dx+mb_x)+0]+x;
+     int my=mv[2*(mb_y*mv_dx+mb_x)+1]+y;
+     if (mx<0) mx=0;if (mx>=dxY) mx=dxY-1;
+     if (my<0) my=0;if (my>=dyY) my=dyY-1;
      line(dstY,x,y,mx,my);
-     //line(dstY,0,0,50,5);
-     /*
-     int max= abs(mx-x);
-     if (abs(my-y) > max) max= abs(my-y);
-     // the ugliest linedrawing routine ... 
-     for(int i=0; i<max; i++)
-      {
-       int x1= x + (mx-x)*i/max;      
-       int y1= y + (my-y)*i/max;
-       dstY[y1*strideY+x1]+=100;
-      }
-     */
      dstY[y*strideY+x]+=100;
     }
   }
@@ -75,219 +64,322 @@ void TimgFilterShowMV::process(const unsigned char *srcY,const unsigned char *,c
 void TimgFilterShowMV::line(unsigned char *dst,int _x0,int _y0,int _x1,int _y1)
 {
  if (_x0==_x1 && _y0==_y1)
-  { 
+  {
    dst[_y0*strideY+_x0]+=100;
    return;
   };
-  #define SET_PIXEL(adr,a1,a2) (a1),(a2),*adr+=100
-        int dy = _y1 - _y0;
-        int dx = _x1 - _x0;
-        int stepx, stepy;
+ #define SET_PIXEL(adr,a1,a2) (a1),(a2),*adr+=100
 
-        if (dy < 0) { dy = -dy;  stepy = -strideY; } else { stepy = strideY; }
-        if (dx < 0) { dx = -dx;  stepx = -1; } else { stepx = 1; }
-        unsigned char *adr0=dst+_y0*strideY+_x0,*adr1=dst+_y1*strideY+_x1;
-        #define x0 adr0
-        #define y0 adr0
-        #define x1 adr1
-        #define y1 adr1
-        SET_PIXEL(adr0,x0,y0);
-        SET_PIXEL(adr1,x1,y1);
-        if (dx > dy) {
-            int length = (dx - 1) >> 2;
-            int extras = (dx - 1) & 3;
-            int incr2 = (dy << 2) - (dx << 1);
-            if (incr2 < 0) {
-                int c = dy << 1;
-                int incr1 = c << 1;
-                int d =  incr1 - dx;
-                for (int i = 0; i < length; i++) {
-                    x0 += stepx;
-                    x1 -= stepx;
-                    if (d < 0) {						// Pattern:
-                        SET_PIXEL(adr0,x0, y0);			//
-                        SET_PIXEL(adr0,x0 += stepx, y0);	//  x o o
-                        SET_PIXEL(adr1,x1, y1);			//
-                        SET_PIXEL(adr1,x1 -= stepx, y1);
-                        d += incr1;
-                    } else {
-                        if (d < c) {							// Pattern:
-                            SET_PIXEL(adr0,x0, y0);				//      o
-                            SET_PIXEL(adr0,x0 += stepx, y0 += stepy);		//  x o
-                            SET_PIXEL(adr1,x1, y1);				//
-                            SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
-                        } else {
-                            SET_PIXEL(adr0,x0, y0 += stepy);			// Pattern:
-                            SET_PIXEL(adr0,x0 += stepx, y0);			//    o o 
-                            SET_PIXEL(adr1,x1, y1 -= stepy);			//  x
-                            SET_PIXEL(adr1,x1 -= stepx, y1);			//
-                        }
-                        d += incr2;
-                    }
-                }
-                if (extras > 0) {
-                    if (d < 0) {
-                        SET_PIXEL(adr0,x0 += stepx, y0);
-                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0);
-                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1);
-                    } else
-                    if (d < c) {
-                        SET_PIXEL(adr0,x0 += stepx, y0);
-                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1);
-                    } else {
-                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0);
-                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
-                    }
-                }
-            } else {
-                int c = (dy - dx) << 1;
-                int incr1 = c << 1;
-                int d =  incr1 + dx;
-                for (int i = 0; i < length; i++) {
-                    x0 += stepx;
-                    x1 -= stepx;
-                    if (d > 0) {
-                        SET_PIXEL(adr0,x0, y0 += stepy);			// Pattern:
-                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);		//      o
-                        SET_PIXEL(adr1,x1, y1 -= stepy);			//    o
-                        SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);		//  x
-                        d += incr1;
-                    } else {
-                        if (d < c) {
-                            SET_PIXEL(adr0,x0, y0);				// Pattern:
-                            SET_PIXEL(adr0,x0 += stepx, y0 += stepy);       //      o
-                            SET_PIXEL(adr1,x1, y1);                         //  x o
-                            SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);       //
-                        } else {
-                            SET_PIXEL(adr0,x0, y0 += stepy);			// Pattern:
-                            SET_PIXEL(adr0,x0 += stepx, y0);			//    o o
-                            SET_PIXEL(adr1,x1, y1 -= stepy);			//  x
-                            SET_PIXEL(adr1,x1 -= stepx, y1);			//
-                        }
-                        d += incr2;
-                    }
-                }
-                if (extras > 0) {
-                    if (d > 0) {
-                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
-                    } else
-                    if (d < c) {
-                        SET_PIXEL(adr0,x0 += stepx, y0);
-                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1);
-                    } else {
-                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0);
-                        if (extras > 2) {
-                            if (d > c)
-                                SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
-                            else
-                                SET_PIXEL(adr1,x1 -= stepx, y1);
-                        }
-                    }
-                }
-            }
-        } else {
-            int length = (dy - 1) >> 2;
-            int extras = (dy - 1) & 3;
-            int incr2 = (dx << 2) - (dy << 1);
-            if (incr2 < 0) {
-                int c = dx << 1;
-                int incr1 = c << 1;
-                int d =  incr1 - dy;
-                for (int i = 0; i < length; i++) {
-                    y0 += stepy;
-                    y1 -= stepy;
-                    if (d < 0) {
-                        SET_PIXEL(adr0,x0, y0);
-                        SET_PIXEL(adr0,x0, y0 += stepy);
-                        SET_PIXEL(adr1,x1, y1);
-                        SET_PIXEL(adr1,x1, y1 -= stepy);
-                        d += incr1;
-                    } else {
-                        if (d < c) {
-                            SET_PIXEL(adr0,x0, y0);
-                            SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                            SET_PIXEL(adr1,x1, y1);
-                            SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
-                        } else {
-                            SET_PIXEL(adr0,x0 += stepx, y0);
-                            SET_PIXEL(adr0,x0, y0 += stepy);
-                            SET_PIXEL(adr1,x1 -= stepx, y1);
-                            SET_PIXEL(adr1,x1, y1 -= stepy);
-                        }
-                        d += incr2;
-                    }
-                }
-                if (extras > 0) {
-                    if (d < 0) {
-                        SET_PIXEL(adr0,x0, y0 += stepy);
-                        if (extras > 1) SET_PIXEL(adr0,x0, y0 += stepy);
-                        if (extras > 2) SET_PIXEL(adr1,x1, y1 -= stepy);
-                    } else
-                    if (d < c) {
-                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        if (extras > 2) SET_PIXEL(adr1,x1, y1 -= stepy);
-                    } else {
-                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        if (extras > 1) SET_PIXEL(adr0,x0, y0 += stepy);
-                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
-                    }
-                }
-            } else {
-                int c = (dx - dy) << 1;
-                int incr1 = c << 1;
-                int d =  incr1 + dy;
-                for (int i = 0; i < length; i++) {
-                    y0 += stepy;
-                    y1 -= stepy;
-                    if (d > 0) {
-                        SET_PIXEL(adr0,x0 += stepx, y0);
-                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        SET_PIXEL(adr1,x1 -= stepy, y1);
-                        SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
-                        d += incr1;
-                    } else {
-                        if (d < c) {
-                            SET_PIXEL(adr0,x0, y0);
-                            SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                            SET_PIXEL(adr1,x1, y1);
-                            SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
-                        } else {
-                            SET_PIXEL(adr0,x0 += stepx, y0);
-                            SET_PIXEL(adr0,x0, y0 += stepy);
-                            SET_PIXEL(adr1,x1 -= stepx, y1);
-                            SET_PIXEL(adr1,x1, y1 -= stepy);
-                        }
-                        d += incr2;
-                    }
-                }
-                if (extras > 0) {
-                    if (d > 0) {
-                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        if (extras > 2) SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
-                    } else
-                    if (d < c) {
-                        SET_PIXEL(adr0,x0, y0 += stepy);
-                        if (extras > 1) SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        if (extras > 2) SET_PIXEL(adr1,x1, y1 -= stepy);
-                    } else {
-                        SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
-                        if (extras > 1) SET_PIXEL(adr0,x0, y0 += stepy);
-                        if (extras > 2) {
-                            if (d > c)
-                                SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
-                            else
-                                SET_PIXEL(adr1,x1, y1 -= stepy);
-                        }
-                    }
-                }
-            }
+ int dy = _y1 - _y0;
+ int dx = _x1 - _x0;
+ int stepx, stepy;
+
+ if (dy < 0)
+  {
+   dy = -dy;
+   stepy = -strideY;
+  }
+ else
+  {
+   stepy = strideY;
+  }
+ if (dx < 0)
+  {
+   dx = -dx;
+   stepx = -1;
+  }
+ else
+  {
+   stepx = 1;
+  }
+ unsigned char *adr0=dst+_y0*strideY+_x0,*adr1=dst+_y1*strideY+_x1;
+ #define x0 adr0
+ #define y0 adr0
+ #define x1 adr1
+ #define y1 adr1
+
+ SET_PIXEL(adr0,x0,y0);
+ SET_PIXEL(adr1,x1,y1);
+ if (dx > dy)
+  {
+   int length = (dx - 1) >> 2;
+   int extras = (dx - 1) & 3;
+   int incr2 = (dy << 2) - (dx << 1);
+   if (incr2 < 0)
+    {
+     int c = dy << 1;
+     int incr1 = c << 1;
+     int d =  incr1 - dx;
+     for (int i = 0; i < length; i++)
+      {
+       x0 += stepx;
+       x1 -= stepx;
+       if (d < 0)
+        {      // Pattern:
+         SET_PIXEL(adr0,x0, y0);   //
+         SET_PIXEL(adr0,x0 += stepx, y0); //  x o o
+         SET_PIXEL(adr1,x1, y1);   //
+         SET_PIXEL(adr1,x1 -= stepx, y1);
+         d += incr1;
         }
+       else
+        {
+         if (d < c)
+          {       // Pattern:
+           SET_PIXEL(adr0,x0, y0);    //      o
+           SET_PIXEL(adr0,x0 += stepx, y0 += stepy);  //  x o
+           SET_PIXEL(adr1,x1, y1);    //
+           SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+          }
+         else
+          {
+           SET_PIXEL(adr0,x0, y0 += stepy);   // Pattern:
+           SET_PIXEL(adr0,x0 += stepx, y0);   //    o o
+           SET_PIXEL(adr1,x1, y1 -= stepy);   //  x
+           SET_PIXEL(adr1,x1 -= stepx, y1);   //
+          }
+         d += incr2;
+        }
+      }
+     if (extras > 0)
+      {
+       if (d < 0)
+        {
+         SET_PIXEL(adr0,x0 += stepx, y0);
+         if (extras > 1)
+          SET_PIXEL(adr0,x0 += stepx, y0);
+         if (extras > 2)
+          SET_PIXEL(adr1,x1 -= stepx, y1);
+        }
+       else
+        if (d < c)
+         {
+          SET_PIXEL(adr0,x0 += stepx, y0);
+          if (extras > 1)
+           SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+          if (extras > 2)
+           SET_PIXEL(adr1,x1 -= stepx, y1);
+         }
+        else
+         {
+          SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+          if (extras > 1)
+           SET_PIXEL(adr0,x0 += stepx, y0);
+          if (extras > 2)
+           SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+         }
+      }
     }
+   else
+    {
+     int c = (dy - dx) << 1;
+     int incr1 = c << 1;
+     int d =  incr1 + dx;
+     for (int i = 0; i < length; i++)
+      {
+       x0 += stepx;
+       x1 -= stepx;
+       if (d > 0)
+        {
+         SET_PIXEL(adr0,x0, y0 += stepy);   // Pattern:
+         SET_PIXEL(adr0,x0 += stepx, y0 += stepy);  //      o
+         SET_PIXEL(adr1,x1, y1 -= stepy);   //    o
+         SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);  //  x
+         d += incr1;
+        }
+       else
+        {
+         if (d < c)
+          {
+           SET_PIXEL(adr0,x0, y0);    // Pattern:
+           SET_PIXEL(adr0,x0 += stepx, y0 += stepy);       //      o
+           SET_PIXEL(adr1,x1, y1);                         //  x o
+           SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);       //
+          }
+         else
+          {
+           SET_PIXEL(adr0,x0, y0 += stepy);   // Pattern:
+           SET_PIXEL(adr0,x0 += stepx, y0);   //    o o
+           SET_PIXEL(adr1,x1, y1 -= stepy);   //  x
+           SET_PIXEL(adr1,x1 -= stepx, y1);   //
+          }
+         d += incr2;
+        }
+      }
+     if (extras > 0)
+      {
+       if (d > 0)
+        {
+         SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+         if (extras > 1)
+          SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+         if (extras > 2)
+          SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+        }
+       else
+        if (d < c)
+         {
+          SET_PIXEL(adr0,x0 += stepx, y0);
+          if (extras > 1)
+           SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+          if (extras > 2)
+           SET_PIXEL(adr1,x1 -= stepx, y1);
+         }
+        else
+         {
+          SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+          if (extras > 1)
+           SET_PIXEL(adr0,x0 += stepx, y0);
+          if (extras > 2)
+           {
+            if (d > c)
+             SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+            else
+             SET_PIXEL(adr1,x1 -= stepx, y1);
+           }
+         }
+      }
+    }
+  }
+ else
+  {
+   int length = (dy - 1) >> 2;
+   int extras = (dy - 1) & 3;
+   int incr2 = (dx << 2) - (dy << 1);
+   if (incr2 < 0)
+    {
+     int c = dx << 1;
+     int incr1 = c << 1;
+     int d =  incr1 - dy;
+     for (int i = 0; i < length; i++)
+      {
+       y0 += stepy;
+       y1 -= stepy;
+       if (d < 0)
+        {
+         SET_PIXEL(adr0,x0, y0);
+         SET_PIXEL(adr0,x0, y0 += stepy);
+         SET_PIXEL(adr1,x1, y1);
+         SET_PIXEL(adr1,x1, y1 -= stepy);
+         d += incr1;
+        }
+       else
+        {
+         if (d < c)
+          {
+           SET_PIXEL(adr0,x0, y0);
+           SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+           SET_PIXEL(adr1,x1, y1);
+           SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+          }
+         else
+          {
+           SET_PIXEL(adr0,x0 += stepx, y0);
+           SET_PIXEL(adr0,x0, y0 += stepy);
+           SET_PIXEL(adr1,x1 -= stepx, y1);
+           SET_PIXEL(adr1,x1, y1 -= stepy);
+          }
+         d += incr2;
+        }
+      }
+     if (extras > 0)
+      {
+       if (d < 0)
+        {
+         SET_PIXEL(adr0,x0, y0 += stepy);
+         if (extras > 1)
+          SET_PIXEL(adr0,x0, y0 += stepy);
+         if (extras > 2)
+          SET_PIXEL(adr1,x1, y1 -= stepy);
+        }
+       else
+        if (d < c)
+         {
+          SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+          if (extras > 1)
+           SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+          if (extras > 2)
+           SET_PIXEL(adr1,x1, y1 -= stepy);
+         }
+        else
+         {
+          SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+          if (extras > 1)
+           SET_PIXEL(adr0,x0, y0 += stepy);
+          if (extras > 2)
+           SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+         }
+      }
+    }
+   else
+    {
+     int c = (dx - dy) << 1;
+     int incr1 = c << 1;
+     int d =  incr1 + dy;
+     for (int i = 0; i < length; i++)
+      {
+       y0 += stepy;
+       y1 -= stepy;
+       if (d > 0)
+        {
+         SET_PIXEL(adr0,x0 += stepx, y0);
+         SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+         SET_PIXEL(adr1,x1 -= stepy, y1);
+         SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+         d += incr1;
+        }
+       else
+        {
+         if (d < c)
+          {
+           SET_PIXEL(adr0,x0, y0);
+           SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+           SET_PIXEL(adr1,x1, y1);
+           SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+          }
+         else
+          {
+           SET_PIXEL(adr0,x0 += stepx, y0);
+           SET_PIXEL(adr0,x0, y0 += stepy);
+           SET_PIXEL(adr1,x1 -= stepx, y1);
+           SET_PIXEL(adr1,x1, y1 -= stepy);
+          }
+         d += incr2;
+        }
+      }
+     if (extras > 0)
+      {
+       if (d > 0)
+        {
+         SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+         if (extras > 1)
+          SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+         if (extras > 2)
+          SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+        }
+       else
+        if (d < c)
+         {
+          SET_PIXEL(adr0,x0, y0 += stepy);
+          if (extras > 1)
+           SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+          if (extras > 2)
+           SET_PIXEL(adr1,x1, y1 -= stepy);
+         }
+        else
+         {
+          SET_PIXEL(adr0,x0 += stepx, y0 += stepy);
+          if (extras > 1)
+           SET_PIXEL(adr0,x0, y0 += stepy);
+          if (extras > 2)
+           {
+            if (d > c)
+             SET_PIXEL(adr1,x1 -= stepx, y1 -= stepy);
+            else
+             SET_PIXEL(adr1,x1, y1 -= stepy);
+           }
+         }
+      }
+    }
+  }
+}

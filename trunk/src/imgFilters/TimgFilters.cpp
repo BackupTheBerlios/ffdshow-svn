@@ -17,14 +17,14 @@
  */
 
 #pragma hdrstop
-#include <assert.h>
-#include "ffmpeg\libavcodec\avcodec.h"
 #include "TimgFilters.h"
 #include "TglobalSettings.h"
 #include "TpresetSettings.h"
 #include "TmovieSource.h"
 
 using namespace std;
+
+const int TpresetSettings::deblockStrengthDef=256;
 
 TimgFilters::TimgFilters(void)
 {
@@ -78,7 +78,7 @@ void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSou
 {
  tempY->reset(srcY);tempU->reset(srcU);tempV->reset(srcV);
  for (int i=cfg->min_order;i<=cfg->max_order;i++)
-  if (i==cfg->orderPostproc && postproc.ok && cfg->isPostproc)
+  if (i==cfg->orderPostproc && postproc.ok && cfg->isPostproc && dxY>16 && dy>16)
    {
     if (cpus>0 && cfg->autoq && cfg->ppqual)
      {
@@ -98,23 +98,29 @@ void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSou
     if (ppmode)
      {
       unsigned char *tempPict1[3]={
-                                  tempY->getTempCur(),//+diffY,
-                                  tempU->getTempCur(),//+diffUV,
-                                  tempV->getTempCur(),//+diffUV
+                                  tempY->getTempCur()+diffY,
+                                  tempU->getTempCur()+diffUV,
+                                  tempV->getTempCur()+diffUV
                                  },
                    *tempPict2[3]={
-                                  tempY->getTempNext(),//+diffY,
-                                  tempU->getTempNext(),//+diffUV,
-                                  tempV->getTempNext(),//+diffUV
+                                  tempY->getTempNext()+diffY,
+                                  tempU->getTempNext()+diffUV,
+                                  tempV->getTempNext()+diffUV
                                  };
-      int *quant=movie->getQuant();
-      for (int y=0;y<MBR+1;y++)
-       for (int x=0;x<MBC+1;x++)
-        quant[y*(MBC+1)+x]*=6;
+      if (movie->quant && cfg->deblockStrength!=TpresetSettings::deblockStrengthDef || afterResize)
+       {
+        int *quant=movie->quant;
+        for (int i=0;i<movie->quantDx*movie->quantDy;i++,quant++)
+         {
+          int q=(((afterResize)?16:*quant)*cfg->deblockStrength)/256;
+          if (q<1) q=1;else if (q>31) q=31;
+          *quant=q;
+         }
+       }
       postproc.postprocess(tempPict1,strideY,
                            tempPict2,strideY,
                            dxY,dy,
-                           quant,MBC+1,ppmode);
+                           movie->quant,movie->quantDx,ppmode);
      }
    }
   else if (i==cfg->orderPictProp && cfg->isPictProp)
