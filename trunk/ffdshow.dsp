@@ -269,10 +269,6 @@ SOURCE=.\src\Tpostproc.h
 
 SOURCE=.\src\trayIcon.h
 # End Source File
-# Begin Source File
-
-SOURCE=.\src\TresizeCtx.h
-# End Source File
 # End Group
 # Begin Group "Resource Files"
 
@@ -729,6 +725,10 @@ SOURCE=.\src\imgFilters\TimgFilterSubtitles.cpp
 # Begin Source File
 
 SOURCE=.\src\imgFilters\TimgFilterSubtitles.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\TresizeCtx.h
 # End Source File
 # Begin Source File
 

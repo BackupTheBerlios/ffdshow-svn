@@ -1,6 +1,8 @@
 #ifndef _REG_H_
 #define _REG_H_
 
+//some of these macros are based on macros from XviD DirectShow filter 
+
 #define FFDSHOW_REG_PARENT "Software\\GNU"
 #define FFDSHOW_REG_CHILD  "ffdshow"
 #define FFDSHOW_REG_CLASS  "config"

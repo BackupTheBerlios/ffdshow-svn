@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2002 Milan Cutka
- * based on config.c from xvidcore
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,12 +20,8 @@
 #include "Tconfig.h"
 #include "xvid\xvid.h"
 #include "Tlibavcodec.h"
-#include <algorithm>
-#include <string>
 #include <stdlib.h>
 #include "settings\reg.h"
-
-using namespace std;
 
 Tconfig config;
 
