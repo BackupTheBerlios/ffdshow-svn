@@ -17,6 +17,8 @@ class TffdshowPage : public CBasePropertyPage
   int ilClear,ilChecked,ilArrowUD,ilArrowU,ilArrowD;
   HWND htv;
   HTREEITEM pagePresets;
+  HWND findParentDlg(void);
+  HWND dlg;char caption[256];
   HTREEITEM addTI(TVINSERTSTRUCT &tvis,TconfPage *page);
   void presetTree(void);
   IffDecoder *deci;

@@ -102,6 +102,13 @@ void TffdshowPage::presetChanged(void)
   pages[i]->cfg2dlg();
  InvalidateRect(htv,NULL,FALSE);
  sortOrder();
+ if (dlg)
+  {
+   char capt[260],presetName[260];
+   deci->getActivePresetName(presetName,260);
+   sprintf(capt,"%s (%s)",caption,presetName);
+   SendMessage(dlg,WM_SETTEXT,0,LPARAM(capt));
+  };
 }
 static int CALLBACK orderCompareFunc(LPARAM lParam1, LPARAM lParam2,LPARAM lParamSort)
 {
@@ -119,10 +126,22 @@ void TffdshowPage::sortOrder(void)
  tvs.lParam=0;
  TreeView_SortChildrenCB(htv,&tvs,0);
 }
+HWND TffdshowPage::findParentDlg(void)
+{
+ for (HWND dlg=GetAncestor(m_hwnd,GA_PARENT);dlg;dlg=GetAncestor(dlg,GA_PARENT))
+  if (GetWindowLong(dlg,GWL_STYLE)&WS_DLGFRAME)
+   return dlg;
+ return NULL;
+}
 HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
 {
  CBasePropertyPage::Activate(hwndParent,prect,fModal);
  if (!m_hwnd) return ERROR;
+ dlg=findParentDlg();
+ if (dlg)
+  GetWindowText(dlg,caption,255);
+ else
+  caption[0]='\0';
  htv=GetDlgItem(m_hwnd,IDC_TV_TREE);
  hil=ImageList_Create(16,16,ILC_COLOR|ILC_MASK,2,2);
  HINSTANCE hi=(HMODULE)GetWindowLong(m_hwnd,GWL_HINSTANCE);
