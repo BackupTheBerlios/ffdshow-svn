@@ -2,7 +2,6 @@
 #define _TFONT_H_
 
 #include <vector>
-#include <windows.h>
 
 class Tchar
 {
@@ -16,7 +15,7 @@ public:
 };
 
 struct subtitle;
-struct TpresetSettings;
+struct TfontSettings;
 class Tfont
 {
 private:
@@ -29,7 +28,7 @@ private:
 public:
  Tfont(void);
  ~Tfont();
- void init(const TpresetSettings *cfg);
+ void init(const TfontSettings &cfg);
  void print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,unsigned int dx,unsigned int stride,unsigned int dy,subtitle *sub,int posX,int posY);
  void done(void);
 };

@@ -19,7 +19,7 @@
 #include "stdafx.h"
 #include "Tfont.h"
 #include "subreader.h"
-#include "TpresetSettings.h"
+#include "TfontSettings.h"
 
 using namespace std;
 
@@ -144,13 +144,13 @@ Tfont::~Tfont()
 {
  done();
 }
-void Tfont::init(const TpresetSettings *cfg)
+void Tfont::init(const TfontSettings &cfg)
 {
  done();
- hf=CreateFont(cfg->font.size*4,0,0,0,cfg->font.weight,0,0,0,cfg->font.charset,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,/*ANTIALIASED_QUALITY*/DEFAULT_QUALITY,DEFAULT_PITCH|FF_DONTCARE,cfg->font.name);
- shadowStrength=cfg->font.shadowStrength;shadowRadius=cfg->font.shadowRadius;
+ hf=CreateFont(cfg.size*4,0,0,0,cfg.weight,0,0,0,cfg.charset,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,/*ANTIALIASED_QUALITY*/DEFAULT_QUALITY,DEFAULT_PITCH|FF_DONTCARE,cfg.name);
+ shadowStrength=cfg.shadowStrength;shadowRadius=cfg.shadowRadius;
  __asm emms;
- double R=GetRValue(cfg->font.color)/255.0,G=GetGValue(cfg->font.color)/255.0,B=GetBValue(cfg->font.color)/255.0;
+ double R=GetRValue(cfg.color)/255.0,G=GetGValue(cfg.color)/255.0,B=GetBValue(cfg.color)/255.0;
  double Y=0.299*R + 0.587*G + 0.114*B;
  double U=(B-Y)*0.565;
  double V=(R-Y)*0.713;
@@ -159,14 +159,14 @@ void Tfont::init(const TpresetSettings *cfg)
  hdc=CreateCompatibleDC(NULL);
  if (!hdc) return;
  SelectObject(hdc,hf);
- SetTextCharacterExtra(hdc,cfg->font.spacing);
- if (cfg->font.shadowStrength<100)
+ SetTextCharacterExtra(hdc,cfg.spacing);
+ if (cfg.shadowStrength<100)
   {
    for (int y=-2;y<=2;y++)
     for (int x=-2;x<=2;x++)
      {
       double d=8-(x*x+y*y);
-      matrix[y+2][x+2]=2.55*cfg->font.shadowStrength*pow(d/8,2-cfg->font.shadowRadius/50.0);
+      matrix[y+2][x+2]=2.55*cfg.shadowStrength*pow(d/8,2-cfg.shadowRadius/50.0);
      }
   }
  else matrix[0][0]=-100;
