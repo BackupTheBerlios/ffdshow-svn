@@ -814,6 +814,23 @@ SOURCE=.\src\imgFilters\TimgFilterSubtitles.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\imgFilters\TimgFilterTimesmooth.cpp
+
+!IF  "$(CFG)" == "ffdshow - Win32 Release"
+
+# ADD CPP /FAs
+
+!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\TimgFilterTimesmooth.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\TresizeCtx.h
 # End Source File
 # Begin Source File

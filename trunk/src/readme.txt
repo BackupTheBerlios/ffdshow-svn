@@ -56,7 +56,7 @@ Supported codec settings are not stored in preset.
 
 5. Web links
 
-ffdshow: http://cutka.szm.sk
+ffdshow: http://cutka.szm.sk/ffdshow or http://sourceforge.net/projects/ffdshow
 XviD:    http://www.xvid.org
 ffmpeg:  http://ffmpeg.sf.net
 mplayer: http://www.mplayerhq.hu

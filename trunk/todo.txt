@@ -41,3 +41,5 @@ wishes
 emms
 priorities
 dscaler
+add black borders
+compilation instructions
