@@ -23,7 +23,6 @@
 #include "TimgFilterLuma.h"
 #include "TpresetSettings.h"
 
-__declspec(align(8)) static const __int64 m64 =0x0040004000400040;
 const int TpresetSettings::lumGainDef=128,TpresetSettings::lumOffsetDef=0,TpresetSettings::gammaCorrectionDef=100;
 
 TimgFilterLuma::TimgFilterLuma(void)
@@ -35,55 +34,63 @@ void TimgFilterLuma::process(unsigned char *srcY,unsigned char *,unsigned char *
                              unsigned char *dstY,unsigned char *,unsigned char *,
                              TpresetSettings *cfg)
 {
- __declspec(align(8)) static __int64 lumGainMask,lumOffsetMask;
- __int64 lumGain=cfg->lumGain,lumOffset=cfg->lumOffset;
- //DEBUGS2("lum gain,lumOffset",lumGain,lumOffset);
- lumGainMask=(lumGain<<48) + (lumGain<<32) + (lumGain<<16) + lumGain;
- lumOffsetMask=(lumOffset<<48) + (lumOffset<<32) + (lumOffset<<16) + lumOffset;
- //DEBUGS2("src dst",int(srcY),int(dstY));
- int LUM_AREA=dxY;
- for (unsigned char *src=srcY,*srcYend=srcY+strideY*dyY,*dst=dstY;src<srcYend;src+=strideY,dst+=strideY)
+ unsigned char *gammaSrc,*gammaDst;
+ if (cfg->lumGain==cfg->lumGainDef && cfg->lumOffset==cfg->lumOffsetDef)
   {
-   __asm
+   gammaSrc=srcY;gammaDst=dstY;
+  }
+ else 
+  {
+   gammaSrc=dstY;gammaDst=dstY;
+   __declspec(align(8)) static const __int64 m64 =0x0040004000400040;
+   __declspec(align(8)) static __int64 lumGainMask,lumOffsetMask;
+   __int64 lumGain=cfg->lumGain,lumOffset=cfg->lumOffset;
+   lumGainMask=(lumGain<<48) + (lumGain<<32) + (lumGain<<16) + lumGain;
+   lumOffsetMask=(lumOffset<<48) + (lumOffset<<32) + (lumOffset<<16) + lumOffset;
+   int LUM_AREA=dxY;
+   for (unsigned char *src=srcY,*srcYend=srcY+strideY*dyY,*dst=dstY;src<srcYend;src+=strideY,dst+=strideY)
     {
-     mov         eax, [src]
-     mov         ebx, [dst]
-     mov         edx, 0x00       
-     mov         edi, [LUM_AREA]
-     pxor        mm0, mm0
-     movq        mm5, [lumOffsetMask]
-     movq        mm6, [lumGainMask]
-     movq        mm7, [m64]
+     __asm
+      {
+       mov         eax, [src]
+       mov         ebx, [dst]
+       mov         edx, 0x00       
+       mov         edi, [LUM_AREA]
+       pxor        mm0, mm0
+       movq        mm5, [lumOffsetMask]
+       movq        mm6, [lumGainMask]
+       movq        mm7, [m64]
  
-    lumconv:
-     movq        mm1, [eax+edx]
-     movq        mm2, mm1              
+      lumconv:
+       movq        mm1, [eax+edx]
+       movq        mm2, mm1              
  
-     punpcklbw   mm1, mm0
-     punpckhbw   mm2, mm0
+       punpcklbw   mm1, mm0
+       punpckhbw   mm2, mm0
  
-     pmullw      mm1, mm6
-     pmullw      mm2, mm6
+       pmullw      mm1, mm6
+       pmullw      mm2, mm6
   
-     paddw       mm1, mm7
-     paddw       mm2, mm7
+       paddw       mm1, mm7
+       paddw       mm2, mm7
   
-     psrlw       mm1, 7
-     psrlw       mm2, 7
+       psrlw       mm1, 7
+       psrlw       mm2, 7
 
-     paddw       mm1, mm5
-     paddw       mm2, mm5
+       paddw       mm1, mm5
+       paddw       mm2, mm5
 
-     packuswb    mm1, mm0
-     packuswb    mm2, mm0
+       packuswb    mm1, mm0
+       packuswb    mm2, mm0
                                                        
-     add         edx, 0x08
-     cmp         edx, edi
-     movq        [ebx+edx-8], mm1
-     movq        [ebx+edx-4], mm2
-     jl          lumconv
-    };
-  };  
+       add         edx, 0x08
+       cmp         edx, edi
+       movq        [ebx+edx-8], mm1
+       movq        [ebx+edx-4], mm2
+       jl          lumconv
+      };
+    };  
+  }
  __asm emms;
  if (cfg->gammaCorrection!=oldGamma)
   {
@@ -94,6 +101,6 @@ void TimgFilterLuma::process(unsigned char *srcY,unsigned char *,unsigned char *
   };
  if (cfg->gammaCorrection!=cfg->gammaCorrectionDef)
   for (int y=0;y<dyY;y++)
-   for (unsigned char *dst=dstY+strideY*y,*dstEnd=dst+dxY;dst<dstEnd;dst+=4)
-    *(unsigned int*)dst=(gammaTab[dst[3]]<<24)|(gammaTab[dst[2]]<<16)|(gammaTab[dst[1]]<<8)|gammaTab[dst[0]];
+   for (unsigned char *src=gammaSrc+strideY*y,*dst=gammaDst+strideY*y,*dstEnd=dst+dxY;dst<dstEnd;src+=4,dst+=4)
+    *(unsigned int*)dst=(gammaTab[src[3]]<<24)|(gammaTab[src[2]]<<16)|(gammaTab[src[1]]<<8)|gammaTab[src[0]];
 };

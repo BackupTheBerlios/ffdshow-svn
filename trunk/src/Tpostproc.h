@@ -17,14 +17,6 @@ class Tpostproc
 {
 private:
  Tdll *postproc_dll;
- /*
- CpuCaps* (*getCaps_)(void);
- void (*postprocess2)(unsigned char * src[], int src_stride,
-                      unsigned char * dst[], int dst_stride,
-                      int horizontal_size,   int vertical_size,
-                      QP_STORE_T *QP_store,  int QP_stride, struct PPMode *mode);
- PPMode (*getPPModeByNameAndQuality)(char *name, int quality);
- */
 public: 
  bool ok;      
  Tpostproc(void)

@@ -22,7 +22,6 @@
 #include "TimgFilterChroma.h"
 #include "TpresetSettings.h"
 
-__declspec(align(8)) static const __int64 m128=0x0080008000800080;
 const int TpresetSettings::hueDef=0,TpresetSettings::saturationDef=64;
 
 TimgFilterChroma::TimgFilterChroma(void)
@@ -48,6 +47,7 @@ void TimgFilterChroma::process(unsigned char *,unsigned char *srcU,unsigned char
  int Cos = hueCos[hue+180];// (int) (cos(Hue) * 4096);
  int diffx=stride-dx;
  #else
+ __declspec(align(8)) static const __int64 m128=0x0080008000800080;
  __int64 Sin = hueSin[hue+180];
  __int64 Cos = hueCos[hue+180];
  __int64 Sat = sat;

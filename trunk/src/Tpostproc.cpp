@@ -40,7 +40,6 @@ void Tpostproc::init(void)
  postproc_dll->loadFunction((void**)&freeSwsContext,"freeSwsContext");
  postproc_dll->loadFunction((void**)&getSwsContextFromCmdLine,"getSwsContextFromCmdLine");
  postproc_dll->loadFunction((void**)&set_sws_params,"set_sws_params");
- //postproc_dll->loadFunction((void**)&getPPModeByNameAndQuality,"getPPModeByNameAndQuality");
  if (postproc_dll->ok)
   { 
    init_mplayer();
@@ -76,12 +75,12 @@ int Tpostproc::getPPmode(const TpresetSettings *cfg)
    static const int ppPresets[1+GET_PP_QUALITY_MAX]=
     {
      0,
-	 LUM_H_DEBLOCK,
-	 LUM_H_DEBLOCK | LUM_V_DEBLOCK,
-	 LUM_H_DEBLOCK | LUM_V_DEBLOCK | CHROM_H_DEBLOCK,
-	 LUM_H_DEBLOCK | LUM_V_DEBLOCK | CHROM_H_DEBLOCK | CHROM_V_DEBLOCK,
-	 LUM_H_DEBLOCK | LUM_V_DEBLOCK | CHROM_H_DEBLOCK | CHROM_V_DEBLOCK | LUM_DERING,
-	 LUM_H_DEBLOCK | LUM_V_DEBLOCK | CHROM_H_DEBLOCK | CHROM_V_DEBLOCK | LUM_DERING | CHROM_DERING
+	   LUM_H_DEBLOCK,
+	   LUM_H_DEBLOCK | LUM_V_DEBLOCK,
+	   LUM_H_DEBLOCK | LUM_V_DEBLOCK | CHROM_H_DEBLOCK,
+	   LUM_H_DEBLOCK | LUM_V_DEBLOCK | CHROM_H_DEBLOCK | CHROM_V_DEBLOCK,
+	   LUM_H_DEBLOCK | LUM_V_DEBLOCK | CHROM_H_DEBLOCK | CHROM_V_DEBLOCK | LUM_DERING,
+	   LUM_H_DEBLOCK | LUM_V_DEBLOCK | CHROM_H_DEBLOCK | CHROM_V_DEBLOCK | LUM_DERING | CHROM_DERING
     };
    result=ppPresets[ppqual];
   }

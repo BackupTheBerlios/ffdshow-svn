@@ -27,9 +27,6 @@
 const int TpresetSettings::xsharp_strengthDef=20,TpresetSettings::xsharp_thresholdDef=150;
 const int TpresetSettings::unsharp_strengthDef=40,TpresetSettings::unsharp_thresholdDef=0;
 
-__declspec(align(8)) static const __int64 m255=0x00ff00ff00ff00ff;
-__declspec(align(8)) static const __int64 ones=0xffffffffffffffff;
-
 TimgFilterSharpen::TimgFilterSharpen(void)
 {
  Ymin=Ymax=NULL;
@@ -157,6 +154,7 @@ void TimgFilterSharpen::xsharpen(unsigned char *src,unsigned char *dst,TpresetSe
     }  
   }
  #else    
+ __declspec(align(8)) static const __int64 ones=0xffffffffffffffff;
  __int64 mfd_strength=cfg->xsharp_strength; // 0-127
  __int64 mfd_strengthInv=127-mfd_strength;
  __int64 mfd_threshold=cfg->xsharp_threshold; // 0-255

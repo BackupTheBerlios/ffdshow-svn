@@ -10,7 +10,7 @@ Caption "ffdshow"
 ;InstType Typical
 Icon "..\..\src\ffdshow.ico"
 
-!define FFDATE "20020525"
+!define FFDATE "20020603"
 
 ; The file to write
 OutFile "ffdshow-${FFDATE}.exe"
