@@ -47,6 +47,7 @@ _REG_OP_N("isCropNzoom",isCropNzoom,0);
 _REG_OP_N("isZoom",isZoom,1);
 _REG_OP_N("magnificationX",magnificationX,0);
 _REG_OP_N("magnificationY",magnificationY,0);
+_REG_OP_N("magnificationLocked",magnificationLocked,1);
 _REG_OP_N("cropLeft"  ,cropLeft,0);
 _REG_OP_N("cropRight" ,cropRight ,0);
 _REG_OP_N("cropTop"   ,cropTop   ,0);

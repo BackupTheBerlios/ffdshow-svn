@@ -284,6 +284,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_isZoom             ]=Tparam(&cfg.isZoom             ,0,0,&TffDecoder::resizeChanged);
  params[IDFF_magnificationX     ]=Tparam(&cfg.magnificationX     ,0,100,&TffDecoder::resizeChanged);
  params[IDFF_magnificationY     ]=Tparam(&cfg.magnificationY     ,0,100,&TffDecoder::resizeChanged);
+ params[IDFF_magnificationLocked]=Tparam(&cfg.magnificationLocked,0,100,&TffDecoder::resizeChanged);
  params[IDFF_cropLeft           ]=Tparam(&cfg.cropLeft           ,0,2048,&TffDecoder::resizeChanged);
  params[IDFF_cropRight          ]=Tparam(&cfg.cropRight          ,0,2048,&TffDecoder::resizeChanged);
  params[IDFF_cropTop            ]=Tparam(&cfg.cropTop            ,0,2048,&TffDecoder::resizeChanged);
@@ -357,6 +358,7 @@ void TffDecoder::subsChanged(void)
 void TffDecoder::resizeChanged(void)
 {
  if (resizeCtx) resizeCtx->resizeChanged=true;
+ if (cfg.magnificationLocked) cfg.magnificationY=cfg.magnificationX;
  //if (AVIdx && AVIdy) calcCrop();
 }
 void TffDecoder::trayIconChanged(void)

@@ -196,7 +196,7 @@
 #define IDC_RBT_ZOOM                    1138
 #define IDC_RBT_ZOOM2                   1139
 #define IDC_RBT_CROP                    1139
-#define IDC_CHECK1                      1140
+#define IDC_CHB_MAGNIFICATION_LOCKED    1140
 #define VERSION_RES_CHARSET             1252
 #define IDC_STATIC                      -1
 

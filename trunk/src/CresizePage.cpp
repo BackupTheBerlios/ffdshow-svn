@@ -69,6 +69,9 @@ void TresizePage::crop2dlg(void)
 {
  setCheck(IDC_RBT_ZOOM,cfgGet(IDFF_isZoom));
  setCheck(IDC_RBT_CROP,!cfgGet(IDFF_isZoom));
+ setCheck(IDC_CHB_MAGNIFICATION_LOCKED,cfgGet(IDFF_magnificationLocked));
+ enableWindow(IDC_LBL_ZOOMY,!cfgGet(IDFF_magnificationLocked));
+ enableWindow(IDC_TBR_ZOOMY,!cfgGet(IDFF_magnificationLocked));
  int x=cfgGet(IDFF_magnificationX);
  char s[256];
  sprintf(s,"Horizontal magnification:  %i",x);
@@ -246,6 +249,10 @@ HRESULT TresizePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     case IDC_RBT_CROP:
      cfgSet(IDFF_isZoom,getCheck(IDC_RBT_ZOOM));
      return TRUE; 
+    case IDC_CHB_MAGNIFICATION_LOCKED:
+     cfgSet(IDFF_magnificationLocked,getCheck(IDC_CHB_MAGNIFICATION_LOCKED));
+     crop2dlg();
+     return TRUE;
    };
    break;
   };

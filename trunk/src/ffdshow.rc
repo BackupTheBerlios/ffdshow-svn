@@ -350,11 +350,11 @@ BEGIN
                     WS_GROUP,8,104,33,10
     CONTROL         "Crop",IDC_RBT_CROP,"Button",BS_AUTORADIOBUTTON,139,104,
                     31,10
-    LTEXT           "Vertical magnification",IDC_LBL_ZOOMY,10,133,99,8
+    LTEXT           "Vertical magnification",IDC_LBL_ZOOMY,10,133,96,8
     CONTROL         "",IDC_TBR_ZOOMY,"msctls_trackbar32",TBS_BOTH | 
                     TBS_NOTICKS | WS_TABSTOP,8,142,125,10
-    CONTROL         "Lock",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | 
-                    WS_TABSTOP,106,132,23,10
+    CONTROL         "Lock",IDC_CHB_MAGNIFICATION_LOCKED,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,106,132,23,10
 END
 
 IDD_SUBTITLES DIALOGEX 0, 0, 259, 234
