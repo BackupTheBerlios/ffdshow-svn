@@ -31,6 +31,7 @@ GUIDELINES DESIGNINFO MOVEABLE PURE
 BEGIN
     IDD_ABOUT, DIALOG
     BEGIN
+        BOTTOMMARGIN, 229
         HORZGUIDE, 21
         HORZGUIDE, 34
         HORZGUIDE, 47
@@ -80,6 +81,16 @@ BEGIN
         HORZGUIDE, 85
         HORZGUIDE, 137
     END
+
+    IDD_FFDSHOW_NEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 6
+        RIGHTMARGIN, 282
+        VERTGUIDE, 277
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 282
+        HORZGUIDE, 17
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -89,27 +100,27 @@ END
 // Dialog
 //
 
-IDD_ABOUT DIALOGEX 0, 0, 258, 229
+IDD_ABOUT DIALOGEX 0, 0, 258, 231
 STYLE DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
-    CTEXT           "ffdshow MPEG-4 VIDEO DECODER",IDC_STATIC,0,0,257,13,
+    CTEXT           "ffdshow MPEG-4 VIDEO DECODER",IDC_STATIC,0,2,257,13,
                     SS_CENTERIMAGE | SS_SUNKEN
     CTEXT           "ffdshow version",IDC_LBL_FFDSHOWVERSION,0,16,257,10,
                     SS_CENTERIMAGE
     CTEXT           "libavcodec version",IDC_LBL_AVVERSION,0,26,257,9,
                     SS_CENTERIMAGE
-    EDITTEXT        IDC_ED_CREDITS,0,35,258,194,ES_MULTILINE | ES_READONLY | 
+    EDITTEXT        IDC_ED_CREDITS,0,35,258,195,ES_MULTILINE | ES_READONLY | 
                     WS_VSCROLL
 END
 
 IDD_FILTERS DIALOGEX 0, 0, 259, 234
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
-    GROUPBOX        "",IDC_STATIC,0,0,128,130
+    GROUPBOX        "",IDC_STATIC,0,0,128,125
     CONTROL         "Postprocessing",IDC_CHB_POSTPROC,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,8,0,64,10
     CONTROL         "Presets",IDC_RBT_PPPRESETS,"Button",BS_AUTORADIOBUTTON | 
@@ -142,64 +153,64 @@ BEGIN
                     WS_TABSTOP,66,113,16,8
     CONTROL         "",IDC_CHB_LEVELFIX_CHROM,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,100,113,16,8
-    GROUPBOX        "",IDC_STATIC,0,130,128,83
+    GROUPBOX        "",IDC_STATIC,0,125,128,83
     CONTROL         "Noise",IDC_CHB_NOISE,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,8,130,31,10
+                    WS_TABSTOP,8,125,31,10
     CONTROL         "Old noise algorithm",IDC_RBT_NOISE_MOJ,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,8,141,80,10
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,8,136,80,10
     CONTROL         "New noise algorithm (avih)",IDC_RBT_NOISE_AVIH,"Button",
-                    BS_AUTORADIOBUTTON | WS_TABSTOP,8,151,99,10
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,8,146,99,10
     CONTROL         "Uniform noise",IDC_CHB_NOISE_UNIFORM,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,8,163,59,10
-    LTEXT           "Luminance noise strength",IDC_LBL_NOISESTRENGTH,6,172,
+                    BS_AUTOCHECKBOX | WS_TABSTOP,8,158,59,10
+    LTEXT           "Luminance noise strength",IDC_LBL_NOISESTRENGTH,6,167,
                     111,8
     CONTROL         "",IDC_TBR_NOISESTRENGTH,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,4,182,119,10
+                    TBS_NOTICKS | WS_TABSTOP,4,177,119,10
     LTEXT           "Chroma noise strength",IDC_LBL_NOISESTRENGTH_CHROMA,6,
-                    191,112,8
+                    186,112,8
     CONTROL         "",IDC_TBR_NOISESTRENGTH_CHROMA,"msctls_trackbar32",
-                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,4,201,119,10
-    GROUPBOX        "",IDC_STATIC,128,0,131,130
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,4,196,119,10
+    GROUPBOX        "",IDC_STATIC,128,0,131,125
     CONTROL         "Picture properties",IDC_CHB_PICTPROP,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,136,0,73,10
     LTEXT           "Luminance gain",IDC_LBL_LUMGAIN,133,11,99,8
     CONTROL         "",IDC_TBR_LUMGAIN,"msctls_trackbar32",TBS_BOTH | 
                     TBS_NOTICKS | WS_TABSTOP,131,21,125,10
-    LTEXT           "Luminance offset",IDC_LBL_LUMOFFSET,133,31,111,8
+    LTEXT           "Luminance offset",IDC_LBL_LUMOFFSET,133,30,111,8
     CONTROL         "",IDC_TBR_LUMOFFSET,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,131,41,125,10
-    LTEXT           "Gamma correction",IDC_LBL_GAMMA,133,51,111,8
+                    TBS_NOTICKS | WS_TABSTOP,131,40,125,10
+    LTEXT           "Gamma correction",IDC_LBL_GAMMA,133,49,111,8
     CONTROL         "",IDC_TBR_GAMMA,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,131,61,125,10
-    LTEXT           "Hue",IDC_LBL_HUE,133,71,99,8
+                    TBS_NOTICKS | WS_TABSTOP,131,59,125,10
+    LTEXT           "Hue",IDC_LBL_HUE,133,68,99,8
     CONTROL         "",IDC_TBR_HUE,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,131,81,125,10
-    LTEXT           "Saturation",IDC_LBL_SATURATION,133,91,111,8
+                    TBS_NOTICKS | WS_TABSTOP,131,78,125,10
+    LTEXT           "Saturation",IDC_LBL_SATURATION,133,87,111,8
     CONTROL         "",IDC_TBR_SATURATION,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,131,101,125,10
-    PUSHBUTTON      "Reset",IDC_BT_LUMRESET2,136,113,115,12
-    GROUPBOX        "",IDC_STATIC,128,130,131,83
+                    TBS_NOTICKS | WS_TABSTOP,131,97,125,10
+    PUSHBUTTON      "Reset",IDC_BT_LUMRESET2,136,109,115,12
+    GROUPBOX        "",IDC_STATIC,128,125,131,83
     CONTROL         "Sharpen",IDC_CHB_SHARPEN,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,136,130,43,10
+                    WS_TABSTOP,136,125,43,10
     CONTROL         "xsharpen",IDC_RBT_SHARPEN_XSHARPEN,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,136,141,46,10
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,136,136,46,10
     CONTROL         "Unsharp mask",IDC_RBT_SHARPEN_UNSHARPMASK,"Button",
-                    BS_AUTORADIOBUTTON | WS_TABSTOP,136,152,61,10
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,136,147,61,10
     CONTROL         "Warpsharp",IDC_RBT_SHARPEN_WARPSHARP,"Button",
-                    BS_AUTORADIOBUTTON | WS_DISABLED,136,163,51,10
-    LTEXT           "Strength",IDC_LBL_XSHARPENSTRENGTH,136,172,99,8
+                    BS_AUTORADIOBUTTON | WS_DISABLED,136,158,51,10
+    LTEXT           "Strength",IDC_LBL_XSHARPENSTRENGTH,136,167,99,8
     CONTROL         "",IDC_TBR_XSHARPENSTRENGTH,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,133,182,121,10
-    LTEXT           "Threshold",IDC_LBL_XSHARPENTHRESH,136,192,111,8
+                    TBS_NOTICKS | WS_TABSTOP,133,177,121,10
+    LTEXT           "Threshold",IDC_LBL_XSHARPENTHRESH,136,187,111,8
     CONTROL         "",IDC_TBR_XSHARPENTHRESH,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,133,201,121,10
-    GROUPBOX        "",IDC_STATIC,0,213,128,20
+                    TBS_NOTICKS | WS_TABSTOP,133,196,121,10
+    GROUPBOX        "",IDC_STATIC,0,208,128,22
     CONTROL         "Blur",IDC_CHB_BLUR,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,8,213,28,10
+                    WS_TABSTOP,8,208,28,10
     CONTROL         "Strength",IDC_LBL_BLUR_STRENGTH,"Static",
-                    SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,6,222,46,8
+                    SS_LEFTNOWORDWRAP | SS_NOPREFIX | WS_GROUP,6,218,46,8
     CONTROL         "",IDC_TBR_BLUR_STRENGTH,"msctls_trackbar32",TBS_BOTH | 
-                    TBS_NOTICKS | WS_TABSTOP,56,222,67,10
+                    TBS_NOTICKS | WS_TABSTOP,56,218,67,10
 END
 
 IDD_GLOBAL DIALOGEX 0, 0, 259, 232
@@ -408,6 +419,30 @@ BEGIN
     LTEXT           "Shadow radius",IDC_LBL_FONT_SHADOW_RADIUS,136,164,111,8
     CONTROL         "",IDC_TBR_FONT_SHADOW_RADIUS,"msctls_trackbar32",
                     TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,136,174,119,10
+END
+
+IDD_FFDSHOW_NEW DIALOG DISCARDABLE  0, 0, 286, 286
+STYLE DS_CENTER | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+FONT 8, "MS Sans Serif"
+BEGIN
+    GROUPBOX        "Presets",IDC_STATIC,6,0,276,50
+    PUSHBUTTON      "->",IDC_BT_PRESET_PUTFLNM,11,9,15,12
+    COMBOBOX        IDC_CBX_PRESETS,28,9,250,117,CBS_DROPDOWN | 
+                    CBS_AUTOHSCROLL | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Load",IDC_BT_PRESET_LOAD,11,24,35,12
+    PUSHBUTTON      "Save",IDC_BT_PRESET_SAVE,47,24,35,12
+    PUSHBUTTON      "Remove",IDC_BT_PRESET_REMOVE,83,24,35,12
+    CONTROL         "Automatic preset loading",IDC_CHB_AUTOPRESET,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,12,38,94,9
+    PUSHBUTTON      "Load from file...",IDC_BT_PRESET_FILE_LOAD,157,24,60,12
+    PUSHBUTTON      "Save to file...",IDC_BT_PRESET_FILE_SAVE,217,24,60,12
+    CONTROL         "Try to load preset from file first",
+                    IDC_CHB_AUTOPRESET_FILEFIRST,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,157,38,117,10
+    CONTROL         "",IDC_HEADER,"SysTabControl32",TCS_VERTICAL | 
+                    TCS_BUTTONS | TCS_FIXEDWIDTH | WS_TABSTOP,6,52,15,232
+    CONTROL         "",IDC_DIVIDER,"Static",SS_ETCHEDVERT | NOT WS_VISIBLE,
+                    20,51,1,242
 END
 
 

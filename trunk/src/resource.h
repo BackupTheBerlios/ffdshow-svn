@@ -25,6 +25,7 @@
 #define IDI_FFDSHOW                     112
 #define IDD_RESIZE                      112
 #define IDD_SUBTITLES                   113
+#define IDD_FFDSHOW_NEW                 114
 #define ID_MN_SHARPEN                   120
 #define ID_MN_NOISE                     121
 #define ID_MN_PICTPROP                  122
