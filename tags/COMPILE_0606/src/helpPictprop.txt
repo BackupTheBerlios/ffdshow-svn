@@ -1,0 +1,5 @@
+Luminance gain
+Luminance offset
+Gamma correction
+Hue
+Saturation

@@ -1,0 +1,27 @@
+.ffdshow {
+	font-family:sans-serif;
+	font-style:italic;
+	font-weight:bold;
+	font-size:24px;
+}
+.navbar {
+	font-family: Verdana, sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 12px;
+	color:white;
+	text-align:center;
+	background-color : transparent;
+	}
+.text {
+	font-family: Verdana, sans-serif;
+	font-style:normal;
+	font-weight:normal;
+	font-size: 11px;
+	color:black;
+	text-align:left;
+	line-height: 13px;
+	margin-top:0;
+	margin-bottom:0;
+	background-color : transparent;
+}
