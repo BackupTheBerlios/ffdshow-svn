@@ -55,6 +55,7 @@ extern "C"
  #include "xvid\image\image.h"
 }
 #include "xvid\xvid.h"
+#include "xvid\dct\idct.h"
 
 #include "dialog\TffdshowPage.h"
 #include "TffDecoder.h"
@@ -292,7 +293,7 @@ void TffDecoder::fillParams(void)
  params[IDFF_noiseStrength      ]=Tparam(&presetSettings.noiseStrength      ,0,255);
  params[IDFF_noiseStrengthChroma]=Tparam(&presetSettings.noiseStrengthChroma,0,127);
                                                          
- params[IDFF_idct               ]=Tparam(&presetSettings.idct               ,0,3);
+ params[IDFF_idct               ]=Tparam(&presetSettings.idct               ,0,4);
                                                          
  params[IDFF_isResize           ]=Tparam(&presetSettings.isResize           ,0,0);
  params[IDFF_resizeDx           ]=Tparam(&presetSettings.resizeDx           ,8,2048);
@@ -1101,7 +1102,8 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    idctOld=presetSettings.idct;
    switch (presetSettings.idct)
     {  
-     case 2:libavcodec.set_ff_idct(idct_xref);break;
+     case 2:libavcodec.set_ff_idct(idct_ref);break;
+     case 4:libavcodec.set_ff_idct(xvid_idct_ptr);break;
      case 3:libavcodec.set_ff_idct((void*)3);break;
      case 1:libavcodec.set_ff_idct((void*)2);break;
      case 0:

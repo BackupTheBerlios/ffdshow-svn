@@ -8,8 +8,6 @@ struct AVCodec;
 struct AVCodecContext;
 struct AVPicture;
 
-extern "C" void idct_xref(short *block);
-
 class Tconfig;
 class Tlibavcodec
 {

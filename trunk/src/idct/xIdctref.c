@@ -1,7 +1,7 @@
 #include <math.h>
 static double coslu[8][8];
 
-void idct_xref(short * const block)
+void idct_ref(short * const block)
 {
   int x,y,u,v;
   double tmp, tmp2;

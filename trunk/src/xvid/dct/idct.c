@@ -204,7 +204,7 @@ short *blk;
 }*/
 
 // function pointer
-idctFuncPtr idct;
+idctFuncPtr xvid_idct_ptr;
 
 /* two dimensional inverse discrete cosine transform */
 //void j_rev_dct(block)
@@ -339,7 +339,6 @@ void idct_int32(short * const block)
 
 //void
 //idct_int32_init()
-static double coslu[8][8];
 void idct_int32_init()
 {
   int i;
@@ -347,90 +346,4 @@ void idct_int32_init()
   iclp = iclip+512;
   for (i= -512; i<512; i++)
     iclp[i] = (i<-256) ? -256 : ((i>255) ? 255 : i);
-
- {
-  
-  int a,b;
-  double tmp;
-  __asm{emms};
-  for(a=0;a<8;a++)
-    for(b=0;b<8;b++) {
-      tmp = cos((double)((a+a+1)*b) * (3.14159265358979323846 / 16.0));
-      if(b==0)
-        tmp /= sqrt(2.0);
-      coslu[a][b] = tmp * 0.5;
-    }
- }
-}
-
-void idct_ref(short * const block)
-{
-  int x,y,u,v;
-  double tmp, tmp2;
-  double res[8][8];  
-  short (*blk)[8] =  (short(*)[8])block;
-
-  __asm {emms};
-
-  for (y=0; y<8; y++) {
-    for (x=0; x<8; x++) {
-      tmp = 0.0;
-      for (v=0; v<8; v++) {
-        tmp2 = 0.0;
-        for (u=0; u<8; u++) {
-          tmp2 += (double) blk[v][u] * coslu[x][u];
-        }
-        tmp += coslu[y][v] * tmp2;
-      }
-      res[y][x] = tmp;
-    }
   }
-  
-  for (v=0; v<8; v++) {
-    for (u=0; u<8; u++) {
-      tmp = res[v][u];
-      if (tmp < 0.0) {
-        x = - ((int) (0.5 - tmp));
-      } else {
-        x = (int) (tmp + 0.5);
-      }
-      blk[v][u] = (short) x;
-    }
-  }
-}
-
-#include <stdio.h>
-#include <stdlib.h>
-char* idct_test(void)
-{
- short src[64*2],src1[64*2],src2[64*2];
- short *i1=src1,*i2=src2;
- int i;
- static char res[2048];
- for (i=0;i<64;i++)
-  src[i]=src1[i]=src2[i]=(short)(i*17);
- #define ITERS 1000
- __asm {emms};
- for (i=0;i<ITERS;i++)
-  idct_ref(src1);
- __asm {emms};
- for (i=0;i<ITERS;i++)
-  idct_xmmx(src2);
- __asm {emms};
- res[0]='\0';
- for (i=0;i<8;i1+=8,i2+=8,i++)
-  {
-   char pomS[256];
-   int d0=i1[0]-i2[0];
-   int d1=i1[1]-i2[1];
-   int d2=i1[2]-i2[2];
-   int d3=i1[3]-i2[3];
-   int d4=i1[4]-i2[4];
-   int d5=i1[5]-i2[5];
-   int d6=i1[6]-i2[6];
-   int d7=i1[7]-i2[7];
-   sprintf(pomS,"%4i %4i %4i %4i %4i %4i %4i %4i\n",d0,d1,d2,d3,d4,d5,d6,d7);
-   strcat(res,pomS);
-  }
- return res;
-};

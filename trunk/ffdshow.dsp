@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MT /Ze /GX /O2 /Ob2 /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FD /c
+# ADD CPP /nologo /MT /GX /O2 /Ob2 /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0xc09 /d "NDEBUG"
@@ -70,7 +70,7 @@ LINK32=xilink6.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /Ze /w /W0 /Gm /Gi /GX /ZI /Od /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /D "DEBUG" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FR /FD /GZ /c
+# ADD CPP /nologo /MTd /w /W0 /Gm /Gi /GX /ZI /Od /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /D "DEBUG" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FR /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -401,6 +401,35 @@ SOURCE=.\src\xvid\utils\emms.c
 # Begin Source File
 
 SOURCE=.\src\xvid\utils\emms.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\xvid\dct\idct.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\xvid\dct\idct.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\xvid\dct\x86_asm\idct_mmx.asm
+
+!IF  "$(CFG)" == "ffdshow - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
+
+# Begin Custom Build - Assembling $(InputPath)
+IntDir=.\Debug
+InputPath=.\src\xvid\dct\x86_asm\idct_mmx.asm
+InputName=idct_mmx
+
+"$(IntDir)\$(InputName).obj" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	nasm -f win32 -DPREFIX -o $(IntDir)\$(InputName).obj $(InputPath)
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 

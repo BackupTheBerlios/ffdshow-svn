@@ -42,6 +42,7 @@
 #include "xvid.h"
 #include "image/colorspace.h"
 #include "utils/emms.h"
+#include "dct/idct.h"
 //#include "utils/mem_transfer.h"
 
 int xvid_init(void *handle, int opt, void *param1, void *param2)
@@ -65,6 +66,8 @@ int xvid_init(void *handle, int opt, void *param1, void *param2)
 	}
 
 	// initialize the function pointers
+	idct_int32_init();
+	xvid_idct_ptr = idct_int32;
 	emms = emms_c;
 
 	colorspace_init();
@@ -88,6 +91,7 @@ int xvid_init(void *handle, int opt, void *param1, void *param2)
 
 #ifdef ARCH_X86
 	if((cpu_flags & XVID_CPU_MMX) > 0) {
+		xvid_idct_ptr = idct_mmx;
 
 		emms = emms_mmx;
 
@@ -106,10 +110,16 @@ int xvid_init(void *handle, int opt, void *param1, void *param2)
 	}
 
 	if((cpu_flags & XVID_CPU_MMXEXT) > 0) {
+		xvid_idct_ptr = idct_xmm;
 		yuv_to_yv12 = yuv_to_yv12_xmm;
 
 	}
 
+	if((cpu_flags & XVID_CPU_SSE2) > 0) {
+#ifdef EXPERIMENTAL_SSE2_CODE
+		xvid_idct_ptr = idct_sse2;
+#endif
+	}
 
 #endif
 #ifdef ARCH_PPC
