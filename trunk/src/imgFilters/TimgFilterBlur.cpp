@@ -43,17 +43,17 @@ void TimgFilterBlur::done(void)
 }
 void TimgFilterBlur::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
- if (!cfg->blurStrength) return;
+ if (!cfg->blur.strength) return;
  Trect *r=init(&pict.rect,cfg->fullBlur);
  const unsigned char *srcY=getCurY(pict)+r->diffY;unsigned char *dstY=getNextY(pict)+r->diffY;
 
- if (oldStrength!=cfg->blurStrength)
+ if (oldStrength!=cfg->blur.strength)
   {
-   oldStrength=cfg->blurStrength;
+   oldStrength=cfg->blur.strength;
    int sum=0;
-   sum+=kernel[0]=cfg->blurStrength;
+   sum+=kernel[0]=cfg->blur.strength;
    sum+=kernel[1]=255;
-   sum+=kernel[2]=cfg->blurStrength;
+   sum+=kernel[2]=cfg->blur.strength;
    sum=(256*256)/sum;
    kernel[0]=(sum*kernel[0])>>8;
    kernel[1]=(sum*kernel[1])>>8;

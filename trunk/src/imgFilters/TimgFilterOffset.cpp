@@ -53,21 +53,21 @@ void TimgFilterOffset::offset(const unsigned char *src,unsigned char *dst,unsign
 }
 void TimgFilterOffset::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
- if (!cfg->offsetY_X && !cfg->offsetY_Y && !cfg->offsetU_X && !cfg->offsetU_Y && !cfg->offsetV_X && !cfg->offsetV_Y) return;
+ if (!cfg->offset.Y_X && !cfg->offset.Y_Y && !cfg->offset.U_X && !cfg->offset.U_Y && !cfg->offset.V_X && !cfg->offset.V_Y) return;
  Trect *r=init(&pict.rect,cfg->fullOffset);
- if (cfg->offsetY_X || cfg->offsetY_Y)
+ if (cfg->offset.Y_X || cfg->offset.Y_Y)
   {
    const unsigned char *srcY=getCurY(pict)+r->diffY;unsigned char *dstY=getNextY(pict)+r->diffY;
-   offset(srcY,dstY,dxY,strideY,dyY,cfg->offsetY_X,-cfg->offsetY_Y,0);
+   offset(srcY,dstY,dxY,strideY,dyY,cfg->offset.Y_X,-cfg->offset.Y_Y,0);
   }
- if (cfg->offsetU_X || cfg->offsetU_Y)
+ if (cfg->offset.U_X || cfg->offset.U_Y)
   {
    const unsigned char *srcU=getCurU(pict)+r->diffUV;unsigned char *dstU=getNextU(pict)+r->diffUV;
-   offset(srcU,dstU,dxUV,strideUV,dyUV,cfg->offsetU_X/2,-cfg->offsetU_Y/2,128);
+   offset(srcU,dstU,dxUV,strideUV,dyUV,cfg->offset.U_X/2,-cfg->offset.U_Y/2,128);
   }
- if (cfg->offsetV_X || cfg->offsetV_Y)
+ if (cfg->offset.V_X || cfg->offset.V_Y)
   {
    const unsigned char *srcV=getCurV(pict)+r->diffUV;unsigned char *dstV=getNextV(pict)+r->diffUV;
-   offset(srcV,dstV,dxUV,strideUV,dyUV,cfg->offsetV_X/2,-cfg->offsetV_Y/2,128);
+   offset(srcV,dstV,dxUV,strideUV,dyUV,cfg->offset.V_X/2,-cfg->offset.V_Y/2,128);
   }
 }

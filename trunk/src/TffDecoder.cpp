@@ -130,7 +130,7 @@ void TffDecoder::onCropChanged(void)
 {
  if (!presetSettings) return;
  cropChanged=true;
- if (presetSettings->magnificationLocked) presetSettings->magnificationY=presetSettings->magnificationX;
+ if (presetSettings->cropNzoom.magnificationLocked) presetSettings->cropNzoom.magnificationY=presetSettings->cropNzoom.magnificationX;
 }
 void TffDecoder::onResizeChanged(void)
 {
@@ -180,7 +180,7 @@ STDMETHODIMP TffDecoder::savePresets(void)
 STDMETHODIMP TffDecoder::setPresetPtr(TpresetSettings *preset)
 {
  if (!preset) return E_POINTER;
- presetSettings=preset;currentq=presetSettings->ppqual;
+ presetSettings=preset;currentq=presetSettings->postproc.qual;
  notifyParamsChanged();
  sendOnChange();
  return S_OK;
@@ -260,7 +260,7 @@ STDMETHODIMP TffDecoder::loadActivePresetFromFile(const char *flnm)
  //TODO: check load success
  if (!flnm) return S_FALSE;
  if (!presetSettings) presetSettings=new TpresetSettings;
- presetSettings->loadFile(flnm);currentq=presetSettings->ppqual;
+ presetSettings->loadFile(flnm);currentq=presetSettings->postproc.qual;
  presets.storePreset(presetSettings);
  notifyParamsChanged();
  return S_OK;
@@ -312,15 +312,15 @@ STDMETHODIMP TffDecoder::getPPmode(unsigned int *ppmode)
 STDMETHODIMP TffDecoder::getFontName(char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
- if (len<strlen(presetSettings->fontName)+1) return E_OUTOFMEMORY;
- strcpy(buf,presetSettings->fontName);
+ if (len<strlen(presetSettings->font.name)+1) return E_OUTOFMEMORY;
+ strcpy(buf,presetSettings->font.name);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::setFontName(const char *name)
 {
  if (!name) return E_POINTER;
  if (strlen(name)>255) return  S_FALSE;
- strcpy(presetSettings->fontName,name);
+ strcpy(presetSettings->font.name,name);
  onSubsChanged();
  sendOnChange();
  return S_OK;
@@ -328,8 +328,8 @@ STDMETHODIMP TffDecoder::setFontName(const char *name)
 STDMETHODIMP TffDecoder::getSubFlnm(char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
- if (len<strlen(presetSettings->subFlnm)+1) return E_OUTOFMEMORY;
- strcpy(buf,presetSettings->subFlnm);
+ if (len<strlen(presetSettings->subtitles.flnm)+1) return E_OUTOFMEMORY;
+ strcpy(buf,presetSettings->subtitles.flnm);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::loadSubtitles(const char *flnm)
@@ -339,9 +339,9 @@ STDMETHODIMP TffDecoder::loadSubtitles(const char *flnm)
  if (subs)
   {
    subs->init(NULL,flnm,AVIfps);
-   strcpy(presetSettings->subFlnm,subs->flnm);
+   strcpy(presetSettings->subtitles.flnm,subs->flnm);
   }
- else strcpy(presetSettings->subFlnm,flnm);
+ else strcpy(presetSettings->subtitles.flnm,flnm);
  sendOnChange();
  return S_OK;
 }
@@ -540,7 +540,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    if (cnt>1) return VFW_E_TYPE_NOT_ACCEPTED;
    postproc.init();
    isResize=(presetSettings->isResize!=0)&&postproc.ok;
-   outDx=(isResize)?presetSettings->resizeDx:AVIdx;outDy=(isResize)?presetSettings->resizeDy:AVIdy;
+   outDx=(isResize)?presetSettings->resizeAspect.dx:AVIdx;outDy=(isResize)?presetSettings->resizeAspect.dy:AVIdy;
    #ifdef FF__MPEG
    if (formatType==FORMAT_MPEGVideo)
     {
@@ -751,7 +751,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    if (globalSettings.trayIcon) tray->show();
    if (!subs) subs=new Tsubtitles;
    if (AVIname[0]=='\0') loadAVInameAndPreset();
-   subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings->subFlnm,subs->flnm);
+   subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings->subtitles.flnm,subs->flnm);
   }
 
  if (t1==0 && movie)
@@ -798,7 +798,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   }
 
  TpresetSettings presetSettings=*this->presetSettings;
- presetSettings.isResize=isResize;presetSettings.resizeDx=outDx;presetSettings.resizeDy=outDy;
+ presetSettings.isResize=isResize;presetSettings.resizeAspect.dx=outDx;presetSettings.resizeAspect.dy=outDy;
  AVPicture avpict;memset(&avpict,0,sizeof(avpict));
  int got_picture=0,ret;
  TffPict2 pict=movie->getFrame(&globalSettings,&presetSettings,(unsigned char*)m_frame.bitstream,m_frame.length,ret,got_picture);
@@ -826,14 +826,14 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
  if (presetSettings.isSubtitles)
   {
    int framesDelay;
-   if (presetSettings.subDelay)
+   if (presetSettings.subtitles.delay)
     {
      __asm emms;
-     framesDelay=(AVIfps==0)?presetSettings.subDelay:presetSettings.subDelay*AVIfps/1000;
+     framesDelay=(AVIfps==0)?presetSettings.subtitles.delay:presetSettings.subtitles.delay*AVIfps/1000;
     }
    else 
     framesDelay=0;
-   int sframe=1000*(int(t1)-framesDelay)/presetSettings.subSpeed;
+   int sframe=1000*(int(t1)-framesDelay)/presetSettings.subtitles.speed;
    sub=(sframe<1)?NULL:subs->getSubtitle(sframe);
   }
  else sub=NULL;  

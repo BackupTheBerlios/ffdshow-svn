@@ -23,7 +23,7 @@
 #include "TpresetSettings.h"
 #include <time.h>
 
-const int TpresetSettings::noiseStrengthDef=15,TpresetSettings::noiseStrengthChromaDef=0;
+const int TpresetSettings::TnoiseSettings::strengthDef=15,TpresetSettings::TnoiseSettings::strengthChromaDef=0;
 
 static __declspec(align(8)) const __int64 m128=0x0080008000800080;
 static __declspec(align(8)) const __int64 m255=0x00ff00ff00ff00ff;
@@ -70,15 +70,15 @@ void TimgFilterNoise::noiseY(const unsigned char *src,unsigned char *dst,const T
 {
  noiseCountY++;
  if (noiseAvihStrength) noiseCountY=0;
- noise0luma(src,dst,strideY,dxY,dyY,cfg->noiseStrength,cfg->uniformNoise,noiseMaskY,noiseCountY);
+ noise0luma(src,dst,strideY,dxY,dyY,cfg->noise.strength,cfg->noise.uniformNoise,noiseMaskY,noiseCountY);
  noiseAvihStrength=0;
 }
 void TimgFilterNoise::noiseUV(const unsigned char *srcU,unsigned char *dstU,const unsigned char *srcV,unsigned char *dstV,const TpresetSettings *cfg)
 {
  noiseCountU++;noiseCountV++;
  if (noiseAvihStrengthChroma) noiseCountU=noiseCountV=0;
- noise0chroma(srcU,dstU,strideUV,dxUV,dyUV,cfg->noiseStrengthChroma,/*cfg->uniformNoise*/true,noiseMaskU,noiseCountU);
- noise0chroma(srcV,dstV,strideUV,dxUV,dyUV,cfg->noiseStrengthChroma,/*cfg->uniformNoise*/true,noiseMaskV,noiseCountV);
+ noise0chroma(srcU,dstU,strideUV,dxUV,dyUV,cfg->noise.strengthChroma,/*cfg->uniformNoise*/true,noiseMaskU,noiseCountU);
+ noise0chroma(srcV,dstV,strideUV,dxUV,dyUV,cfg->noise.strengthChroma,/*cfg->uniformNoise*/true,noiseMaskV,noiseCountV);
  noiseAvihStrengthChroma=0;
 }
 
@@ -98,9 +98,9 @@ void TimgFilterNoise::noise0chroma(const unsigned char *src,unsigned char *dst,u
 
 void TimgFilterNoise::noiseAvihY(const unsigned char *src,unsigned char *dst,const TpresetSettings *cfg)
 {
- if (cfg->noiseStrength!=noiseAvihStrength)
+ if (cfg->noise.strength!=noiseAvihStrength)
   {
-   noiseAvihStrength=cfg->noiseStrength;
+   noiseAvihStrength=cfg->noise.strength;
    short *dst1=noiseMaskY,*dst2=dst1+dxY*dyY;
    for (unsigned int i=0;i<dxY*dyY;i++)
     dst1[i]=dst2[i]=(((rand()&255)-128)*noiseAvihStrength)/256;
@@ -114,9 +114,9 @@ void TimgFilterNoise::noiseAvihY(const unsigned char *src,unsigned char *dst,con
 }
 void TimgFilterNoise::noiseAvihUV(const unsigned char *srcU,unsigned char *dstU,const unsigned char *srcV,unsigned char *dstV,const TpresetSettings *cfg)
 {
- if (cfg->noiseStrengthChroma!=noiseAvihStrengthChroma)
+ if (cfg->noise.strengthChroma!=noiseAvihStrengthChroma)
   {
-   noiseAvihStrengthChroma=cfg->noiseStrengthChroma;
+   noiseAvihStrengthChroma=cfg->noise.strengthChroma;
    short *dst1=noiseMaskU,*dst2=dst1+dxUV*dyUV;
    unsigned int i;
    for (i=0;i<dxUV*dyUV;i++)
@@ -145,22 +145,22 @@ void TimgFilterNoise::noiseAvihUV(const unsigned char *srcU,unsigned char *dstU,
 
 void TimgFilterNoise::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
- if (!cfg->noiseStrength && !cfg->noiseStrengthChroma) return;
+ if (!cfg->noise.strength && !cfg->noise.strengthChroma) return;
  Trect *r=init(&pict.rect,cfg->fullNoise);
- if (cfg->noiseStrength)
+ if (cfg->noise.strength)
   {  
    const unsigned char *srcY=getCurY(pict)+r->diffY;unsigned char *dstY=getCurNextY(pict)+r->diffY;
-   if (cfg->noiseMethod==0) 
+   if (cfg->noise.method==0) 
     noiseY(srcY,dstY,cfg);
    else 
     noiseAvihY(srcY,dstY,cfg);
    __asm emms;
   }
- if (cfg->noiseStrengthChroma)
+ if (cfg->noise.strengthChroma)
   {
    const unsigned char *srcU=getCurU(pict)+r->diffUV;unsigned char *dstU=getCurNextU(pict)+r->diffUV;
    const unsigned char *srcV=getCurV(pict)+r->diffUV;unsigned char *dstV=getCurNextV(pict)+r->diffUV;
-   if (cfg->noiseMethod==0)                    
+   if (cfg->noise.method==0)
     noiseUV(srcU,dstU,srcV,dstV,cfg);
    else 
     noiseAvihUV(srcU,dstU,srcV,dstV,cfg);

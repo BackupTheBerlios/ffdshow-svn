@@ -78,14 +78,14 @@ void TimgFilterTimesmooth::done(void)
 }
 void TimgFilterTimesmooth::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
- if (!cfg->tempSmooth) return;
+ if (!cfg->blur.tempSmooth) return;
  Trect *r=init(&pict.rect,cfg->fullBlur);
  const unsigned char *srcY=getCurY(pict)+r->diffY ;unsigned char *dstY=getNextY(pict)+r->diffY ;
  const unsigned char *srcU=getCurU(pict)+r->diffUV;unsigned char *dstU=getNextU(pict)+r->diffUV;
  const unsigned char *srcV=getCurV(pict)+r->diffUV;unsigned char *dstV=getNextV(pict)+r->diffUV;
- if (cfg->tempSmooth!=oldStrength)
+ if (cfg->blur.tempSmooth!=oldStrength)
   {
-   oldStrength=cfg->tempSmooth;
+   oldStrength=cfg->blur.tempSmooth;
    for (int i=0;i<=510;i++)
     {
      int sqerr=((i-255)*(i-255))>>oldStrength;

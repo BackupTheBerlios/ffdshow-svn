@@ -1,4 +1,4 @@
- if (!cfg->uniformNoise)
+ if (!cfg->noise.uniformNoise)
   for (const unsigned char *srcEnd=src+stride*dy;src<srcEnd;src+=stride,dst+=stride)
    {
     const unsigned char *srcLnEnd=src+dx;

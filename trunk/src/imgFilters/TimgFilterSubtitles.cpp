@@ -21,7 +21,7 @@
 #include "TpresetSettings.h"
 #include "IffDecoder.h"
 
-const int TpresetSettings::subDelayDef=0,TpresetSettings::subSpeedDef=1000;
+const int TpresetSettings::TsubtitlesSettings::delayDef=0,TpresetSettings::TsubtitlesSettings::speedDef=1000;
 
 void TimgFilterSubtitles::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
@@ -38,6 +38,6 @@ void TimgFilterSubtitles::process(TffPict2 &pict,const TpresetSettings *cfg)
    unsigned char *dstY=getCurNextY(pict)+r->diffY ;
    unsigned char *dstU=getCurNextU(pict)+r->diffUV;
    unsigned char *dstV=getCurNextV(pict)+r->diffUV;
-   font.print(dstY,dstU,dstV,dxY,strideY,dyY,sub,cfg->subPosX,cfg->subPosY);
+   font.print(dstY,dstU,dstV,dxY,strideY,dyY,sub,cfg->subtitles.posX,cfg->subtitles.posY);
   }
 }                                  

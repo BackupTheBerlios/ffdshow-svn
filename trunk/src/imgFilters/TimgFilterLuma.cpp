@@ -21,7 +21,7 @@
 #include "TimgFilterLuma.h"
 #include "TpresetSettings.h"
 
-const int TpresetSettings::lumGainDef=128,TpresetSettings::lumOffsetDef=0,TpresetSettings::gammaCorrectionDef=100;
+const int TpresetSettings::TpictPropSettings::lumGainDef=128,TpresetSettings::TpictPropSettings::lumOffsetDef=0,TpresetSettings::TpictPropSettings::gammaCorrectionDef=100;
 
 TimgFilterLuma::TimgFilterLuma(void)
 {
@@ -30,12 +30,12 @@ TimgFilterLuma::TimgFilterLuma(void)
 
 void TimgFilterLuma::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
- if (cfg->lumGain==TpresetSettings::lumGainDef && cfg->lumOffset==TpresetSettings::lumOffsetDef && cfg->gammaCorrection==TpresetSettings::gammaCorrectionDef) return;
+ if (cfg->pictProp.lumGain==TpresetSettings::TpictPropSettings::lumGainDef && cfg->pictProp.lumOffset==TpresetSettings::TpictPropSettings::lumOffsetDef && cfg->pictProp.gammaCorrection==TpresetSettings::TpictPropSettings::gammaCorrectionDef) return;
  Trect *r=init(&pict.rect,cfg->fullPictProp);
  const unsigned char *srcY=getCurY(pict)+r->diffY;unsigned char *dstY=getCurNextY(pict)+r->diffY;
 
  const unsigned char *gammaSrc;unsigned char *gammaDst;
- if (cfg->lumGain==cfg->lumGainDef && cfg->lumOffset==cfg->lumOffsetDef)
+ if (cfg->pictProp.lumGain==TpresetSettings::TpictPropSettings::lumGainDef && cfg->pictProp.lumOffset==TpresetSettings::TpictPropSettings::lumOffsetDef)
   {
    gammaSrc=srcY;gammaDst=dstY;
   }
@@ -44,7 +44,7 @@ void TimgFilterLuma::process(TffPict2 &pict,const TpresetSettings *cfg)
    gammaSrc=dstY;gammaDst=dstY;
    static __declspec(align(8)) const __int64 m64 =0x0040004000400040;
    static __declspec(align(8)) __int64 lumGainMask,lumOffsetMask;
-   __int64 lumGain=cfg->lumGain,lumOffset=cfg->lumOffset;
+   __int64 lumGain=cfg->pictProp.lumGain,lumOffset=cfg->pictProp.lumOffset;
    lumGainMask  =(lumGain  <<48) + (lumGain  <<32) + (lumGain  <<16) + lumGain  ;
    lumOffsetMask=(lumOffset<<48) + (lumOffset<<32) + (lumOffset<<16) + lumOffset;
    int LUM_AREA=dxY;
@@ -93,14 +93,14 @@ void TimgFilterLuma::process(TffPict2 &pict,const TpresetSettings *cfg)
     }
   }
  __asm emms;
- if (cfg->gammaCorrection!=oldGamma)
+ if (cfg->pictProp.gammaCorrection!=oldGamma)
   {
-   oldGamma=cfg->gammaCorrection;
+   oldGamma=cfg->pictProp.gammaCorrection;
    double gamma=100.0/(oldGamma);
    for(int i=0;i<256;i++)
     gammaTab[i]=(unsigned char)(255.0*pow((i/255.0),gamma));
   }
- if (cfg->gammaCorrection!=cfg->gammaCorrectionDef)
+ if (cfg->pictProp.gammaCorrection!=TpresetSettings::TpictPropSettings::gammaCorrectionDef)
   for (unsigned int y=0;y<dyY;y++)
    {
     const unsigned char *src;unsigned char *dst,*dstEnd;

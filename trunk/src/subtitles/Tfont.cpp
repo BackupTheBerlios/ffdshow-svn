@@ -147,10 +147,10 @@ Tfont::~Tfont()
 void Tfont::init(const TpresetSettings *cfg)
 {
  done();
- hf=CreateFont(cfg->fontSize*4,0,0,0,cfg->fontWeight,0,0,0,cfg->fontCharset,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,/*ANTIALIASED_QUALITY*/DEFAULT_QUALITY,DEFAULT_PITCH|FF_DONTCARE,cfg->fontName);
- shadowStrength=cfg->fontShadowStrength;shadowRadius=cfg->fontShadowRadius;
+ hf=CreateFont(cfg->font.size*4,0,0,0,cfg->font.weight,0,0,0,cfg->font.charset,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,/*ANTIALIASED_QUALITY*/DEFAULT_QUALITY,DEFAULT_PITCH|FF_DONTCARE,cfg->font.name);
+ shadowStrength=cfg->font.shadowStrength;shadowRadius=cfg->font.shadowRadius;
  __asm emms;
- double R=GetRValue(cfg->fontColor)/255.0,G=GetGValue(cfg->fontColor)/255.0,B=GetBValue(cfg->fontColor)/255.0;
+ double R=GetRValue(cfg->font.color)/255.0,G=GetGValue(cfg->font.color)/255.0,B=GetBValue(cfg->font.color)/255.0;
  double Y=0.299*R + 0.587*G + 0.114*B;
  double U=(B-Y)*0.565;
  double V=(R-Y)*0.713;
@@ -159,14 +159,14 @@ void Tfont::init(const TpresetSettings *cfg)
  hdc=CreateCompatibleDC(NULL);
  if (!hdc) return;
  SelectObject(hdc,hf);
- SetTextCharacterExtra(hdc,cfg->fontSpacing);
- if (cfg->fontShadowStrength<100)
+ SetTextCharacterExtra(hdc,cfg->font.spacing);
+ if (cfg->font.shadowStrength<100)
   {
    for (int y=-2;y<=2;y++)
     for (int x=-2;x<=2;x++)
      {
       double d=8-(x*x+y*y);
-      matrix[y+2][x+2]=2.55*cfg->fontShadowStrength*pow(d/8,2-cfg->fontShadowRadius/50.0);
+      matrix[y+2][x+2]=2.55*cfg->font.shadowStrength*pow(d/8,2-cfg->font.shadowRadius/50.0);
      }
   }
  else matrix[0][0]=-100;

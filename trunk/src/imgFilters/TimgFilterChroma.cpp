@@ -21,7 +21,7 @@
 #include "TimgFilterChroma.h"
 #include "TpresetSettings.h"
 
-const int TpresetSettings::hueDef=0,TpresetSettings::saturationDef=64;
+const int TpresetSettings::TpictPropSettings::hueDef=0,TpresetSettings::TpictPropSettings::saturationDef=64;
 
 TimgFilterChroma::TimgFilterChroma(void)
 {
@@ -36,23 +36,23 @@ TimgFilterChroma::TimgFilterChroma(void)
 
 void TimgFilterChroma::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
- if (cfg->hue==TpresetSettings::hueDef && cfg->saturation==TpresetSettings::saturationDef) return;
+ if (cfg->pictProp.hue==TpresetSettings::TpictPropSettings::hueDef && cfg->pictProp.saturation==TpresetSettings::TpictPropSettings::saturationDef) return;
  Trect *r=init(&pict.rect,cfg->fullPictProp);
  const unsigned char *srcU=getCurU(pict)+r->diffUV;unsigned char *dstU=getCurNextU(pict)+r->diffUV;
  const unsigned char *srcV=getCurV(pict)+r->diffUV;unsigned char *dstV=getCurNextV(pict)+r->diffUV;
  
- int hue=cfg->hue;          //-180 ... 0 ... 180
- int sat = cfg->saturation ;//0 (BW) - 64 (normal) - 128 (too much color);
+ int hue=cfg->pictProp.hue;          //-180 ... 0 ... 180
+ int sat=cfg->pictProp.saturation ;//0 (BW) - 64 (normal) - 128 (too much color);
  //#define CHUESAT
  #ifdef CHUESAT
- int Sin = hueSin[hue+180];// (int) (sin(Hue) * 4096);
- int Cos = hueCos[hue+180];// (int) (cos(Hue) * 4096);
+ int Sin=hueSin[hue+180];// (int) (sin(Hue) * 4096);
+ int Cos=hueCos[hue+180];// (int) (cos(Hue) * 4096);
  int diffx=stride-dx;
  #else
  static __declspec(align(8)) const __int64 m128=0x0080008000800080;
- __int64 Sin = hueSin[hue+180];
- __int64 Cos = hueCos[hue+180];
- __int64 Sat = sat;
+ __int64 Sin=hueSin[hue+180];
+ __int64 Cos=hueCos[hue+180];
+ __int64 Sat=sat;
  static __declspec(align(8)) __int64 Sin64,Cos64,Sat64;
  Sin64=(Sin&0x000000000000ffff)+((Sin<<16)&0x00000000ffff0000)+((Sin<<32)&0x0000ffff00000000)+((Sin<<48)&0xffff000000000000);
  Cos64=(Cos&0x000000000000ffff)+((Cos<<16)&0x00000000ffff0000)+((Cos<<32)&0x0000ffff00000000)+((Cos<<48)&0xffff000000000000);

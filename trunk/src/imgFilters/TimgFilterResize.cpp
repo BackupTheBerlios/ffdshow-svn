@@ -23,7 +23,7 @@
 #include "Tpostproc.h"
 #include "mplayer\libmpcodecs\img_format.h"
 
-const TpresetSettings::resizeMethodNone=11;
+const TpresetSettings::TresizeAspectSettings::methodNone=11;
 
 TimgFilterResize::TimgFilterResize(void)
 {
@@ -41,19 +41,19 @@ void TimgFilterResize::done(void)
 Trect TimgFilterResize::calcNewClip(const TpresetSettings *cfg,const Trect &oldClip,const Trect &newFull)
 {
  Trect newClip;
- if (cfg->isAspect==0)
+ if (cfg->resizeAspect.isAspect==0)
   newClip=newFull;
  else
   {
    int ax,ay;
-   if (cfg->isAspect==1)
+   if (cfg->resizeAspect.isAspect==1)
     {
      ax=oldClip.dx;
      ay=oldClip.dy;
     }
    else
     {
-     ax=cfg->aspectRatio;
+     ax=cfg->resizeAspect.aspectRatio;
      ay=1<<16;
     }
    newClip.dx=newFull.dx;
@@ -72,19 +72,19 @@ Trect TimgFilterResize::calcNewClip(const TpresetSettings *cfg,const Trect &oldC
 void TimgFilterResize::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
  Trect *r=init(&pict.rect,cfg->fullResize);
- if (r->dx==cfg->resizeDx && r->dy==cfg->resizeDy && cfg->isAspect!=2) return;
+ if (r->dx==cfg->resizeAspect.dx && r->dy==cfg->resizeAspect.dy && cfg->resizeAspect.isAspect!=2) return;
  if (!swsc || deci->getParam2(IDFF_resizeChanged))
   {
    deci->putParam(IDFF_resizeChanged,0);
    done();
    Tpostproc *postproc;deci->getPostproc(&postproc);if (!postproc->ok) return;
-   newRect.stride=(cfg->resizeDx/16+2)*16;
-   newRect.full=Trect(0,0,cfg->resizeDx,cfg->resizeDy,newRect.stride);
-   if (cfg->resizeMethod!=cfg->resizeMethodNone)
+   newRect.stride=(cfg->resizeAspect.dx/16+2)*16;
+   newRect.full=Trect(0,0,cfg->resizeAspect.dx,cfg->resizeAspect.dy,newRect.stride);
+   if (cfg->resizeAspect.method!=TpresetSettings::TresizeAspectSettings::methodNone)
     {
      newRect.clip=calcNewClip(cfg,*r,newRect.full);newRect.clip.calcDiff(newRect.stride);
      __asm emms;
-     swsc=postproc->getSwsContextFromCmdLine(r->dx,r->dy,IMGFMT_YV12,newRect.clip.dx,newRect.clip.dy,IMGFMT_YV12,cfg->resizeMethod,cfg->resizeGblurLum,cfg->resizeGblurChrom,cfg->resizeSharpenLum,cfg->resizeSharpenChrom);
+     swsc=postproc->getSwsContextFromCmdLine(r->dx,r->dy,IMGFMT_YV12,newRect.clip.dx,newRect.clip.dy,IMGFMT_YV12,cfg->resizeAspect.method,cfg->resizeAspect.GblurLum,cfg->resizeAspect.GblurChrom,cfg->resizeAspect.sharpenLum,cfg->resizeAspect.sharpenChrom);
     }
    else 
     {

@@ -24,8 +24,8 @@
 #include "xvid\utils\mem_align.h"
 #include "xvid\xvid.h"
 
-const int TpresetSettings::xsharp_strengthDef=20,TpresetSettings::xsharp_thresholdDef=150;
-const int TpresetSettings::unsharp_strengthDef=40,TpresetSettings::unsharp_thresholdDef=0;
+const int TpresetSettings::TsharpenSettings::xsharpStrengthDef=20,TpresetSettings::TsharpenSettings::xsharpThresholdDef=150;
+const int TpresetSettings::TsharpenSettings::unsharpStrengthDef=40,TpresetSettings::TsharpenSettings::unsharpThresholdDef=0;
 
 TimgFilterSharpen::TimgFilterSharpen(void)
 {
@@ -159,9 +159,9 @@ void TimgFilterSharpen::xsharpen(const unsigned char *src,unsigned char *dst,con
   }
  #else    
  static __declspec(align(8)) const __int64 ones=0xffffffffffffffff;
- __int64 mfd_strength=cfg->xsharp_strength; // 0-127
+ __int64 mfd_strength=cfg->sharpen.xsharpStrength; // 0-127
  __int64 mfd_strengthInv=127-mfd_strength;
- __int64 mfd_threshold=cfg->xsharp_threshold; // 0-255
+ __int64 mfd_threshold=cfg->sharpen.xsharpThreshold; // 0-255
  static __declspec(align(8)) __int64 mtf_strength64;
  static __declspec(align(8)) __int64 mtf_strengthInv64;
  static __declspec(align(8)) __int64 mtf_thresh64;
@@ -319,8 +319,8 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
 
  static const __int64 div9=7281;
  static __declspec(align(8)) const __int64 div9_64=(div9<<48)+(div9<<32)+(div9<<16)+div9;
- __int64 T=cfg->unsharp_threshold;
- __int64 C=cfg->unsharp_strength+C_SCALE;  //strength = 0-250
+ __int64 T=cfg->sharpen.unsharpThreshold;
+ __int64 C=cfg->sharpen.unsharpStrength+C_SCALE;  //strength = 0-250
  static __declspec(align(8)) __int64 T_64;
  T_64=(T<<48)+(T<<32)+(T<<16)+T;
  static __declspec(align(8)) __int64 C_64;
@@ -431,9 +431,9 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
 
 void TimgFilterSharpen::process(TffPict2 &pict,const TpresetSettings *cfg)
 {
- if (cfg->xsharp_strength==cfg->xsharp_strengthDef && cfg->unsharp_strength!=cfg->unsharp_strengthDef) return;
+ if (cfg->sharpen.xsharpStrength==TpresetSettings::TsharpenSettings::xsharpStrengthDef && cfg->sharpen.unsharpStrength!=TpresetSettings::TsharpenSettings::unsharpStrengthDef) return;
  Trect *r=init(&pict.rect,cfg->fullSharpen);
- switch (cfg->sharpenMethod)
+ switch (cfg->sharpen.method)
   {
    case 0:
     if (config.cpu_flags&XVID_CPU_MMXEXT)

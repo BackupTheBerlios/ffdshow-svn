@@ -55,6 +55,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_saturationDef       212
 
 #define IDFF_flip                301 //should output video be flipped?
+#define IDFF_idct                601 //IDCT function user (0 = libavcodec simple 16383, 1 = libavcodec normal, 2 = reference, 3 = libavcodec simple 16384)
 
 #define IDFF_isSharpen           401 //is xshapen filter active?
 #define IDFF_orderSharpen        407
@@ -73,7 +74,6 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_noiseStrength       503 //luma noise strength
 #define IDFF_noiseStrengthChroma 504 //chroma noise strength
 
-#define IDFF_idct                601 //IDCT function user (0 = libavcodec simple 16383, 1 = libavcodec normal, 2 = reference, 3 = libavcodec simple 16384)
 
 #define IDFF_isResize            701 //is resizing active (or will be resizing active)
 #define IDFF_orderResize         722

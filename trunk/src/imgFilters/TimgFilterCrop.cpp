@@ -28,18 +28,18 @@ TimgFilterCrop::TimgFilterCrop(void)
 
 void TimgFilterCrop::calcCrop(const Trect *r,const TpresetSettings *cfg)
 {
- if (cfg->isZoom)
+ if (cfg->cropNzoom.isZoom)
   {
-   cropDx=((100-cfg->magnificationX)*r->dx)/100;
-   cropDy=((100-cfg->magnificationY)*r->dy)/100;
+   cropDx=((100-cfg->cropNzoom.magnificationX)*r->dx)/100;
+   cropDy=((100-cfg->cropNzoom.magnificationY)*r->dy)/100;
    cropLeft=(r->dx-cropDx)/2;
    cropTop =(r->dy-cropDy)/2;
   }
  else
   {
-   cropDx=r->dx-(cfg->cropLeft+cfg->cropRight );
-   cropDy=r->dy-(cfg->cropTop +cfg->cropBottom);
-   cropLeft=cfg->cropLeft;cropTop=cfg->cropTop;
+   cropDx=r->dx-(cfg->cropNzoom.cropLeft+cfg->cropNzoom.cropRight );
+   cropDy=r->dy-(cfg->cropNzoom.cropTop +cfg->cropNzoom.cropBottom);
+   cropLeft=cfg->cropNzoom.cropLeft;cropTop=cfg->cropNzoom.cropTop;
   }
  cropDx&=~7;cropDy&=~7;if (cropDx<=0) cropDx=8;if (cropDy<=0) cropDy=8;
  if (cropLeft+cropDx>=r->dx) cropLeft=r->dx-cropDx;if (cropTop+cropDy>=r->dy) cropTop=r->dy-cropDy;

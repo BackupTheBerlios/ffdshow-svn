@@ -23,26 +23,33 @@ public:
  void loadDefault(void);
  void loadReg(void),saveReg(void);
  void loadFile(const char *flnm),saveFile(const char *flnm);
+ char presetName[260];
  int autoLoadedFromFile;
 
- char presetName[260];
  int isPostproc,orderPostproc;
  static const int orderPostprocDef;
  int fullPostproc;
- int ppqual;
- int autoq;
- int ppIsCustom,ppcustom;
- int deblockStrength;
- static const int deblockStrengthDef;
- int levelFixLum,levelFixChrom;
+
+ struct TpostprocSettings
+  {
+   int qual;
+   int autoq;
+   int isCustom,custom;
+   int deblockStrength;
+   static const int deblockStrengthDef;
+   int levelFixLum,levelFixChrom;
+  } postproc;
   
  int isPictProp,orderPictProp; 
  static const int orderPictPropDef;
  int fullPictProp;
- int lumGain,lumOffset,gammaCorrection;
- static const int lumGainDef,lumOffsetDef,gammaCorrectionDef;
- int hue,saturation;
- static const int hueDef,saturationDef;
+ struct TpictPropSettings
+  {
+   int lumGain,lumOffset,gammaCorrection;
+   static const int lumGainDef,lumOffsetDef,gammaCorrectionDef;
+   int hue,saturation;
+   static const int hueDef,saturationDef;
+  } pictProp;
  
  int isDeinterlace;
  
@@ -51,58 +58,83 @@ public:
  int isBlur,orderBlur;
  static const int orderBlurDef;
  int fullBlur;
- int blurStrength,tempSmooth;
+ struct TblurSettings
+  {
+   int strength;
+   int tempSmooth;
+  } blur;
  
  int isSharpen,orderSharpen;
  static const int orderSharpenDef;
  int fullSharpen;
- int sharpenMethod;
- int xsharp_strength,xsharp_threshold;
- static const int xsharp_strengthDef,xsharp_thresholdDef;
- int unsharp_strength,unsharp_threshold;
- static const int unsharp_strengthDef,unsharp_thresholdDef;
+ struct TsharpenSettings
+  {
+   int method;
+   int xsharpStrength,xsharpThreshold;
+   static const int xsharpStrengthDef,xsharpThresholdDef;
+   int unsharpStrength,unsharpThreshold;
+   static const int unsharpStrengthDef,unsharpThresholdDef;
+  } sharpen;
  
  int isNoise,orderNoise;
  static const int orderNoiseDef;
  int fullNoise;
- int noiseMethod,uniformNoise;
- int noiseStrength,noiseStrengthChroma;
- static const int noiseStrengthDef,noiseStrengthChromaDef;
+ struct TnoiseSettings
+  {
+   int method,uniformNoise;
+   int strength,strengthChroma;
+   static const int strengthDef,strengthChromaDef;
+  } noise;
  
  int idct;
  
  int isResize,orderResize;
  static const int orderResizeDef;
  int fullResize;
- int resizeDx,resizeDy;
- int isAspect;
- int aspectRatio;
- int resizeMethod;
- static const int resizeMethodNone;
- int resizeGblurLum,resizeGblurChrom;
- int resizeSharpenLum,resizeSharpenChrom;
+ struct TresizeAspectSettings
+  {
+   int dx,dy;
+   int isAspect;
+   int aspectRatio;
+   int method;
+   static const int methodNone;
+   int GblurLum,GblurChrom;
+   int sharpenLum,sharpenChrom;
+  } resizeAspect;
  
  int isCropNzoom;
- int isZoom;
- int magnificationX,magnificationY,magnificationLocked;
- int cropTop,cropBottom,cropLeft,cropRight;
- int autocrop;
+ struct TcropSettings
+  {
+   int isZoom;
+   int magnificationX,magnificationY,magnificationLocked;
+   int cropTop,cropBottom,cropLeft,cropRight;
+   int autocrop;
+  } cropNzoom;
 
  int isSubtitles,orderSubtitles;
  static const int orderSubtitlesDef;
  int fullSubtitles;
- char fontName[256];
- int fontCharset,fontSize,fontSpacing,fontWeight,fontColor,fontShadowStrength,fontShadowRadius;
- int subPosX,subPosY;
- int subDelay,subSpeed;
- static const int subDelayDef,subSpeedDef;
- int subAutoFlnm;
- char subFlnm[260];
+ struct TfontSettings
+  {
+   char name[256];
+   int charset,size,spacing,weight,color,shadowStrength,shadowRadius;
+  } font;
+ struct TsubtitlesSettings
+  {
+   char flnm[260];
+   int autoFlnm;
+   int posX,posY;
+   int delay,speed;
+   static const int delayDef,speedDef;
+  } subtitles;
 
  int isOffset,orderOffset;
  static const int orderOffsetDef;
  int fullOffset;
- int offsetY_X,offsetY_Y,offsetU_X,offsetU_Y,offsetV_X,offsetV_Y;
+ struct ToffsetSettings
+  {
+   int Y_X,Y_Y,U_X,U_Y,V_X,V_Y;
+  } offset;
  
  int orderShowMV;
  static const int orderShowMVdef;

@@ -57,9 +57,9 @@ void Tpostproc::done(void)
 int Tpostproc::getPPmode(const TpresetSettings *cfg,int currentq)
 {
  int result=0;
- if (!cfg->ppIsCustom)
+ if (!cfg->postproc.isCustom)
   {
-   int ppqual=cfg->autoq?currentq:cfg->ppqual;
+   int ppqual=cfg->postproc.autoq?currentq:cfg->postproc.qual;
    if (ppqual<0) ppqual=0;
    if (ppqual>GET_PP_QUALITY_MAX) ppqual=GET_PP_QUALITY_MAX;
    static const int ppPresets[1+GET_PP_QUALITY_MAX]=
@@ -75,9 +75,9 @@ int Tpostproc::getPPmode(const TpresetSettings *cfg,int currentq)
    result=ppPresets[ppqual];
   }
  else
-  result=cfg->ppcustom;  
- if (cfg->levelFixLum) result|=LUM_LEVEL_FIX;
- if (cfg->levelFixChrom) result|=CHROM_LEVEL_FIX;
+  result=cfg->postproc.custom;  
+ if (cfg->postproc.levelFixLum) result|=LUM_LEVEL_FIX;
+ if (cfg->postproc.levelFixChrom) result|=CHROM_LEVEL_FIX;
  if (cfg->isDeinterlace) result|=CUBIC_IPOL_DEINT_FILTER;
  return result;
 }
