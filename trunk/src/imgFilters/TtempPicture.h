@@ -2,6 +2,8 @@
 #define _TTEMPPICTURE_H_
 
 #include "xvid\utils\mem_align.h"
+#include <string.h>
+#include <stddef.h>
 
 struct TtempPictures
 {
@@ -62,9 +64,10 @@ struct TtempPictures
 public:
  TtempPictures(int stride,int dy,int IdiffX,int IdiffY)
   {
-   y=new TtempPicture( stride   *(dy+16)+16,0);
-   u=new TtempPicture((stride/2)*(dy+16)/2 ,128);
-   v=new TtempPicture((stride/2)*(dy+16)/2 ,128);
+   dy+=16;
+   y=new TtempPicture( stride   *dy+16,0);
+   u=new TtempPicture((stride/2)*dy/2 ,128);
+   v=new TtempPicture((stride/2)*dy/2 ,128);
    diffY = IdiffY   * stride   + IdiffX   ;
    diffUV=(IdiffY/2)*(stride/2)+(IdiffX/2);
   }

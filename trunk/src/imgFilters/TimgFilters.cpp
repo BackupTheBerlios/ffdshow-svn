@@ -60,10 +60,9 @@ void TimgFilters::setSubtitle(subtitle *Isub)
 {
  subtitles.sub=Isub;
 }
-void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSource *movie,Tpostproc *pp,unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV)
+void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *cfg,TmovieSource *movie,const Tpostproc *pp,unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,unsigned char **dstY,unsigned char **dstU,unsigned char **dstV)
 {
  tempPict->reset(srcY,srcU,srcV);
- //if (deci->getParam2(IDFF_isClear)) tempPict->clear();
  for (int i=cfg->min_order;i<=cfg->max_order;i++)
   if (i==cfg->orderPostproc && cfg->isPostproc)
    postproc.process(tempPict,cfg,afterResize,movie,pp);

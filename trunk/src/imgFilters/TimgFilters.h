@@ -46,7 +46,7 @@ public:
  void init(int IdxY,int IstrideY,int Idy,int dyFull,int IdiffX,int IdiffY,bool IafterResize);
  void done(void);
  void setSubtitle(subtitle *Isub);
- void process(TglobalSettings *global,TpresetSettings *cfg,TmovieSource *movie,Tpostproc *pp,
+ void process(const TglobalSettings *global,const TpresetSettings *cfg,TmovieSource *movie,const Tpostproc *pp,
               unsigned char *srcY,unsigned char *srcU,unsigned char *srcV,
               unsigned char**dstY,unsigned char**dstU,unsigned char**dstV);
 };

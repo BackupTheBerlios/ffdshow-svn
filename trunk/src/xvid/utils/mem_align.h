@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "../portab.h"
+#include "inttypes.h"
 
 #define MCACHE_LINE 64
 

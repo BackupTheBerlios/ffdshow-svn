@@ -3,13 +3,13 @@
 
 #include "TconfPage.h"
 
-class TinfoPage : public TconfPage
+class TinfoPage :public TconfPage
 {
- public:
-  TinfoPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
-  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
-  virtual void init(void);
-  virtual void cfg2dlg(void);
+public:
+ TinfoPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+ virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
+ virtual void init(void);
+ virtual void cfg2dlg(void);
 };
 
 #endif 

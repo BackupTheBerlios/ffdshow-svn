@@ -39,14 +39,13 @@ void TimgFilterNoise::init(int Idx,int Istride,int Idy)
 {
  TimgFilter::init(Idx,Istride,Idy);
  noiseCountY=noiseCountU=noiseCountV=-1;
- noiseAvihStrenth=0;
- noiseMaskY=(short*)xvid_calloc(dxY*dyY*2,2,MCACHE_LINE);
+ noiseAvihStrength=0;
+ noiseMaskY=(short*)xvid_calloc(dxY *dyY *2,2,MCACHE_LINE);
  noiseMaskU=(short*)xvid_calloc(dxUV*dyUV*2,2,MCACHE_LINE);
  noiseMaskV=(short*)xvid_calloc(dxUV*dyUV*2,2,MCACHE_LINE);
  time_t t;  
  time(&t); 
  noisenext=t;
- 
 }
 void TimgFilterNoise::done(void)
 {
@@ -69,17 +68,17 @@ void TimgFilterNoise::done(void)
 void TimgFilterNoise::noiseY(const unsigned char *src,unsigned char *dst,const TpresetSettings *cfg)
 {
  noiseCountY++;
- if (noiseAvihStrenth) noiseCountY=0;
+ if (noiseAvihStrength) noiseCountY=0;
  noise0luma(src,dst,strideY,dxY,dyY,cfg->noiseStrength,cfg->uniformNoise,noiseMaskY,noiseCountY);
- noiseAvihStrenth=0;
+ noiseAvihStrength=0;
 }
 void TimgFilterNoise::noiseUV(const unsigned char *srcU,unsigned char *dstU,const unsigned char *srcV,unsigned char *dstV,const TpresetSettings *cfg)
 {
  noiseCountU++;noiseCountV++;
- if (noiseAvihStrenthChroma) noiseCountU=noiseCountV=0;
+ if (noiseAvihStrengthChroma) noiseCountU=noiseCountV=0;
  noise0chroma(srcU,dstU,strideUV,dxUV,dyUV,cfg->noiseStrengthChroma,/*cfg->uniformNoise*/true,noiseMaskU,noiseCountU);
  noise0chroma(srcV,dstV,strideUV,dxUV,dyUV,cfg->noiseStrengthChroma,/*cfg->uniformNoise*/true,noiseMaskV,noiseCountV);
- noiseAvihStrenthChroma=0;
+ noiseAvihStrengthChroma=0;
 }
 
 void TimgFilterNoise::noise0luma(const unsigned char *src,unsigned char *dst,int stride,int dx,int dy,int noiseStrength,int uniformNoise,short *noiseMask,int noiseCount)
@@ -98,32 +97,31 @@ void TimgFilterNoise::noise0chroma(const unsigned char *src,unsigned char *dst,i
 
 void TimgFilterNoise::noiseAvihY(const unsigned char *src,unsigned char *dst,const TpresetSettings *cfg)
 {
- if (cfg->noiseStrength!=noiseAvihStrenth)
+ if (cfg->noiseStrength!=noiseAvihStrength)
   {
-   noiseAvihStrenth=cfg->noiseStrength;
+   noiseAvihStrength=cfg->noiseStrength;
    short *dst1=noiseMaskY,*dst2=dst1+dxY*dyY;
    for (int i=0;i<dxY*dyY;i++)
-    dst1[i]=dst2[i]=(((rand()&255)-128)*noiseAvihStrenth)/256;
+    dst1[i]=dst2[i]=(((rand()&255)-128)*noiseAvihStrength)/256;
   }
  #define NOISE_AVIH 
  #undef NOISE_CHROMA
  int stride=strideY,dx=dxY,dy=dyY;
  short *noiseMaskPtr=noiseMaskY+rand()%(dxY*dyY); 
  #include "noise_avih_template.h"
- __asm {emms};
 }
 void TimgFilterNoise::noiseAvihUV(const unsigned char *srcU,unsigned char *dstU,const unsigned char *srcV,unsigned char *dstV,const TpresetSettings *cfg)
 {
- if (cfg->noiseStrengthChroma!=noiseAvihStrenthChroma)
+ if (cfg->noiseStrengthChroma!=noiseAvihStrengthChroma)
   {
-   noiseAvihStrenthChroma=cfg->noiseStrengthChroma;
+   noiseAvihStrengthChroma=cfg->noiseStrengthChroma;
    short *dst1=noiseMaskU,*dst2=dst1+dxUV*dyUV;
    int i;
    for (i=0;i<dxUV*dyUV;i++)
-    dst1[i]=dst2[i]=(((rand()&255)-128)*noiseAvihStrenthChroma)/256;
+    dst1[i]=dst2[i]=(((rand()&255)-128)*noiseAvihStrengthChroma)/256;
    dst1=noiseMaskV;dst2=dst1+dxUV*dyUV; 
    for (i=0;i<dxUV*dyUV;i++)
-    dst1[i]=dst2[i]=(((rand()&255)-128)*noiseAvihStrenthChroma)/256;
+    dst1[i]=dst2[i]=(((rand()&255)-128)*noiseAvihStrengthChroma)/256;
   }
  #define NOISE_AVIH 
  #undef NOISE_CHROMA
@@ -140,7 +138,6 @@ void TimgFilterNoise::noiseAvihUV(const unsigned char *srcU,unsigned char *dstU,
  #undef  lineLoop2nu
  #define lineLoop2nu lineLoop2nu2
  #include "noise_avih_template.h"
- __asm {emms};
 }
 
 void TimgFilterNoise::process(TtempPictures *pict,const TpresetSettings *cfg)
@@ -152,6 +149,7 @@ void TimgFilterNoise::process(TtempPictures *pict,const TpresetSettings *cfg)
     noiseY(srcY,dstY,cfg);
    else 
     noiseAvihY(srcY,dstY,cfg);
+   __asm emms;
   };
  if (cfg->noiseStrengthChroma)
   {
@@ -161,7 +159,6 @@ void TimgFilterNoise::process(TtempPictures *pict,const TpresetSettings *cfg)
     noiseUV(srcU,dstU,srcV,dstV,cfg);
    else 
     noiseAvihUV(srcU,dstU,srcV,dstV,cfg);
+   __asm emms;
   };
 }
-
-                               

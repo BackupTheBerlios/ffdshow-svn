@@ -3,22 +3,22 @@
 
 #include "TconfPage.h"
 
-class TpictPropPage : public TconfPage
+class TpictPropPage :public TconfPage
 {
- private:
-  int writeLumGain(int x),writeLumOffset(int x),writeGamma(int x),writeHue(int x),writeSaturation(int x);
-  void pictProp2dlg(void);
- public:
-  TpictPropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
-  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
-  virtual void init(void);
-  virtual void cfg2dlg(void);
-  virtual void interDlg(void);
-  virtual int getInter(void) {return cfgGet(IDFF_isPictProp);};
-  virtual int invInter(void) {return cfgInv(IDFF_isPictProp);};
-  virtual int getOrder(void) {return cfgGet(IDFF_orderPictProp);};
-  virtual void setOrder(int o) {cfgSet(IDFF_orderPictProp,o);};
-  virtual void getTip(char *tipS,int len);
+private:
+ int writeLumGain(int x),writeLumOffset(int x),writeGamma(int x),writeHue(int x),writeSaturation(int x);
+ void pictProp2dlg(void);
+public:
+ TpictPropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+ virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
+ virtual void init(void);
+ virtual void cfg2dlg(void);
+ virtual void interDlg(void);
+ virtual int getInter(void) {return cfgGet(IDFF_isPictProp);};
+ virtual int invInter(void) {return cfgInv(IDFF_isPictProp);};
+ virtual int getOrder(void) {return cfgGet(IDFF_orderPictProp);};
+ virtual void setOrder(int o) {cfgSet(IDFF_orderPictProp,o);};
+ virtual void getTip(char *tipS,int len);
 };
 
 #endif 

@@ -3,9 +3,6 @@
 /* /usr/include/inttypes.h for CYGWIN
  * Copyleft 2001-2002 by Felix Buenemann
  * <atmosfear at users.sourceforge.net>
- *
- * Should be installed into /usr/include
- * as inttypes.h
  */
 typedef char *  caddr_t;
 typedef char int8_t;
@@ -27,5 +24,4 @@ typedef u_int16_t uint16_t;
 typedef u_int32_t uint32_t;
 typedef u_int64_t uint64_t;
 
-#endif /* _CYGWIN_INTTYPES_H */
-
+#endif

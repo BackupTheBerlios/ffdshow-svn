@@ -6,7 +6,7 @@
 class TimgFilterNoise :public TimgFilter
 {
 private:
- int noiseAvihStrenth,noiseAvihStrenthChroma;
+ int noiseAvihStrength,noiseAvihStrengthChroma;
  short *noiseMaskY;int noiseCountY;
  short *noiseMaskU;int noiseCountU;
  short *noiseMaskV;int noiseCountV;

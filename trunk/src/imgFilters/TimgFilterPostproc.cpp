@@ -38,7 +38,7 @@ TimgFilterPostproc::~TimgFilterPostproc()
  done();
  delete cpu;
 }
-void TimgFilterPostproc::process(TtempPictures *pict,TpresetSettings *cfg,bool afterResize,TmovieSource *movie,Tpostproc *postproc)
+void TimgFilterPostproc::process(TtempPictures *pict,const TpresetSettings *cfg,bool afterResize,TmovieSource *movie,const Tpostproc *postproc)
 {
  if (!postproc->ok || dxY<16 || dyY<16) return;
  int currentq=deci->getParam2(IDFF_currentq);

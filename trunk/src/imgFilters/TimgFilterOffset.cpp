@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <windows.h>
 #include "TimgFilterOffset.h"
 #include "TpresetSettings.h"
 #include "IffDecoder.h"

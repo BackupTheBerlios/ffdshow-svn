@@ -14,7 +14,7 @@ public:
  TimgFilterPostproc(void);
  virtual ~TimgFilterPostproc();
  void process(TtempPictures*,const TpresetSettings*) {};
- void process(TtempPictures *pict,TpresetSettings *cfg,bool afterResize,TmovieSource *movie,Tpostproc *postproc);
+ void process(TtempPictures *pict,const TpresetSettings *cfg,bool afterResize,TmovieSource *movie,const Tpostproc *postproc);
 };
 
 #endif
