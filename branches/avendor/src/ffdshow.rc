@@ -1,0 +1,486 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include <windows.h>
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEU)
+#ifdef _WIN32
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1250)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUT, DIALOG
+    BEGIN
+        HORZGUIDE, 21
+        HORZGUIDE, 34
+        HORZGUIDE, 47
+        HORZGUIDE, 86
+        HORZGUIDE, 115
+    END
+
+    IDD_GLOBAL, DIALOG
+    BEGIN
+        VERTGUIDE, 5
+        VERTGUIDE, 250
+        HORZGUIDE, 117
+    END
+
+    IDD_FFDSHOW, DIALOG
+    BEGIN
+        LEFTMARGIN, 6
+        RIGHTMARGIN, 265
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 256
+        HORZGUIDE, 17
+    END
+
+    IDD_RESIZE, DIALOG
+    BEGIN
+        VERTGUIDE, 8
+        BOTTOMMARGIN, 233
+        HORZGUIDE, 39
+        HORZGUIDE, 99
+    END
+
+    IDD_SUBTITLES, DIALOG
+    BEGIN
+        VERTGUIDE, 8
+        VERTGUIDE, 126
+        VERTGUIDE, 136
+        VERTGUIDE, 164
+        VERTGUIDE, 254
+        BOTTOMMARGIN, 233
+        HORZGUIDE, 85
+        HORZGUIDE, 137
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUT DIALOGEX 0, 0, 258, 229
+STYLE DS_SETFONT | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CTEXT           "ffdshow MPEG-4 VIDEO DECODER",IDC_STATIC,0,0,257,13,
+                    SS_CENTERIMAGE | SS_SUNKEN
+    CTEXT           "ffdshow version",IDC_LBL_FFDSHOWVERSION,0,16,257,10,
+                    SS_CENTERIMAGE
+    CTEXT           "libavcodec version",IDC_LBL_AVVERSION,0,26,257,9,
+                    SS_CENTERIMAGE
+    EDITTEXT        IDC_ED_CREDITS,0,35,258,194,ES_MULTILINE | ES_READONLY | 
+                    WS_VSCROLL
+END
+
+IDD_FILTERS DIALOGEX 0, 0, 259, 234
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "",IDC_STATIC,0,0,128,130
+    CONTROL         "Postprocessing",IDC_CHB_POSTPROC,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,8,0,64,10
+    CONTROL         "Presets",IDC_RBT_PPPRESETS,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP | WS_TABSTOP,8,15,40,10
+    CONTROL         "",IDC_TBR_PPQUAL,"msctls_trackbar32",TBS_AUTOTICKS | 
+                    TBS_BOTH | TBS_ENABLESELRANGE | WS_TABSTOP,9,25,112,25
+    CONTROL         "Automatic quality control",IDC_CHB_AUTOQ,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,13,51,91,10
+    CONTROL         "Custom",IDC_RBT_PPCUSTOM,"Button",BS_AUTORADIOBUTTON | 
+                    WS_TABSTOP,8,68,40,10
+    LTEXT           "Luminance",IDC_STATIC,52,76,36,8
+    LTEXT           "Chroma",IDC_STATIC,93,76,26,8
+    LTEXT           "Deblock (H)",IDC_STATIC,14,86,38,8
+    CONTROL         "",IDC_CHB_DEBLOCKH_LUM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,66,86,16,8
+    CONTROL         "",IDC_CHB_DEBLOCKH_CHROM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,100,86,16,8
+    LTEXT           "Deblock (V)",IDC_STATIC,14,94,37,8
+    CONTROL         "",IDC_CHB_DEBLOCKV_LUM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,66,94,16,8
+    CONTROL         "",IDC_CHB_DEBLOCKV_CHROM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,100,94,16,8
+    LTEXT           "Dering",IDC_STATIC,14,102,40,8,SS_CENTERIMAGE
+    CONTROL         "",IDC_CHB_DERING_LUM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,66,102,16,8
+    CONTROL         "",IDC_CHB_DERING_CHROM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,100,102,16,8
+    LTEXT           "Level fix",IDC_STATIC,14,113,40,9
+    CONTROL         "",IDC_CHB_LEVELFIX_LUM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,66,113,16,8
+    CONTROL         "",IDC_CHB_LEVELFIX_CHROM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,100,113,16,8
+    GROUPBOX        "",IDC_STATIC,0,130,128,83
+    CONTROL         "Noise",IDC_CHB_NOISE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,8,130,31,10
+    CONTROL         "Old noise algorithm",IDC_RBT_NOISE_MOJ,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,8,141,80,10
+    CONTROL         "New noise algorithm (avih)",IDC_RBT_NOISE_AVIH,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,8,151,99,10
+    CONTROL         "Uniform noise",IDC_CHB_NOISE_UNIFORM,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,8,163,59,10
+    LTEXT           "Luminance noise strength",IDC_LBL_NOISESTRENGTH,6,172,
+                    111,8
+    CONTROL         "",IDC_TBR_NOISESTRENGTH,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,4,182,119,10
+    LTEXT           "Chroma noise strength",IDC_LBL_NOISESTRENGTH_CHROMA,6,
+                    191,112,8
+    CONTROL         "",IDC_TBR_NOISESTRENGTH_CHROMA,"msctls_trackbar32",
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,4,201,119,10
+    GROUPBOX        "",IDC_STATIC,128,0,131,130
+    CONTROL         "Picture properties",IDC_CHB_PICTPROP,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,136,0,73,10
+    LTEXT           "Luminance gain",IDC_LBL_LUMGAIN,133,11,99,8
+    CONTROL         "",IDC_TBR_LUMGAIN,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,131,21,125,10
+    LTEXT           "Luminance offset",IDC_LBL_LUMOFFSET,133,31,111,8
+    CONTROL         "",IDC_TBR_LUMOFFSET,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,131,41,125,10
+    LTEXT           "Gamma correction",IDC_LBL_GAMMA,133,51,111,8
+    CONTROL         "",IDC_TBR_GAMMA,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,131,61,125,10
+    LTEXT           "Hue",IDC_LBL_HUE,133,71,99,8
+    CONTROL         "",IDC_TBR_HUE,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,131,81,125,10
+    LTEXT           "Saturation",IDC_LBL_SATURATION,133,91,111,8
+    CONTROL         "",IDC_TBR_SATURATION,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,131,101,125,10
+    PUSHBUTTON      "Reset",IDC_BT_LUMRESET2,136,113,115,12
+    GROUPBOX        "",IDC_STATIC,128,130,131,83
+    CONTROL         "Sharpen",IDC_CHB_SHARPEN,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,136,130,43,10
+    CONTROL         "xsharpen",IDC_RBT_SHARPEN_XSHARPEN,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,136,141,46,10
+    CONTROL         "Unsharp mask",IDC_RBT_SHARPEN_UNSHARPMASK,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,136,152,61,10
+    CONTROL         "Warpsharp",IDC_RBT_SHARPEN_WARPSHARP,"Button",
+                    BS_AUTORADIOBUTTON | WS_DISABLED,136,163,51,10
+    LTEXT           "Strength",IDC_LBL_XSHARPENSTRENGTH,136,172,99,8
+    CONTROL         "",IDC_TBR_XSHARPENSTRENGTH,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,133,182,121,10
+    LTEXT           "Threshold",IDC_LBL_XSHARPENTHRESH,136,192,111,8
+    CONTROL         "",IDC_TBR_XSHARPENTHRESH,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,133,201,121,10
+END
+
+IDD_GLOBAL DIALOGEX 0, 0, 259, 232
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Global settings",IDC_STATIC,0,0,259,80
+    CONTROL         "Postprocessing",IDC_CHB_GLOBAL_POSTPROC,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,11,245,10
+    CONTROL         "Picture properties",IDC_CHB_GLOBAL_PICTPROP,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,21,245,10
+    CONTROL         "Noise",IDC_CHB_GLOBAL_NOISE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,31,245,10
+    CONTROL         "Sharpen",IDC_CHB_GLOBAL_SHARPEN,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,41,245,10
+    CONTROL         "Flip video",IDC_CHB_FLIP,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,51,245,10
+    LTEXT           "IDCT",IDC_LBL_IDCT,5,66,17,8
+    COMBOBOX        IDC_CBX_IDCT,25,63,99,55,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    GROUPBOX        "Supported codecs",IDC_STATIC,0,80,259,34
+    CONTROL         "XVID",IDC_CHB_XVID,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,90,33,10
+    CONTROL         "DIVX 3",IDC_CHB_DIV3,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,43,90,39,10
+    CONTROL         "DIVX 4",IDC_CHB_DIVX,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,86,90,39,10
+    CONTROL         "DIVX 5",IDC_CHB_DX50,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,127,90,37,10
+    CONTROL         "MP43",IDC_CHB_MP43,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,165,90,35,10
+    CONTROL         "MP42",IDC_CHB_MP42,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,208,90,35,10
+    CONTROL         "H.263+",IDC_CHB_H263,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,101,37,10
+    CONTROL         "MPEG1",IDC_CHB_H264,"Button",BS_AUTOCHECKBOX | 
+                    WS_DISABLED | WS_TABSTOP,43,101,37,10
+    CONTROL         "MPEG2",IDC_CHB_H265,"Button",BS_AUTOCHECKBOX | 
+                    WS_DISABLED | WS_TABSTOP,86,101,37,10
+    GROUPBOX        "Presets",IDC_STATIC,0,114,259,50
+    PUSHBUTTON      "->",IDC_BT_PRESET_PUTFLNM,5,123,15,12
+    COMBOBOX        IDC_CBX_PRESETS,20,123,235,117,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Load",IDC_BT_PRESET_LOAD,5,138,35,12
+    PUSHBUTTON      "Save",IDC_BT_PRESET_SAVE,41,138,35,12
+    PUSHBUTTON      "Remove",IDC_BT_PRESET_REMOVE,77,138,35,12
+    CONTROL         "Automatic preset loading",IDC_CHB_AUTOPRESET,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,152,94,9
+    PUSHBUTTON      "Load from file...",IDC_BT_PRESET_FILE_LOAD,135,138,60,
+                    12
+    PUSHBUTTON      "Save to file...",IDC_BT_PRESET_FILE_SAVE,195,138,60,12
+    CONTROL         "Try to load preset from file first",
+                    IDC_CHB_AUTOPRESET_FILEFIRST,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,135,152,117,10
+    GROUPBOX        "Info",IDC_STATIC,0,164,259,42
+    CONTROL         "Now playing",IDC_LBL_NOW_PLAYING,"Static",
+                    SS_LEFTNOWORDWRAP | SS_NOPREFIX | SS_PATHELLIPSIS | 
+                    WS_GROUP,5,174,249,8
+    LTEXT           "Dimensions",IDC_LBL_NOW_DIMENSIONS,5,184,249,8
+    LTEXT           "Codec",IDC_LBL_NOW_CODEC,5,194,249,8
+    GROUPBOX        "Miscellaneous",IDC_STATIC,0,206,259,25
+    CONTROL         "Tray icon",IDC_CHB_TRAYICON,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,218,45,8
+END
+
+IDD_FFDSHOW DIALOGEX 0, 0, 272, 260
+STYLE DS_SETFONT | DS_CENTER | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_HEADER,"SysTabControl32",TCS_BUTTONS | 
+                    TCS_FIXEDWIDTH | WS_TABSTOP,7,3,259,14
+    CONTROL         "",IDC_DIVIDER,"Static",SS_ETCHEDHORZ,6,18,260,1
+END
+
+IDD_RESIZE DIALOGEX 0, 0, 259, 234
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "",IDC_STATIC,0,0,259,39
+    CONTROL         "Resize",IDC_CHB_RESIZE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,8,0,37,10
+    LTEXT           "New size",IDC_STATIC,8,13,29,8
+    EDITTEXT        IDC_ED_RESIZEDX,39,11,31,13,ES_AUTOHSCROLL | ES_NUMBER,
+                    WS_EX_RIGHT
+    EDITTEXT        IDC_ED_RESIZEDY,72,11,31,13,ES_AUTOHSCROLL | ES_NUMBER,
+                    WS_EX_RIGHT
+    PUSHBUTTON      "Apply",IDC_BT_RESIZE_SET,106,11,36,13
+    LTEXT           "Warning: settings will be applied when the file will be reopened",
+                    IDC_STATIC,8,26,201,8
+    GROUPBOX        "Aspect ratio",IDC_STATIC,0,39,259,60
+    CONTROL         "No aspect ratio correction",IDC_RBT_ASPECT_NO,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,8,49,99,10
+    CONTROL         "Keep original aspect ratio",IDC_RBT_ASPECT_KEEP,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,8,60,191,10
+    CONTROL         "Set aspect ratio manually",IDC_RBT_ASPECT_USER,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,8,72,97,10
+    CONTROL         "",IDC_TBR_ASPECT_USER,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,15,83,209,12
+    LTEXT           "1:1",IDC_LBL_ASPECT_USER,226,85,27,8
+    GROUPBOX        "Settings",IDC_STATIC,0,99,259,89
+    CONTROL         "Video is resized before other filters",
+                    IDC_CHB_RESIZE_FIRST,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,8,109,127,10
+    LTEXT           "Resize algorithm",IDC_STATIC,8,124,53,8
+    COMBOBOX        IDC_CBX_RESIZE_METHOD,64,123,81,87,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Luma gaussian blur",IDC_LBL_RESIZE_GBLUR_LUM,7,142,99,8
+    CONTROL         "",IDC_TBR_RESIZE_GBLUR_LUM,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,5,153,125,10
+    LTEXT           "Chroma gaussian blur",IDC_LBL_RESIZE_GBLUR_CHROM,7,164,
+                    111,8
+    CONTROL         "",IDC_TBR_RESIZE_GBLUR_CHROM,"msctls_trackbar32",
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,5,174,125,10
+    LTEXT           "Luma sharpen",IDC_LBL_RESIZE_SHARPEN_LUM,132,142,99,8
+    CONTROL         "",IDC_TBR_RESIZE_SHARPEN_LUM,"msctls_trackbar32",
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,130,153,125,10
+    LTEXT           "Chroma sharpen",IDC_LBL_RESIZE_SHARPEN_CHROM,132,164,
+                    111,8
+    CONTROL         "",IDC_TBR_RESIZE_SHARPEN_CHROM,"msctls_trackbar32",
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,130,174,125,10
+END
+
+IDD_SUBTITLES DIALOGEX 0, 0, 259, 234
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "",IDC_STATIC,0,0,259,85
+    CONTROL         "Subtitles",IDC_CHB_SUBTITLES,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,8,0,43,10
+    GROUPBOX        "Font",IDC_STATIC,0,85,259,83
+    LTEXT           "Weight",IDC_LBL_FONT_WEIGHT,136,116,24,8
+    COMBOBOX        IDC_CBX_FONT_WEIGHT,164,114,90,62,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Size",IDC_LBL_FONT_SIZE,8,108,111,8
+    CONTROL         "",IDC_TBR_FONT_SIZE,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,8,118,118,10
+    COMBOBOX        IDC_CBX_FONT_NAME,8,95,117,118,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_CBX_FONT_CHARSET,164,95,90,59,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Charset",IDC_LBL_FONT_CHARSET,136,96,26,8
+    CONTROL         "Automatically reduce font size",IDC_CHB_FONT_AUTOSIZE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,10,131,112,10
+    LTEXT           "Spacing",IDC_LBL_FONT_SPACING,8,145,111,8
+    CONTROL         "",IDC_TBR_FONT_SPACING,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,8,155,118,10
+    LTEXT           "File",IDC_STATIC,8,15,12,8
+    PUSHBUTTON      "Load",IDC_BT_SUB_LOADFILE,232,13,22,12
+    COMBOBOX        IDC_CBX_SUB_FLNM,23,13,208,124,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Shadow intensity",IDC_LBL_FONT_SHADOW,136,144,111,8
+    CONTROL         "",IDC_TBR_FONT_SHADOW,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,136,155,119,10
+    LTEXT           "Horizontal position",IDC_LBL_SUB_POSX,8,31,111,8
+    CONTROL         "",IDC_TBR_SUB_POSX,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,8,41,118,10
+    LTEXT           "Vertical position",IDC_LBL_SUB_POSY,8,51,111,8
+    CONTROL         "",IDC_TBR_SUB_POSY,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_TABSTOP,8,61,118,10
+    LTEXT           "Color",IDC_LBL_FONT_COLOR,136,131,17,9,SS_CENTERIMAGE
+    CONTROL         "",IDC_IMG_FONT_COLOR,"Static",SS_OWNERDRAW | SS_NOTIFY,
+                    164,130,28,12,WS_EX_DLGMODALFRAME
+    EDITTEXT        IDC_ED_SUB_DELAY,164,38,40,13,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Delay",IDC_STATIC,136,40,19,8
+    EDITTEXT        IDC_ED_SUB_SPEED,164,58,40,13,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Speed",IDC_STATIC,136,61,22,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_FFDSHOW             ICON                    "ffdshow.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXT
+//
+
+IDR_README              TEXT                    "readme.txt"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ABOUT               "About"
+    IDS_CONFIGURATION       "Config"
+    IDS_POSTPROC            "Postprocessing"
+    IDS_PICTPROP            "Picture properties"
+    IDS_VIDEOFILTERS        "Video filters"
+    IDS_OTHER               "Other options"
+    IDS_FILTERS             "Video filters"
+    IDS_GLOBAL              "Global settings"
+    IDS_FFDSHOW             "Configuration"
+END
+
+STRINGTABLE 
+BEGIN
+    IDC_BT_PRESET_SAVE      "Stores settings to selected preset"
+    IDC_CBX_PRESETS         "Lists available presets"
+    IDC_BT_PRESET_REMOVE    "Removes selected preset (can't remove default preset)"
+    IDC_CBX_IDCT            "Choose between IDCT algorithms:\n simple - fastest and accurate\n normal - if simple IDCT gives color problems, try this\n reference - slow, most accurate IDCT, only for testing"
+    IDC_BT_PRESET_PUTFLNM   "Fills preset name edit box with name of currently played file (may not work correctly)"
+    IDC_CHB_H263            "If checked H.263 encoded movies will be decoded by ffdshow"
+    IDC_CHB_AUTOPRESET      "If checked, preset for played movie will be automatically loaded"
+END
+
+STRINGTABLE 
+BEGIN
+    IDC_CHB_AUTOQ           "Activates automatic quality control: ffdshow automatically lowers postprocessing settings when CPU load is high and raises it again, when CPU load get lower"
+    IDC_BT_LUMRESET         "Resets luminance, hue and suturation settings"
+    IDC_CHB_XVID            "If checked XVID movies will be decoded by ffdshow"
+    IDC_CHB_DIV3            "If checked DIVX 3 movies will be decoded by ffdshow"
+    IDC_CHB_DIVX            "If checked DIVX 4 movies will be decoded by ffdshow"
+    IDC_CHB_DX50            "If checked DIVX 5 movies will be decoded by ffdshow"
+    IDC_BT_PRESET_LOAD      "Load selected preset"
+    IDC_CHB_FLIP            "Flips output image (may be needed for some video cards)"
+    IDC_CHB_MP42            "If checked MSMPEG4v2 movies will be decoded by ffdshow"
+END
+
+STRINGTABLE 
+BEGIN
+    IDC_CHB_MP43            "If checked MSMPEG4v3 movies will be decoded by ffdshow"
+    IDC_RBT_PPCUSTOM        "If checked, you can select custom postprocessing filters"
+    IDC_CHB_DEBLOCKV_LUM    "Vertical luminance deblocking"
+    IDC_CHB_DEBLOCKH_LUM    "Horizontal luminance deblocking"
+    IDC_CHB_DERING_LUM      "Luminance deringing"
+    IDC_CHB_DEBLOCKV_CHROM  "Vertical chroma deblocking"
+    IDC_CHB_DEBLOCKH_CHROM  "Horizontal chroma deblocking"
+    IDC_CHB_DERING_CHROM    "Chroma deringing"
+    IDC_CHB_XSHARPEN        "Activates sharpening using xsharpen algorithm"
+    IDC_CHB_NOISE           "If checked, noise will be added to output picture"
+    IDC_CHB_NOISE_UNIFORM   "If checked equal amount of noise will be applied to dark and bright areas"
+END
+
+#endif    // Neutral resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (Australia) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENA)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include <windows.h>\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (Australia) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

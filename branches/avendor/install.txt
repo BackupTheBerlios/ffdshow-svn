@@ -1,0 +1,24 @@
+Binary distribution:
+
+Run ffdshow.exe and follow instructions.
+
+
+From sources:
+
+1. Install cygwin with gcc, binutils, make and mingw runtime (maybe others)
+   Cygwin can be downloaded from http://www.cygwin.com
+2. Install nasm
+3. Go to ffmpeg directory
+4. Edit config.mak and config.h
+5. Go to libavcodec directory
+6. Type make
+7. Copy libavcodec.dll to windows system directory (or somewhere to PATH)
+8. Go to mplayer directory
+9. Edit config.mak and maybe config.h
+10. Type make
+11. Copy libpostproc.dll to windows system directory (or somewhere to PATH)
+12. Go to dshow directory
+13. Open dshow.sln (for VS.NET) or dshow.dsw (for VS 6) and build it
+    (xvid.ax should be registered after build)
+14. Try to play some XVID AVI with Windows Media Player 6.4 
+    (may work also with other players)
