@@ -26,18 +26,18 @@
 
 const int TpresetSettings::noiseStrengthDef=15,TpresetSettings::noiseStrengthChromaDef=0;
 
-__declspec(align(8)) static const __int64 m128=0x0080008000800080;
-__declspec(align(8)) static const __int64 m255=0x00ff00ff00ff00ff;
-__declspec(align(8)) static const unsigned __int64 noiseConst=6364136223846793005i64;
-__declspec(align(8)) static unsigned __int64 noisenext;
+static __declspec(align(8)) const __int64 m128=0x0080008000800080;
+static __declspec(align(8)) const __int64 m255=0x00ff00ff00ff00ff;
+static __declspec(align(8)) const unsigned __int64 noiseConst=6364136223846793005i64;
+static __declspec(align(8)) unsigned __int64 noisenext;
 
 TimgFilterNoise::TimgFilterNoise(void)
 {
  noiseMaskY=noiseMaskU=noiseMaskV=NULL;
 }
-TffRect::Trect* TimgFilterNoise::init(TffRect *rect,int full)
+Trect* TimgFilterNoise::init(TffRect *rect,int full)
 {
- TffRect::Trect *r=TimgFilter::init(rect,full);
+ Trect *r=TimgFilter::init(rect,full);
  if (!noiseMaskY)
   {
    noiseCountY=noiseCountU=noiseCountV=-1;
@@ -147,7 +147,7 @@ void TimgFilterNoise::noiseAvihUV(const unsigned char *srcU,unsigned char *dstU,
 void TimgFilterNoise::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (!cfg->noiseStrength && !cfg->noiseStrengthChroma) return;
- TffRect::Trect *r=init(&rect,0);
+ Trect *r=init(&rect,0);
  if (cfg->noiseStrength)
   {  
    const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;

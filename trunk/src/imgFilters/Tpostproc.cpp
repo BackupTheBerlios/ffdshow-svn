@@ -31,13 +31,14 @@ void modifyPPmode(PPMode *pp,Tconfig *cfg)
 
 void Tpostproc::init(void)
 {
+ if (inited) return;
+ inited=true;
  postproc_dll=new Tdll("C:\\mydocuments\\ffdshow\\src\\mplayer\\libpostproc.dll");
  postproc_dll->loadFunction((void**)&init_mplayer,"init_mplayer");
  postproc_dll->loadFunction((void**)&postprocess,"postprocess");
  postproc_dll->loadFunction((void**)&setModifyPPmode,"setModifyPPmode");
  postproc_dll->loadFunction((void**)&freeSwsContext,"freeSwsContext");
  postproc_dll->loadFunction((void**)&getSwsContextFromCmdLine,"getSwsContextFromCmdLine");
- postproc_dll->loadFunction((void**)&set_sws_params,"set_sws_params");
  postproc_dll->loadFunction((void**)&rgb24toyv12,"rgb24toyv12");
  postproc_dll->loadFunction((void**)&yuy2toyv12,"yuy2toyv12");
  if (postproc_dll->ok)
@@ -48,7 +49,7 @@ void Tpostproc::init(void)
   }
  else
   ok=false; 
-};
+}
 
 void Tpostproc::done(void)
 {
@@ -61,7 +62,7 @@ void Tpostproc::done(void)
  postprocess=NULL;
  setModifyPPmode=NULL;
  ok=false;
-};
+}
 
 int Tpostproc::getPPmode(const TpresetSettings *cfg,int currentq)
 {

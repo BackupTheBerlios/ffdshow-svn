@@ -18,7 +18,6 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_dlgPosX              10
 #define IDFF_dlgPosY              11
 #define IDFF_lvWidth0             12
-#define IDFF_showMV                8
 #define IDFF_trayIcon              3  //is tray icon visible
 #define IDFF_cfgDlgHnwd            4  //handle to configuration dialog
 #define IDFF_autoPresetFileFirst   5  //try to load preset from file
@@ -69,10 +68,10 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_idct                601 //IDCT function user (0 = libavcodec simple 16383, 1 = libavcodec normal, 2 = reference, 3 = libavcodec simple 16384)
 
 #define IDFF_isResize            701 //is resizing active (or will be resizing active)
+#define IDFF_orderResize         722
 #define IDFF_resizeDx            702 //new width
 #define IDFF_resizeDy            703 //new height
 #define IDFF_resizeAspect        704 //0 - no aspect ratio correctio, 1 - keep original aspect, 2 - aspect ration is set in IDFF_aspectRatio
-#define IDFF_resizeFirst         705 //should be resizing applied before other filters
 #define IDFF_resizeMethod        706
 #define IDFF_aspectRatio         707 //aspect ratio (<<16)
 #define IDFF_resizeGblurLum      708 // *100
@@ -119,6 +118,9 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_offsetU_Y          1106
 #define IDFF_offsetV_X          1107
 #define IDFF_offsetV_Y          1108
+
+#define IDFF_isShowMV           1201
+#define IDFF_orderShowMV        1202
 
 #define IDFF_xvid               1001 //are AVIs with this FOURCC played by ffdshow?
 #define IDFF_div3               1002
@@ -172,7 +174,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (setPresetPtr)(TpresetSettings *preset) PURE;
  STDMETHOD (renameActivePreset)(const char *newName) PURE;
  STDMETHOD (setOnChangeMsg)(HWND wnd,unsigned int msg) PURE;
- STDMETHOD (setOnInfoMsg)(HWND wnd,unsigned int msg) PURE;
+ STDMETHOD (setOnInfoMsg)(HWND wnd,unsigned int msg1,unsigned int msg2) PURE;
  STDMETHOD (getDefaultPresetName)(char *buf,unsigned int len) PURE;
  STDMETHOD (setDefaultPresetName)(const char *presetName) PURE;
  STDMETHOD (isDefaultPreset)(const char *presetName) PURE;

@@ -15,7 +15,7 @@
 #define _CTYPE_DISABLE_MACROS
 #include <ctype.h>
 
-inline void mp_msg(int x,...) {};
+inline void mp_msg(int x,...) {}
 #define MSGT_SUBREADER 1
 #define MSGL_WARN      2
 #define MSGL_INFO      3

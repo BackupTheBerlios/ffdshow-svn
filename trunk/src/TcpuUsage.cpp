@@ -100,7 +100,7 @@ void TcpuUsage::ReleaseCPUData(void)
 
  RegCloseKey(H);
 
-};
+}
 
 //------------------------------------------------------------------------------
 int TcpuUsage::GetCPUUsage(int Index)
@@ -227,7 +227,7 @@ void TcpuUsage::CollectCPUData(void)
    dwDataSize=sizeof(DWORD);
    RegQueryValueEx( _W9xCpuKey, "KERNEL\\CPUUsage",NULL,&dwType, (unsigned char*)&_W9xCpuUsage, &dwDataSize );
   };
-};
+}
 
 
 void TcpuUsage::usage_initialization(void)
@@ -241,10 +241,10 @@ void TcpuUsage::usage_initialization(void)
   return ;//raise Exception.Create('Can''t get the Windows version');
 
  _IsWinNT = (VI.dwPlatformId == VER_PLATFORM_WIN32_NT);
-};
+}
 void TcpuUsage::usage_finalization(void)
 {
  ReleaseCPUData();
  free(_PerfData);
-};
+}
 

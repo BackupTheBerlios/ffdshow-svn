@@ -25,7 +25,7 @@ public:
    return GetOwner()->QueryInterface(riid,ppv);
   };
  #else
- DECLARE_IUNKNOWN;
+ DECLARE_IUNKNOWN
  #endif
 
  TffDecoder(LPUNKNOWN punk, HRESULT *phr);
@@ -81,7 +81,7 @@ public:
  STDMETHODIMP setPresetPtr(TpresetSettings *preset);
  STDMETHODIMP renameActivePreset(const char *newName);
  STDMETHODIMP setOnChangeMsg(HWND Iwnd,unsigned int Imsg);
- STDMETHODIMP setOnInfoMsg(HWND Iwnd,unsigned int Imsg);
+ STDMETHODIMP setOnInfoMsg(HWND Iwnd,unsigned int msg1,unsigned int msg2);
  STDMETHODIMP getDefaultPresetName(char *buf,unsigned int len);
  STDMETHODIMP setDefaultPresetName(const char *presetName);
  STDMETHODIMP isDefaultPreset(const char *presetName);
@@ -105,7 +105,7 @@ private:
  void onSubsChanged(void),onResizeChanged(void),onTrayIconChanged(void),onFilterOnOff(void);
  HRESULT ChangeColorspace(GUID subtype,GUID formattype,void * format);
  HWND onChangeWnd;unsigned int onChangeMsg;
- HWND onInfoWnd;unsigned int onInfoMsg;
+ HWND onInfoWnd;unsigned int onInfoMsg1,onInfoMsg2;
  void sendOnChange(void);
 
  unsigned int AVIdx,AVIdy;double AVIfps;
@@ -117,7 +117,7 @@ private:
    unsigned int bpp;
    unsigned int stride;
    unsigned int length;
-   unsigned int outLenght;
+   unsigned int outLength;
    void *bitstream;
    void *image;
   } m_frame;

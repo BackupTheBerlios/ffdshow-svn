@@ -26,29 +26,29 @@ extern void palette8torgb15(const uint8_t *src, uint8_t *dst, unsigned num_pixel
 extern void palette8torgb24(const uint8_t *src, uint8_t *dst, unsigned num_pixels, const uint8_t *palette);
 
 extern void yv12toyuy2(const uint8_t *ysrc, const uint8_t *usrc, const uint8_t *vsrc, uint8_t *dst,
-	unsigned int width, unsigned int height,
-	unsigned int lumStride, unsigned int chromStride, unsigned int dstStride);
+        unsigned int width, unsigned int height,
+        unsigned int lumStride, unsigned int chromStride, unsigned int dstStride);
 extern void yuv422ptoyuy2(const uint8_t *ysrc, const uint8_t *usrc, const uint8_t *vsrc, uint8_t *dst,
-	unsigned int width, unsigned int height,
-	unsigned int lumStride, unsigned int chromStride, unsigned int dstStride);
+        unsigned int width, unsigned int height,
+        unsigned int lumStride, unsigned int chromStride, unsigned int dstStride);
 extern void yuy2toyv12(const uint8_t *src, uint8_t *ydst, uint8_t *udst, uint8_t *vdst,
-	unsigned int width, unsigned int height,
-	unsigned int lumStride, unsigned int chromStride, unsigned int srcStride);
+        unsigned int width, unsigned int height,
+        unsigned int lumStride, unsigned int chromStride, unsigned int srcStride);
 extern void rgb24toyv12(const uint8_t *src, uint8_t *ydst, uint8_t *udst, uint8_t *vdst,
-	unsigned int width, unsigned int height,
-	unsigned int lumStride, unsigned int chromStride, unsigned int srcStride);
+        unsigned int width, unsigned int height,
+        unsigned int lumStride, unsigned int chromStride, unsigned int srcStride);
 
 extern void interleaveBytes(uint8_t *src1, uint8_t *src2, uint8_t *dst,
-			    int width, int height, int src1Stride, int src2Stride, int dstStride);
-	
+                            int width, int height, int src1Stride, int src2Stride, int dstStride);
+        
 
 #define MODE_RGB  0x1
 #define MODE_BGR  0x2
 
 typedef void (* yuv2rgb_fun) (uint8_t * image, uint8_t * py,
-			      uint8_t * pu, uint8_t * pv,
-			      int h_size, int v_size,
-			      int rgb_stride, int y_stride, int uv_stride);
+                              uint8_t * pu, uint8_t * pv,
+                              int h_size, int v_size,
+                              int rgb_stride, int y_stride, int uv_stride);
 
 extern yuv2rgb_fun yuv2rgb;
 

@@ -33,9 +33,8 @@ void TimgFilterShowMV::process(TffPict *pict,TffRect &rect,const TpresetSettings
  deci->getMovieSource(&movie);
  TmovieSource::TmotionVectors mv=movie->getMV();
  if (!mv.vectors) return;
- TffRect::Trect *r=init(&rect,0);
- const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
- for (unsigned int y=0;y<dyY;y++) memcpy(dstY+y*strideY,srcY+y*strideY,dxY);
+ Trect *r=init(&rect,0);
+ unsigned char *dstY=pict->getCurNextY(rect.stride,r)+r->diffY;
  for (unsigned int mb_y=0;mb_y<mv.dy;mb_y++)
   {
    unsigned int y=mb_y*16+8;

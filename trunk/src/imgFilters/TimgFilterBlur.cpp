@@ -30,9 +30,9 @@ TimgFilterBlur::TimgFilterBlur(void)
  oldStrength=-1;
  tempPict=NULL;
 }
-TffRect::Trect* TimgFilterBlur::init(TffRect *rect,int full)
+Trect* TimgFilterBlur::init(TffRect *rect,int full)
 {
- TffRect::Trect *r=TimgFilter::init(rect,full);
+ Trect *r=TimgFilter::init(rect,full);
  if (!tempPict) tempPict=(unsigned char*)xvid_malloc(strideY*dyY,MCACHE_LINE);
  return r;
 }
@@ -47,7 +47,7 @@ void TimgFilterBlur::done(void)
 void TimgFilterBlur::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (!cfg->blurStrength) return;
- TffRect::Trect *r=init(&rect,0);
+ Trect *r=init(&rect,0);
  const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;
 
  if (oldStrength!=cfg->blurStrength)
@@ -64,9 +64,9 @@ void TimgFilterBlur::process(TffPict *pict,TffRect &rect,const TpresetSettings *
    kernel[1]+=255-(kernel[0]+kernel[1]+kernel[2]);
   }
  int dx=dxY,dy=dyY,stride=strideY;
- __declspec(align(8)) static __int64 k0;
- __declspec(align(8)) static __int64 k1;
- __declspec(align(8)) static __int64 k2;
+ static __declspec(align(8)) __int64 k0;
+ static __declspec(align(8)) __int64 k1;
+ static __declspec(align(8)) __int64 k2;
  k0=(kernel[0]<<48)+(kernel[0]<<32)+(kernel[0]<<16)+kernel[0];
  k1=(kernel[1]<<48)+(kernel[1]<<32)+(kernel[1]<<16)+kernel[1];
  k2=(kernel[2]<<48)+(kernel[2]<<32)+(kernel[2]<<16)+kernel[2];

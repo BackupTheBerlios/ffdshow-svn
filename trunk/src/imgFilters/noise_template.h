@@ -32,7 +32,7 @@
    return;
   }; 
  short *noiseMaskPtr=noiseMask; 
- __declspec(align(8)) static __int64 noiseStrength64;
+ static __declspec(align(8)) __int64 noiseStrength64;
  noiseStrength64=__int64(noiseStrength) +(__int64(noiseStrength)<<16)+(__int64(noiseStrength)<<32)+(__int64(noiseStrength)<<48);
  if (!uniformNoise)
   for (const unsigned char *srcEnd=src+stride*dy;src<srcEnd;src+=stride,dst+=stride)

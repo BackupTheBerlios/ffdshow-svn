@@ -88,8 +88,8 @@ Tchar::Tchar(HDC hdc,const char *s,int matrix[5][5],int colorY,int colorU,int co
  else
   {
    memcpy(mskY,bmpY,dxY*dyY);
-   for (unsigned int y=0;y<dyY;y++)
-    for (unsigned int x=0;x<dxY;x++)
+   for (int y=0;y<dyY;y++)
+    for (int x=0;x<dxY;x++)
      {
       int s=0,cnt=0;;
       for (int yy=-2;yy<=+2;yy++)
@@ -275,8 +275,8 @@ void Tfont::print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,un
       }
      #else
      int dxUV=c[i]->dxUV/8;
-     __declspec(align(8)) static const __int64 m128=0x8080808080808080;
-     __declspec(align(8)) static const __int64 m255=0xffffffffffffffff;
+     static __declspec(align(8)) const __int64 m128=0x8080808080808080;
+     static __declspec(align(8)) const __int64 m255=0xffffffffffffffff;
      __asm
       {
        mov ebx,[msk]

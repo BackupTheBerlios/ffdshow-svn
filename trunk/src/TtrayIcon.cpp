@@ -109,12 +109,12 @@ HMENU TtrayIcon::createMenu(void)
   else if (i==cfgGet(IDFF_orderBlur     )) insertMenuItem(hm,ord,IDC_CHB_BLUR,"Blur",IDFF_isBlur);
   else if (i==cfgGet(IDFF_orderSharpen  )) insertMenuItem(hm,ord,IDC_CHB_SHARPEN,"Sharpen",IDFF_isSharpen);
   else if (i==cfgGet(IDFF_orderSubtitles)) insertMenuItem(hm,ord,IDC_CHB_SUBTITLES,"Subtitles",IDFF_isSubtitles);
-  else if (i==cfgGet(IDFF_orderOffset   )) insertMenuItem(hm,ord,IDC_CHB_OFFSET   ,"Offset   ",IDFF_isOffset   );
+  else if (i==cfgGet(IDFF_orderOffset   )) insertMenuItem(hm,ord,IDC_CHB_OFFSET,"Offset",IDFF_isOffset);
 
  insertMenuItem(hm,ord,IDC_CHB_CROP,"Crop",IDFF_isCropNzoom);
  insertMenuItem(hm,ord,IDC_CHB_FLIP,"Flip",IDFF_flip);
  insertSeparator(hm,ord);
- insertMenuItem(hm,ord,IDC_CHB_SHOWMV,"Show motion vectors",IDFF_showMV);
+ insertMenuItem(hm,ord,IDC_CHB_SHOWMV,"Show motion vectors",IDFF_isShowMV);
  return hm;
 }
 
@@ -181,7 +181,7 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
             ti->negate_Param(IDFF_isOffset);
             break;
            case IDC_CHB_SHOWMV:
-            ti->negate_Param(IDFF_showMV);
+            ti->negate_Param(IDFF_isShowMV);
             break;
           }
         DestroyMenu(hm);
@@ -196,12 +196,12 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
 int TtrayIcon::cfgGet(int i)
 {
  return deci->getParam2(i);
-};
+}
 int TtrayIcon::cfgSet(int i,int val)
 {
  deci->putParam(i,val);
  return val;
-};
+}
 
 TtrayIcon::TtrayIcon(IffDecoder *Ideci,HINSTANCE Ihi):deci(Ideci),hi(Ihi)
 {

@@ -28,6 +28,7 @@
 #include "TimgFilterOffset.h"
 #include "TimgFilterTimesmooth.h"
 #include "TimgFilterShowMV.h"
+#include "TimgFilterResize.h"
 #include "TglobalSettings.h"
 #include "TpresetSettings.h"
 
@@ -45,10 +46,15 @@ TimgFilters::TimgFilters(IffDecoder *deci)
  filters.push_back(offset=new TimgFilterOffset);offset->setDeci(deci);
  filters.push_back(timesmooth=new TimgFilterTimesmooth);timesmooth->setDeci(deci);
  filters.push_back(showMV=new TimgFilterShowMV);showMV->setDeci(deci);
+ filters.push_back(resize=new TimgFilterResize);resize->setDeci(deci);
 }
 TimgFilters::~TimgFilters()
 {
- for (vector<TimgFilter*>::iterator i=filters.begin();i!=filters.end();i++) {(*i)->done();delete *i;};
+ for (vector<TimgFilter*>::iterator i=filters.begin();i!=filters.end();i++)
+  {
+   (*i)->done();
+   delete *i;
+  };
  filters.clear();
 }
 void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *cfg,TffPict *pict,TffRect &rect)
@@ -74,6 +80,8 @@ void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *c
    subtitles->process(pict,rect,cfg);
   else if (i==cfg->orderOffset && cfg->isOffset)
    offset->process(pict,rect,cfg);
- if (global->showMV)
-  showMV->process(pict,rect,cfg);
+  else if (i==cfg->orderResize && (cfg->isResize || cfg->resizeAspect!=0))
+   resize->process(pict,rect,cfg);
+  else if (i==cfg->orderShowMV && global->isShowMV) 
+   showMV->process(pict,rect,cfg);
 }

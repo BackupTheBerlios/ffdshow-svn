@@ -35,11 +35,11 @@ extern "C" {
 
 //the following 4 flags are not completly implemented
 //internal chrominace subsamling info
-#define SWS_FULL_CHR_V		0x100
-#define SWS_FULL_CHR_H_INT	0x200
+#define SWS_FULL_CHR_V          0x100
+#define SWS_FULL_CHR_H_INT      0x200
 //input subsampling info
-#define SWS_FULL_CHR_H_INP	0x400
-#define SWS_DIRECT_BGR		0x800
+#define SWS_FULL_CHR_H_INP      0x400
+#define SWS_DIRECT_BGR          0x800
 
 #define SWS_PRINT_INFO 0x1000
 
@@ -47,67 +47,67 @@ extern "C" {
 
 /* this struct should be aligned on at least 32-byte boundary */
 typedef struct SwsContext{
-	void (*swScale)(struct SwsContext *context, uint8_t* src[], int srcStride[], int srcSliceY,int srcSliceH, uint8_t* dst[], int dstStride[]);
-	int srcW, srcH, dstW, dstH;
-	int chrSrcW, chrSrcH, chrDstW, chrDstH;
-	int lumXInc, chrXInc;
-	int lumYInc, chrYInc;
-	int dstFormat, srcFormat;
+        void (*swScale)(struct SwsContext *context, const uint8_t* src[], int srcStride[], int srcSliceY,int srcSliceH, uint8_t* dst[], int dstStride[]);
+        int srcW, srcH, dstW, dstH;
+        int chrSrcW, chrSrcH, chrDstW, chrDstH;
+        int lumXInc, chrXInc;
+        int lumYInc, chrYInc;
+        int dstFormat, srcFormat;
 
-	int16_t **lumPixBuf;
-	int16_t **chrPixBuf;
-	int16_t *hLumFilter;
-	int16_t *hLumFilterPos;
-	int16_t *hChrFilter;
-	int16_t *hChrFilterPos;
-	int16_t *vLumFilter;
-	int16_t *vLumFilterPos;
-	int16_t *vChrFilter;
-	int16_t *vChrFilterPos;
+        int16_t **lumPixBuf;
+        int16_t **chrPixBuf;
+        int16_t *hLumFilter;
+        int16_t *hLumFilterPos;
+        int16_t *hChrFilter;
+        int16_t *hChrFilterPos;
+        int16_t *vLumFilter;
+        int16_t *vLumFilterPos;
+        int16_t *vChrFilter;
+        int16_t *vChrFilterPos;
 
 // Contain simply the values from v(Lum|Chr)Filter just nicely packed for mmx
-	int16_t  *lumMmxFilter;
-	int16_t  *chrMmxFilter;
-	uint8_t formatConvBuffer[4000]; //FIXME dynamic alloc, but we have to change alot of code for this to be usefull
+        int16_t  *lumMmxFilter;
+        int16_t  *chrMmxFilter;
+        uint8_t formatConvBuffer[4000]; //FIXME dynamic alloc, but we have to change alot of code for this to be usefull
 
-	int hLumFilterSize;
-	int hChrFilterSize;
-	int vLumFilterSize;
-	int vChrFilterSize;
-	int vLumBufSize;
-	int vChrBufSize;
+        int hLumFilterSize;
+        int hChrFilterSize;
+        int vLumFilterSize;
+        int vChrFilterSize;
+        int vLumBufSize;
+        int vChrBufSize;
 
-	uint8_t __attribute__((aligned(32))) funnyYCode[10000];
-	uint8_t __attribute__((aligned(32))) funnyUVCode[10000];
-	int32_t *lumMmx2FilterPos;
-	int32_t *chrMmx2FilterPos;
-	int16_t *lumMmx2Filter;
-	int16_t *chrMmx2Filter;
+        uint8_t __attribute__((aligned(32))) funnyYCode[10000];
+        uint8_t __attribute__((aligned(32))) funnyUVCode[10000];
+        int32_t *lumMmx2FilterPos;
+        int32_t *chrMmx2FilterPos;
+        int16_t *lumMmx2Filter;
+        int16_t *chrMmx2Filter;
 
-	int canMMX2BeUsed;
+        int canMMX2BeUsed;
 
-	int lastInLumBuf;
-	int lastInChrBuf;
-	int lumBufIndex;
-	int chrBufIndex;
-	int dstY;
-	int flags;
+        int lastInLumBuf;
+        int lastInChrBuf;
+        int lumBufIndex;
+        int chrBufIndex;
+        int dstY;
+        int flags;
 } SwsContext;
 //FIXME check init (where 0)
 
 // when used for filters they must have an odd number of elements
 // coeffs cannot be shared between vectors
 typedef struct {
-	double *coeff;
-	int length;
+        double *coeff;
+        int length;
 } SwsVector;
 
 // vectors can be shared
 typedef struct {
-	SwsVector *lumH;
-	SwsVector *lumV;
-	SwsVector *chrH;
-	SwsVector *chrV;
+        SwsVector *lumH;
+        SwsVector *lumV;
+        SwsVector *chrH;
+        SwsVector *chrV;
 } SwsFilter;
 
 
@@ -116,8 +116,8 @@ typedef struct {
 // dstbpp == 12 -> yv12 output
 // will use sws_flags
 void SwScale_YV12slice(unsigned char* src[],int srcStride[], int srcSliceY,
-			     int srcSliceH, uint8_t* dst[], int dstStride, int dstbpp,
-			     int srcW, int srcH, int dstW, int dstH);
+                             int srcSliceH, uint8_t* dst[], int dstStride, int dstbpp,
+                             int srcW, int srcH, int dstW, int dstH);
 
 // Obsolete, will be removed soon
 void SwScale_Init();
@@ -126,9 +126,10 @@ void SwScale_Init();
 
 void freeSwsContext(SwsContext *swsContext);
 
-SwsContext *getSwsContextFromCmdLine(int srcW, int srcH, int srcFormat, int dstW, int dstH, int dstFormat);
+SwsContext *getSwsContextFromCmdLine(int srcW, int srcH, int srcFormat, int dstW, int dstH, int dstFormat,
+                                     int sws_flags,int Isws_lum_gblur,int Isws_chr_gblur,int Isws_lum_sharpen,int Isws_chr_sharpen);
 SwsContext *getSwsContext(int srcW, int srcH, int srcFormat, int dstW, int dstH, int dstFormat, int flags,
-			 SwsFilter *srcFilter, SwsFilter *dstFilter);
+                         SwsFilter *srcFilter, SwsFilter *dstFilter);
 
 SwsVector *getGaussianVec(double variance, double quality);
 SwsVector *getConstVec(double c, int length);

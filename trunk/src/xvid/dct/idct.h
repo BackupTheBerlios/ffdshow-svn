@@ -5,7 +5,7 @@
 extern "C" {
 #endif 
 
-void idct_int32_init();
+void idct_int32_init(void);
 
 typedef void (idctFunc)(short * const block);
 typedef idctFunc* idctFuncPtr;	

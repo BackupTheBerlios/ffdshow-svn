@@ -420,9 +420,9 @@ STDMETHODIMP TffDecoder::setOnChangeMsg(HWND wnd,unsigned int msg)
  onChangeWnd=wnd;onChangeMsg=msg;
  return S_OK;
 }
-STDMETHODIMP TffDecoder::setOnInfoMsg(HWND wnd,unsigned int msg)
+STDMETHODIMP TffDecoder::setOnInfoMsg(HWND wnd,unsigned int msg1,unsigned int msg2)
 {
- onInfoWnd=wnd;onInfoMsg=msg;
+ onInfoWnd=wnd;onInfoMsg1=msg1;onInfoMsg2=msg2;
  return S_OK;
 }
 STDMETHODIMP TffDecoder::showCfgDlg(HWND owner)
@@ -474,7 +474,7 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  cfgDlgHnwd=NULL;inPlayer=1;
  movie=NULL;tray=NULL;subs=NULL;sub=NULL;pict=NULL;imgFilters=NULL;
  onChangeWnd=NULL;onChangeMsg=0;
- onInfoWnd=NULL;onInfoMsg=0;
+ onInfoWnd=NULL;onInfoMsg1=onInfoMsg2=0;
  codecId=CODEC_ID_NONE;
  lastTime=clock();
 
@@ -563,6 +563,7 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    AVIdy=hdr->biHeight;
    int cnt=loadAVInameAndPreset();
    if (cnt>1) return VFW_E_TYPE_NOT_ACCEPTED;
+   postproc.init();
    isResize=(presetSettings->isResize!=0)&&postproc.ok;
    outDx=(isResize)?presetSettings->resizeDx:AVIdx;outDy=(isResize)?presetSettings->resizeDy:AVIdy;
    #ifdef FF__MPEG
@@ -826,15 +827,15 @@ void TffDecoder::calcCrop(void)
 // decode frame
 HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
 {
+ //DEBUGS("Transform");
  LONGLONG t1=-1,t2=-1;pIn->GetMediaTime(&t1,&t2);
- if (onInfoMsg)
+ if (onInfoMsg1)
   {
    clock_t t=clock();
    int fps=(t!=lastTime)?1000*CLOCKS_PER_SEC/(t-lastTime):0;
-   PostMessage(onInfoWnd,onInfoMsg,fps,(int)t1);
+   PostMessage(onInfoWnd,onInfoMsg1,fps,(int)t1);
    lastTime=t;
   };
- //DEBUGS("Transform");
  if (!subs)
   {
    if (globalSettings.trayIcon) tray->show();
@@ -857,20 +858,21 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    if (!movie) return S_FALSE;
   };
 
- AM_MEDIA_TYPE * mtOut;
+ AM_MEDIA_TYPE *mtOut;
  pOut->GetMediaType(&mtOut);
- if (mtOut != NULL)
+ if (mtOut!=NULL)
   {
    HRESULT result;
-   result = ChangeColorspace(mtOut->subtype, mtOut->formattype, mtOut->pbFormat);
+   result=ChangeColorspace(mtOut->subtype,mtOut->formattype,mtOut->pbFormat);
    DeleteMediaType(mtOut);
-   if (result != S_OK)
-    return result;
+   if (result!=S_OK) return result;
   }
+  
  if (pIn ->GetPointer((BYTE**)&m_frame.bitstream)!=S_OK) return S_FALSE;
  if (pOut->GetPointer((BYTE**)&m_frame.image    )!=S_OK) return S_FALSE;
- m_frame.outLenght=pOut->GetActualDataLength();//GetSize();
+ m_frame.outLength=pOut->GetActualDataLength();//GetSize();
  m_frame.length   =pIn ->GetActualDataLength();//GetSize();
+ if (onInfoMsg2) PostMessage(onInfoWnd,onInfoMsg2,m_frame.length,0);
 
  #ifdef FF__MPEG
  firstFrame=false;
@@ -905,20 +907,16 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    }
  //else DEBUGS("got image");
 
- #ifdef FF__MPEG
- static int kcount=0;
- sprintf(pomS,"kreslim:%i\n",kcount++);
- OutputDebugString(pomS);
- #endif
- 
  if (!imgFilters) imgFilters=new TimgFilters(this);
+ 
  if (presetSettings.isSubtitles)
   {
    int sframe=1000*(int(t1)-presetSettings.subDelay)/presetSettings.subSpeed;
    sub=(sframe<1)?NULL:subs->getSubtitle(sframe);
   }
  else sub=NULL;  
- if (!pict) pict=new TffPict(max(avpict.linesize[0]*AVIdy,outDx*outDy));
+ 
+ if (!pict) pict=new TffPict(max(avpict.linesize[0]*AVIdy,((outDx/16+2)*16)*outDy));
  /*
  if (resizeChanged)
   {
@@ -975,59 +973,20 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   };
  */ 
  IMAGE destPict;
- /*
- if ((resizeCtx->isResize || presetSettings.resizeAspect==2 || presetSettings.isCropNzoom) && postproc.ok)
+ if (m_frame.stride<outDx)
   {
-   int cropDiffY=avpict.linesize[0]*cropTop+cropLeft,cropDiffUV=avpict.linesize[1]*(cropTop/2)+(cropLeft/2);
-   if (presetSettings.resizeFirst)
-    {
-     resizeCtx->resize(avpict.data[0]+cropDiffY,avpict.data[1]+cropDiffUV,avpict.data[2]+cropDiffUV,
-                       avpict.linesize[0],avpict.linesize[1],avpict.linesize[2],
-                       AVIdy);
-     imgFilters->process(&globalSettings,&presetSettings,
-                         resizeCtx->imgResizeY,resizeCtx->imgResizeU,resizeCtx->imgResizeV,
-                         &destPict.y,&destPict.u,&destPict.v);
-    }
-   else
-    {
-     unsigned char *src[3];
-     imgFilters->process(&globalSettings,&presetSettings,
-                         avpict.data[0]+cropDiffY,avpict.data[1]+cropDiffUV,avpict.data[2]+cropDiffUV,
-                         &src[0],&src[1],&src[2]);
-     resizeCtx->resize(src[0],src[1],src[2],
-                       avpict.linesize[0],avpict.linesize[1],avpict.linesize[2],
-                       AVIdy);
-     destPict.y=resizeCtx->imgResizeY;destPict.u=resizeCtx->imgResizeU;destPict.v=resizeCtx->imgResizeV;
-    }
-   if (m_frame.stride<resizeCtx->FFdx)
-    {
-     char pomS[256];sprintf(pomS,"bola by chyba: stride:%i, AVIdx:%i\n",m_frame.stride,resizeCtx->FFdx);DEBUGS(pomS);
-     return S_FALSE;
-    };
-   image_output(&destPict,
-                resizeCtx->FFdx,resizeCtx->FFdy,resizeCtx->strideY,
-                (unsigned char*)m_frame.image,
-                m_frame.stride,
-                m_frame.colorspace^(presetSettings.flip?XVID_CSP_VFLIP:0));
-  }
- else
- */
-  {
-   if (m_frame.stride<outDx)
-    {
-     char pomS[256];sprintf(pomS,"here would be an error: stride:%i, AVIdx:%i\n",m_frame.stride,AVIdx);DEBUGS(pomS);
-     return S_FALSE;
-    };
-   TffRect rect(avpict.linesize[0],0,0,AVIdx,AVIdy);
-   pict->reset(avpict.data[0],avpict.data[1],avpict.data[2]);
-   imgFilters->process(&globalSettings,&presetSettings,pict,rect);
-   destPict.y=(uint8_t*)pict->getCurY();destPict.u=(uint8_t*)pict->getCurU();destPict.v=(uint8_t*)pict->getCurV();
-   image_output(&destPict,
-                rect.full.dx,rect.full.dy,rect.stride,
-                (unsigned char*)m_frame.image,
-                m_frame.stride,
-                m_frame.colorspace^(presetSettings.flip?XVID_CSP_VFLIP:0));
+   char pomS[256];sprintf(pomS,"here would be an error: stride:%u, AVIdx:%u\n",m_frame.stride,AVIdx);DEBUGS(pomS);
+   return S_FALSE;
   };
+ TffRect rect(avpict.linesize[0],0,0,AVIdx,AVIdy);
+ pict->reset(avpict.data[0],avpict.data[1],avpict.data[2]);
+ imgFilters->process(&globalSettings,&presetSettings,pict,rect);
+ destPict.y=(uint8_t*)pict->getCurY();destPict.u=(uint8_t*)pict->getCurU();destPict.v=(uint8_t*)pict->getCurV();
+ image_output(&destPict,
+              rect.full.dx,rect.full.dy,rect.stride,
+              (unsigned char*)m_frame.image,
+              m_frame.stride,
+              m_frame.colorspace^(presetSettings.flip?XVID_CSP_VFLIP:0));
  return S_OK;
 }
 

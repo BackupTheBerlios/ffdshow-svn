@@ -12,7 +12,7 @@ private:
  int square_table[255*2+1];
  void smooth(const unsigned char *src,unsigned char *dst,unsigned char *Iaccum,unsigned int dx,unsigned int stride,unsigned int dy);
 protected:
- virtual TffRect::Trect* init(TffRect *rect,int full);
+ virtual Trect* init(TffRect *rect,int full);
 public:
  TimgFilterTimesmooth(void);
  virtual void done(void);

@@ -92,7 +92,7 @@ void TpresetsPage::addCol(int w,const char *txt,bool right)
  lvc.fmt=(right)?LVCFMT_RIGHT:LVCFMT_LEFT;
  ListView_InsertColumn(hlv,ncol,&lvc);
  ncol++;
-};
+}
 
 void TpresetsPage::cfg2dlg(void)
 {

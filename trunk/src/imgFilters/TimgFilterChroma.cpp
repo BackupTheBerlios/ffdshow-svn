@@ -29,18 +29,18 @@ TimgFilterChroma::TimgFilterChroma(void)
  __asm emms;
  for (int i=-180,ii=0;i<=180;ii++,i++)
   {
-   double Hue=(i * 3.1415926) / 180.0;
-   hueSin[ii]=int(sin(Hue) * 128);
-   hueCos[ii]=int(cos(Hue) * 128);
+   double Hue=(i*3.1415926)/180.0;
+   hueSin[ii]=int(sin(Hue)*128);
+   hueCos[ii]=int(cos(Hue)*128);
   }
 }
 
 void TimgFilterChroma::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (cfg->hue==TpresetSettings::hueDef && cfg->saturation==TpresetSettings::saturationDef) return;
- TffRect::Trect *r=init(&rect,0);
- const unsigned char *srcU=pict->getCurU()+r->diffUV;unsigned char *dstU=pict->getNextU()+r->diffUV;
- const unsigned char *srcV=pict->getCurV()+r->diffUV;unsigned char *dstV=pict->getNextV()+r->diffUV;
+ Trect *r=init(&rect,0);
+ unsigned char *dstU=pict->getCurNextU(rect.stride,r)+r->diffUV;
+ unsigned char *dstV=pict->getCurNextV(rect.stride,r)+r->diffUV;
  
  int hue=cfg->hue;          //-180 ... 0 ... 180
  int sat = cfg->saturation ;//0 (BW) - 64 (normal) - 128 (too much color);
@@ -50,18 +50,18 @@ void TimgFilterChroma::process(TffPict *pict,TffRect &rect,const TpresetSettings
  int Cos = hueCos[hue+180];// (int) (cos(Hue) * 4096);
  int diffx=stride-dx;
  #else
- __declspec(align(8)) static const __int64 m128=0x0080008000800080;
+ static __declspec(align(8)) const __int64 m128=0x0080008000800080;
  __int64 Sin = hueSin[hue+180];
  __int64 Cos = hueCos[hue+180];
  __int64 Sat = sat;
- __declspec(align(8)) static __int64 Sin64,Cos64,Sat64;
+ static __declspec(align(8)) __int64 Sin64,Cos64,Sat64;
  Sin64=(Sin&0x000000000000ffff)+((Sin<<16)&0x00000000ffff0000)+((Sin<<32)&0x0000ffff00000000)+((Sin<<48)&0xffff000000000000);
  Cos64=(Cos&0x000000000000ffff)+((Cos<<16)&0x00000000ffff0000)+((Cos<<32)&0x0000ffff00000000)+((Cos<<48)&0xffff000000000000);
  Sat64=(Sat&0x000000000000ffff)+((Sat<<16)&0x00000000ffff0000)+((Sat<<32)&0x0000ffff00000000)+((Sat<<48)&0xffff000000000000);
  #endif
- for (const unsigned char *srcUend=srcU+strideUV*dyUV;srcU<srcUend;srcU+=strideUV,srcV+=strideUV,dstU+=strideUV,dstV+=strideUV)
+ for (const unsigned char *dstUend=dstU+strideUV*dyUV;dstU<dstUend;dstU+=strideUV,dstV+=strideUV)
   {
-   const unsigned char *srcUlnEnd=srcU+dxUV;
+   const unsigned char *dstUlnEnd=dstU+dxUV;
    #ifdef CHUESAT
    stride=diffx;
    for (;srcU<srcUlnEnd;srcU++,srcV++,dstU++,dstV++)
@@ -84,9 +84,9 @@ void TimgFilterChroma::process(TffPict *pict,TffRect &rect,const TpresetSettings
    //srcV[0]=5;srcV[1]=6;srcV[2]=7;srcV[3]=8;
    __asm 
     {
-     mov eax,[srcUlnEnd]
-     mov ecx,[srcU]
-     mov esi,[srcV]
+     mov eax,[dstUlnEnd]
+     //mov ecx,[srcU]
+     //mov esi,[srcV]
      mov edx,[dstU]
      mov edi,[dstV]
      movq mm0,[Sat64] // mm0 = Sat64
@@ -94,11 +94,11 @@ void TimgFilterChroma::process(TffPict *pict,TffRect &rect,const TpresetSettings
      movq mm2,[Cos64] // mm2 = Cos64
     lineLoop:
      pxor mm3,mm3
-     punpcklbw mm3,[ecx]  
+     punpcklbw mm3,[edx]  
      psrlw mm3,8     //mm3 = *srcU        
      
      pxor mm4,mm4
-     punpcklbw mm4,[esi]  
+     punpcklbw mm4,[edi]  
      psrlw mm4,8     //mm4 = *srcV        
 
      movq mm7,[m128]
@@ -133,11 +133,11 @@ void TimgFilterChroma::process(TffPict *pict,TffRect &rect,const TpresetSettings
      pxor mm6,mm6
      packuswb mm7,mm6
      movd [edi],mm7
-     add ecx,4
-     add esi,4
+     //add ecx,4
+     //add esi,4
      add edx,4
      add edi,4
-     cmp ecx,eax
+     cmp edx,eax
      jl  lineLoop
     }
    #endif 

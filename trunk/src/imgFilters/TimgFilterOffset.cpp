@@ -25,7 +25,7 @@
 #include "TpresetSettings.h"
 #include "IffDecoder.h"
 
-void TimgFilterOffset::offset(const unsigned char *src,unsigned char *dst,unsigned int dx,unsigned int stride,unsigned int dy,unsigned int offsetX,unsigned int offsetY,unsigned char c)
+void TimgFilterOffset::offset(const unsigned char *src,unsigned char *dst,unsigned int dx,unsigned int stride,unsigned int dy,int offsetX,int offsetY,unsigned char c)
 {
  unsigned int x1,x2;
  if (offsetX>0)
@@ -58,7 +58,7 @@ void TimgFilterOffset::offset(const unsigned char *src,unsigned char *dst,unsign
 void TimgFilterOffset::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (!cfg->offsetY_X && !cfg->offsetY_Y && !cfg->offsetU_X && !cfg->offsetU_Y && !cfg->offsetV_X && !cfg->offsetV_Y) return;
- TffRect::Trect *r=init(&rect,0);
+ Trect *r=init(&rect,0);
  if (cfg->offsetY_X || cfg->offsetY_Y)
   {
    const unsigned char *srcY=pict->getCurY()+r->diffY;unsigned char *dstY=pict->getNextY()+r->diffY;

@@ -31,9 +31,9 @@ TimgFilterSharpen::TimgFilterSharpen(void)
 {
  Ymin=Ymax=NULL;
 }
-TffRect::Trect* TimgFilterSharpen::init(TffRect *rect,int full)
+Trect* TimgFilterSharpen::init(TffRect *rect,int full)
 {
- TffRect::Trect *r=TimgFilter::init(rect,full);
+ Trect *r=TimgFilter::init(rect,full);
  if (!Ymin)
   {
    Ymin=(unsigned char*)xvid_malloc(strideY*dyY*2,MCACHE_LINE);
@@ -158,13 +158,13 @@ void TimgFilterSharpen::xsharpen(const unsigned char *src,unsigned char *dst,con
     }  
   }
  #else    
- __declspec(align(8)) static const __int64 ones=0xffffffffffffffff;
+ static __declspec(align(8)) const __int64 ones=0xffffffffffffffff;
  __int64 mfd_strength=cfg->xsharp_strength; // 0-127
  __int64 mfd_strengthInv=127-mfd_strength;
  __int64 mfd_threshold=cfg->xsharp_threshold; // 0-255
- __declspec(align(8)) static __int64 mtf_strength64;
- __declspec(align(8)) static __int64 mtf_strengthInv64;
- __declspec(align(8)) static __int64 mtf_thresh64;
+ static __declspec(align(8)) __int64 mtf_strength64;
+ static __declspec(align(8)) __int64 mtf_strengthInv64;
+ static __declspec(align(8)) __int64 mtf_thresh64;
  mtf_strength64=mfd_strength +(mfd_strength <<16)+(mfd_strength <<32)+(mfd_strength <<48);
  mtf_strengthInv64=mfd_strengthInv +(mfd_strengthInv <<16)+(mfd_strengthInv <<32)+(mfd_strengthInv <<48);
  mtf_thresh64=mfd_threshold+(mfd_threshold<<16)+(mfd_threshold<<32)+(mfd_threshold<<48);
@@ -318,12 +318,12 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
  for (x=1;x<dx-1;x++) YsumLn[x]=(unsigned int)srcLn[x-1]+(unsigned int)srcLn[x]+(unsigned int)srcLn[x+1];
 
  static const __int64 div9=7281;
- __declspec(align(8)) static const __int64 div9_64=(div9<<48)+(div9<<32)+(div9<<16)+div9;
+ static __declspec(align(8)) const __int64 div9_64=(div9<<48)+(div9<<32)+(div9<<16)+div9;
  __int64 T=cfg->unsharp_threshold;
  __int64 C=cfg->unsharp_strength+C_SCALE;  //strength = 0-250
- __declspec(align(8)) static __int64 T_64;
+ static __declspec(align(8)) __int64 T_64;
  T_64=(T<<48)+(T<<32)+(T<<16)+T;
- __declspec(align(8)) static __int64 C_64;
+ static __declspec(align(8)) __int64 C_64;
  C_64=(C<<48)+(C<<32)+(C<<16)+C;
 
  //for (int i=0;i<20;i++) src[2*stride+i]=i;
@@ -432,7 +432,7 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
 void TimgFilterSharpen::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (cfg->xsharp_strength==cfg->xsharp_strengthDef && cfg->unsharp_strength!=cfg->unsharp_strengthDef) return;
- TffRect::Trect *r=init(&rect,0);
+ Trect *r=init(&rect,0);
  switch (cfg->sharpenMethod)
   {
    case 0:

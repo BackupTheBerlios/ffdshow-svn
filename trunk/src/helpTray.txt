@@ -4,4 +4,3 @@ Tray icon
   after right click on it menu with basic settings is displayed
 Restore dialog position
   remembers position of configuration dialog (doesn't work in graphedt)
-Show motion vectors - try this, it looks nice

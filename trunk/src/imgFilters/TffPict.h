@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stddef.h>
 
+struct Trect;
 struct TffPict
 {
  struct TtempPicture 
@@ -59,6 +60,7 @@ struct TffPict
       if (temp1) memset(temp1,c,size);
       if (temp2) memset(temp2,c,size);
      } 
+    unsigned char *getCurNext(unsigned int stride=0,const Trect *r=NULL,int div=0);
   } *y,*u,*v;
 public:
  TffPict(unsigned int size)
@@ -80,7 +82,7 @@ public:
  void clear(void)
   {
    y->clear();u->clear();v->clear();
-  } 
+  }
  const unsigned char *getCurY(void)
   {
    return y->getTempCur();
@@ -105,6 +107,18 @@ public:
   {
    return v->getTempNext();
   }
+ unsigned char *getCurNextY(int stride=0,const Trect *r=NULL)
+  {
+   return y->getCurNext(stride,r,1);
+  } 
+ unsigned char *getCurNextU(int stride=0,const Trect *r=NULL)
+  {
+   return u->getCurNext(stride,r,2);
+  } 
+ unsigned char *getCurNextV(int stride=0,const Trect *r=NULL)
+  {
+   return v->getCurNext(stride,r,2);
+  } 
 };
 
 #endif

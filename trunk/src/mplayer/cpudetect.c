@@ -35,7 +35,7 @@ static void check_os_katmai_support( void );
 // return TRUE if cpuid supported
 static int has_cpuid()
 {
-	int a, c;
+    int a, c;
 
 // code from libavcodec:
     __asm__ __volatile__ (
@@ -59,7 +59,7 @@ static int has_cpuid()
                           : "cc" 
                           );
 
-	return (a!=c);
+    return (a!=c);
 }
 #endif
 
@@ -67,15 +67,15 @@ static void
 do_cpuid(unsigned int ax, unsigned int *p)
 {
 #if 0
-	__asm __volatile(
-	"cpuid;"
-	: "=a" (p[0]), "=b" (p[1]), "=c" (p[2]), "=d" (p[3])
-	:  "0" (ax)
-	);
+    __asm __volatile(
+    "cpuid;"
+    : "=a" (p[0]), "=b" (p[1]), "=c" (p[2]), "=d" (p[3])
+    :  "0" (ax)
+    );
 #else
 // code from libavcodec:
     __asm __volatile
-	("movl %%ebx, %%esi\n\t"
+    ("movl %%ebx, %%esi\n\t"
          "cpuid\n\t"
          "xchgl %%ebx, %%esi"
          : "=a" (p[0]), "=S" (p[1]), 
@@ -87,96 +87,96 @@ do_cpuid(unsigned int ax, unsigned int *p)
 
 void GetCpuCaps( CpuCaps *caps)
 {
-	unsigned int regs[4];
-	unsigned int regs2[4];
+    unsigned int regs[4];
+    unsigned int regs2[4];
 
-	caps->isX86=1;
+    caps->isX86=1;
 
-	memset(caps, 0, sizeof(*caps));
-	if (!has_cpuid()) {
-	    printf("CPUID not supported!???\n");
-	    return;
-	}
-	do_cpuid(0x00000000, regs); // get _max_ cpuid level and vendor name
-	printf("CPU vendor name: %.4s%.4s%.4s  max cpuid level: %d\n",
-			(char*) (regs+1),(char*) (regs+3),(char*) (regs+2), regs[0]);
-	if (regs[0]>=0x00000001)
-	{
-		char *tmpstr;
+    memset(caps, 0, sizeof(*caps));
+    if (!has_cpuid()) {
+        printf("CPUID not supported!???\n");
+        return;
+    }
+    do_cpuid(0x00000000, regs); // get _max_ cpuid level and vendor name
+    printf("CPU vendor name: %.4s%.4s%.4s  max cpuid level: %d\n",
+            (char*) (regs+1),(char*) (regs+3),(char*) (regs+2), regs[0]);
+    if (regs[0]>=0x00000001)
+    {
+        char *tmpstr;
 
-		do_cpuid(0x00000001, regs2);
+        do_cpuid(0x00000001, regs2);
 
-		caps->cpuType=(regs2[0] >> 8)&0xf;
-		if(caps->cpuType==0xf){
-		    // use extended family (P4, IA64)
-		    caps->cpuType=8+((regs2[0]>>20)&255);
-		}
-		caps->cpuStepping=regs2[0] & 0xf;
-		printf("(Type: %d, Stepping: %d)\n",
-		    caps->cpuType, caps->cpuStepping);
+        caps->cpuType=(regs2[0] >> 8)&0xf;
+        if(caps->cpuType==0xf){
+            // use extended family (P4, IA64)
+            caps->cpuType=8+((regs2[0]>>20)&255);
+        }
+        caps->cpuStepping=regs2[0] & 0xf;
+        printf("(Type: %d, Stepping: %d)\n",
+            caps->cpuType, caps->cpuStepping);
 
-		// general feature flags:
-		caps->hasMMX  = (regs2[3] & (1 << 23 )) >> 23; // 0x0800000
-		caps->hasSSE  = (regs2[3] & (1 << 25 )) >> 25; // 0x2000000
-		caps->hasSSE2 = (regs2[3] & (1 << 26 )) >> 26; // 0x4000000
-		caps->hasMMX2 = caps->hasSSE; // SSE cpus supports mmxext too
-	}
-	do_cpuid(0x80000000, regs);
-	if (regs[0]>=0x80000001) {
-		printf("extended cpuid-level: %d\n",regs[0]&0x7FFFFFFF);
-		do_cpuid(0x80000001, regs2);
-		caps->hasMMX  |= (regs2[3] & (1 << 23 )) >> 23; // 0x0800000
-		caps->hasMMX2 |= (regs2[3] & (1 << 22 )) >> 22; // 0x400000
-		caps->has3DNow    = (regs2[3] & (1 << 31 )) >> 31; //0x80000000
-		caps->has3DNowExt = (regs2[3] & (1 << 30 )) >> 30;
-	}
+        // general feature flags:
+        caps->hasMMX  = (regs2[3] & (1 << 23 )) >> 23; // 0x0800000
+        caps->hasSSE  = (regs2[3] & (1 << 25 )) >> 25; // 0x2000000
+        caps->hasSSE2 = (regs2[3] & (1 << 26 )) >> 26; // 0x4000000
+        caps->hasMMX2 = caps->hasSSE; // SSE cpus supports mmxext too
+    }
+    do_cpuid(0x80000000, regs);
+    if (regs[0]>=0x80000001) {
+        printf("extended cpuid-level: %d\n",regs[0]&0x7FFFFFFF);
+        do_cpuid(0x80000001, regs2);
+        caps->hasMMX  |= (regs2[3] & (1 << 23 )) >> 23; // 0x0800000
+        caps->hasMMX2 |= (regs2[3] & (1 << 22 )) >> 22; // 0x400000
+        caps->has3DNow    = (regs2[3] & (1 << 31 )) >> 31; //0x80000000
+        caps->has3DNowExt = (regs2[3] & (1 << 30 )) >> 30;
+    }
 #if 0
-	printf("cpudetect: MMX=%d MMX2=%d SSE=%d SSE2=%d 3DNow=%d 3DNowExt=%d\n",
-		gCpuCaps.hasMMX,
-		gCpuCaps.hasMMX2,
-		gCpuCaps.hasSSE,
-		gCpuCaps.hasSSE2,
-		gCpuCaps.has3DNow,
-		gCpuCaps.has3DNowExt );
+    printf("cpudetect: MMX=%d MMX2=%d SSE=%d SSE2=%d 3DNow=%d 3DNowExt=%d\n",
+        gCpuCaps.hasMMX,
+        gCpuCaps.hasMMX2,
+        gCpuCaps.hasSSE,
+        gCpuCaps.hasSSE2,
+        gCpuCaps.has3DNow,
+        gCpuCaps.has3DNowExt );
 #endif
 
-		/* FIXME: Does SSE2 need more OS support, too? */
+        /* FIXME: Does SSE2 need more OS support, too? */
 #if defined(__linux__) || defined(__FreeBSD__)
-		if (caps->hasSSE)
-			check_os_katmai_support();
-		if (!caps->hasSSE)
-			caps->hasSSE2 = 0;
+        if (caps->hasSSE)
+            check_os_katmai_support();
+        if (!caps->hasSSE)
+            caps->hasSSE2 = 0;
 #else
-		caps->hasSSE=0;
-		caps->hasSSE2 = 0;
+        caps->hasSSE=0;
+        caps->hasSSE2 = 0;
 #endif
-//		caps->has3DNow=1;
-//		caps->hasMMX2 = 0;
-//		caps->hasMMX = 0;
+//      caps->has3DNow=1;
+//      caps->hasMMX2 = 0;
+//      caps->hasMMX = 0;
 
 #ifndef HAVE_MMX
-	if(caps->hasMMX) printf("MMX supported but disabled\n");
-	caps->hasMMX=0;
+    if(caps->hasMMX) printf("MMX supported but disabled\n");
+    caps->hasMMX=0;
 #endif
 #ifndef HAVE_MMX2
-	if(caps->hasMMX2) printf("MMX2 supported but disabled\n");
-	caps->hasMMX2=0;
+    if(caps->hasMMX2) printf("MMX2 supported but disabled\n");
+    caps->hasMMX2=0;
 #endif
 #ifndef HAVE_SSE
-	if(caps->hasSSE) printf("SSE supported but disabled\n");
-	caps->hasSSE=0;
+    if(caps->hasSSE) printf("SSE supported but disabled\n");
+    caps->hasSSE=0;
 #endif
 #ifndef HAVE_SSE2
-	if(caps->hasSSE2) printf("SSE2 supported but disabled\n");
-	caps->hasSSE2=0;
+    if(caps->hasSSE2) printf("SSE2 supported but disabled\n");
+    caps->hasSSE2=0;
 #endif
 #ifndef HAVE_3DNOW
-	if(caps->has3DNow) printf("3DNow supported but disabled\n");
-	caps->has3DNow=0;
+    if(caps->has3DNow) printf("3DNow supported but disabled\n");
+    caps->has3DNow=0;
 #endif
 #ifndef HAVE_3DNOWEX
-	if(caps->has3DNowExt) printf("3DNowExt supported but disabled\n");
-	caps->has3DNowExt=0;
+    if(caps->has3DNowExt) printf("3DNowExt supported but disabled\n");
+    caps->has3DNowExt=0;
 #endif
 }
 
@@ -262,9 +262,9 @@ static void check_os_katmai_support( void )
       __asm __volatile ("xorps %xmm0, %xmm0");
 
       if ( gCpuCaps.hasSSE ) {
-	 printf( "yes.\n" );
+     printf( "yes.\n" );
       } else {
-	 printf( "no!\n" );
+     printf( "no!\n" );
       }
    }
 
@@ -287,9 +287,9 @@ static void check_os_katmai_support( void )
 //      test_os_katmai_exception_support();
 
       if ( gCpuCaps.hasSSE ) {
-	 printf( "yes.\n" );
+     printf( "yes.\n" );
       } else {
-	 printf( "no!\n" );
+     printf( "no!\n" );
       }
    }
 
@@ -324,14 +324,14 @@ static void check_os_katmai_support( void )
 
 void GetCpuCaps( CpuCaps *caps)
 {
-	caps->cpuType=0;
-	caps->cpuStepping=0;
-	caps->hasMMX=0;
-	caps->hasMMX2=0;
-	caps->has3DNow=0;
-	caps->has3DNowExt=0;
-	caps->hasSSE=0;
-	caps->hasSSE2=0;
-	caps->isX86=0;
+    caps->cpuType=0;
+    caps->cpuStepping=0;
+    caps->hasMMX=0;
+    caps->hasMMX2=0;
+    caps->has3DNow=0;
+    caps->has3DNowExt=0;
+    caps->hasSSE=0;
+    caps->hasSSE2=0;
+    caps->isX86=0;
 }
 #endif /* !ARCH_X86 */

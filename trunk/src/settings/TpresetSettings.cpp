@@ -32,13 +32,15 @@ const int TpresetSettings::orderBlurDef=4;
 const int TpresetSettings::orderSharpenDef=5;
 const int TpresetSettings::orderNoiseDef=6;
 const int TpresetSettings::orderSubtitlesDef=7;
-const int TpresetSettings::max_order=7;
+const int TpresetSettings::orderResizeDef=8;
+const int TpresetSettings::orderShowMVdef=9;
+const int TpresetSettings::max_order=9;
 
 TpresetSettings::TpresetSettings(const char *IpresetName) 
 {
  strcpy(presetName,IpresetName);
  autoLoadedFromFile=0;
-};
+}
 void TpresetSettings::loadDefault(void)
 {
  strcpy(presetName,FFPRESET_DEFAULT);

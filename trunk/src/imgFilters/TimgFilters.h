@@ -15,7 +15,7 @@ class TimgFilters
 {
 private:
  std::vector<TimgFilter*> filters;
- TimgFilter *postproc,*noise,*luma,*chroma,*blur,*sharpen,*subtitles,*offset,*timesmooth,*showMV;
+ TimgFilter *postproc,*noise,*luma,*chroma,*blur,*sharpen,*subtitles,*offset,*timesmooth,*showMV,*resize;
 public:
  TimgFilters(IffDecoder *Ideci);
  ~TimgFilters();

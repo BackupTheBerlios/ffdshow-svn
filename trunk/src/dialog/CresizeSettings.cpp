@@ -34,6 +34,7 @@ void TresizeSettingsPage::init(void)
  SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("EXPERIMENTAL"));
  SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("POINT"));
  SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("AREA"));
+ SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("NONE"));
  SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_GBLUR_LUM    ,TBM_SETRANGE,TRUE,MAKELPARAM(0,200));
  SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_GBLUR_LUM    ,TBM_SETLINESIZE,0,5);
  SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_GBLUR_LUM    ,TBM_SETPAGESIZE,0,20); 
@@ -69,7 +70,6 @@ void TresizeSettingsPage::resizeSettings2dlg(void)
  SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_SHARPEN_LUM  ,TBM_SETPOS,TRUE,cfgGet(IDFF_resizeSharpenLum  ));
  SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_SHARPEN_CHROM,TBM_SETPOS,TRUE,cfgGet(IDFF_resizeSharpenChrom));
 
- setCheck(IDC_CHB_RESIZE_FIRST,cfgGet(IDFF_resizeFirst));
  SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_SETCURSEL,cfgGet(IDFF_resizeMethod),0);
 }
 
@@ -109,9 +109,6 @@ HRESULT TresizeSettingsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
      {
       case IDC_CHB_RESIZE:
        cfgSet(IDFF_isResize,getCheck(IDC_CHB_RESIZE));
-       return TRUE; 
-      case IDC_CHB_RESIZE_FIRST:
-       cfgSet(IDFF_resizeFirst,getCheck(IDC_CHB_RESIZE_FIRST));
        return TRUE; 
       case IDC_CBX_RESIZE_METHOD:
        if (HIWORD(wParam)==CBN_SELCHANGE)

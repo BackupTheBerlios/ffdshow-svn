@@ -61,9 +61,9 @@ TimgFilterTimesmooth::TimgFilterTimesmooth(void)
  framecount=0;
  accumY=accumU=accumV=NULL;
 }
-TffRect::Trect* TimgFilterTimesmooth::init(TffRect *rect,int full)
+Trect* TimgFilterTimesmooth::init(TffRect *rect,int full)
 {
- TffRect::Trect *r=TimgFilter::init(rect,full);
+ Trect *r=TimgFilter::init(rect,full);
  if (!accumY)
   {
    accumY=(unsigned char*)xvid_malloc(dxY *dyY *KERNEL,MCACHE_LINE);memset(accumY,  0,dxY *dyY *KERNEL);
@@ -81,7 +81,7 @@ void TimgFilterTimesmooth::done(void)
 void TimgFilterTimesmooth::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (!cfg->tempSmooth) return;
- TffRect::Trect *r=init(&rect,0);
+ Trect *r=init(&rect,0);
  const unsigned char *srcY=pict->getCurY()+r->diffY ;unsigned char *dstY=pict->getNextY()+r->diffY ;
  const unsigned char *srcU=pict->getCurU()+r->diffUV;unsigned char *dstU=pict->getNextU()+r->diffUV;
  const unsigned char *srcV=pict->getCurV()+r->diffUV;unsigned char *dstV=pict->getNextV()+r->diffUV;
@@ -152,4 +152,4 @@ void TimgFilterTimesmooth::smooth(const unsigned char *src,unsigned char *dst,un
     } while(--x);
    src+=stride-dx;dst+=stride-dx;
   } while(--y);
-};
+}

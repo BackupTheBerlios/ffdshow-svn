@@ -32,18 +32,10 @@ void TimgFilterSubtitles::process(TffPict *pict,TffRect &rect,const TpresetSetti
  deci->getSubtitle(&sub); 
  if (sub)
   { 
-   TffRect::Trect *r=init(&rect,0);
-   const unsigned char *srcY=pict->getCurY()+r->diffY ;unsigned char *dstY=pict->getNextY()+r->diffY ;
-   const unsigned char *srcU=pict->getCurU()+r->diffUV;unsigned char *dstU=pict->getNextU()+r->diffUV;
-   const unsigned char *srcV=pict->getCurV()+r->diffUV;unsigned char *dstV=pict->getNextV()+r->diffUV;
-   unsigned int y;
-   for (y=0;y<dyY;y++)
-    memcpy(dstY+y*strideY,srcY+y*strideY,dxY);
-   for (y=0;y<dyUV;y++)
-    {
-     memcpy(dstU+y*strideUV,srcU+y*strideUV,dxUV);
-     memcpy(dstV+y*strideUV,srcV+y*strideUV,dxUV);
-    }; 
+   Trect *r=init(&rect,0);
+   unsigned char *dstY=pict->getCurNextY(rect.stride,r)+r->diffY ;
+   unsigned char *dstU=pict->getCurNextU(rect.stride,r)+r->diffUV;
+   unsigned char *dstV=pict->getCurNextV(rect.stride,r)+r->diffUV;
    font.print(dstY,dstU,dstV,dxY,strideY,dyY,sub,cfg->subPosX,cfg->subPosY);
   }; 
 }                                  

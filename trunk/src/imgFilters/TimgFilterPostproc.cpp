@@ -59,7 +59,7 @@ void TimgFilterPostproc::process(TffPict *pict,TffRect &rect,const TpresetSettin
  int ppmode=postproc->getPPmode(cfg,currentq);
  if (ppmode)
   {
-   TffRect::Trect *r=init(&rect,0);
+   Trect *r=init(&rect,0);
    const unsigned char *tempPict1[3]={pict->getCurY() +r->diffY,pict->getCurU() +r->diffUV,pict->getCurV() +r->diffUV};
    unsigned char       *tempPict2[3]={pict->getNextY()+r->diffY,pict->getNextU()+r->diffUV,pict->getNextV()+r->diffUV};
    if (cfg->deblockStrength!=TpresetSettings::deblockStrengthDef/* || afterResize*/)

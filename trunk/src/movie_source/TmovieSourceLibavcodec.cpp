@@ -98,7 +98,7 @@ int TmovieSourceLibavcodec::getFrame(const TglobalSettings *global,const Tpreset
     case 3:
     default:set_ff_idct((void*)1);break;
    };
- avctx->showMV=global->showMV;
+ avctx->showMV=global->isShowMV;
  for (unsigned int i=0;i<quantDx*quantDy;i++)
   quant[i]=10;
  return avcodec_decode_video(avctx,avpict,&got_picture,src,srcLen);

@@ -9,7 +9,7 @@ SRCS=   \
 	mplayer.c cpudetect.c mem_align.c
 OBJS=$(SRCS:.c=.o)
 
-CFLAGS  = -w -Dsnprintf=_snprintf -mno-cygwin $(OPTFLAGS) $(MLIB_INC) -I. -I.. -Wall $(EXTRA_INC)
+CFLAGS  = -Wall -Dsnprintf=_snprintf -mno-cygwin $(OPTFLAGS) $(MLIB_INC) -I. -I.. -Wall $(EXTRA_INC)
 
 .SUFFIXES: .c .o
 

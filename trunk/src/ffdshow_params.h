@@ -39,7 +39,7 @@ _PARAM_OP(IDFF_mp42               ,globalSettings.,mp42               ,0,0,NULL)
 _PARAM_OP(IDFF_mp41               ,globalSettings.,mp41               ,0,0,NULL)
 _PARAM_OP(IDFF_h263               ,globalSettings.,h263               ,0,0,NULL)
 _PARAM_OP(IDFF_rawv               ,globalSettings.,rawv               ,0,0,NULL)
-_PARAM_OP(IDFF_showMV             ,globalSettings.,showMV             ,0,0,NULL)
+_PARAM_OP(IDFF_isShowMV           ,globalSettings.,isShowMV           ,0,0,NULL)
  
 //preset settings
 _PARAM_OP(IDFF_autoLoadedFromFile ,presetSettings->,autoLoadedFromFile ,0,0,NULL)
@@ -93,11 +93,11 @@ _PARAM_OP(IDFF_noiseStrengthChroma,presetSettings->,noiseStrengthChroma,0,127,NU
 _PARAM_OP(IDFF_idct               ,presetSettings->,idct               ,0,4,NULL)
                                                 
 _PARAM_OP(IDFF_isResize           ,presetSettings->,isResize           ,0,0,NULL)
-_PARAM_OP(IDFF_resizeDx           ,presetSettings->,resizeDx           ,8,2048,NULL)
-_PARAM_OP(IDFF_resizeDy           ,presetSettings->,resizeDy           ,8,2048,NULL)
+_PARAM_OP(IDFF_orderResize        ,presetSettings->,orderResize        ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)
+_PARAM_OP(IDFF_resizeDx           ,presetSettings->,resizeDx           ,16,2048,NULL)
+_PARAM_OP(IDFF_resizeDy           ,presetSettings->,resizeDy           ,16,2048,NULL)
 _PARAM_OP(IDFF_resizeAspect       ,presetSettings->,resizeAspect       ,0,0,&TffDecoder::onResizeChanged)
-_PARAM_OP(IDFF_resizeFirst        ,presetSettings->,resizeFirst        ,0,0,&TffDecoder::onResizeChanged)
-_PARAM_OP(IDFF_resizeMethod       ,presetSettings->,resizeMethod       ,0,5,&TffDecoder::onResizeChanged)
+_PARAM_OP(IDFF_resizeMethod       ,presetSettings->,resizeMethod       ,0,6,&TffDecoder::onResizeChanged)
 _PARAM_OP(IDFF_aspectRatio        ,presetSettings->,aspectRatio        ,0,0,&TffDecoder::onResizeChanged)
 _PARAM_OP(IDFF_resizeGblurLum     ,presetSettings->,resizeGblurLum     ,0,200,&TffDecoder::onResizeChanged)
 _PARAM_OP(IDFF_resizeGblurChrom   ,presetSettings->,resizeGblurChrom   ,0,200,&TffDecoder::onResizeChanged)
@@ -138,3 +138,5 @@ _PARAM_OP(IDFF_offsetU_X          ,presetSettings->,offsetU_X          ,-32,32,N
 _PARAM_OP(IDFF_offsetU_Y          ,presetSettings->,offsetU_Y          ,-32,32,NULL);
 _PARAM_OP(IDFF_offsetV_X          ,presetSettings->,offsetV_X          ,-32,32,NULL);
 _PARAM_OP(IDFF_offsetV_Y          ,presetSettings->,offsetV_Y          ,-32,32,NULL);
+
+_PARAM_OP(IDFF_orderShowMV        ,presetSettings->,orderShowMV        ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)

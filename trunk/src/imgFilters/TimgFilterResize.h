@@ -8,8 +8,9 @@ class TimgFilterResize :public TimgFilter
 {
 private:
  SwsContext *swsc;
-protected:
- virtual TffRect::Trect* init(TffRect *rect,int full);
+ TffRect newRect;
+ int resizeMethodOld,resizeGblurLumOld,resizeGblurChromOld,resizeSharpenLumOld,resizeSharpenChromOld;
+ Trect calcNewClip(const TpresetSettings *cfg,const Trect &oldClip,const Trect &newFull);
 public:
  TimgFilterResize(void);
  virtual void done(void);

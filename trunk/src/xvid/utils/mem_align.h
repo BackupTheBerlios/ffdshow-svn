@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "inttypes.h"
+#include <stddef.h>
 
 #define MCACHE_LINE 64
 

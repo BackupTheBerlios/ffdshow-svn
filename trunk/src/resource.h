@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by ffdshow.rc
 //
 #define VERSION_RES_MINOR_VER           0
@@ -29,6 +29,7 @@
 #define IDD_DLGMISC                     136
 #define IDD_OFFSET                      137
 #define IDD_RESIZESETTINGS              138
+#define IDD_SHOWMV                      139
 #define IDB_ARROWS                      145
 #define IDB_ARROWS_MASK_UD              146
 #define IDB_ARROWS_MASK_U               147
@@ -106,6 +107,7 @@
 #define IDC_LBL_NOW_FPS                 1057
 #define IDC_LBL_NOW_DECODERFPS          1058
 #define IDC_LBL_NOW_FRAME               1059
+#define IDC_LBL_NOW_BITRATE             1060
 #define IDC_RBT_SHARPEN_XSHARPEN        1063
 #define IDC_RBT_SHARPEN_UNSHARPMASK     1064
 #define IDC_CHB_SHARPEN                 1065
@@ -126,7 +128,6 @@
 #define IDC_ED_RESIZEDY                 1085
 #define IDC_ED_CROP_TOP                 1086
 #define IDC_ED_CROP_LEFT                1087
-#define IDC_CHB_RESIZE_FIRST            1088
 #define IDC_ED_CROP_RIGHT               1089
 #define IDC_CBX_RESIZE_METHOD           1090
 #define IDC_ED_CROP_BOTTOM              1092
@@ -198,11 +199,11 @@
 #define IDC_STATIC                      -1
 
 // Next default values for new objects
-//
+// 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        154
+#define _APS_NEXT_RESOURCE_VALUE        157
 #define _APS_NEXT_COMMAND_VALUE         40009
 #define _APS_NEXT_CONTROL_VALUE         1160
 #define _APS_NEXT_SYMED_VALUE           101

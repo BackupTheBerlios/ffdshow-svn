@@ -21,6 +21,7 @@
 #include <string.h>
 #include <stdio.h>
 #pragma hdrstop
+#include "IffDecoder.h"
 #include "CresizeAspect.h"
 #include "resource.h"
 #include "IffDecoder.h"

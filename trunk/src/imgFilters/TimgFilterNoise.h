@@ -17,7 +17,7 @@ private:
  void noiseAvihY  (const unsigned char *src ,unsigned char *dst ,const TpresetSettings *cfg); 
  void noiseAvihUV (const unsigned char *srcU,unsigned char *dstU,const unsigned char *srcV,unsigned char *dstV,const TpresetSettings *cfg);
 protected:
- virtual TffRect::Trect* init(TffRect *rect,int full);
+ virtual Trect* init(TffRect *rect,int full);
 public:
  TimgFilterNoise(void);
  virtual void done(void);

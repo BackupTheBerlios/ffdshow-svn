@@ -62,12 +62,12 @@ static volatile uint64_t __attribute__((aligned(8))) g6Dither;
 static volatile uint64_t __attribute__((aligned(8))) r5Dither;
 
 static uint64_t __attribute__((aligned(8))) dither4[2]={
-	0x0103010301030103LL,
-	0x0200020002000200LL,};
+        0x0103010301030103LL,
+        0x0200020002000200LL,};
 
 static uint64_t __attribute__((aligned(8))) dither8[2]={
-	0x0602060206020602LL,
-	0x0004000400040004LL,};
+        0x0602060206020602LL,
+        0x0004000400040004LL,};
 #endif
 #endif
 
@@ -129,34 +129,34 @@ static uint64_t __attribute__((aligned(8))) dither8[2]={
 void rgb24to32(const uint8_t *src,uint8_t *dst,unsigned src_size)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		rgb24to32_MMX2(src, dst, src_size);
-	else if(gCpuCaps.has3DNow)
-		rgb24to32_3DNow(src, dst, src_size);
-	else if(gCpuCaps.hasMMX)
-		rgb24to32_MMX(src, dst, src_size);
-	else
-		rgb24to32_C(src, dst, src_size);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                rgb24to32_MMX2(src, dst, src_size);
+        else if(gCpuCaps.has3DNow)
+                rgb24to32_3DNow(src, dst, src_size);
+        else if(gCpuCaps.hasMMX)
+                rgb24to32_MMX(src, dst, src_size);
+        else
+                rgb24to32_C(src, dst, src_size);
 #else
-		rgb24to32_C(src, dst, src_size);
+                rgb24to32_C(src, dst, src_size);
 #endif
 }
 
 void rgb32to24(const uint8_t *src,uint8_t *dst,unsigned src_size)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		rgb32to24_MMX2(src, dst, src_size);
-	else if(gCpuCaps.has3DNow)
-		rgb32to24_3DNow(src, dst, src_size);
-	else if(gCpuCaps.hasMMX)
-		rgb32to24_MMX(src, dst, src_size);
-	else
-		rgb32to24_C(src, dst, src_size);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                rgb32to24_MMX2(src, dst, src_size);
+        else if(gCpuCaps.has3DNow)
+                rgb32to24_3DNow(src, dst, src_size);
+        else if(gCpuCaps.hasMMX)
+                rgb32to24_MMX(src, dst, src_size);
+        else
+                rgb32to24_C(src, dst, src_size);
 #else
-		rgb32to24_C(src, dst, src_size);
+                rgb32to24_C(src, dst, src_size);
 #endif
 }
 
@@ -169,17 +169,17 @@ void rgb32to24(const uint8_t *src,uint8_t *dst,unsigned src_size)
 void rgb15to16(const uint8_t *src,uint8_t *dst,unsigned src_size)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		rgb15to16_MMX2(src, dst, src_size);
-	else if(gCpuCaps.has3DNow)
-		rgb15to16_3DNow(src, dst, src_size);
-	else if(gCpuCaps.hasMMX)
-		rgb15to16_MMX(src, dst, src_size);
-	else
-		rgb15to16_C(src, dst, src_size);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                rgb15to16_MMX2(src, dst, src_size);
+        else if(gCpuCaps.has3DNow)
+                rgb15to16_3DNow(src, dst, src_size);
+        else if(gCpuCaps.hasMMX)
+                rgb15to16_MMX(src, dst, src_size);
+        else
+                rgb15to16_C(src, dst, src_size);
 #else
-		rgb15to16_C(src, dst, src_size);
+                rgb15to16_C(src, dst, src_size);
 #endif
 }
 
@@ -188,9 +188,9 @@ void rgb15to16(const uint8_t *src,uint8_t *dst,unsigned src_size)
  */
 void palette8torgb32(const uint8_t *src, uint8_t *dst, unsigned num_pixels, const uint8_t *palette)
 {
-	unsigned i;
-	for(i=0; i<num_pixels; i++)
-		((unsigned *)dst)[i] = ((unsigned *)palette)[ src[i] ];
+        unsigned i;
+        for(i=0; i<num_pixels; i++)
+                ((unsigned *)dst)[i] = ((unsigned *)palette)[ src[i] ];
 }
 
 /**
@@ -198,87 +198,87 @@ void palette8torgb32(const uint8_t *src, uint8_t *dst, unsigned num_pixels, cons
  */
 void palette8torgb24(const uint8_t *src, uint8_t *dst, unsigned num_pixels, const uint8_t *palette)
 {
-	unsigned i;
+        unsigned i;
 /*
-	writes 1 byte o much and might cause alignment issues on some architectures?
-	for(i=0; i<num_pixels; i++)
-		((unsigned *)(&dst[i*3])) = ((unsigned *)palette)[ src[i] ];
+        writes 1 byte o much and might cause alignment issues on some architectures?
+        for(i=0; i<num_pixels; i++)
+                ((unsigned *)(&dst[i*3])) = ((unsigned *)palette)[ src[i] ];
 */
-	for(i=0; i<num_pixels; i++)
-	{
-		//FIXME slow?
-		dst[0]= palette[ src[i]*4+0 ];
-		dst[1]= palette[ src[i]*4+1 ];
-		dst[2]= palette[ src[i]*4+2 ];
-		dst+= 3;
-	}
+        for(i=0; i<num_pixels; i++)
+        {
+                //FIXME slow?
+                dst[0]= palette[ src[i]*4+0 ];
+                dst[1]= palette[ src[i]*4+1 ];
+                dst[2]= palette[ src[i]*4+2 ];
+                dst+= 3;
+        }
 }
 
 void rgb32to16(const uint8_t *src, uint8_t *dst, unsigned src_size)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		rgb32to16_MMX2(src, dst, src_size);
-	else if(gCpuCaps.has3DNow)
-		rgb32to16_3DNow(src, dst, src_size);
-	else if(gCpuCaps.hasMMX)
-		rgb32to16_MMX(src, dst, src_size);
-	else
-		rgb32to16_C(src, dst, src_size);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                rgb32to16_MMX2(src, dst, src_size);
+        else if(gCpuCaps.has3DNow)
+                rgb32to16_3DNow(src, dst, src_size);
+        else if(gCpuCaps.hasMMX)
+                rgb32to16_MMX(src, dst, src_size);
+        else
+                rgb32to16_C(src, dst, src_size);
 #else
-		rgb32to16_C(src, dst, src_size);
+                rgb32to16_C(src, dst, src_size);
 #endif
 }
 
 void rgb32to15(const uint8_t *src, uint8_t *dst, unsigned src_size)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		rgb32to15_MMX2(src, dst, src_size);
-	else if(gCpuCaps.has3DNow)
-		rgb32to15_3DNow(src, dst, src_size);
-	else if(gCpuCaps.hasMMX)
-		rgb32to15_MMX(src, dst, src_size);
-	else
-		rgb32to15_C(src, dst, src_size);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                rgb32to15_MMX2(src, dst, src_size);
+        else if(gCpuCaps.has3DNow)
+                rgb32to15_3DNow(src, dst, src_size);
+        else if(gCpuCaps.hasMMX)
+                rgb32to15_MMX(src, dst, src_size);
+        else
+                rgb32to15_C(src, dst, src_size);
 #else
-		rgb32to15_C(src, dst, src_size);
+                rgb32to15_C(src, dst, src_size);
 #endif
 }
 
 void rgb24to16(const uint8_t *src, uint8_t *dst, unsigned src_size)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		rgb24to16_MMX2(src, dst, src_size);
-	else if(gCpuCaps.has3DNow)
-		rgb24to16_3DNow(src, dst, src_size);
-	else if(gCpuCaps.hasMMX)
-		rgb24to16_MMX(src, dst, src_size);
-	else
-		rgb24to16_C(src, dst, src_size);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                rgb24to16_MMX2(src, dst, src_size);
+        else if(gCpuCaps.has3DNow)
+                rgb24to16_3DNow(src, dst, src_size);
+        else if(gCpuCaps.hasMMX)
+                rgb24to16_MMX(src, dst, src_size);
+        else
+                rgb24to16_C(src, dst, src_size);
 #else
-		rgb24to16_C(src, dst, src_size);
+                rgb24to16_C(src, dst, src_size);
 #endif
 }
 
 void rgb24to15(const uint8_t *src, uint8_t *dst, unsigned src_size)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		rgb24to15_MMX2(src, dst, src_size);
-	else if(gCpuCaps.has3DNow)
-		rgb24to15_3DNow(src, dst, src_size);
-	else if(gCpuCaps.hasMMX)
-		rgb24to15_MMX(src, dst, src_size);
-	else
-		rgb24to15_C(src, dst, src_size);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                rgb24to15_MMX2(src, dst, src_size);
+        else if(gCpuCaps.has3DNow)
+                rgb24to15_3DNow(src, dst, src_size);
+        else if(gCpuCaps.hasMMX)
+                rgb24to15_MMX(src, dst, src_size);
+        else
+                rgb24to15_C(src, dst, src_size);
 #else
-		rgb24to15_C(src, dst, src_size);
+                rgb24to15_C(src, dst, src_size);
 #endif
 }
 
@@ -287,9 +287,9 @@ void rgb24to15(const uint8_t *src, uint8_t *dst, unsigned src_size)
  */
 void palette8torgb16(const uint8_t *src, uint8_t *dst, unsigned num_pixels, const uint8_t *palette)
 {
-	unsigned i;
-	for(i=0; i<num_pixels; i++)
-		((uint16_t *)dst)[i] = ((uint16_t *)palette)[ src[i] ];
+        unsigned i;
+        for(i=0; i<num_pixels; i++)
+                ((uint16_t *)dst)[i] = ((uint16_t *)palette)[ src[i] ];
 }
 
 /**
@@ -297,42 +297,42 @@ void palette8torgb16(const uint8_t *src, uint8_t *dst, unsigned num_pixels, cons
  */
 void palette8torgb15(const uint8_t *src, uint8_t *dst, unsigned num_pixels, const uint8_t *palette)
 {
-	unsigned i;
-	for(i=0; i<num_pixels; i++)
-		((uint16_t *)dst)[i] = ((uint16_t *)palette)[ src[i] ];
+        unsigned i;
+        for(i=0; i<num_pixels; i++)
+                ((uint16_t *)dst)[i] = ((uint16_t *)palette)[ src[i] ];
 }
 
 void rgb32tobgr32(const uint8_t *src, uint8_t *dst, unsigned int src_size)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		rgb32tobgr32_MMX2(src, dst, src_size);
-	else if(gCpuCaps.has3DNow)
-		rgb32tobgr32_3DNow(src, dst, src_size);
-	else if(gCpuCaps.hasMMX)
-		rgb32tobgr32_MMX(src, dst, src_size);
-	else
-		rgb32tobgr32_C(src, dst, src_size);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                rgb32tobgr32_MMX2(src, dst, src_size);
+        else if(gCpuCaps.has3DNow)
+                rgb32tobgr32_3DNow(src, dst, src_size);
+        else if(gCpuCaps.hasMMX)
+                rgb32tobgr32_MMX(src, dst, src_size);
+        else
+                rgb32tobgr32_C(src, dst, src_size);
 #else
-		rgb32tobgr32_C(src, dst, src_size);
+                rgb32tobgr32_C(src, dst, src_size);
 #endif
 }
 
 void rgb24tobgr24(const uint8_t *src, uint8_t *dst, unsigned int src_size)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		rgb24tobgr24_MMX2(src, dst, src_size);
-	else if(gCpuCaps.has3DNow)
-		rgb24tobgr24_3DNow(src, dst, src_size);
-	else if(gCpuCaps.hasMMX)
-		rgb24tobgr24_MMX(src, dst, src_size);
-	else
-		rgb24tobgr24_C(src, dst, src_size);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                rgb24tobgr24_MMX2(src, dst, src_size);
+        else if(gCpuCaps.has3DNow)
+                rgb24tobgr24_3DNow(src, dst, src_size);
+        else if(gCpuCaps.hasMMX)
+                rgb24tobgr24_MMX(src, dst, src_size);
+        else
+                rgb24tobgr24_C(src, dst, src_size);
 #else
-		rgb24tobgr24_C(src, dst, src_size);
+                rgb24tobgr24_C(src, dst, src_size);
 #endif
 }
 
@@ -342,21 +342,21 @@ void rgb24tobgr24(const uint8_t *src, uint8_t *dst, unsigned int src_size)
  * problem for anyone then tell me, and ill fix it)
  */
 void yv12toyuy2(const uint8_t *ysrc, const uint8_t *usrc, const uint8_t *vsrc, uint8_t *dst,
-	unsigned int width, unsigned int height,
-	unsigned int lumStride, unsigned int chromStride, unsigned int dstStride)
+        unsigned int width, unsigned int height,
+        unsigned int lumStride, unsigned int chromStride, unsigned int dstStride)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		yv12toyuy2_MMX2(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
-	else if(gCpuCaps.has3DNow)
-		yv12toyuy2_3DNow(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
-	else if(gCpuCaps.hasMMX)
-		yv12toyuy2_MMX(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
-	else
-		yv12toyuy2_C(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                yv12toyuy2_MMX2(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
+        else if(gCpuCaps.has3DNow)
+                yv12toyuy2_3DNow(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
+        else if(gCpuCaps.hasMMX)
+                yv12toyuy2_MMX(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
+        else
+                yv12toyuy2_C(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
 #else
-		yv12toyuy2_C(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
+                yv12toyuy2_C(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
 #endif
 }
 
@@ -365,21 +365,21 @@ void yv12toyuy2(const uint8_t *ysrc, const uint8_t *usrc, const uint8_t *vsrc, u
  * width should be a multiple of 16
  */
 void yuv422ptoyuy2(const uint8_t *ysrc, const uint8_t *usrc, const uint8_t *vsrc, uint8_t *dst,
-	unsigned int width, unsigned int height,
-	unsigned int lumStride, unsigned int chromStride, unsigned int dstStride)
+        unsigned int width, unsigned int height,
+        unsigned int lumStride, unsigned int chromStride, unsigned int dstStride)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		yuv422ptoyuy2_MMX2(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
-	else if(gCpuCaps.has3DNow)
-		yuv422ptoyuy2_3DNow(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
-	else if(gCpuCaps.hasMMX)
-		yuv422ptoyuy2_MMX(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
-	else
-		yuv422ptoyuy2_C(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                yuv422ptoyuy2_MMX2(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
+        else if(gCpuCaps.has3DNow)
+                yuv422ptoyuy2_3DNow(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
+        else if(gCpuCaps.hasMMX)
+                yuv422ptoyuy2_MMX(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
+        else
+                yuv422ptoyuy2_C(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
 #else
-		yuv422ptoyuy2_C(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
+                yuv422ptoyuy2_C(ysrc, usrc, vsrc, dst, width, height, lumStride, chromStride, dstStride);
 #endif
 }
 
@@ -389,21 +389,21 @@ void yuv422ptoyuy2(const uint8_t *ysrc, const uint8_t *usrc, const uint8_t *vsrc
  * problem for anyone then tell me, and ill fix it)
  */
 void yuy2toyv12(const uint8_t *src, uint8_t *ydst, uint8_t *udst, uint8_t *vdst,
-	unsigned int width, unsigned int height,
-	unsigned int lumStride, unsigned int chromStride, unsigned int srcStride)
+        unsigned int width, unsigned int height,
+        unsigned int lumStride, unsigned int chromStride, unsigned int srcStride)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		yuy2toyv12_MMX2(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
-	else if(gCpuCaps.has3DNow)
-		yuy2toyv12_3DNow(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
-	else if(gCpuCaps.hasMMX)
-		yuy2toyv12_MMX(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
-	else
-		yuy2toyv12_C(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                yuy2toyv12_MMX2(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+        else if(gCpuCaps.has3DNow)
+                yuy2toyv12_3DNow(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+        else if(gCpuCaps.hasMMX)
+                yuy2toyv12_MMX(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+        else
+                yuy2toyv12_C(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
 #else
-		yuy2toyv12_C(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+                yuy2toyv12_C(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
 #endif
 }
 
@@ -414,21 +414,21 @@ void yuy2toyv12(const uint8_t *src, uint8_t *ydst, uint8_t *udst, uint8_t *vdst,
  * chrominance data is only taken from every secound line others are ignored FIXME write HQ version
  */
 void uyvytoyv12(const uint8_t *src, uint8_t *ydst, uint8_t *udst, uint8_t *vdst,
-	unsigned int width, unsigned int height,
-	unsigned int lumStride, unsigned int chromStride, unsigned int srcStride)
+        unsigned int width, unsigned int height,
+        unsigned int lumStride, unsigned int chromStride, unsigned int srcStride)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		uyvytoyv12_MMX2(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
-	else if(gCpuCaps.has3DNow)
-		uyvytoyv12_3DNow(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
-	else if(gCpuCaps.hasMMX)
-		uyvytoyv12_MMX(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
-	else
-		uyvytoyv12_C(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                uyvytoyv12_MMX2(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+        else if(gCpuCaps.has3DNow)
+                uyvytoyv12_3DNow(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+        else if(gCpuCaps.hasMMX)
+                uyvytoyv12_MMX(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+        else
+                uyvytoyv12_C(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
 #else
-		uyvytoyv12_C(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+                uyvytoyv12_C(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
 #endif
 }
 
@@ -439,38 +439,38 @@ void uyvytoyv12(const uint8_t *src, uint8_t *ydst, uint8_t *udst, uint8_t *vdst,
  * chrominance data is only taken from every secound line others are ignored FIXME write HQ version
  */
 void rgb24toyv12(const uint8_t *src, uint8_t *ydst, uint8_t *udst, uint8_t *vdst,
-	unsigned int width, unsigned int height,
-	unsigned int lumStride, unsigned int chromStride, unsigned int srcStride)
+        unsigned int width, unsigned int height,
+        unsigned int lumStride, unsigned int chromStride, unsigned int srcStride)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		rgb24toyv12_MMX2(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
-	else if(gCpuCaps.has3DNow)
-		rgb24toyv12_3DNow(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
-	else if(gCpuCaps.hasMMX)
-		rgb24toyv12_MMX(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
-	else
-		rgb24toyv12_C(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                rgb24toyv12_MMX2(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+        else if(gCpuCaps.has3DNow)
+                rgb24toyv12_3DNow(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+        else if(gCpuCaps.hasMMX)
+                rgb24toyv12_MMX(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+        else
+                rgb24toyv12_C(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
 #else
-		rgb24toyv12_C(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
+                rgb24toyv12_C(src, ydst, udst, vdst, width,  height, lumStride, chromStride, srcStride);
 #endif
 }
 
 void interleaveBytes(uint8_t *src1, uint8_t *src2, uint8_t *dst,
-		     int width, int height, int src1Stride, int src2Stride, int dstStride)
+                     int width, int height, int src1Stride, int src2Stride, int dstStride)
 {
 #ifdef CAN_COMPILE_X86_ASM
-	// ordered per speed fasterst first
-	if(gCpuCaps.hasMMX2)
-		interleaveBytes_MMX2(src1, src2, dst, width, height, src1Stride, src2Stride, dstStride);
-	else if(gCpuCaps.has3DNow)
-		interleaveBytes_3DNow(src1, src2, dst, width, height, src1Stride, src2Stride, dstStride);
-	else if(gCpuCaps.hasMMX)
-		interleaveBytes_MMX(src1, src2, dst, width, height, src1Stride, src2Stride, dstStride);
-	else
-		interleaveBytes_C(src1, src2, dst, width, height, src1Stride, src2Stride, dstStride);
+        // ordered per speed fasterst first
+        if(gCpuCaps.hasMMX2)
+                interleaveBytes_MMX2(src1, src2, dst, width, height, src1Stride, src2Stride, dstStride);
+        else if(gCpuCaps.has3DNow)
+                interleaveBytes_3DNow(src1, src2, dst, width, height, src1Stride, src2Stride, dstStride);
+        else if(gCpuCaps.hasMMX)
+                interleaveBytes_MMX(src1, src2, dst, width, height, src1Stride, src2Stride, dstStride);
+        else
+                interleaveBytes_C(src1, src2, dst, width, height, src1Stride, src2Stride, dstStride);
 #else
-		interleaveBytes_C(src1, src2, dst, width, height, src1Stride, src2Stride, dstStride);
+                interleaveBytes_C(src1, src2, dst, width, height, src1Stride, src2Stride, dstStride);
 #endif
 }

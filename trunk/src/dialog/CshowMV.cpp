@@ -21,41 +21,51 @@
 #include <string.h>
 #include <stdio.h>
 #pragma hdrstop
-#include "Ctray.h"
-#include "resource.h"
 #include "IffDecoder.h"
+#include "TffdshowPage.h"
+#include "CshowMV.h"
+#include "resource.h"
 
-void TdlgMiscPage::init(void)
+void TshowMVpage::init(void)
 {
  cfg2dlg();
 }
 
-void TdlgMiscPage::cfg2dlg(void)
+void TshowMVpage::cfg2dlg(void)
 {
- setCheck(IDC_CHB_TRAYICON,cfgGet(IDFF_trayIcon));
- setCheck(IDC_CHB_DLG_RESTOREPOS,cfgGet(IDFF_dlgRestorePos));
+ showMV2dlg();
 }
 
-HRESULT TdlgMiscPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
+void TshowMVpage::showMV2dlg(void)
+{
+}
+
+HRESULT TshowMVpage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
    case WM_COMMAND:
     switch (LOWORD(wParam))  
      {
-      case IDC_CHB_TRAYICON:
-       cfgSet(IDFF_trayIcon,getCheck(IDC_CHB_TRAYICON));
-       return TRUE;
-      case IDC_CHB_DLG_RESTOREPOS:
-       cfgSet(IDFF_dlgRestorePos,getCheck(IDC_CHB_DLG_RESTOREPOS));
+      case IDC_CHB_SHOWMV:
+       cfgSet(IDFF_isShowMV,getCheck(IDC_CHB_SHOWMV));
+       parent->drawInter();
        return TRUE;
      }
-    break; 
-  }    
+    break;
+  }
  return FALSE;
 }
 
-TdlgMiscPage::TdlgMiscPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
+void TshowMVpage::interDlg(void)
 {
- createWindow(IDD_DLGMISC);
+ setCheck(IDC_CHB_SHOWMV,cfgGet(IDFF_isShowMV));
+}
+void TshowMVpage::getTip(char *tipS,int len)
+{
+ sprintf(tipS,"%sshow motion vectors",cfgGet(IDFF_isShowMV)?"":"do not ");
+}
+TshowMVpage::TshowMVpage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
+{
+ createWindow(IDD_SHOWMV);
 }

@@ -40,7 +40,7 @@ static int CALLBACK EnumFamCallBackCharsets(CONST LOGFONT *lpelf,CONST TEXTMETRI
     sl->push_back(lpelf->lfCharSet);
   }; 
  return 1;
-};
+}
 
 static int CALLBACK EnumFamCallBackFonts(CONST LOGFONT *lpelf,CONST TEXTMETRIC *lpntm,DWORD FontType,LPARAM lParam)
 {
@@ -52,7 +52,7 @@ static int CALLBACK EnumFamCallBackFonts(CONST LOGFONT *lpelf,CONST TEXTMETRIC *
     sl->push_back(lpelf->lfFaceName);
   }; 
  return 1;
-};
+}
 
 void TfontPage::init(void)
 {
@@ -286,7 +286,6 @@ HRESULT TfontPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
      }
     else 
      break; 
-   break; 
   }   
  return FALSE;
 }

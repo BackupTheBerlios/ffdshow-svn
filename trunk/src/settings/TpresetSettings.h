@@ -64,11 +64,13 @@ public:
  
  int idct;
  
- int isResize;
+ int isResize,orderResize;
+ static const int orderResizeDef;
  int resizeDx,resizeDy;
- int resizeAspect,resizeFirst;
+ int resizeAspect;
  int aspectRatio;
  int resizeMethod;
+ static const int resizeMethodNone;
  int resizeGblurLum,resizeGblurChrom;
  int resizeSharpenLum,resizeSharpenChrom;
  int isCropNzoom;
@@ -88,6 +90,9 @@ public:
  int isOffset,orderOffset;
  static const int orderOffsetDef;
  int offsetY_X,offsetY_Y,offsetU_X,offsetU_Y,offsetV_X,offsetV_Y;
+ 
+ int orderShowMV;
+ static const int orderShowMVdef;
 
  static const int min_order,max_order;
 };

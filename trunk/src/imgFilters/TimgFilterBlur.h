@@ -10,7 +10,7 @@ private:
  int oldStrength;
  unsigned char *tempPict;
 protected:
- virtual TffRect::Trect* init(TffRect *rect,int full);
+ virtual Trect* init(TffRect *rect,int full);
 public:
  TimgFilterBlur(void);
  virtual void done(void);

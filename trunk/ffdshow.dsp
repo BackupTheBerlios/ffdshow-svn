@@ -43,8 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /G6 /MT /GX /O2 /Ob2 /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /I "src\movie_source" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FD /c
-# SUBTRACT CPP /YX
+# ADD CPP /nologo /G6 /MT /W1 /GX /O2 /Ob2 /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /I "src\movie_source" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0xc09 /d "NDEBUG"
@@ -675,6 +674,14 @@ SOURCE=.\src\imgFilters\noise_template_mmx.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\imgFilters\TffPict.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\TffRect.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\imgFilters\TimgFilter.h
 # End Source File
 # Begin Source File
@@ -733,6 +740,14 @@ SOURCE=.\src\imgFilters\TimgFilterPostproc.cpp
 # Begin Source File
 
 SOURCE=.\src\imgFilters\TimgFilterPostproc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\TimgFilterResize.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\TimgFilterResize.h
 # End Source File
 # Begin Source File
 
@@ -813,10 +828,6 @@ SOURCE=.\src\imgFilters\Tpostproc.h
 # Begin Source File
 
 SOURCE=.\src\imgFilters\TresizeCtx.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\imgFilters\TtempPicture.h
 # End Source File
 # End Group
 # Begin Group "dialog"

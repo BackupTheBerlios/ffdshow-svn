@@ -210,6 +210,9 @@
 					RelativePath="src\helpSharpen.txt">
 				</File>
 				<File
+					RelativePath="src\helpShowMV.txt">
+				</File>
+				<File
 					RelativePath="src\helpSubtitles.txt">
 				</File>
 				<File
@@ -585,7 +588,19 @@
 			Name="imgFilters"
 			Filter="">
 			<File
+				RelativePath="src\imgFilters\TffPict.cpp">
+			</File>
+			<File
 				RelativePath="src\imgFilters\TffPict.h">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TffRect.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AssemblerOutput="4"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\imgFilters\TffRect.h">
@@ -601,6 +616,12 @@
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterChroma.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AssemblerOutput="4"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterChroma.h">
@@ -915,6 +936,12 @@
 			</File>
 			<File
 				RelativePath="src\dialog\Csharpen.h">
+			</File>
+			<File
+				RelativePath="src\dialog\CshowMV.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\CshowMV.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Csubtitles.cpp">

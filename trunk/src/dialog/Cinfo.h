@@ -5,6 +5,8 @@
 
 class TinfoPage :public TconfPage
 {
+private:
+ int frameCnt,bytesCnt;
 public:
  TinfoPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);

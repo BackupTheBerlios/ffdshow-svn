@@ -14,12 +14,12 @@ protected:
  unsigned int dxY,strideY,dyY;
  unsigned int dxUV,strideUV,dyUV;
  IffDecoder *deci;
- virtual TffRect::Trect* init(TffRect *rect,int full)
+ virtual Trect* init(TffRect *rect,int full)
   {
    if (*rect!=oldRect || oldFull!=full)
     {
-     this->done();
-     TffRect::Trect *r=(full==1)?&rect->full:&rect->clip;
+     done();
+     Trect *r=(full==1)?&rect->full:&rect->clip;
      dxY=r->dx;dyY=r->dy;strideY=rect->stride;
      dxUV=dxY/2;dyUV=dyY/2;strideUV=strideY/2;
      r->calcDiff(rect->stride);

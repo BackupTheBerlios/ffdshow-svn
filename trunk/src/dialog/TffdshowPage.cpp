@@ -45,6 +45,7 @@
 #include "Cmisc.h"
 #include "Cabout.h"
 #include "Coffset.h"
+#include "CshowMV.h"
 
 using namespace std;
 
@@ -185,8 +186,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  addTI(tvis,new TsharpenPage(this,m_hwnd,deci));  
  addTI(tvis,new TblurPage(this,m_hwnd,deci));     
  addTI(tvis,new ToffsetPage(this,m_hwnd,deci));     
- //addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
- //addTI(tvis,new TfontPage(this,m_hwnd,deci));
+ addTI(tvis,new TshowMVpage(this,m_hwnd,deci));     
  tvis.item.cChildren=1;
  HTREEITEM htiSubtitles=addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
  tvis.item.cChildren=0;
@@ -194,7 +194,6 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  addTI(tvis,new TfontPage(this,m_hwnd,deci));
  TreeView_Expand(htv,htiSubtitles,TVE_EXPAND);
  tvis.hParent=htiPresets;
- sortOrder();
  tvis.item.cChildren=1;
  HTREEITEM htiResizeAspect=addTI(tvis,new TresizeAspectPage(this,m_hwnd,deci));
  tvis.item.cChildren=0;
@@ -204,6 +203,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  tvis.hParent=htiPresets;
  addTI(tvis,new TcropPage(this,m_hwnd,deci));
  addTI(tvis,new TmiscPage(this,m_hwnd,deci));
+ sortOrder();
  tvis.hParent=NULL;
  addTI(tvis,new TaboutPage(this,m_hwnd,deci));
  pages.push_back(pagePresets);
@@ -334,7 +334,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           if (tvcd->nmcd.dwDrawStage==CDDS_ITEMPREPAINT)
            {
             TconfPage *page=(TconfPage*)tvcd->nmcd.lItemlParam;
-            if (page->getInter()==-1) return FALSE;
+            if (page->getInter()==-1 && page->getOrder()==-1) return FALSE;
             SetWindowLong(m_hwnd,DWL_MSGRESULT,CDRF_NOTIFYPOSTPAINT);
             return TRUE;
            }
@@ -345,7 +345,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             rr.left-=24;
             //DEBUGS2("tv rect",rr.left,rr.top);
             TconfPage *page=(TconfPage*)tvcd->nmcd.lItemlParam;
-            ImageList_Draw(hil,page->getInter()?ilChecked:ilClear,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+8+rr.left,tvcd->nmcd.rc.top+(rcDy-16)/2,ILD_TRANSPARENT);
+            if (page->getInter()!=-1) ImageList_Draw(hil,page->getInter()?ilChecked:ilClear,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+8+rr.left,tvcd->nmcd.rc.top+(rcDy-16)/2,ILD_TRANSPARENT);
             if (page->getOrder()!=-1 && (tvcd->nmcd.uItemState&CDIS_SELECTED)) 
              {
               int img;
