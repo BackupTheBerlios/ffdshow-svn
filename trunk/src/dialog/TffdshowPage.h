@@ -37,6 +37,7 @@ class TffdshowPage : public CBasePropertyPage
   ~TffdshowPage();
   void applySettings(void);
   void drawInter(void);
+  void showHelp(const char *flnm);
   
   STDMETHODIMP Activate(HWND hwndParent,LPCRECT prect, BOOL fModal);
   STDMETHODIMP Deactivate(void);

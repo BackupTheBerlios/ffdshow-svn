@@ -10,7 +10,7 @@ Caption "ffdshow"
 ;InstType Typical
 Icon "..\..\src\ffdshow.ico"
 
-!define FFDATE "20020603"
+!define FFDATE "20020605"
 
 ; The file to write
 OutFile "ffdshow-${FFDATE}.exe"
@@ -67,6 +67,11 @@ Section "Documentation (optional)"
   SectionIn 1
   File "..\..\copying.txt"
   File "..\..\src\readme.txt"
+  SetOutPath $INSTDIR\help
+  File "..\help\ff.css"
+  File "..\help\ffmpeg-button.gif"
+  File "..\help\index.html"
+  File "..\help\presets.html"
 SectionEnd
 
 ; uninstall stuff

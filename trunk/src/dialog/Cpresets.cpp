@@ -273,6 +273,9 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
          }; 
         return TRUE;
        }
+      case IDC_BT_PRESET_HELP:
+       parent->showHelp("presets.html");
+       return TRUE;
      }
     break;
    case WM_NOTIFY:

@@ -23,6 +23,7 @@
 #include <stdio.h>
 #pragma hdrstop
 #include <assert.h>
+#include "Tconfig.h"
 #include "TffdshowPage.h"
 #include "resource.h"
 #include "IffDecoder.h"
@@ -413,6 +414,15 @@ void TffdshowPage::drawInter(void)
 {
  InvalidateRect(htv,NULL,FALSE);
 }
+void TffdshowPage::showHelp(const char *flnm)
+{
+ char fullflnm[260];
+ _makepath(fullflnm,NULL,config.pth,"help\\",NULL);
+ strcat(fullflnm,flnm);
+ if (GetFileAttributes(fullflnm)!=INVALID_FILE_ATTRIBUTES)
+  ShellExecute(m_hwnd,"open",fullflnm,NULL,".",SW_SHOWNORMAL);
+}
+
 
 #ifdef DEBUG
 static int refcnt=0;
