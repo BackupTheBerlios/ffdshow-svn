@@ -9,7 +9,6 @@ struct TglobalSettings
  int TglobalSettings::codecSupported(DWORD fourCC,char *AVIfourCC);
  char defaultPreset[260];
  int showMV;
- TglobalSettings(void) {load();};
  void load(void),save(void);
 };
 

@@ -103,20 +103,22 @@ int TmovieSourceLibavcodec::getFrame(const TglobalSettings *global,const Tpreset
  return avcodec_decode_video(avctx,avpict,&got_picture,src,srcLen);
 }
 
-void TmovieSourceLibavcodec::getVersion(char **vers)
+bool TmovieSourceLibavcodec::getVersion(char **vers)
 {
- if (!vers) return;
  static char ver[1024];
  ver[0]='\0';
- *vers=ver;
- void (*av_getVersion)(char **version,char **build,char **datetime);
+ if (vers) *vers=ver;
  Tdll *dl=new Tdll(AVCODEC_PATH);
+ void (*av_getVersion)(char **version,char **build,char **datetime);
  dl->loadFunction((void**)&av_getVersion,"getVersion");
+ bool res=false;
  if (av_getVersion) 
   {
+   res=true;
    char *version,*build,*datetime;
    av_getVersion(&version,&build,&datetime);
    sprintf(ver,"libavcodec: version %s, build %s (%s)",version,build,datetime);
   };
  delete dl;  
+ return res;
 }

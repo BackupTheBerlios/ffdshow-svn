@@ -435,8 +435,10 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  lastTime=clock();
  firstFrame=firstTransform=true;
  
- presets.init();
  config.init();
+ globalSettings.load();
+ dialogSettings.load();
+ presets.init();
  loadPreset(globalSettings.defaultPreset);
  
  tray=new TtrayIcon(this,g_hInst);

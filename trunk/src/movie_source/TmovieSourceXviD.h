@@ -12,14 +12,13 @@ private:
  int (*xvid_decore)(void * handle, int opt, void * param1, void * param2);
  void *dechandle;
  int dx,dy,stride;
- unsigned char *yuvY,*yuvU,*yuvV;
 public:
  TmovieSourceXviD(void);
  virtual ~TmovieSourceXviD() {done();};
  virtual bool init(int codecId,int AVIdx,int AVIdy);
  virtual void done(void);
  virtual int  getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen, AVPicture *avpict,int &got_picture);
- static  void getVersion(char **vers);
+ static  bool getVersion(char **vers);
 };
 
 #endif

@@ -43,3 +43,4 @@ dscaler
 add black borders
 compilation instructions
 better noise
+less memory

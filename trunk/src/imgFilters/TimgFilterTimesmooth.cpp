@@ -64,9 +64,7 @@ TimgFilterTimesmooth::TimgFilterTimesmooth(void)
 void TimgFilterTimesmooth::init(int Idx,int Istride,int Idy)
 {
  TimgFilter::init(Idx,Istride,Idy);
- accumY=(unsigned char*)xvid_malloc(dxY *dyY *KERNEL,MCACHE_LINE);memset(accumY,  0,dxY *dyY *KERNEL);
- accumU=(unsigned char*)xvid_malloc(dxUV*dyUV*KERNEL,MCACHE_LINE);memset(accumU,128,dxUV*dyUV*KERNEL);
- accumV=(unsigned char*)xvid_malloc(dxUV*dyUV*KERNEL,MCACHE_LINE);memset(accumV,128,dxUV*dyUV*KERNEL);
+ accumY=accumU=accumV=NULL;
 }
 void TimgFilterTimesmooth::done(void)
 {
@@ -78,6 +76,12 @@ void TimgFilterTimesmooth::process(const unsigned char *srcY,const unsigned char
                                    unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,
                                    const TpresetSettings *cfg)
 {
+ if (!accumY)
+  {
+   accumY=(unsigned char*)xvid_malloc(dxY *dyY *KERNEL,MCACHE_LINE);memset(accumY,  0,dxY *dyY *KERNEL);
+   accumU=(unsigned char*)xvid_malloc(dxUV*dyUV*KERNEL,MCACHE_LINE);memset(accumU,128,dxUV*dyUV*KERNEL);
+   accumV=(unsigned char*)xvid_malloc(dxUV*dyUV*KERNEL,MCACHE_LINE);memset(accumV,128,dxUV*dyUV*KERNEL);
+  }
  if (cfg->tempSmooth!=oldStrength)
   {
    oldStrength=cfg->tempSmooth;

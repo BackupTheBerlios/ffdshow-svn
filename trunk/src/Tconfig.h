@@ -7,6 +7,7 @@ public:
  void init(void);
  char pth[1024];
  static int cpu_flags;
+ bool isLibavcodec,isXviD;
 };
 
 extern Tconfig config;

@@ -22,9 +22,34 @@
 #include "TmovieSourceUncompressed.h"
 #include "TmovieSourceXvid.h"
 
+#define TESTSOURCE(Tsource)            \
+ movie=new Tsource;                    \
+ if (movie->init(codecId,AVIdx,AVIdy)) \
+  return movie;                        \
+ else                                  \
+  delete movie; 
+ 
 TmovieSource* TmovieSource::initSource(int codecId,int AVIdx,int AVIdy)
 {
  TmovieSource *movie;
+ bool xvidfirst=false; 
+ if (codecId>=CODEC_ID_XVID_MASK)
+  {
+   xvidfirst=true;
+   codecId-=CODEC_ID_XVID_MASK;
+  }; 
+ if (xvidfirst)
+  {
+   TESTSOURCE(TmovieSourceXviD)
+   TESTSOURCE(TmovieSourceLibavcodec)
+  } 
+ else
+  {
+   TESTSOURCE(TmovieSourceLibavcodec)
+   TESTSOURCE(TmovieSourceXviD)
+  };
+ TESTSOURCE(TmovieSourceUncompressed)
+/*  
  movie=new TmovieSourceLibavcodec;
  if (movie->init(codecId,AVIdx,AVIdy))
   return movie;
@@ -40,5 +65,6 @@ TmovieSource* TmovieSource::initSource(int codecId,int AVIdx,int AVIdy)
   return movie;
  else
   delete movie; 
+*/  
  return NULL; 
 }

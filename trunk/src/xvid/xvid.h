@@ -21,7 +21,7 @@ extern "C" {
 #define XVID_CPU_3DNOWEXT	0x00000020
 #define XVID_CPU_TSC		0x00000040
 #define XVID_CPU_FORCE		0x80000000
-
+/*
 // colorspaces
 #define XVID_CSP_NULL 	0
 #define XVID_CSP_YV12	1
@@ -34,6 +34,19 @@ extern "C" {
 #define XVID_CSP_RGB24 	12
 #define XVID_CSP_RGB32 	13  
 #define XVID_CSP_USER	100
+*/
+// colorspaces
+#define XVID_CSP_RGB24 	0
+#define XVID_CSP_YV12	1
+#define XVID_CSP_YUY2	2
+#define XVID_CSP_UYVY	3
+#define XVID_CSP_I420	4
+#define XVID_CSP_RGB555	10
+#define XVID_CSP_RGB565	11
+#define XVID_CSP_USER	12
+#define XVID_CSP_YVYU	1002
+#define XVID_CSP_RGB32 	1000
+#define XVID_CSP_NULL 	9999
 
 #define XVID_CSP_VFLIP	0x80000000	// flip mask
 

@@ -21,7 +21,6 @@
 #include "Tdll.h"
 #include "TmovieSourceXviD.h"
 #include "xvid\xvid.h"
-#include "xvid\utils\mem_align.h"
 
 #define XVID_PATH "C:\\mydocuments\\ffdshow\\src\\ffmpeg\\xvid\\xvid.dll"
 
@@ -49,9 +48,6 @@ bool TmovieSourceXviD::init(int codecId,int AVIdx,int AVIdy)
    if (xerr!=XVID_ERR_OK) return false;
    dx=AVIdx;dy=AVIdy;
    stride=(dx/16+4)*16;
-   yuvY=(unsigned char*)xvid_malloc(stride*dy,MCACHE_LINE);
-   yuvU=(unsigned char*)xvid_malloc((stride/2)*(dy/2),MCACHE_LINE);
-   yuvV=(unsigned char*)xvid_malloc((stride/2)*(dy/2),MCACHE_LINE);
    dechandle=xparam.handle;
    return true;
   }
@@ -60,9 +56,6 @@ bool TmovieSourceXviD::init(int codecId,int AVIdx,int AVIdy)
 }
 void TmovieSourceXviD::done(void)
 {
- if (yuvY) xvid_free(yuvY);yuvY=NULL;
- if (yuvU) xvid_free(yuvU);yuvU=NULL;
- if (yuvV) xvid_free(yuvV);yuvV=NULL;
  if (dll)
   {
    if (dechandle) xvid_decore(dechandle,XVID_DEC_DESTROY,NULL,NULL);dechandle=NULL;
@@ -72,7 +65,6 @@ void TmovieSourceXviD::done(void)
  xvid_init=NULL;
  xvid_decore=NULL;
 }
-
 int TmovieSourceXviD::getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen, AVPicture *avpict,int &got_picture)
 {
  XVID_DEC_FRAME xframe;
@@ -88,7 +80,7 @@ int TmovieSourceXviD::getFrame(const TglobalSettings *global,const TpresetSettin
   } xpict;
  xframe.image=&xpict;
  xframe.stride=stride;
- xframe.colorspace=XVID_CSP_USER;// _RGB24;		// XVID_CSP_USER is fastest (no memcopy involved)
+ xframe.colorspace=XVID_CSP_USER;
  int xerr=xvid_decore(dechandle,XVID_DEC_DECODE,&xframe,NULL);
  if (xerr==XVID_ERR_OK)
   {
@@ -103,4 +95,25 @@ int TmovieSourceXviD::getFrame(const TglobalSettings *global,const TpresetSettin
    avpict->data[0]=avpict->data[1]=avpict->data[2]=NULL;
    return 0;
   } 
+}
+
+bool TmovieSourceXviD::getVersion(char **vers)
+{
+ static char ver[1024];
+ ver[0]='\0';
+ if (vers) *vers=ver;
+ Tdll *dl=new Tdll(XVID_PATH);
+ int (*xvid_init)(void *handle, int opt, void *param1, void *param2);
+ dl->loadFunction((void**)&xvid_init,"xvid_init");
+ bool res=false;
+ if (xvid_init) 
+  {
+   res=true;
+   XVID_INIT_PARAM xinit;
+   xinit.cpu_flags=0;
+   xvid_init(NULL,0,&xinit,NULL);
+   sprintf(ver,"xvid: API version %i.%i",xinit.api_version>>16,xinit.api_version&0xffff);
+  };
+ delete dl;  
+ return res;
 }

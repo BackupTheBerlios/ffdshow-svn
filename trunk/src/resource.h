@@ -54,10 +54,13 @@
 #define IDC_CHB_RAWV                    1015
 #define IDC_CHB_FLIP                    1016
 #define IDC_BT_PRESET_NEW               1016
+#define IDC_CHB_DIVX_XVID               1016
 #define IDC_LBL_LUMGAIN                 1017
 #define IDC_BT_PRESET_NEW_MENU          1017
+#define IDC_CHB_XVID_XVID               1017
 #define IDC_LBL_LUMOFFSET               1018
 #define IDC_BT_PRESET_RENAME_MENU       1018
+#define IDC_CHB_DX50_XVID               1018
 #define IDC_LBL_XSHARPENSTRENGTH        1019
 #define IDC_LBL_RESIZE_SHARPEN_LUM      1019
 #define IDC_TBR_XSHARPENSTRENGTH        1020

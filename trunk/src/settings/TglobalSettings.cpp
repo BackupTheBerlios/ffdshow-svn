@@ -18,6 +18,7 @@
 
 #include <windows.h>
 #pragma hdrstop
+#include "Tconfig.h"
 #include "TglobalSettings.h"
 #include "TpresetSettings.h"
 #include "reg.h"
@@ -28,14 +29,14 @@ void TglobalSettings::load(void)
 {
  HKEY hKey;DWORD size;
  RegOpenKeyEx(HKEY_LOCAL_MACHINE,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,KEY_READ,&hKey);
- REG_GET_N("xvid",xvid,1);
- REG_GET_N("div3",div3,0);
- REG_GET_N("divx",divx,0);
- REG_GET_N("dx50",dx50,0);
- REG_GET_N("mp43",mp43,0);
- REG_GET_N("mp42",mp42,0);
- REG_GET_N("mp41",mp41,0);
- REG_GET_N("h263",h263,0);
+ REG_GET_N("xvid",xvid,1);if (!config.isXviD && xvid==2) xvid=1;if (!config.isLibavcodec && config.isXviD && xvid) xvid=2;if (!config.isLibavcodec && !config.isXviD) xvid=0;
+ REG_GET_N("div3",div3,0);if (!config.isLibavcodec) div3=0;
+ REG_GET_N("divx",divx,0);if (!config.isXviD && divx==2) divx=1;if (!config.isLibavcodec && config.isXviD && divx) divx=2;if (!config.isLibavcodec && !config.isXviD) divx=0;
+ REG_GET_N("dx50",dx50,0);if (!config.isXviD && dx50==2) dx50=1;if (!config.isLibavcodec && config.isXviD && dx50) dx50=2;if (!config.isLibavcodec && !config.isXviD) dx50=0;
+ REG_GET_N("mp43",mp43,0);if (!config.isLibavcodec) mp43=0;
+ REG_GET_N("mp42",mp42,0);if (!config.isLibavcodec) mp42=0;
+ REG_GET_N("mp41",mp41,0);if (!config.isLibavcodec) mp41=0;
+ REG_GET_N("h263",h263,0);if (!config.isLibavcodec) h263=0;
  REG_GET_N("rawv",rawv,0);
  RegCloseKey(hKey);
  RegOpenKeyEx(HKEY_CURRENT_USER, FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,KEY_READ,&hKey);
@@ -74,14 +75,14 @@ void TglobalSettings::save(void)
   }; 
 }
 
-#define FF_FOURCC(fourCC1,fourCC2,testVar,codecId)  \
- case FOURCC_##fourCC1:                             \
- case FOURCC_##fourCC2:                             \
-  if (testVar)                                      \
-   {                                                \
-    if (AVIfourCC) strcpy(AVIfourCC,#fourCC1);      \
-    return codecId;                                 \
-   }                                                \
+#define FF_FOURCC(fourCC1,fourCC2,testVar,codecId)          \
+ case FOURCC_##fourCC1:                                     \
+ case FOURCC_##fourCC2:                                     \
+  if (testVar)                                              \
+   {                                                        \
+    if (AVIfourCC) strcpy(AVIfourCC,#fourCC1);              \
+    return (testVar==2)?codecId+CODEC_ID_XVID_MASK:codecId; \
+   }                                                        \
   else return CODEC_ID_NONE;
   
 int TglobalSettings::codecSupported(DWORD fourCC,char *AVIfourCC)

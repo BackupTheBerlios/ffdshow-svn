@@ -21,6 +21,8 @@
 #include "xvid\xvid.h"
 #include <stdlib.h>
 #include "settings\reg.h"
+#include "movie_source\TmovieSourceLibavcodec.h"
+#include "movie_source\TmovieSourceXviD.h"
 
 Tconfig config;
 
@@ -40,6 +42,9 @@ void Tconfig::init(void)
  xip.cpu_flags=0;
  xvid_init(NULL, 0, &xip, NULL);
  cpu_flags=xip.cpu_flags;
+ 
+ isLibavcodec=TmovieSourceLibavcodec::getVersion(NULL);
+ isXviD=TmovieSourceXviD::getVersion(NULL);
 }
 /*
 vector<string> *Tconfig::presets=NULL;

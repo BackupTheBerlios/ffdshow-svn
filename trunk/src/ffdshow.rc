@@ -63,12 +63,18 @@ BEGIN
     GROUPBOX        "Supported codecs",-1,0,0,253,104
     CONTROL         "XVID",IDC_CHB_XVID,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,10,33,10
+    CONTROL         "Decode using XviD",IDC_CHB_XVID_XVID,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,50,10,72,10
     CONTROL         "DIVX 3",IDC_CHB_DIV3,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,20,39,10
     CONTROL         "DIVX 4",IDC_CHB_DIVX,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,30,39,10
+    CONTROL         "Decode using XviD",IDC_CHB_DIVX_XVID,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,50,30,72,10
     CONTROL         "DIVX 5",IDC_CHB_DX50,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,40,37,10
+    CONTROL         "Decode using XviD",IDC_CHB_DX50_XVID,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,50,40,72,10
     CONTROL         "MP43",IDC_CHB_MP43,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,50,35,10
     CONTROL         "MP42",IDC_CHB_MP42,"Button",BS_AUTOCHECKBOX | 
@@ -82,7 +88,7 @@ BEGIN
     EDITTEXT        IDC_ED_HELP,0,104,253,60,ES_MULTILINE | ES_READONLY | 
                     NOT WS_BORDER | WS_VSCROLL
     CONTROL         "Raw video",IDC_CHB_RAWV,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,128,10,59,10
+                    WS_TABSTOP,179,10,59,10
 END
 
 IDD_PICTPROP DIALOGEX 0, 0, 254, 165
