@@ -99,7 +99,7 @@ SOURCE=.\authors.txt
 # End Source File
 # Begin Source File
 
-SOURCE=.\gpl.txt
+SOURCE=.\copying.txt
 # End Source File
 # Begin Source File
 
@@ -162,10 +162,6 @@ SOURCE=.\src\idct\xIdctref.c
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\src\credits.h
-# End Source File
 # Begin Source File
 
 SOURCE=.\src\ffdebug.h
@@ -606,23 +602,11 @@ SOURCE=.\src\imgFilters\noise_avih_template.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\noise_avih_template.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\imgFilters\noise_template.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\noise_template.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\imgFilters\noise_template_mmx.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\noise_template_mmx.h
 # End Source File
 # Begin Source File
 
