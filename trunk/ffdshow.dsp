@@ -222,59 +222,7 @@ SOURCE=.\src\TffDecoder.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\Tlibavcodec.cpp
-
-!IF  "$(CFG)" == "ffdshow - Win32 Release"
-
-# ADD CPP /O1
-
-!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\Tpostproc.cpp
-
-!IF  "$(CFG)" == "ffdshow - Win32 Release"
-
-# ADD CPP /O1 /FAs
-
-!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\trayIcon.cpp
-
-!IF  "$(CFG)" == "ffdshow - Win32 Release"
-
-# ADD CPP /O1
-
-!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\Txvid.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\idct\xIdctref.c
-
-!IF  "$(CFG)" == "ffdshow - Win32 Release"
-
-# ADD CPP /O1
-
-!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
-
-!ENDIF 
-
+SOURCE=.\src\TtrayIcon.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -295,6 +243,10 @@ SOURCE=.\src\ffdshow_mediaguids.h
 # Begin Source File
 
 SOURCE=.\src\IffDecoder.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\inttypes.h
 # End Source File
 # Begin Source File
 
@@ -322,19 +274,7 @@ SOURCE=.\src\TffDecoder.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\Tlibavcodec.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\Tpostproc.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\trayIcon.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\Txvid.h
+SOURCE=.\src\TtrayIcon.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
@@ -839,7 +779,15 @@ SOURCE=.\src\imgFilters\TimgFilterTimesmooth.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\TresizeCtx.h
+SOURCE=.\src\imgFilters\Tpostproc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\Tpostproc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\imgFilters\TresizeCtx.h
 # End Source File
 # Begin Source File
 
@@ -1238,6 +1186,46 @@ SOURCE=.\src\settings\TpresetSettings.cpp
 # Begin Source File
 
 SOURCE=.\src\settings\TpresetSettings.h
+# End Source File
+# End Group
+# Begin Group "movie_source"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\movie_source\TmovieSource.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\movie_source\TmovieSource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\movie_source\TmovieSourceLibavcodec.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\movie_source\TmovieSourceLibavcodec.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\movie_source\TmovieSourceUncompressed.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\movie_source\TmovieSourceUncompressed.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\movie_source\TmovieSourceXviD.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\movie_source\TmovieSourceXviD.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\idct\xIdctref.c
 # End Source File
 # End Group
 # End Target
