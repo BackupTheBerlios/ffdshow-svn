@@ -30,6 +30,7 @@
 #define IDD_OFFSET                      137
 #define IDD_RESIZESETTINGS              138
 #define IDD_SHOWMV                      139
+#define IDD_DEINTERLACE                 140
 #define IDB_ARROWS                      145
 #define IDB_ARROWS_MASK_UD              146
 #define IDB_ARROWS_MASK_U               147
@@ -43,6 +44,7 @@
 #define IDC_TBR_HUE                     1004
 #define IDC_TBR_RESIZE_SHARPEN_LUM      1004
 #define IDC_TBR_LUMOFFSET               1005
+#define IDC_TBR_RESIZE_PARAM            1005
 #define IDC_TBR_SATURATION              1006
 #define IDC_TBR_RESIZE_SHARPEN_CHROM    1006
 #define IDC_TBR_GAMMA                   1007
@@ -69,6 +71,7 @@
 #define IDC_CHB_YV12                    1020
 #define IDC_LBL_XSHARPENTHRESH          1021
 #define IDC_CHB_YUY2                    1021
+#define IDC_LBL_RESIZE_PARAM            1021
 #define IDC_TBR_XSHARPENTHRESH          1022
 #define IDC_CHB_YVYU                    1022
 #define IDC_CHB_MP42                    1023
@@ -95,9 +98,9 @@
 #define IDC_CHB_LEVELFIX_LUM            1035
 #define IDC_CHB_LEVELFIX_CHROM          1036
 #define IDC_LBL_GAMMA                   1037
-#define IDC_CHB_LEVELFIX_LUM2           1037
-#define IDC_CHB_DEINTERLACE             1037
+#define IDC_CHB_TEMPNOISE               1037
 #define IDC_CHB_NOISE                   1038
+#define IDC_CHB_FULLYRANGE              1038
 #define IDC_CHB_NOISE_UNIFORM           1039
 #define IDC_TBR_NOISESTRENGTH           1040
 #define IDC_LBL_NOISESTRENGTH           1041
@@ -211,6 +214,13 @@
 #define IDC_CHB_PROCESSFULL             1164
 #define IDC_CBX_PRESETS                 1165
 #define IDC_CHB_CODECS_DONTREG          1166
+#define IDC_CHB_DEINTERLACE             1167
+#define IDC_RBT_DEINT_METHOD1           1169
+#define IDC_RBT_DEINT_METHOD2           1170
+#define IDC_RBT_DEINT_METHOD3           1171
+#define IDC_RGB_DEINT_METHOD4           1172
+#define IDC_RBT_DEINT_METHOD5           1172
+#define IDC_RBT_DEINT_METHOD4           1173
 #define VERSION_RES_CHARSET             1252
 #define ID_MNI_PRESET_NEWFROMDEFAULT    40004
 #define ID_MNI_PRESET_NEWFROMSELECTED   40005
@@ -224,7 +234,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        157
 #define _APS_NEXT_COMMAND_VALUE         40009
-#define _APS_NEXT_CONTROL_VALUE         1167
+#define _APS_NEXT_CONTROL_VALUE         1170
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

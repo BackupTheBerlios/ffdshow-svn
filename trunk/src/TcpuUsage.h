@@ -1,8 +1,6 @@
 #ifndef _TCPUUSAGE_H_
 #define _TCPUUSAGE_H_
 
-#include <windows.h>
-
 class TcpuUsage
 {
 public:

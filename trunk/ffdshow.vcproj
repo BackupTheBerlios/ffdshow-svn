@@ -640,6 +640,9 @@
 				RelativePath="src\subtitles\Tfont.h">
 			</File>
 			<File
+				RelativePath="src\subtitles\TfontSettings.h">
+			</File>
+			<File
 				RelativePath="src\subtitles\Tsubtitles.cpp">
 			</File>
 			<File
@@ -701,6 +704,12 @@
 				RelativePath="src\imgFilters\TimgFilterCrop.h">
 			</File>
 			<File
+				RelativePath="src\imgFilters\TimgFilterDeinterlace.cpp">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TimgFilterDeinterlace.h">
+			</File>
+			<File
 				RelativePath="src\imgFilters\TimgFilterLuma.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -717,6 +726,12 @@
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterNoise.h">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TimgFilterOSD.cpp">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TimgFilterOSD.h">
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterOffset.cpp">
@@ -853,6 +868,12 @@
 				RelativePath="src\dialog\Ccrop.h">
 			</File>
 			<File
+				RelativePath="src\dialog\Cdeinterlace.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\Cdeinterlace.h">
+			</File>
+			<File
 				RelativePath="src\dialog\Cfont.cpp">
 			</File>
 			<File
@@ -872,6 +893,12 @@
 			</File>
 			<File
 				RelativePath="src\dialog\Cnoise.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AssemblerOutput="4"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Cnoise.h">

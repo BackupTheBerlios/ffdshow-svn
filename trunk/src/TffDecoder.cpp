@@ -50,6 +50,7 @@
 #include "TffdshowPage.h"
 #include "TffDecoder.h"
 #include "TtrayIcon.h"
+#include "TcpuUsage.h"
 #include "TffRect.h"
 #include "TffPict.h"
 #include "TimgFilters.h"
@@ -112,30 +113,13 @@ STDMETHODIMP TffDecoder::putParam(unsigned int paramID, int  val)
    #include "ffdshow_params.h"
    default:return S_FALSE;
   }
- if (paramID!=IDFF_lastPage && paramID!=IDFF_cropChanged && paramID!=IDFF_fontChanged && paramID!=IDFF_resizeChanged) sendOnChange();
+ if (paramID!=IDFF_lastPage) sendOnChange();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::notifyParamsChanged(void)
 {
- onSubsChanged();
- onCropChanged();
  onTrayIconChanged();
  return S_OK;
-}
-void TffDecoder::onSubsChanged(void)
-{
- fontChanged=true;
-}
-void TffDecoder::onCropChanged(void)
-{
- if (!presetSettings) return;
- cropChanged=true;
- if (presetSettings->cropNzoom.magnificationLocked) presetSettings->cropNzoom.magnificationY=presetSettings->cropNzoom.magnificationX;
-}
-void TffDecoder::onResizeChanged(void)
-{
- if (!presetSettings) return;
- resizeChanged=true;
 }
 void TffDecoder::onTrayIconChanged(void)
 {
@@ -305,8 +289,7 @@ STDMETHODIMP TffDecoder::getOutputDimensions(unsigned int *x,unsigned int *y)
 }
 STDMETHODIMP TffDecoder::getPPmode(unsigned int *ppmode)
 {
- if (!imgFilters) return S_FALSE;
- *ppmode=(postproc.ok)?Tpostproc::getPPmode(presetSettings,currentq):0;
+ *ppmode=Tpostproc::getPPmode(presetSettings,currentq);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getFontName(char *buf,unsigned int len)
@@ -321,7 +304,6 @@ STDMETHODIMP TffDecoder::setFontName(const char *name)
  if (!name) return E_POINTER;
  if (strlen(name)>255) return  S_FALSE;
  strcpy(presetSettings->font.name,name);
- onSubsChanged();
  sendOnChange();
  return S_OK;
 }
@@ -437,6 +419,12 @@ STDMETHODIMP TffDecoder::getSubtitle(subtitle* *subPtr)
  *subPtr=sub;
  return S_OK;
 }
+STDMETHODIMP TffDecoder::getCpuUsage2(void)
+{
+ if (!cpu) return 0;
+ cpu->CollectCPUData();
+ return cpu->GetCPUUsage(0);
+}
 
 // constructor
 TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME("CffDecoder"),punk,/*CLSID_XVID*/CLSID_FFDSHOW)
@@ -449,11 +437,10 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  AVIname[0]=AVIfourcc[0]='\0';
  AVIdx=AVIdy=outDx=outDy=0;AVIfps=0;
  cfgDlgHnwd=NULL;inPlayer=1;
- movie=NULL;tray=NULL;subs=NULL;sub=NULL;imgFilters=NULL;
+ movie=NULL;tray=NULL;subs=NULL;sub=NULL;imgFilters=NULL;cpu=NULL;cpus=-1;
  onChangeWnd=NULL;onChangeMsg=0;
  onInfoWnd=NULL;onInfoMsg1=onInfoMsg2=0;
  codecId=CODEC_ID_NONE;
- cropChanged=resizeChanged=true;
  lastTime=clock();
 
  config.init();
@@ -474,6 +461,7 @@ TffDecoder::~TffDecoder()
  if (imgFilters) delete imgFilters;imgFilters=NULL;
  postproc.done();
  if (subs) delete subs;subs=NULL;
+ if (cpu) delete cpu;cpu=NULL;
  delete tray;tray=NULL;
 }
 
@@ -843,6 +831,12 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   {
    char pomS[256];sprintf(pomS,"here would be an error: stride:%u, AVIdx:%u\n",m_frame.stride,AVIdx);DEBUGS(pomS);
    return S_FALSE;
+  }
+ if (!cpu && cpus==-1)
+  {
+   cpu=new TcpuUsage;
+   cpus=cpu->GetCPUCount();
+   if (cpus==0) {delete cpu;cpu=NULL;};
   }
  imgFilters->process(&globalSettings,&presetSettings,pict);
  destPict.y=pict.y;destPict.u=pict.u;destPict.v=pict.v;

@@ -11,6 +11,7 @@ class TtrayIcon;
 class Tsubtitles;
 class TimgFilters;
 struct TpresetSettings;
+class TcpuUsage;
 class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpecifyPropertyPages
 {
 public:
@@ -89,19 +90,21 @@ public:
  STDMETHODIMP getPostproc(Tpostproc* *postprocPtr);
  STDMETHODIMP getSubtitle(subtitle* *subPtr);
  STDMETHODIMP getOutputDimensions(unsigned int *x,unsigned int *y);
+ STDMETHODIMP getCpuUsage2(void);
 
 private:
  TtrayIcon *tray;
+ TcpuUsage *cpu;int cpus;
  TpresetSettings *presetSettings;
  TglobalSettings globalSettings;
  TdialogSettings dialogSettings;
  Tpresets presets;
  int inPlayer;
- int fontChanged,cropChanged,resizeChanged,currentq;
+ int currentq;
  int cfgDlgHnwd;
  char AVIname[1024],AVIfourcc[10];
  int loadAVInameAndPreset(void);
- void onSubsChanged(void),onCropChanged(void),onResizeChanged(void),onTrayIconChanged(void);
+ void onTrayIconChanged(void);
  HRESULT ChangeColorspace(GUID subtype,GUID formattype,void * format);
  HWND onChangeWnd;unsigned int onChangeMsg;
  HWND onInfoWnd;unsigned int onInfoMsg1,onInfoMsg2;

@@ -39,7 +39,7 @@ wishes
 
 =======================================================================
 priorities
-dscaler
+dscaler [DEINTERLACE FROM MPLAYER]
 add black borders
 documentation
 compilation instructions
@@ -51,3 +51,7 @@ check and write xvid version [DISPLAYING DONE]
 subtitles
 better changeOrder COM functions
 full keyboard control in cfg dialog [DONE]
+OSD
+levels filter
+possiblity to use mplayer YUV->RGB conversion
+chroma only blur

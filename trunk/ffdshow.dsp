@@ -777,6 +777,15 @@ SOURCE=.\src\imgFilters\TimgFilterPostproc.h
 # Begin Source File
 
 SOURCE=.\src\imgFilters\TimgFilterResize.cpp
+
+!IF  "$(CFG)" == "ffdshow - Win32 Release"
+
+# ADD CPP /FAs
+
+!ELSEIF  "$(CFG)" == "ffdshow - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -1199,10 +1208,6 @@ SOURCE=.\src\dialog\TffdshowPage.h
 # Begin Source File
 
 SOURCE=.\src\ffdshow_params.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\settings\presets_template.h
 # End Source File
 # Begin Source File
 

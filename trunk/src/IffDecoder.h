@@ -37,8 +37,12 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_deblockStrength     110
 #define IDFF_levelFixLum         107
 #define IDFF_levelFixChrom       108
+#define IDFF_fullYrange          112
+#define IDFF_tempNoiseFilter     113
 
 #define IDFF_isDeinterlace      1401
+#define IDFF_fullDeinterlace    1402
+#define IDFF_deinterlaceMethod  1403
 
 #define IDFF_isPictProp          205
 #define IDFF_orderPictProp       207
@@ -83,11 +87,14 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_isAspect            704 //0 - no aspect ratio correctio, 1 - keep original aspect, 2 - aspect ration is set in IDFF_aspectRatio
 #define IDFF_aspectRatio         707 //aspect ratio (<<16)
 #define IDFF_resizeMethod        706
+#define IDFF_resizeBicubicParam  724
+#define IDFF_resizeXparam        725
+#define IDFF_resizeGaussParam    726
+#define IDFF_resizeLanczosParam  727
 #define IDFF_resizeGblurLum      708 // *100
 #define IDFF_resizeGblurChrom    709 // *100
 #define IDFF_resizeSharpenLum    710 // *100
 #define IDFF_resizeSharpenChrom  711 // *100
-#define IDFF_resizeChanged       725
 
 #define IDFF_isCropNzoom         712
 #define IDFF_isZoom              713
@@ -99,18 +106,10 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_autocrop            719
 #define IDFF_magnificationY      720
 #define IDFF_magnificationLocked 721
-#define IDFF_cropChanged         724 
 
 #define IDFF_isSubtitles         801
 #define IDFF_orderSubtitles      815
 #define IDFF_fullSubtitles       817
-#define IDFF_fontCharset         802
-#define IDFF_fontSize            803
-#define IDFF_fontWeight          804
-#define IDFF_fontShadowStrength  805  //shadow strength (0..100) 100 - subtitles aren't transparent
-#define IDFF_fontShadowRadius    806  //shadow radius
-#define IDFF_fontSpacing         808
-#define IDFF_fontColor           809
 #define IDFF_subPosX             810
 #define IDFF_subPosY             811
 #define IDFF_subDelay            812
@@ -118,7 +117,14 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_subSpeed            813
 #define IDFF_subSpeedDef         819
 #define IDFF_subAutoFlnm         814
-#define IDFF_fontChanged         816
+
+#define IDFF_fontCharset         802
+#define IDFF_fontSize            803
+#define IDFF_fontWeight          804
+#define IDFF_fontShadowStrength  805  //shadow strength (0..100) 100 - subtitles aren't transparent
+#define IDFF_fontShadowRadius    806  //shadow radius
+#define IDFF_fontSpacing         808
+#define IDFF_fontColor           809
 
 #define IDFF_isBlur              901
 #define IDFF_orderBlur           903
@@ -138,6 +144,15 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 
 #define IDFF_isShowMV           1201
 #define IDFF_orderShowMV        1202
+
+#define IDFF_isOSD                 1501
+#define IDFF_OSDfontCharset        1502
+#define IDFF_OSDfontSize           1503
+#define IDFF_OSDfontWeight         1504
+#define IDFF_OSDfontShadowStrength 1505  //shadow strength (0..100) 100 - subtitles aren't transparent
+#define IDFF_OSDfontShadowRadius   1506  //shadow radius
+#define IDFF_OSDfontSpacing        1508
+#define IDFF_OSDfontColor          1509
 
 #define IDFF_xvid               1001 //are AVIs with this FOURCC played by ffdshow?
 #define IDFF_div3               1002
@@ -213,6 +228,7 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (getPostproc)(Tpostproc* *postprocPtr) PURE;
  STDMETHOD (getSubtitle)(subtitle* *subPtr) PURE;
  STDMETHOD (getOutputDimensions)(unsigned int *x,unsigned int *y) PURE;
+ STDMETHOD (getCpuUsage2)(void) PURE;
 };
 
 #ifdef __cplusplus

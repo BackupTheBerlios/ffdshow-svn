@@ -17,29 +17,24 @@
  */
 
 #include "stdafx.h"
-#include "Tconfig.h"
-#include "xvid\xvid.h"
-#include "settings\reg.h"
-#include "TmovieSourceLibavcodec.h"
-#include "TmovieSourceXviD.h"
+#include "TimgFilterOSD.h"
+#include "TpresetSettings.h"
+#include "IffDecoder.h"
 
-Tconfig config;
-
-int Tconfig::cpu_flags=0;
-
-void Tconfig::init(void)
+TimgFilterOSD::TimgFilterOSD(void)
 {
- char sysdir[256];
- GetSystemDirectory(sysdir,255);
- TregOpRegRead t(HKEY_LOCAL_MACHINE,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD);
- t._REG_OP_S("pth",pth,sysdir);
-
- if (strlen(pth) && pth[strlen(pth)-1]!='\\') strcat(pth,"\\");
- XVID_INIT_PARAM xip;
- xip.cpu_flags=0;
- xvid_init(NULL, 0, &xip, NULL);
- cpu_flags=xip.cpu_flags;
-
- isLibavcodec=TmovieSourceLibavcodec::getVersion(NULL);
- isXviD=TmovieSourceXviD::getVersion(NULL);
+ oldSettings.weight=-1;
+}
+void TimgFilterOSD::process(TffPict2 &pict,const TpresetSettings *cfg)
+{
+ if (memcmp(&oldSettings,&cfg->fontOSD,sizeof(TfontSettings))!=0)
+  {
+   oldSettings=cfg->fontOSD;
+   font.init(cfg->fontOSD);
+  }
+ Trect *r=init(&pict.rect,true);
+ unsigned char *dstY=getCurNextY(pict)+r->diffY ;
+ unsigned char *dstU=getCurNextU(pict)+r->diffUV;
+ unsigned char *dstV=getCurNextV(pict)+r->diffUV;
+ //font.print(dstY,dstU,dstV,dxY,strideY,dyY,sub,cfg->subtitles.posX,cfg->subtitles.posY);
 }
