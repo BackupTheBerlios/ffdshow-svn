@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2002 Milan Cutka
- * portions copyright (C) 1999-2000 Donald A. Graft
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

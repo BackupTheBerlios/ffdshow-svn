@@ -1,3 +1,22 @@
+/*
+ * Copyright (c) 2002 Milan Cutka
+ * based on AVIsynth filter by Donald A. Graft
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+
 #include "TimgFilterChroma.h"
 #include "../Tconfig.h"
 #include <math.h>
@@ -91,7 +110,7 @@ void TimgFilterChroma::process(unsigned char *srcY,unsigned char *srcU,unsigned 
      paddw mm5,mm6      //mm5 = u * Cos + v * Sin
      PMULLW mm5,mm0     //mm5 = u2 * Sat
      PSRAW mm5,6        //mm5 =(u2 * Sat)>>8
-     PADDW mm5,[m128] //mm5 =(u2 * Sat)>>8 +128
+     PADDW mm5,[m128]   //mm5 =(u2 * Sat)>>8 +128
      
      movq mm7,mm4
      PMULLW mm7,mm2     //mm7 = v * Cos
@@ -102,7 +121,7 @@ void TimgFilterChroma::process(unsigned char *srcY,unsigned char *srcU,unsigned 
      psubw mm7,mm6      //mm7 = v * Cos - u * Sin
      PMULLW mm7,mm0     //mm7 = v2 * Sat
      PSRAW mm7,6        //mm7 =(v2 * Sat)>>8
-     PADDW mm7,[m128] //mm7 =(v2 * Sat)>>8 +128
+     PADDW mm7,[m128]   //mm7 =(v2 * Sat)>>8 +128
      
      pxor mm6,mm6
      packuswb mm5,mm6
