@@ -93,6 +93,62 @@ LINK32=xilink6.exe
 # Begin Group "doc"
 
 # PROP Default_Filter ""
+# Begin Group "help"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\helpAspectNcrop.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpBlur.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpCodecs.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpFont.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpInfo.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpMisc.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpNoise.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpPictprop.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpPostproc.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpResize.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpSharpen.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpSubtitles.txt
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\helpTray.txt
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\authors.txt
@@ -220,11 +276,23 @@ SOURCE=.\src\TresizeCtx.h
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # Begin Source File
 
+SOURCE=.\src\checked.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\empty.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\ffdshow.ico
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\ffdshow.rc
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\mask.bmp
 # End Source File
 # End Group
 # Begin Group "Linker Defs"
@@ -233,66 +301,6 @@ SOURCE=.\src\ffdshow.rc
 # Begin Source File
 
 SOURCE=.\src\ffdshow.def
-# End Source File
-# End Group
-# Begin Group "configuration"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\src\CAboutPage.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\CAboutPage.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\CconfPage.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\CconfPage.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\Cffdshow.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\Cffdshow.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\CfiltersPage.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\CfiltersPage.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\CglobalPage.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\CglobalPage.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\CresizePage.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\CresizePage.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\CsubtitlesPage.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\CsubtitlesPage.h
 # End Source File
 # End Group
 # Begin Group "subtitles"
@@ -671,6 +679,146 @@ SOURCE=.\src\imgFilters\TimgFilterSubtitles.h
 # Begin Source File
 
 SOURCE=.\src\imgFilters\TtempPicture.h
+# End Source File
+# End Group
+# Begin Group "dialog"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\dialog\Cabout.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cabout.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\CaspectNcrop.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\CaspectNcrop.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cblur.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cblur.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Ccodecs.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Ccodecs.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cfont.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cfont.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cinfo.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cinfo.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cmisc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cmisc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cnoise.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cnoise.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\CpictProp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\CpictProp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\CpostProc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\CpostProc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cpresets.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cpresets.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cresize.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Cresize.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Csharpen.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Csharpen.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Csubtitles.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Csubtitles.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Ctray.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\Ctray.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\TconfPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\TconfPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\TffdshowPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\TffdshowPage.h
 # End Source File
 # End Group
 # End Target

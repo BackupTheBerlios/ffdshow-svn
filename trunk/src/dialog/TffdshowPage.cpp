@@ -97,7 +97,6 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  int ret;
  ret=ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_CLEAR  )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHB_MASK)));
  ret=ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHECKED)),LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHB_MASK))); 
- //ret=(int)TreeView_SetImageList(tv,hil,TVSIL_NORMAL);
  
  TVINSERTSTRUCT tvis;
  tvis.hParent=NULL;
@@ -131,6 +130,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  TreeView_SetIndent(htv,24);
  TreeView_SetItemHeight(htv,16);
  TreeView_Expand(htv,pagePresets,TVE_EXPAND);
+ deci->put_Param(IDFF_isDlg,1);
  m_bDirty=true;
  return NOERROR;
 }
