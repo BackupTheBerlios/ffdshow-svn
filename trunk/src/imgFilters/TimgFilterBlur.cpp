@@ -35,7 +35,11 @@ void TimgFilterBlur::init(int Idx,int Istride,int Idy)
 }
 void TimgFilterBlur::done(void)
 {
- if (tempPict) xvid_free(tempPict);
+ if (tempPict) 
+  {
+   xvid_free(tempPict);
+   tempPict=NULL;
+  }; 
 }
 void TimgFilterBlur::process(unsigned char *srcY,unsigned char *,unsigned char *,
                              unsigned char *dstY,unsigned char *,unsigned char *,

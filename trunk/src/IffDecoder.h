@@ -17,12 +17,12 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_dlgRestorePos         9
 #define IDFF_dlgPosX              10
 #define IDFF_dlgPosY              11
+#define IDFF_lvWidth0             12
 #define IDFF_trayIcon              3  //is tray icon visible
 #define IDFF_isDlg                 4  //is configuration dialog visible
 #define IDFF_autoPresetFileFirst   5  //try to load preset from file 
 #define IDFF_autoLoadedFromFile    6
 #define IDFF_inPlayer              7
-#define IDFF_autoLoadedFromReg     8
 
 #define IDFF_isPostproc          106  
 #define IDFF_orderPostproc       109
@@ -165,6 +165,10 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (savePresets)(void) PURE;
  STDMETHOD (setPresetPtr)(TpresetSettings *preset) PURE;
  STDMETHOD (renameActivePreset)(const char *newName) PURE;
+ STDMETHOD (setOnChangeMsg)(HWND wnd,unsigned int msg) PURE;
+ STDMETHOD (getDefaultPresetName)(char *buf,unsigned int len) PURE;
+ STDMETHOD (setDefaultPresetName)(const char *presetName) PURE;
+ STDMETHOD (isDefaultPreset)(const char *presetName) PURE;
 };
 
 #ifdef __cplusplus

@@ -1,6 +1,6 @@
 EXPORTS
 libavcodec_init
-avcodec_find_decoder_by_name
+avcodec_find_decoder
 avcodec_open
 avcodec_decode_video
 avcodec_flush_buffers

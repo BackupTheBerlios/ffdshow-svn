@@ -47,6 +47,8 @@
 
 using namespace std;
 
+#define WM_FFONCHANGE WM_APP+1
+
 CUnknown * WINAPI TffdshowPage::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
  TffdshowPage * pNewObject=new TffdshowPage(punk,phr);
@@ -61,6 +63,7 @@ TffdshowPage::TffdshowPage(LPUNKNOWN pUnk, HRESULT * phr):CBasePropertyPage(NAME
  hil=NULL;
  deci=NULL;
  page=NULL;
+ applying=false;
 }
 TffdshowPage::~TffdshowPage()
 {
@@ -211,15 +214,18 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
     }
   }
  deci->putParam(IDFF_isDlg,1);
- m_bDirty=true;
+ m_bDirty=true;//m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
+ deci->setOnChangeMsg(m_hwnd,WM_FFONCHANGE);
  return NOERROR;
 }
 HRESULT TffdshowPage::OnApplyChanges(void)
 {
+ applying=true;
  applySettings();
  //deci->put_Param(IDFF_presetShouldBeSaved,1);
 // globalPage->savePreset();
  deci->saveGlobalSettings();
+ applying=false;
  return CBasePropertyPage::OnApplyChanges();
 }
 STDMETHODIMP TffdshowPage::Deactivate(void)
@@ -228,6 +234,7 @@ STDMETHODIMP TffdshowPage::Deactivate(void)
  //int beSaved=deci->getParam2(IDFF_presetShouldBeSaved);
  //if (beSaved) deci->loadPreset(NULL);
  //loadPreset();
+ deci->setOnChangeMsg(NULL,0);
  HRESULT res=CBasePropertyPage::Deactivate();
  for (vector<TconfPage*>::iterator i=pages.begin();i!=pages.end();i++)
   delete *i;
@@ -259,6 +266,7 @@ HRESULT TffdshowPage::OnDisconnect(void)
 {
  DEBUGS("On disconnect 1");
  if (deci==NULL) return E_UNEXPECTED;
+ deci->loadGlobalSettings();
  deci->Release();
  DEBUGS("On disconnect 2");
  deci=NULL;
@@ -269,6 +277,13 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 {
  switch (uMsg)
   {
+   case WM_FFONCHANGE:
+    if (!applying)
+     {
+      DEBUGS("onChangeParam");
+      m_bDirty=true;m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
+     }; 
+    return TRUE;
    case WM_NOTIFY:
     {
      NMHDR *nmhdr=LPNMHDR(lParam);

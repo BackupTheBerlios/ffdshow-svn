@@ -49,9 +49,9 @@
 #include "Tconfig.h"
 #include "ffdebug.h"
 #define FF_POSTPROCESS
+#include "ffmpeg\libavcodec\avcodec.h"
 extern "C"
 {
- #include "ffmpeg\libavcodec\avcodec.h"
  #include "mplayer\libmpcodecs\img_format.h"
 }
 extern "C" 
@@ -119,6 +119,7 @@ STDMETHODIMP TffDecoder::putParam(unsigned int paramID, int  val)
    #include "ffdshow_params.h"
    default:return S_FALSE;
   }
+ if (paramID!=IDFF_lastPage) sendOnChange();
  return S_OK; 
 }
 STDMETHODIMP TffDecoder::notifyParamsChanged(void)
@@ -184,6 +185,7 @@ STDMETHODIMP TffDecoder::setPresetPtr(TpresetSettings *preset)
  if (!preset) return E_POINTER;
  presetSettings=preset;
  notifyParamsChanged();
+ sendOnChange();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getActivePresetName(char *buf,unsigned int len)
@@ -192,6 +194,24 @@ STDMETHODIMP TffDecoder::getActivePresetName(char *buf,unsigned int len)
  if (len<strlen(presetSettings->presetName)+1) return E_OUTOFMEMORY;
  strcpy(buf,presetSettings->presetName);
  return S_OK;
+}
+STDMETHODIMP TffDecoder::getDefaultPresetName(char *buf,unsigned int len)
+{
+ if (!buf) return E_POINTER;
+ if (len<strlen(globalSettings.defaultPreset)+1) return E_OUTOFMEMORY;
+ strcpy(buf,globalSettings.defaultPreset);
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::isDefaultPreset(const char *presetName)
+{
+ return (_stricmp(globalSettings.defaultPreset,presetName)==0)?S_OK:S_FALSE;
+}
+STDMETHODIMP TffDecoder::setDefaultPresetName(const char *presetName)
+{
+ if (!presetName) return E_POINTER;
+ strcpy(globalSettings.defaultPreset,presetName);
+ sendOnChange();
+ return S_OK; 
 }
 STDMETHODIMP TffDecoder::getAVIname(char *buf,unsigned int len)
 {
@@ -242,6 +262,8 @@ STDMETHODIMP TffDecoder::loadPresetFromFile(const char *flnm)
 }
 STDMETHODIMP TffDecoder::removePreset(const char *name)
 {
+ if (_stricmp(presetSettings->presetName,globalSettings.defaultPreset)==0)
+  setDefaultPresetName(presets[0]->presetName);
  presets.removePreset(name);
  return S_OK;
 }
@@ -284,6 +306,7 @@ STDMETHODIMP TffDecoder::setFontName(const char *name)
  if (strlen(name)>255) return  S_FALSE;
  strcpy(presetSettings->fontName,name);
  subsChanged();
+ sendOnChange();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getSubFlnm(char *buf,unsigned int len)
@@ -303,6 +326,7 @@ STDMETHODIMP TffDecoder::loadSubtitles(const char *flnm)
    strcpy(presetSettings->subFlnm,subs->flnm);
   }
  else strcpy(presetSettings->subFlnm,flnm);  
+ sendOnChange();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getRealCrop(unsigned int *left,unsigned int *top,unsigned int *right,unsigned int *bottom)
@@ -351,7 +375,20 @@ STDMETHODIMP TffDecoder::renameActivePreset(const char *newName)
 {
  if (!newName) return E_POINTER;
  if (strlen(newName)>260) return E_OUTOFMEMORY;
+ int res=_stricmp(presetSettings->presetName,globalSettings.defaultPreset);
  strcpy(presetSettings->presetName,newName);
+ if (res==0) setDefaultPresetName(newName);
+ sendOnChange();
+ return S_OK;
+}
+void TffDecoder::sendOnChange(void)
+{
+ if (onChangeWnd && onChangeMsg) 
+  SendMessage(onChangeWnd,onChangeMsg,0,0);
+}
+STDMETHODIMP TffDecoder::setOnChangeMsg(HWND wnd,unsigned int msg)
+{
+ onChangeWnd=wnd;onChangeMsg=msg;
  return S_OK;
 }
 
@@ -380,16 +417,16 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  ASSERT(phr);
 
  InitCommonControls();
- srand(time(NULL));
  
  AVIname[0]=AVIfourcc[0]='\0';
  AVIdx=AVIdy=cropLeft=cropTop=cropDx=cropDy=AVIfps=0;
  isDlg=0;inPlayer=1;idctOld=-1;
  avctx=NULL;resizeCtx=NULL;tray=NULL;
+ onChangeWnd=NULL;onChangeMsg=0;
  
  presets.init();
  config.init();
- loadPreset(globalSettings.activePreset);
+ loadPreset(globalSettings.defaultPreset);
 // presetSettings->fontChanged=true;
  
  tray=new TtrayIcon(this,g_hInst);
@@ -476,86 +513,9 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
   }; 
  #endif 
  
- codecName="";AVIfourcc[0]='\0';
- switch(hdr->biCompression)
-  {
-   case FOURCC_XVID:
-   case FOURCC_xvid:
-    if (globalSettings.xvid) 
-     {
-      codecName="mpeg4";strcpy(AVIfourcc,"XVID");
-      break;
-     }
-    else return VFW_E_TYPE_NOT_ACCEPTED;
-   case FOURCC_DIVX:
-   case FOURCC_divx:
-    if (globalSettings.divx) 
-     {
-      codecName="mpeg4";strcpy(AVIfourcc,"DIVX");
-      break;
-     } 
-    else return VFW_E_TYPE_NOT_ACCEPTED;
-   case FOURCC_DX50:
-   case FOURCC_dx50:
-    if (globalSettings.dx50) 
-     {
-      codecName="mpeg4";strcpy(AVIfourcc,"DX50");
-      break;
-     }
-    else return VFW_E_TYPE_NOT_ACCEPTED;
-   case FOURCC_DIV3:
-   case FOURCC_div3:
-    if (globalSettings.div3) 
-     {
-      codecName="msmpeg4";strcpy(AVIfourcc,"DIV3");
-      break;
-     } 
-    else return VFW_E_TYPE_NOT_ACCEPTED;
-   case FOURCC_MP43:
-   case FOURCC_mp43:
-    if (globalSettings.mp43)
-     {
-      codecName="msmpeg4";strcpy(AVIfourcc,"MP43");
-      break;
-     } 
-    else return VFW_E_TYPE_NOT_ACCEPTED;
-   case FOURCC_MP42:
-   case FOURCC_mp42:
-    if (globalSettings.mp42)
-     {
-      codecName="msmpeg4v2";strcpy(AVIfourcc,"MP42");
-      break;
-     } 
-    else return VFW_E_TYPE_NOT_ACCEPTED;
-   case FOURCC_MP41:
-   case FOURCC_mp41:
-    if (globalSettings.mp41)
-     {
-      codecName="msmpeg4v1";strcpy(AVIfourcc,"MP41");
-      break;
-     } 
-    else return VFW_E_TYPE_NOT_ACCEPTED;
-   case FOURCC_H263:
-   case FOURCC_h263:
-    if (globalSettings.h263)
-     {
-      codecName="h263";strcpy(AVIfourcc,"H263");
-      break;
-     } 
-    else return VFW_E_TYPE_NOT_ACCEPTED;
-   #ifdef FF__WMV1 
-   case FOURCC_WMV1:
-   case FOURCC_wmv1:
-    if (cfg.wmv1)
-     {
-      codecName="wmv1";strcpy(AVIfourcc,"WMV1");
-      break;
-     } 
-    else return VFW_E_TYPE_NOT_ACCEPTED;
-   #endif
-   default:return VFW_E_TYPE_NOT_ACCEPTED;
-  }
- return S_OK;
+ AVIfourcc[0]='\0';
+ codecId=globalSettings.codecSupported(hdr->biCompression,AVIfourcc);
+ return (codecId!=CODEC_ID_NONE)?S_OK:VFW_E_TYPE_NOT_ACCEPTED;
 }
 
 // get list of supported output colorspaces 
@@ -578,56 +538,48 @@ HRESULT TffDecoder::GetMediaType(int iPosition, CMediaType *mtOut)
 
  switch(iPosition)
   {
-  case 0  :
-   vih->bmiHeader.biCompression = MEDIASUBTYPE_YV12.Data1;
-   vih->bmiHeader.biBitCount = 12;
-   mtOut->SetSubtype(&MEDIASUBTYPE_YV12);
-   break;
-
-  case 1:
-   vih->bmiHeader.biCompression = MEDIASUBTYPE_YUY2.Data1;
-   vih->bmiHeader.biBitCount = 16;
-   mtOut->SetSubtype(&MEDIASUBTYPE_YUY2);
-   break;
-
-  case 2:
-   vih->bmiHeader.biCompression = MEDIASUBTYPE_YVYU.Data1;
-   vih->bmiHeader.biBitCount = 16;
-   mtOut->SetSubtype(&MEDIASUBTYPE_YVYU);
-   break;
-
-  case 3:
-   vih->bmiHeader.biCompression = MEDIASUBTYPE_UYVY.Data1;
-   vih->bmiHeader.biBitCount = 16;
-   mtOut->SetSubtype(&MEDIASUBTYPE_UYVY);
-   break;
-
-  case 4:
-   vih->bmiHeader.biCompression = BI_RGB;
-   vih->bmiHeader.biBitCount = 32;
-   mtOut->SetSubtype(&MEDIASUBTYPE_RGB32);
-   break;
-
-  case 5:
-   vih->bmiHeader.biCompression = BI_RGB;
-   vih->bmiHeader.biBitCount = 24;
-   mtOut->SetSubtype(&MEDIASUBTYPE_RGB24);
-   break;
-
-  case 6:
-   vih->bmiHeader.biCompression = BI_RGB;
-   vih->bmiHeader.biBitCount = 16;
-   mtOut->SetSubtype(&MEDIASUBTYPE_RGB555);
-   break;
-
-  case 7:
-   vih->bmiHeader.biCompression = BI_RGB;
-   vih->bmiHeader.biBitCount = 16;
-   mtOut->SetSubtype(&MEDIASUBTYPE_RGB565);
-   break;
-
-  default :
-   return VFW_S_NO_MORE_ITEMS;
+   case 0:
+    vih->bmiHeader.biCompression = MEDIASUBTYPE_YV12.Data1;
+    vih->bmiHeader.biBitCount = 12;
+    mtOut->SetSubtype(&MEDIASUBTYPE_YV12);
+    break;
+   case 1:
+    vih->bmiHeader.biCompression = MEDIASUBTYPE_YUY2.Data1;
+    vih->bmiHeader.biBitCount = 16;
+    mtOut->SetSubtype(&MEDIASUBTYPE_YUY2);
+    break;
+   case 2:
+    vih->bmiHeader.biCompression = MEDIASUBTYPE_YVYU.Data1;
+    vih->bmiHeader.biBitCount = 16;
+    mtOut->SetSubtype(&MEDIASUBTYPE_YVYU);
+    break;
+   case 3:
+    vih->bmiHeader.biCompression = MEDIASUBTYPE_UYVY.Data1;
+    vih->bmiHeader.biBitCount = 16;
+    mtOut->SetSubtype(&MEDIASUBTYPE_UYVY);
+    break;
+   case 4:
+    vih->bmiHeader.biCompression = BI_RGB;
+    vih->bmiHeader.biBitCount = 32;
+    mtOut->SetSubtype(&MEDIASUBTYPE_RGB32);
+    break;
+   case 5:
+    vih->bmiHeader.biCompression = BI_RGB;
+    vih->bmiHeader.biBitCount = 24;
+    mtOut->SetSubtype(&MEDIASUBTYPE_RGB24);
+    break;
+   case 6:
+    vih->bmiHeader.biCompression = BI_RGB;
+    vih->bmiHeader.biBitCount = 16;
+    mtOut->SetSubtype(&MEDIASUBTYPE_RGB555);
+    break;
+   case 7:
+    vih->bmiHeader.biCompression = BI_RGB;
+    vih->bmiHeader.biBitCount = 16;
+    mtOut->SetSubtype(&MEDIASUBTYPE_RGB565);
+    break;
+   default :
+    return VFW_S_NO_MORE_ITEMS;
   }
 
  vih->bmiHeader.biSizeImage = GetBitmapSize(&vih->bmiHeader);
@@ -837,11 +789,10 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    avctx->width =AVIdx;
    avctx->height=AVIdy;
    DEBUGS("avcodec_find_decoder_by_name before");
-   AVCodec *avcodec=libavcodec.avcodec_find_decoder_by_name(codecName);
+   AVCodec *avcodec=libavcodec.avcodec_find_decoder(codecId);
    DEBUGS("avcodec_find_decoder_by_name after");
    DEBUGS("avcodec_open before");
-   if (libavcodec.avcodec_open(avctx,avcodec)<0)
-    return S_FALSE;
+   if (libavcodec.avcodec_open(avctx,avcodec)<0) return S_FALSE;
    DEBUGS("avcodec_open after");
    firstFrame=true;
   };
@@ -904,7 +855,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   else
 #endif 
   {
-   memset(avpict.data[0],0,avpict.linesize[0]*AVIdy);
+   memset(avpict.data[0],  0,avpict.linesize[0]*AVIdy  );
    memset(avpict.data[1],128,avpict.linesize[1]*AVIdy/2);
    memset(avpict.data[2],128,avpict.linesize[2]*AVIdy/2);
   }

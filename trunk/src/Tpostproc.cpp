@@ -21,10 +21,7 @@
 #include <math.h>
 #include "TpresetSettings.h"
 #include <time.h>
-extern "C"
-{
- #include "xvid\utils\mem_align.h"
-}
+#include "xvid\utils\mem_align.h"
 
 extern "C" void modifyPPmode(PPMode *pp,Tconfig *cfg);
 void modifyPPmode(PPMode *pp,Tconfig *cfg)

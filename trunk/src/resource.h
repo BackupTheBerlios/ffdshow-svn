@@ -8,7 +8,6 @@
 #define VERSION_RES_MAJOR_VER           8
 #define IDS_FFDSHOW                     9
 #define IDD_ABOUT                       102
-#define IDD_GLOBAL                      110
 #define IDD_FFDSHOW                     111
 #define IDI_FFDSHOW                     112
 #define IDD_SUBTITLES                   113
@@ -49,7 +48,6 @@
 #define IDC_CHB_DIV3                    1012
 #define IDC_CHB_DIVX                    1013
 #define IDC_CHB_DX50                    1014
-#define IDC_BT_PRESET_LOAD              1015
 #define IDC_CHB_FLIP                    1016
 #define IDC_BT_PRESET_NEW               1016
 #define IDC_LBL_LUMGAIN                 1017
@@ -57,7 +55,6 @@
 #define IDC_LBL_LUMOFFSET               1018
 #define IDC_LBL_XSHARPENSTRENGTH        1019
 #define IDC_LBL_RESIZE_SHARPEN_LUM      1019
-#define IDC_BT_PRESET_SAVE_MENU         1019
 #define IDC_TBR_XSHARPENSTRENGTH        1020
 #define IDC_LBL_RESIZE_SHARPEN_CHROM    1020
 #define IDC_LBL_XSHARPENTHRESH          1021
@@ -83,12 +80,9 @@
 #define IDC_CHB_NOISE_UNIFORM           1039
 #define IDC_TBR_NOISESTRENGTH           1040
 #define IDC_LBL_NOISESTRENGTH           1041
-#define IDC_BT_PRESET_SAVE              1042
-#define IDC_CBX_PRESETS                 1043
 #define IDC_BT_PRESET_REMOVE            1044
 #define IDC_LBL_IDCT                    1045
 #define IDC_CBX_IDCT                    1046
-#define IDC_BT_PRESET_PUTFLNM           1047
 #define IDC_CHB_H263                    1048
 #define IDC_LBL_NOISESTRENGTH_CHROMA    1049
 #define IDC_CHB_H264                    1049
@@ -96,21 +90,15 @@
 #define IDC_CHB_AUTOPRESET              1051
 #define IDC_CHB_H265                    1052
 #define IDC_TBR_NOISESTRENGTH_CHROMA    1053
-#define IDC_BT_PRESET_FILE_SAVE         1053
 #define IDC_LBL_NOW_DIMENSIONS          1054
 #define IDC_LBL_NOW_CODEC               1055
-#define IDC_BT_PRESET_FILE_LOAD         1056
 #define IDC_LBL_NOW_FPS                 1057
 #define IDC_RBT_SHARPEN_XSHARPEN        1063
 #define IDC_RBT_SHARPEN_UNSHARPMASK     1064
 #define IDC_CHB_SHARPEN                 1065
-#define IDC_CHB_GLOBAL_POSTPROC         1066
 #define IDC_RBT_SHARPEN_WARPSHARP       1066
 #define IDC_RBT_NOISE_MOJ               1067
-#define IDC_CHB_GLOBAL_PICTPROP         1067
-#define IDC_CHB_GLOBAL_NOISE            1068
 #define IDC_RBT_NOISE_AVIH              1068
-#define IDC_CHB_GLOBAL_SHARPEN          1069
 #define IDC_CHB_TRAYICON                1070
 #define IDC_LBL_AVVERSION               1071
 #define IDC_CHB_DLG_RESTOREPOS          1071
@@ -153,7 +141,9 @@
 #define IDC_LBL_FONT_SHADOW_STRENGTH    1118
 #define IDC_TBR_FONT_SHADOW_STRENGTH    1119
 #define IDC_BT_SUB_LOADFILE             1120
+#define IDC_LBL_OFFSETUV_Y              1120
 #define IDC_CBX_SUB_FLNM                1121
+#define IDC_TBR_OFFSETUV_Y              1121
 #define IDC_LBL_SUB_POSX                1122
 #define IDC_TBR_SUB_POSX                1123
 #define IDC_LBL_FONT_COLOR              1124
@@ -162,11 +152,8 @@
 #define IDC_TBR_SUB_POSY                1127
 #define IDC_ED_SUB_DELAY                1128
 #define IDC_ED_SUB_SPEED                1129
-#define IDC_CHB_GLOBAL_SUBTITLES        1129
 #define IDC_LBL_FONT_SHADOW_RADIUS      1130
-#define IDC_CHB_GLOBAL_BLUR             1130
 #define IDC_TBR_FONT_SHADOW_RADIUS      1131
-#define IDC_CHB_GLOBAL_CROP             1131
 #define IDC_CHB_SUB_AUTOFLNM            1133
 #define IDC_CHB_BLUR                    1134
 #define IDC_LBL_BLUR_STRENGTH           1136
@@ -175,12 +162,17 @@
 #define IDC_RBT_CROP                    1139
 #define IDC_CHB_MAGNIFICATION_LOCKED    1140
 #define IDC_TV_TREE                     1141
-#define IDC_LIST1                       1142
 #define IDC_ED_HELP                     1143
 #define IDC_LV_PRESETS                  1144
-#define IDC_BT_PRESET_SAVE_             1146
-#define IDC_BT_PRESET_REMOVE_           1147
 #define IDC_CHB_OFFSET                  1148
+#define IDC_LBL_OFFSETY_X               1149
+#define IDC_TBR_OFFSETY_X               1150
+#define IDC_LBL_OFFSETY_Y               1151
+#define IDC_TBR_OFFSETY_Y               1152
+#define IDC_LBL_OFFSETUV_X              1153
+#define IDC_TBR_OFFSETUV_X              1154
+#define IDC_BT_PRESET_SAVETOFILE        1155
+#define IDC_BT_PRESET_READFROMFILE      1156
 #define VERSION_RES_CHARSET             1252
 #define ID_MNI_PRESET_NEWFROMDEFAULT    40004
 #define ID_MNI_PRESET_NEWFROMSELECTED   40005
@@ -193,9 +185,10 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
+#define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        149
 #define _APS_NEXT_COMMAND_VALUE         40009
-#define _APS_NEXT_CONTROL_VALUE         1149
+#define _APS_NEXT_CONTROL_VALUE         1156
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

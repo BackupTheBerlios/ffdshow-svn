@@ -2,6 +2,7 @@
 #define _TPRESETSETTINGS_H_
 
 #define FFPRESET_EXT "ffpreset"
+#define FFPRESET_DEFAULT   "default"
 
 struct TpresetSettings
 {
@@ -18,12 +19,11 @@ public:
   }
  static bool isValidPresetName(const char *presetName);
 public:
- TpresetSettings(void);
- TpresetSettings(const char *IpresetName);
+ TpresetSettings(const char *IpresetName=FFPRESET_DEFAULT);
  void loadDefault(void);
  void loadReg(void),saveReg(void);
  void loadFile(const char *flnm),saveFile(const char *flnm);
- int autoLoadedFromFile,autoLoadedFromReg;
+ int autoLoadedFromFile;
 
  char presetName[260];
  int isPostproc,orderPostproc;

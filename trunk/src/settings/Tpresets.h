@@ -2,12 +2,14 @@
 #define _TPRESETS_H_
 
 #include <vector>
+#include <string>
 #include "TpresetSettings.h"
 
 class Tpresets :public std::vector<TpresetSettings*>
 {
 private:
  iterator findPreset(const char *presetName);
+ void listRegKeys(std::vector<std::string> &list);
 public:
  ~Tpresets();
  void init(void);

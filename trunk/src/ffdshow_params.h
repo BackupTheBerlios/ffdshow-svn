@@ -16,7 +16,7 @@
    if (onNotify && oldVal!=dst) (this->*onNotify)();          \
   }                                                           \
   break;
-
+#pragma warning (once:4127)
 //state variables
 PARAM(IDFF_inPlayer           ,this->,inPlayer          ,0,0,NULL)
 PARAM(IDFF_isDlg              ,this->,isDlg             ,0,0,NULL)
@@ -25,10 +25,11 @@ PARAM(IDFF_lastPage           ,dialogSettings.,lastPage     ,0,0,NULL)
 PARAM(IDFF_dlgRestorePos      ,dialogSettings.,dlgRestorePos,0,0,NULL)
 PARAM(IDFF_dlgPosX            ,dialogSettings.,dlgPosX      ,-4096,4096,NULL)
 PARAM(IDFF_dlgPosY            ,dialogSettings.,dlgPosY      ,-4096,4096,NULL)
+PARAM(IDFF_lvWidth0           ,dialogSettings.,lvWidth0     ,1,2048,NULL)
 //global settings
 PARAM(IDFF_autoPreset         ,globalSettings.,autoPreset         ,0,0,NULL)
-PARAM(IDFF_trayIcon           ,globalSettings.,trayIcon           ,0,0,&TffDecoder::trayIconChanged)
 PARAM(IDFF_autoPresetFileFirst,globalSettings.,autoPresetFileFirst,0,0,NULL)
+PARAM(IDFF_trayIcon           ,globalSettings.,trayIcon           ,0,0,&TffDecoder::trayIconChanged)
 PARAM(IDFF_xvid               ,globalSettings.,xvid               ,0,0,NULL)
 PARAM(IDFF_div3               ,globalSettings.,div3               ,0,0,NULL)
 PARAM(IDFF_divx               ,globalSettings.,divx               ,0,0,NULL)
@@ -39,7 +40,6 @@ PARAM(IDFF_mp41               ,globalSettings.,mp41               ,0,0,NULL)
 PARAM(IDFF_h263               ,globalSettings.,h263               ,0,0,NULL)
 
 PARAM(IDFF_autoLoadedFromFile ,presetSettings->,autoLoadedFromFile ,0,0,NULL)
-PARAM(IDFF_autoLoadedFromReg  ,presetSettings->,autoLoadedFromReg  ,0,0,NULL)
 
 PARAM(IDFF_isPostproc         ,presetSettings->,isPostproc         ,0,0,NULL)
 PARAM(IDFF_orderPostproc      ,presetSettings->,orderPostproc      ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)
@@ -58,11 +58,11 @@ PARAM(IDFF_lumOffset          ,presetSettings->,lumOffset          ,-256,256,NUL
 PARAM(IDFF_gammaCorrection    ,presetSettings->,gammaCorrection    ,1,400,NULL)
 PARAM(IDFF_hue                ,presetSettings->,hue                ,-180,180,NULL)
 PARAM(IDFF_saturation         ,presetSettings->,saturation         ,0,128,NULL)
-PARAM(IDFF_lumGainDef         ,TpresetSettings::,lumGainDef,-1,-1,NULL)
-PARAM(IDFF_lumOffsetDef       ,TpresetSettings::,lumOffsetDef,-1,-1,NULL)
+PARAM(IDFF_lumGainDef         ,TpresetSettings::,lumGainDef        ,-1,-1,NULL)
+PARAM(IDFF_lumOffsetDef       ,TpresetSettings::,lumOffsetDef      ,-1,-1,NULL)
 PARAM(IDFF_gammaCorrectionDef ,TpresetSettings::,gammaCorrectionDef,-1,-1,NULL)
-PARAM(IDFF_hueDef             ,TpresetSettings::,hueDef,-1,-1,NULL)
-PARAM(IDFF_saturationDef      ,TpresetSettings::,saturationDef,-1,-1,NULL)
+PARAM(IDFF_hueDef             ,TpresetSettings::,hueDef            ,-1,-1,NULL)
+PARAM(IDFF_saturationDef      ,TpresetSettings::,saturationDef     ,-1,-1,NULL)
                                                         
 PARAM(IDFF_flip               ,presetSettings->,flip               ,0,0,NULL)
 

@@ -8,10 +8,6 @@ protected:
  int dxY,strideY,dyY;
  int dxUV,strideUV,dyUV;
 public:
- virtual ~TimgFilter()
-  {
-   done();
-  }
  virtual void init(int Idx,int Istride,int Idy)
   {
    done();

@@ -28,6 +28,18 @@
 
 void ToffsetPage::init(void)
 {
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETY_X ,TBM_SETRANGE,TRUE,MAKELPARAM(-32,32));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETY_X ,TBM_SETLINESIZE,0,1);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETY_X ,TBM_SETPAGESIZE,0,4); 
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETY_Y ,TBM_SETRANGE,TRUE,MAKELPARAM(-32,32));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETY_Y ,TBM_SETLINESIZE,0,1);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETY_Y ,TBM_SETPAGESIZE,0,4); 
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETUV_X,TBM_SETRANGE,TRUE,MAKELPARAM(-32,32));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETUV_X,TBM_SETLINESIZE,0,1);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETUV_X,TBM_SETPAGESIZE,0,4); 
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETUV_Y,TBM_SETRANGE,TRUE,MAKELPARAM(-32,32));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETUV_Y,TBM_SETLINESIZE,0,1);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETUV_Y,TBM_SETPAGESIZE,0,4); 
  cfg2dlg();
 }
 
@@ -38,12 +50,43 @@ void ToffsetPage::cfg2dlg(void)
 
 void ToffsetPage::offset2dlg(void)
 {
+ char s[256];int x;
+ x=cfgGet(IDFF_offsetY_X);
+ sprintf(s,"Luma offset X: %i",x);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_OFFSETY_X,WM_SETTEXT,0,LPARAM(s));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETY_X,TBM_SETPOS,TRUE,x);
+ x=cfgGet(IDFF_offsetY_Y);
+ sprintf(s,"Luma offset Y: %i",x);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_OFFSETY_Y,WM_SETTEXT,0,LPARAM(s));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETY_Y,TBM_SETPOS,TRUE,x);
+ x=cfgGet(IDFF_offsetU_X);
+ sprintf(s,"Chroma offset X: %i",x);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_OFFSETUV_X,WM_SETTEXT,0,LPARAM(s));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETUV_X,TBM_SETPOS,TRUE,x);
+ x=cfgGet(IDFF_offsetU_Y);
+ sprintf(s,"Chroma offset Y: %i",x);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_OFFSETUV_Y,WM_SETTEXT,0,LPARAM(s));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETUV_Y,TBM_SETPOS,TRUE,x);
+
 }
 
 HRESULT ToffsetPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
+   case WM_HSCROLL:
+    if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_OFFSETY_X) || HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_OFFSETY_Y) || HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_OFFSETUV_X) || HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_OFFSETUV_Y))
+     {
+      cfgSet(IDFF_offsetY_X,SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETY_X ,TBM_GETPOS,0,0));
+      cfgSet(IDFF_offsetY_Y,SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETY_Y ,TBM_GETPOS,0,0));
+      cfgSet(IDFF_offsetU_X,SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETUV_X,TBM_GETPOS,0,0));
+      cfgSet(IDFF_offsetU_Y,SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETUV_Y,TBM_GETPOS,0,0));
+      cfgSet(IDFF_offsetV_X,SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETUV_X,TBM_GETPOS,0,0));
+      cfgSet(IDFF_offsetV_Y,SendDlgItemMessage(m_hwnd,IDC_TBR_OFFSETUV_Y,TBM_GETPOS,0,0));
+      offset2dlg();
+      return TRUE;
+     }
+    break;
    case WM_COMMAND:
     switch (LOWORD(wParam))  
      {
@@ -63,7 +106,7 @@ void ToffsetPage::interDlg(void)
 }
 void ToffsetPage::getTip(char *tipS,int len)
 {
- sprintf(tipS,"Offset (Y:[%i,%i] U:[%i,%i] V:[%i,%i])",cfgGet(IDFF_offsetY_X),cfgGet(IDFF_offsetY_Y),cfgGet(IDFF_offsetU_X),cfgGet(IDFF_offsetU_Y),cfgGet(IDFF_offsetV_X),cfgGet(IDFF_offsetV_Y));
+ sprintf(tipS,"Offset (luma:[%i,%i] chroma:[%i,%i])",cfgGet(IDFF_offsetY_X),cfgGet(IDFF_offsetY_Y),cfgGet(IDFF_offsetU_X),cfgGet(IDFF_offsetU_Y),cfgGet(IDFF_offsetV_X),cfgGet(IDFF_offsetV_Y));
 }
 ToffsetPage::ToffsetPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {

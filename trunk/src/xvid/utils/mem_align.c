@@ -78,4 +78,3 @@ void xvid_free(void *mem_ptr)
 	free((uint8_t*)mem_ptr - *((uint8_t*)mem_ptr - 1));
 
 }
-

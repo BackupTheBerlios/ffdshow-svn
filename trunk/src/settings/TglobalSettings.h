@@ -6,7 +6,8 @@ struct TglobalSettings
  int trayIcon;
  int autoPreset,autoPresetFileFirst;
  int xvid,div3,divx,dx50,mp43,mp42,mp41,h263;
- char activePreset[1024];
+ int TglobalSettings::codecSupported(const DWORD fourCC,char *AVIfourCC);
+ char defaultPreset[260];
  TglobalSettings(void) {load();};
  void load(void),save(void);
 };

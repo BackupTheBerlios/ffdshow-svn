@@ -68,7 +68,7 @@ _REG_OP_N("fontSize",fontSize,26);
 _REG_OP_N("fontWeight",fontWeight,FW_NORMAL);
 _REG_OP_N("fontColor",fontColor,RGB(255,255,255));
 _REG_OP_N("fontShadowStrength",fontShadowStrength,90);
-_REG_OP_N("fontShadowRadius  ",fontShadowRadius  ,50);
+_REG_OP_N("fontShadowRadius"  ,fontShadowRadius  ,50);
 _REG_OP_N("fontAutosize",fontAutosize,0);
 _REG_OP_N("fontSpacing",fontSpacing,0);
 _REG_OP_N("subPosX",subPosX,50);

@@ -231,31 +231,7 @@ int avcodec_close(AVCodecContext *avctx)
     return 0;
 }
 
-AVCodec *avcodec_find_encoder(enum CodecID id)
-{
-    AVCodec *p;
-    p = first_avcodec;
-    while (p) {
-        if (p->encode != NULL && p->id == id)
-            return p;
-        p = p->next;
-    }
-    return NULL;
-}
-
-AVCodec *avcodec_find_encoder_by_name(const char *name)
-{
-    AVCodec *p;
-    p = first_avcodec;
-    while (p) {
-        if (p->encode != NULL && strcmp(name,p->name) == 0)
-            return p;
-        p = p->next;
-    }
-    return NULL;
-}
-
-AVCodec *avcodec_find_decoder(enum CodecID id)
+AVCodec *avcodec_find_decoder(int id)
 {
     AVCodec *p;
     p = first_avcodec;
@@ -279,7 +255,7 @@ AVCodec *avcodec_find_decoder_by_name(const char *name)
     return NULL;
 }
 
-AVCodec *avcodec_find(enum CodecID id)
+AVCodec *avcodec_find(int id)
 {
     AVCodec *p;
     p = first_avcodec;
@@ -309,10 +285,7 @@ void avcodec_string(char *buf, int buf_size, AVCodecContext *enc, int encode)
     char channels_str[100];
     int bitrate;
 
-    if (encode)
-        p = avcodec_find_encoder(enc->codec_id);
-    else
-        p = avcodec_find_decoder(enc->codec_id);
+    p = avcodec_find_decoder(enc->codec_id);
 
     if (p) {
         codec_name = p->name;
@@ -352,50 +325,6 @@ void avcodec_string(char *buf, int buf_size, AVCodecContext *enc, int encode)
                 ", q=%d-%d", enc->qmin, enc->qmax);
 
         bitrate = enc->bit_rate;
-        break;
-    case CODEC_TYPE_AUDIO:
-        snprintf(buf, buf_size,
-                 "Audio: %s",
-                 codec_name);
-        switch (enc->channels) {
-            case 1:
-                strcpy(channels_str, "mono");
-                break;
-            case 2:
-                strcpy(channels_str, "stereo");
-                break;
-            case 6:
-                strcpy(channels_str, "5:1");
-                break;
-            default:
-                sprintf(channels_str, "%d channels", enc->channels);
-                break;
-        }
-        if (enc->sample_rate) {
-            snprintf(buf + strlen(buf), buf_size - strlen(buf),
-                     ", %d Hz, %s",
-                     enc->sample_rate,
-                     channels_str);
-        }
-        
-        /* for PCM codecs, compute bitrate directly */
-        switch(enc->codec_id) {
-        case CODEC_ID_PCM_S16LE:
-        case CODEC_ID_PCM_S16BE:
-        case CODEC_ID_PCM_U16LE:
-        case CODEC_ID_PCM_U16BE:
-            bitrate = enc->sample_rate * enc->channels * 16;
-            break;
-        case CODEC_ID_PCM_S8:
-        case CODEC_ID_PCM_U8:
-        case CODEC_ID_PCM_ALAW:
-        case CODEC_ID_PCM_MULAW:
-            bitrate = enc->sample_rate * enc->channels * 8;
-            break;
-        default:
-            bitrate = enc->bit_rate;
-            break;
-        }
         break;
     default:
         abort();

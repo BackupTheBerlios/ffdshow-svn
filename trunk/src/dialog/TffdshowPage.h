@@ -30,6 +30,7 @@ class TffdshowPage : public CBasePropertyPage
   //void swap(HTREEITEM hti1,HTREEITEM hti2);
   void presetChanged(void);
   friend class TpresetsPage;
+  bool applying;
  public: 
   static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT * phr);
   TffdshowPage(LPUNKNOWN pUnk, HRESULT * phr);

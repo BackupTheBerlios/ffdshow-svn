@@ -18,14 +18,13 @@
 
 #pragma hdrstop
 #include <assert.h>
-extern "C"
-{
- #define FF_POSTPROCESS
- #include "ffmpeg\libavcodec\avcodec.h"
-}
+#define FF_POSTPROCESS
+#include "ffmpeg\libavcodec\avcodec.h"
 #include "TimgFilters.h"
 #include "TpresetSettings.h"
 #include "ffdebug.h"
+
+using namespace std;
 
 TimgFilters::TimgFilters(void)
 {
@@ -46,19 +45,22 @@ void TimgFilters::init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY)
  tempV=new TtempPicture(strideUV*dy/2,128);
  IdxY-=IdiffX*2;_dy=Idy-=IdiffY*2;
  _dx=IdxY;_dy=Idy;
- noise.init(IdxY,IstrideY,Idy);
- luma.init(IdxY,IstrideY,Idy);
- chroma.init(IdxY,IstrideY,Idy);
- blur.init(IdxY,IstrideY,Idy);
- sharpen.init(IdxY,IstrideY,Idy);
- subtitles.init(IdxY,IstrideY,Idy);
- offset.init(IdxY,IstrideY,Idy);
+ filters.push_back(&noise);noise.init(IdxY,IstrideY,Idy);
+ filters.push_back(&luma);luma.init(IdxY,IstrideY,Idy);
+ filters.push_back(&chroma);chroma.init(IdxY,IstrideY,Idy);
+ filters.push_back(&blur);blur.init(IdxY,IstrideY,Idy);
+ filters.push_back(&sharpen);sharpen.init(IdxY,IstrideY,Idy);
+ filters.push_back(&subtitles);subtitles.init(IdxY,IstrideY,Idy);
+ filters.push_back(&offset);offset.init(IdxY,IstrideY,Idy);
 }
 void TimgFilters::done(void)
 {
  if (tempY) {delete tempY;tempY=NULL;};
  if (tempU) {delete tempU;tempU=NULL;};
  if (tempV) {delete tempV;tempV=NULL;};
+ for (vector<TimgFilter*>::iterator i=filters.begin();i!=filters.end();i++)
+  (*i)->done();
+ filters.clear(); 
 }
 TimgFilters::~TimgFilters()
 {

@@ -70,8 +70,7 @@
 				Name="VCPreLinkEventTool"/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="3081"/>
+				PreprocessorDefinitions="_DEBUG"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
@@ -87,6 +86,7 @@
 			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="4"
 				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="TRUE"
@@ -221,9 +221,25 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
 				RelativePath="src\Tconfig.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\TcpuUsage.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\TffDecoder.cpp">
@@ -243,6 +259,14 @@
 			</File>
 			<File
 				RelativePath=".\src\Tlibavcodec.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\src\Tpostproc.cpp">
@@ -250,14 +274,33 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
+						Optimization="1"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"
 						AssemblerOutput="0"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\src\xvid\utils\mem_align.c">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\src\trayIcon.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\src\idct\xIdctref.c">
@@ -301,6 +344,9 @@
 			</File>
 			<File
 				RelativePath=".\src\xvid\utils\mem_align.h">
+			</File>
+			<File
+				RelativePath="src\resrc1.h">
 			</File>
 			<File
 				RelativePath=".\src\trayIcon.h">
@@ -661,108 +707,270 @@
 			Filter="">
 			<File
 				RelativePath="src\dialog\Cabout.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Cabout.h">
 			</File>
 			<File
 				RelativePath="src\dialog\CaspectNcrop.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\CaspectNcrop.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Cblur.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Cblur.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Ccodecs.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Ccodecs.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Cfont.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Cfont.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Cinfo.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Cinfo.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Cmisc.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Cmisc.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Cnoise.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Cnoise.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Coffset.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Coffset.h">
 			</File>
 			<File
 				RelativePath="src\dialog\CpictProp.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\CpictProp.h">
 			</File>
 			<File
 				RelativePath="src\dialog\CpostProc.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\CpostProc.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Cpresets.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Cpresets.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Cresize.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Cresize.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Csharpen.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Csharpen.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Csubtitles.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Csubtitles.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Ctray.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\Ctray.h">
 			</File>
 			<File
 				RelativePath="src\dialog\TconfPage.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\TconfPage.h">
 			</File>
 			<File
 				RelativePath="src\dialog\TffdshowPage.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						InlineFunctionExpansion="2"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\dialog\TffdshowPage.h">
@@ -773,24 +981,62 @@
 			Filter="">
 			<File
 				RelativePath="src\settings\TdialogSettings.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\settings\TdialogSettings.h">
 			</File>
 			<File
 				RelativePath="src\settings\TglobalSettings.cpp">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						GeneratePreprocessedFile="0"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\settings\TglobalSettings.h">
 			</File>
 			<File
 				RelativePath="src\settings\TpresetSettings.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\settings\TpresetSettings.h">
 			</File>
 			<File
 				RelativePath="src\settings\Tpresets.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						EnableIntrinsicFunctions="FALSE"
+						FavorSizeOrSpeed="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\settings\Tpresets.h">

@@ -1,5 +1,7 @@
+[FileVersion]
+Version=6.0
 [Compiler]
-A=1
+A=8
 B=0
 C=1
 D=1
@@ -51,6 +53,9 @@ UsePackages=0
 [Parameters]
 RunParams=
 HostApplication=
+Launcher=
+UseLauncher=0
+DebugCWD=
 [Version Info]
 IncludeVerInfo=0
 AutoIncBuild=0
@@ -78,8 +83,8 @@ ProductVersion=1.0.0.0
 Comments=
 [Excluded Packages]
 c:\PrometeusW5\system\rbRAP55.bpl=ReportBuilder RAP Runtime (Beta)
-$(DELPHI)\Projects\Bpl\JvPack100_D50.bpl=JEDI-VCL JvPack Components
-$(DELPHI)\vglib\Delphi5\Bpl\vg2DclIb50.bpl=VG Library II VCL Components (InterBase)
+c:\program files\borland\delphi6\Projects\Bpl\JvPack100_D50.bpl=JEDI-VCL JvPack Components
+c:\program files\borland\delphi6\vglib\Delphi5\Bpl\vg2DclIb50.bpl=VG Library II VCL Components (InterBase)
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;

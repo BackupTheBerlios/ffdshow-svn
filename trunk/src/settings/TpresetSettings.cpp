@@ -22,6 +22,7 @@
 #pragma hdrstop
 #include "reg.h"
 #include "TpresetSettings.h"
+#include "ffdebug.h"
 
 const int TpresetSettings::min_order=1;
 const int TpresetSettings::orderPostprocDef=1;
@@ -33,13 +34,10 @@ const int TpresetSettings::orderNoiseDef=6;
 const int TpresetSettings::orderSubtitlesDef=7;
 const int TpresetSettings::max_order=7;
 
-TpresetSettings::TpresetSettings(void)
-{
- strcpy(presetName,FFPRESET_DEFAULT);
-};
 TpresetSettings::TpresetSettings(const char *IpresetName) 
 {
  strcpy(presetName,IpresetName);
+ autoLoadedFromFile=0;
 };
 void TpresetSettings::loadDefault(void)
 {
@@ -61,7 +59,7 @@ void TpresetSettings::loadReg(void)
  
  RegCloseKey(hKey);
 }
-void TpresetSettings::saveReg (void)
+void TpresetSettings::saveReg(void)
 {
  char presetRegStr[256];
  sprintf(presetRegStr,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD"\\%s",presetName);
@@ -81,7 +79,7 @@ void TpresetSettings::loadFile(const char *flnm)
  char sections[4096]="";
  GetPrivateProfileSectionNames(sections,4095,flnm);
  if (sections[0]=='\0') return;
- normalizePresetName(presetName,flnm);
+ _splitpath(flnm,NULL,NULL,presetName,NULL);
  char pomS[256],propS[256];
  #undef _REG_OP_N
  #undef _REG_OP_S

@@ -6,7 +6,6 @@
 #define FFDSHOW_REG_PARENT "Software\\GNU"
 #define FFDSHOW_REG_CHILD  "ffdshow"
 #define FFDSHOW_REG_CLASS  "config"
-#define FFPRESET_DEFAULT   "default"
 
 #define REG_GET_N(X, Y, Z) size=sizeof(int);if(RegQueryValueEx(hKey, X, 0, 0, (LPBYTE)&Y, &size) != ERROR_SUCCESS) {Y=Z;}
 #define REG_GET_N_FILE(X, Y, Z) {GetPrivateProfileString(sections,X,_itoa(Z,pomS,10),propS,255,flnm);Y=atoi(propS);}

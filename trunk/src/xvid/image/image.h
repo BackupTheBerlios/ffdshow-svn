@@ -1,11 +1,14 @@
 #ifndef _IMAGE_H_
 #define _IMAGE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "../portab.h"
 #include "colorspace.h"
 
 #define EDGE_SIZE  32
-
 
 typedef struct
 {
@@ -31,5 +34,9 @@ int image_input(IMAGE * image, uint32_t width, int height, uint32_t edged_width,
 
 int image_output(IMAGE * image, uint32_t width, int height, uint32_t edged_width,
 			uint8_t * dst, uint32_t dst_stride, int csp);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _IMAGE_H_ */

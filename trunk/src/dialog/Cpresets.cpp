@@ -56,12 +56,14 @@ void TpresetsPage::init(void)
  hlv=GetDlgItem(m_hwnd,IDC_LV_PRESETS); 
  SetWindowLong(hlv,GWL_USERDATA,LONG(this));
  lvOldWndProc=(WNDPROC)SetWindowLong(hlv,GWL_WNDPROC,LONG(lvWndProc));
+
+ italicFont=boldFont=NULL;
  ncol=0;fileDlgFlnm[0]='\0';
 
  deci->getPresets(&localPresets);
 
  ListView_SetExtendedListViewStyleEx(hlv,LVS_EX_FULLROWSELECT,LVS_EX_FULLROWSELECT);
- addCol(300,"preset name",false);
+ addCol(cfgGet(IDFF_lvWidth0),"preset name",false);
  ListView_SetItemCountEx(hlv,localPresets.size(),0);
  deci->getActivePresetName(oldActivePresetName,260);
  lvSelectPreset(oldActivePresetName);
@@ -104,6 +106,11 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  int menuCmd=0;
  switch (uMsg)
   {
+   case WM_DESTROY:
+    cfgSet(IDFF_lvWidth0,ListView_GetColumnWidth(hlv,0));
+    DeleteObject(italicFont);
+    DeleteObject(boldFont);
+    return FALSE;
    case WM_COMMAND:
     switch (LOWORD(wParam))  
      {
@@ -172,6 +179,51 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
          } 
         return TRUE;
        }; 
+      case IDC_BT_PRESET_READFROMFILE:
+       {
+        int i=ListView_GetNextItem(hlv,-1,LVNI_SELECTED);
+        char presetFlnm[MAX_PATH];
+        _splitpath(localPresets[i]->presetName,NULL,NULL,presetFlnm,NULL);
+        OPENFILENAME ofn;
+        memset(&ofn,0,sizeof(ofn));
+        ofn.lStructSize    =sizeof(OPENFILENAME);
+        ofn.hwndOwner      =m_hwnd;
+        ofn.lpstrFilter    ="ffdshow preset (*."FFPRESET_EXT")\0*."FFPRESET_EXT"\0All files (*.*)\0*.*\0\0";
+        ofn.lpstrInitialDir=".";
+        ofn.lpstrFile      =presetFlnm;
+        ofn.lpstrTitle     ="Load ffdshow preset";
+        ofn.lpstrDefExt    =FFPRESET_EXT;  
+        ofn.nMaxFile       =MAX_PATH;
+        ofn.Flags          =OFN_PATHMUSTEXIST|OFN_FILEMUSTEXIST|OFN_ENABLESIZING;
+        if (GetOpenFileName(&ofn))
+         {
+          char presetName[260];strcpy(presetName,localPresets[i]->presetName);
+          localPresets[i]->loadFile(presetFlnm);
+          strcpy(localPresets[i]->presetName,presetName);
+          lvSelectPreset(presetName);
+         }; 
+        return TRUE; 
+       } 
+      case IDC_BT_PRESET_SAVETOFILE:
+       {
+        int i=ListView_GetNextItem(hlv,-1,LVNI_SELECTED);
+        char presetFlnm[MAX_PATH];
+        _splitpath(localPresets[i]->presetName,NULL,NULL,presetFlnm,NULL);
+        OPENFILENAME ofn;
+        memset(&ofn,0,sizeof(ofn));
+        ofn.lStructSize    =sizeof(OPENFILENAME);
+        ofn.hwndOwner      =m_hwnd;
+        ofn.lpstrFilter    ="ffdshow preset (*."FFPRESET_EXT")\0*."FFPRESET_EXT"\0All files (*.*)\0*.*\0\0";
+        ofn.lpstrFile      =presetFlnm;
+        ofn.lpstrInitialDir=".";
+        ofn.lpstrTitle     ="Save ffdshow preset";
+        ofn.lpstrDefExt    =FFPRESET_EXT;  
+        ofn.nMaxFile       =MAX_PATH;
+        ofn.Flags          =OFN_PATHMUSTEXIST|OFN_ENABLESIZING;
+        if (GetSaveFileName(&ofn))
+         localPresets[i]->saveFile(presetFlnm);
+        return TRUE; 
+       }
       case IDC_BT_PRESET_REMOVE:
        int i=ListView_GetNextItem(hlv,-1,LVNI_SELECTED);
        if (i!=0 && MessageBox(m_hwnd,"Do you realy want to remove selected preset?","Removing preset",MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2)==IDYES)
@@ -179,6 +231,8 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
          char presetName[1024];
          ListView_GetItemText(hlv,i,0,presetName,1023);
          localPresets.removePreset(presetName);
+         if (deci->isDefaultPreset(presetName)==S_OK)
+          deci->setDefaultPresetName(localPresets[0]->presetName);
          ListView_SetItemCountEx(hlv,localPresets.size(),0);
          ListView_GetItemText(hlv,0,0,presetName,1023);
          lvSelectPreset(presetName);
@@ -200,9 +254,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           //if (di->item.mask&LVIF_STATE) di->item.state|=0;
           //if (di->item.mask&LVIF_IMAGE) di->item.iImage=items[i]->getImageIndex();
           if (nmdi->item.mask&LVIF_TEXT)
-           {
-            strcpy(nmdi->item.pszText,localPresets[i]->presetName);
-           }
+           strcpy(nmdi->item.pszText,localPresets[i]->presetName);
           return TRUE;
          };
         case LVN_ITEMCHANGED:
@@ -212,7 +264,9 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           DEBUGS1("activate",nmlv->iItem);
           char presetName[1024];
           ListView_GetItemText(hlv,nmlv->iItem,0,presetName,1023);
+          parent->applying=true;
           lvSelectPreset(presetName);
+          parent->applying=false;
           return TRUE;
          }
         case NM_DBLCLK:
@@ -226,6 +280,21 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             deci->getActivePresetName(activePresetName,260);
             //DEBUGS1(activePresetName,nmia->iItem);
             lvSelectPreset(activePresetName);
+           }
+          else if (nmhdr->code==NM_DBLCLK)
+           {
+            if (cfgGet(IDFF_autoLoadedFromFile)==1)
+             {
+              cfgSet(IDFF_autoLoadedFromFile,0);
+              InvalidateRect(hlv,NULL,false);
+             }
+            else 
+             {
+              char presetName[260];
+              deci->getActivePresetName(presetName,260);
+              deci->setDefaultPresetName(presetName);
+              InvalidateRect(hlv,NULL,false);
+             }  
            }
           return TRUE;
          }
@@ -244,6 +313,40 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           else
            SetWindowLong(m_hwnd,DWL_MSGRESULT,FALSE);
          } 
+        case NM_CUSTOMDRAW:
+         {
+          NMLVCUSTOMDRAW *lvcd=LPNMLVCUSTOMDRAW(lParam);
+          if (lvcd->nmcd.dwDrawStage==CDDS_PREPAINT)
+           {
+            SetWindowLong(m_hwnd,DWL_MSGRESULT,CDRF_NOTIFYITEMDRAW);
+            return TRUE;
+           } 
+          if (lvcd->nmcd.dwDrawStage==CDDS_ITEMPREPAINT)
+           {
+            //TconfPage *page=(TconfPage*)tvcd->nmcd.lItemlParam;
+            //if (page->getInter()==-1) return FALSE;
+            if (!italicFont)
+             {
+              LOGFONT oldFont;
+              HFONT hf=(HFONT)GetCurrentObject(lvcd->nmcd.hdc,OBJ_FONT);
+              GetObject(hf,sizeof(LOGFONT),&oldFont);
+              oldFont.lfItalic=TRUE;
+              italicFont=CreateFontIndirect(&oldFont);
+              oldFont.lfItalic=FALSE;oldFont.lfWeight=FW_BLACK;
+              boldFont=CreateFontIndirect(&oldFont);
+             }
+            TpresetSettings *preset=localPresets[lvcd->nmcd.dwItemSpec];
+            if (preset->autoLoadedFromFile) 
+             SelectObject(lvcd->nmcd.hdc,italicFont);
+            char defaultPreset[260];
+            deci->getDefaultPresetName(defaultPreset,260); 
+            if (_stricmp(defaultPreset,preset->presetName)==0)
+             SelectObject(lvcd->nmcd.hdc,boldFont);
+            SetWindowLong(m_hwnd,DWL_MSGRESULT,/*CDRF_NOTIFYPOSTPAINT*/CDRF_NEWFONT);
+            return TRUE;
+           }
+          return TRUE;
+         }
        }
      break; 
     }

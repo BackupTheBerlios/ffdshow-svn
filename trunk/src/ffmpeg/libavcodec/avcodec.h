@@ -1,6 +1,10 @@
 #ifndef AVCODEC_H
 #define AVCODEC_H
 
+#ifdef __cpluplus
+extern "C" {
+#endif 
+
 #include "common.h"
 
 #define LIBAVCODEC_VERSION_INT 0x000406
@@ -8,35 +12,24 @@
 #define LIBAVCODEC_BUILD       4610
 #define LIBAVCODEC_BUILD_STR   "4610"
 
-enum CodecID {
-    CODEC_ID_NONE, 
-    CODEC_ID_MPEG1VIDEO,
-    CODEC_ID_H263,
-    CODEC_ID_RV10,
-    CODEC_ID_MP2,
-    CODEC_ID_MP3LAME,
-    CODEC_ID_AC3,
-    CODEC_ID_MJPEG,
-    CODEC_ID_MPEG4,
-    CODEC_ID_RAWVIDEO,
-    CODEC_ID_MSMPEG4V1,
-    CODEC_ID_MSMPEG4V2,
-    CODEC_ID_MSMPEG4V3,
-    CODEC_ID_WMV1,
-    CODEC_ID_H263P,
-    CODEC_ID_H263I,
-
-    /* various pcm "codecs" */
-    CODEC_ID_PCM_S16LE,
-    CODEC_ID_PCM_S16BE,
-    CODEC_ID_PCM_U16LE,
-    CODEC_ID_PCM_U16BE,
-    CODEC_ID_PCM_S8,
-    CODEC_ID_PCM_U8,
-    CODEC_ID_PCM_MULAW,
-    CODEC_ID_PCM_ALAW,
-};
+#define CODEC_ID_NONE       0
+#define CODEC_ID_MPEG1VIDEO 1
+#define CODEC_ID_H263       2
+#define CODEC_ID_RV10       3
+#define CODEC_ID_MP2        4
+#define CODEC_ID_MP3LAME    5
+#define CODEC_ID_AC3        6
+#define CODEC_ID_MJPEG      7
+#define CODEC_ID_MPEG4      8
+#define CODEC_ID_RAWVIDEO   9
+#define CODEC_ID_MSMPEG4V1 10
+#define CODEC_ID_MSMPEG4V2 11
+#define CODEC_ID_MSMPEG4V3 12
 #define CODEC_ID_MSMPEG4 CODEC_ID_MSMPEG4V3
+#define CODEC_ID_WMV1      13
+#define CODEC_ID_H263P     14
+#define CODEC_ID_H263I     15
+
 
 enum CodecType {
     CODEC_TYPE_UNKNOWN = -1,
@@ -229,7 +222,7 @@ typedef struct AVCodecContext {
     void *opaque;   /* can be used to carry app specific stuff */
     char codec_name[32];
     enum CodecType codec_type; /* see CODEC_TYPE_xxx */
-    enum CodecID codec_id; /* see CODEC_ID_xxx */
+    int codec_id; /* see CODEC_ID_xxx */
     unsigned int codec_tag;  /* codec tag, only used if unknown codec */
     
     int workaround_bugs;       /* workaround bugs in encoders which cannot be detected automatically */
@@ -399,9 +392,7 @@ void avcodec_init(void);
 void avcodec_set_bit_exact(void);
 
 void register_avcodec(AVCodec *format);
-AVCodec *avcodec_find_encoder(enum CodecID id);
-AVCodec *avcodec_find_encoder_by_name(const char *name);
-AVCodec *avcodec_find_decoder(enum CodecID id);
+AVCodec *avcodec_find_decoder(int id);
 AVCodec *avcodec_find_decoder_by_name(const char *name);
 void avcodec_string(char *buf, int buf_size, AVCodecContext *enc, int encode);
 
@@ -507,5 +498,9 @@ typedef enum {
  * integer resulting value
  */
 int avcodec(void* handle, avc_cmd_t cmd, void* pin, void* pout);
+
+#ifdef __cpluplus
+}
+#endif 
 
 #endif /* AVCODEC_H */

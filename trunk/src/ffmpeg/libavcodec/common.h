@@ -228,6 +228,7 @@ static inline uint32_t unaligned32(const void *v) {
 #endif //!ARCH_X86
 
 #ifndef ALT_BITSTREAM_WRITER
+#include <assert.h>
 static inline void put_bits(PutBitContext *s, int n, unsigned int value)
 {
     unsigned int bit_buf;

@@ -23,20 +23,19 @@
 #include "Tpresets.h"
 #include "reg.h"
 
+using namespace std;
+
 Tpresets::~Tpresets()
 {
  done();
 }
-void Tpresets::init(void)
+void Tpresets::listRegKeys(std::vector<string> &list)
 {
- TpresetSettings *def=new TpresetSettings;
- def->loadDefault();
- push_back(def);
-
+ list.clear();
+ 
  HKEY hKey;
  RegOpenKeyEx(HKEY_CURRENT_USER,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,KEY_READ,&hKey);
- int i,retCode;
- for (i=0,retCode=ERROR_SUCCESS;retCode==ERROR_SUCCESS;i++) 
+ for (int i=0,retCode=ERROR_SUCCESS;retCode==ERROR_SUCCESS;i++) 
   { 
    char keyName[256];DWORD keyNameSize=255;
    FILETIME ftLastWriteTime;
@@ -49,16 +48,29 @@ void Tpresets::init(void)
                           NULL, 
                           &ftLastWriteTime
                          ); 
-   if (retCode==ERROR_SUCCESS && findPreset(keyName)==end()) 
-    {
-     TpresetSettings *preset=new TpresetSettings(keyName);
-     preset->loadReg();
-     push_back(preset);
-    }
-   else break;
+   if (retCode==ERROR_SUCCESS) 
+    list.push_back(string(keyName));
+   else
+    break;
   };
  RegCloseKey(hKey);
- if (i==0)
+}
+void Tpresets::init(void)
+{
+ TpresetSettings *def=new TpresetSettings;
+ def->loadDefault();
+ push_back(def);
+
+ vector<string> keys;
+ listRegKeys(keys);
+ for (vector<string>::iterator i=keys.begin();i!=keys.end();i++)
+  if (findPreset(i->c_str())==end()) 
+   {
+    TpresetSettings *preset=new TpresetSettings(i->c_str());
+    preset->loadReg();
+    push_back(preset);
+   }
+ if (keys.size()==0)
   (*begin())->saveReg();
 }
 void Tpresets::done(void)
@@ -102,7 +114,7 @@ void Tpresets::savePreset(TpresetSettings *preset,const char *presetName)
 void Tpresets::removePreset(const char *presetName)
 {
  iterator i=findPreset(presetName);
- if (i!=begin())
+ if (i!=begin() && i!=end())
   {
    delete *i;
    erase(i);
@@ -126,6 +138,16 @@ void Tpresets::nextUniqueName(TpresetSettings *preset)
 }
 void Tpresets::saveRegAll(void)
 {
- for (iterator i=begin();i!=end();i++)
-  (*i)->saveReg();
+ for (iterator ii=begin();ii!=end();ii++)
+  (*ii)->saveReg();
+
+ vector<string> keys;
+ listRegKeys(keys);
+ for (vector<string>::iterator i=keys.begin();i!=keys.end();i++)
+  if (i->c_str()[0]!='\0' && findPreset(i->c_str())==end())
+   {
+    char presetRegStr[256];
+    sprintf(presetRegStr,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD"\\%s",i->c_str());
+    RegDeleteKey(HKEY_CURRENT_USER,presetRegStr);
+   }
 }

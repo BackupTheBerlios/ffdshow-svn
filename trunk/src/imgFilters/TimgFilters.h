@@ -2,6 +2,7 @@
 #define _TIMGFILTERS_H_
 
 #include <stdlib.h>
+#include <vector>
 #include "TcpuUsage.h"
 #include "Tpostproc.h"
 #include "TtempPicture.h"
@@ -24,6 +25,7 @@ private:
  int _dx,_dy;
  TcpuUsage cpu;int cpus;
  TtempPicture *tempY,*tempU,*tempV;
+ std::vector<TimgFilter*> filters;
  TimgFilterNoise noise;
  TimgFilterLuma luma;
  TimgFilterChroma chroma;

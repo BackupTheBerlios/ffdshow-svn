@@ -79,6 +79,10 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   STDMETHODIMP savePresets(void);
   STDMETHODIMP setPresetPtr(TpresetSettings *preset);
   STDMETHODIMP renameActivePreset(const char *newName);
+  STDMETHODIMP setOnChangeMsg(HWND Iwnd,unsigned int Imsg);
+  STDMETHODIMP getDefaultPresetName(char *buf,unsigned int len);
+  STDMETHODIMP setDefaultPresetName(const char *presetName);
+  STDMETHODIMP isDefaultPreset(const char *presetName);
   
  private:
   bool firstFrame;
@@ -94,6 +98,8 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   int idctOld;
   Tlibavcodec libavcodec;
   HRESULT ChangeColorspace(GUID subtype, GUID formattype, void * format);
+  HWND onChangeWnd;unsigned int onChangeMsg;
+  void sendOnChange(void);
   
   int AVIdx,AVIdy;double AVIfps;
   struct
@@ -113,7 +119,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   void calcCrop(void);
   TimgFilters *imgFilters;
   Tsubtitles *subs;
-  char *codecName;
+  int  codecId;
 };
 
 #endif 

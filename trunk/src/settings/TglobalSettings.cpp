@@ -19,7 +19,10 @@
 #include <windows.h>
 #pragma hdrstop
 #include "TglobalSettings.h"
+#include "TpresetSettings.h"
 #include "reg.h"
+#include "ffdshow_mediaguids.h"
+#include "ffmpeg\libavcodec\avcodec.h"
 
 void TglobalSettings::load(void)
 {
@@ -38,7 +41,7 @@ void TglobalSettings::load(void)
  REG_GET_N("autoPreset",autoPreset,0);
  REG_GET_N("trayIcon",trayIcon,0);
  REG_GET_N("autoPresetFileFirst",autoPresetFileFirst,0);
- REG_GET_S("activePreset",activePreset,FFPRESET_DEFAULT);
+ REG_GET_S("activePreset",defaultPreset,FFPRESET_DEFAULT);
  RegCloseKey(hKey); 
 }
 
@@ -62,7 +65,33 @@ void TglobalSettings::save(void)
    REG_SET_N("autoPreset",autoPreset,0);
    REG_SET_N("autoPresetFileFirst",autoPresetFileFirst,0);
    REG_SET_N("trayIcon",trayIcon,0);
-   REG_SET_S("activePreset",activePreset,"");
+   REG_SET_S("activePreset",defaultPreset,"");
    RegCloseKey(hKey);
+  }; 
+}
+
+#define FF_FOURCC(fourCC1,fourCC2,testVar,codecId)  \
+ case FOURCC_##fourCC1:                             \
+ case FOURCC_##fourCC2:                             \
+  if (testVar)                                      \
+   {                                                \
+    if (AVIfourCC) strcpy(AVIfourCC,#fourCC1);      \
+    return codecId;                                 \
+   }                                                \
+  else return CODEC_ID_NONE;
+  
+int TglobalSettings::codecSupported(const DWORD fourCC,char *AVIfourCC)
+{
+ switch(fourCC)
+  {
+   FF_FOURCC(XVID,xvid,xvid,CODEC_ID_MPEG4)
+   FF_FOURCC(DIVX,divx,divx,CODEC_ID_MPEG4)
+   FF_FOURCC(DX50,dx50,dx50,CODEC_ID_MPEG4)
+   FF_FOURCC(DIV3,div3,div3,CODEC_ID_MSMPEG4V3)
+   FF_FOURCC(MP43,mp43,mp43,CODEC_ID_MSMPEG4V3);
+   FF_FOURCC(MP42,mp42,mp42,CODEC_ID_MSMPEG4V2);
+   FF_FOURCC(MP41,mp41,mp41,CODEC_ID_MSMPEG4V1);
+   FF_FOURCC(H263,h263,h263,CODEC_ID_H263);
+   default:return CODEC_ID_NONE;
   }; 
 }

@@ -26,7 +26,7 @@ public:
  void init(void);
  void done(void);
  void (*libavcodec_init)(void);
- AVCodec* (*avcodec_find_decoder_by_name)(const char *name);
+ AVCodec* (*avcodec_find_decoder)(int codecId);
  int  (*avcodec_open)(AVCodecContext *avctx, AVCodec *codec);
  int  (*avcodec_decode_video)(AVCodecContext *avctx, AVPicture *picture,
                               int *got_picture_ptr,

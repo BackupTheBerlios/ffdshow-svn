@@ -61,7 +61,11 @@ void Tsubtitles::init(const char *aviFlnm,const char *subFlnm,double Ifps)
 }
 void Tsubtitles::done(void)
 {
- if (subs) sub_free(subs);subs=NULL;
+ if (subs) 
+  {
+   sub_free(subs);
+   subs=NULL;
+  } 
 }
 subtitle* Tsubtitles::getSubtitle(unsigned long frame)
 {

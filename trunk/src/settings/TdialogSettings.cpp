@@ -29,6 +29,7 @@ void TdialogSettings::load(void)
  REG_GET_N("dlgRestorePos",dlgRestorePos,0);
  REG_GET_N("dlgPosX",dlgPosX,0);
  REG_GET_N("dlgPosY",dlgPosY,0);
+ REG_GET_N("lvWidth0",lvWidth0,300);
  RegCloseKey(hKey); 
 }
 
@@ -41,6 +42,7 @@ void TdialogSettings::save(void)
    REG_SET_N("dlgRestorePos",dlgRestorePos,0);
    REG_SET_N("dlgPosX",dlgPosX,0);
    REG_SET_N("dlgPosY",dlgPosY,0);
+   REG_SET_N("lvWidth0",lvWidth0,0);
    RegCloseKey(hKey);
   }; 
 }

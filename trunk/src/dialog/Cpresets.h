@@ -16,6 +16,7 @@ class TpresetsPage : public TconfPage
   WNDPROC lvOldWndProc;
   friend static LRESULT CALLBACK lvWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam) ;
   char fileDlgFlnm[MAX_PATH];
+  HFONT italicFont,boldFont;
  public:
   TpresetsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
   virtual ~TpresetsPage();

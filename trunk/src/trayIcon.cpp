@@ -99,21 +99,20 @@ HMENU TtrayIcon::createMenu(void)
  insertSeparator(hm,ord);
  
  for (i=deci->getMinOrder2();i<=deci->getMaxOrder2();i++)
-  if      (i==cfgGet(IDFF_orderPostproc )) insertMenuItem(hm,ord,IDC_CHB_GLOBAL_POSTPROC,"Postprocessing",IDFF_isPostproc);
+  if      (i==cfgGet(IDFF_orderPostproc )) insertMenuItem(hm,ord,IDC_CHB_POSTPROC,"Postprocessing",IDFF_isPostproc);
    // insertSubmenu(hm,ord,"Postprocessing settings",createPostProcMenu());
    // insertSeparator(hm,ord);
-  else if (i==cfgGet(IDFF_orderPictProp )) insertMenuItem(hm,ord,IDC_CHB_GLOBAL_PICTPROP,"Picture properties",IDFF_isPictProp);
+  else if (i==cfgGet(IDFF_orderPictProp )) insertMenuItem(hm,ord,IDC_CHB_PICTPROP,"Picture properties",IDFF_isPictProp);
    // insertSeparator(hm,ord);
-  else if (i==cfgGet(IDFF_orderNoise    )) insertMenuItem(hm,ord,IDC_CHB_GLOBAL_NOISE,"Noise",IDFF_isNoise);
+  else if (i==cfgGet(IDFF_orderNoise    )) insertMenuItem(hm,ord,IDC_CHB_NOISE,"Noise",IDFF_isNoise);
    // insertSeparator(hm,ord);
-  else if (i==cfgGet(IDFF_orderBlur     )) insertMenuItem(hm,ord,IDC_CHB_GLOBAL_BLUR,"Blur",IDFF_isBlur);
-  else if (i==cfgGet(IDFF_orderSharpen  )) insertMenuItem(hm,ord,IDC_CHB_GLOBAL_SHARPEN,"Sharpen",IDFF_isSharpen);
+  else if (i==cfgGet(IDFF_orderBlur     )) insertMenuItem(hm,ord,IDC_CHB_BLUR,"Blur",IDFF_isBlur);
+  else if (i==cfgGet(IDFF_orderSharpen  )) insertMenuItem(hm,ord,IDC_CHB_SHARPEN,"Sharpen",IDFF_isSharpen);
   else if (i==cfgGet(IDFF_orderSubtitles)) insertMenuItem(hm,ord,IDC_CHB_SUBTITLES,"Subtitles",IDFF_isSubtitles);
+  else if (i==cfgGet(IDFF_orderOffset   )) insertMenuItem(hm,ord,IDC_CHB_OFFSET   ,"Offset   ",IDFF_isOffset   );
 
- insertSeparator(hm,ord);
- insertMenuItem(hm,ord,IDC_CHB_GLOBAL_CROP,"Crop",IDFF_isCropNzoom);
+ insertMenuItem(hm,ord,IDC_CHB_CROP,"Crop",IDFF_isCropNzoom);
  insertMenuItem(hm,ord,IDC_CHB_FLIP,"Flip",IDFF_flip);
- 
  return hm;
 }
 
@@ -151,22 +150,22 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
         else 
          switch (cmd)
           {
-           case IDC_CHB_GLOBAL_POSTPROC:
+           case IDC_CHB_POSTPROC:
             ti->negate_Param(IDFF_isPostproc);
             break; 
-           case IDC_CHB_GLOBAL_PICTPROP:
+           case IDC_CHB_PICTPROP:
             ti->negate_Param(IDFF_isPictProp);
             break; 
-           case IDC_CHB_GLOBAL_NOISE:
+           case IDC_CHB_NOISE:
             ti->negate_Param(IDFF_isNoise);
             break; 
-           case IDC_CHB_GLOBAL_BLUR:
+           case IDC_CHB_BLUR:
             ti->negate_Param(IDFF_isBlur);
             break; 
-           case IDC_CHB_GLOBAL_SHARPEN:
+           case IDC_CHB_SHARPEN:
             ti->negate_Param(IDFF_isSharpen);
             break; 
-           case IDC_CHB_GLOBAL_CROP:
+           case IDC_CHB_CROP:
             ti->negate_Param(IDFF_isCropNzoom);
             break; 
            case IDC_CHB_FLIP:
@@ -174,6 +173,9 @@ static LRESULT CALLBACK trayWndProc (HWND hwnd, UINT msg, WPARAM wprm, LPARAM lp
             break; 
            case IDC_CHB_SUBTITLES:
             ti->negate_Param(IDFF_isSubtitles);
+            break; 
+           case IDC_CHB_OFFSET:
+            ti->negate_Param(IDFF_isOffset);
             break; 
           }
         DestroyMenu(hm);

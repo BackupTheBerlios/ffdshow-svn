@@ -30,7 +30,7 @@ void Tlibavcodec::init(void)
  inited=true;
  avcodec_dll=new Tdll("C:\\mydocuments\\ffdshow\\src\\ffmpeg\\libavcodec\\libavcodec.dll");
  avcodec_dll->loadFunction((void**)&libavcodec_init,"libavcodec_init");
- avcodec_dll->loadFunction((void**)&avcodec_find_decoder_by_name,"avcodec_find_decoder_by_name");
+ avcodec_dll->loadFunction((void**)&avcodec_find_decoder,"avcodec_find_decoder");
  avcodec_dll->loadFunction((void**)&avcodec_open,"avcodec_open");
  avcodec_dll->loadFunction((void**)&avcodec_decode_video,"avcodec_decode_video");
  avcodec_dll->loadFunction((void**)&avcodec_flush_buffers,"avcodec_flush_buffers");
@@ -55,7 +55,7 @@ void Tlibavcodec::done(void)
    avcodec_dll=NULL;
   }; 
  libavcodec_init=NULL;
- avcodec_find_decoder_by_name=NULL;
+ avcodec_find_decoder=NULL;
  avcodec_open=NULL;
  avcodec_decode_video=NULL;
  avcodec_close=NULL;

@@ -146,7 +146,7 @@ HRESULT TpostProcPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
    case WM_TIMER:
     if (wParam==POSTPROC_TIMER/* && !cfgGet(IDFF_ppIsCustom)*/)
      {
-      if (!cfgGet(IDFF_autoq)) cfgSet(IDFF_currentq,cfgGet(IDFF_ppqual));
+      //if (!cfgGet(IDFF_autoq)) cfgSet(IDFF_currentq,cfgGet(IDFF_ppqual));
       SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_SETSELEND,TRUE,cfgGet(IDFF_currentq));
       setPPchbs();
       return TRUE;
