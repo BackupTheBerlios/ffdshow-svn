@@ -50,14 +50,14 @@ void TnoisePage::noise2dlg(void)
 int TnoisePage::writeNoiseStrength(int x)
 {
  char s[256];
- sprintf(s,"Luminance noise strength:  %i",x);
+ sprintf(s,"Luminance noise strength: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_NOISESTRENGTH,WM_SETTEXT,0,LPARAM(s));
  return x;
 }
 int TnoisePage::writeNoiseStrengthChroma(int x)
 {
  char s[256];
- sprintf(s,"Chroma noise strength:  %i",x);
+ sprintf(s,"Chroma noise strength: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_NOISESTRENGTH_CHROMA,WM_SETTEXT,0,LPARAM(s));
  return x;
 }

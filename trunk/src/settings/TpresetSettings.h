@@ -2,7 +2,7 @@
 #define _TPRESETSETTINGS_H_
 
 #define FFPRESET_EXT "ffpreset"
-#define FFPRESET_DEFAULT   "default"
+#define FFPRESET_DEFAULT "default"
 
 struct TpresetSettings
 {
@@ -91,7 +91,9 @@ public:
  int fullSubtitles;
  char fontName[256];
  int fontCharset,fontSize,fontSpacing,fontWeight,fontColor,fontShadowStrength,fontShadowRadius;
- int subPosX,subPosY,subDelay,subSpeed;
+ int subPosX,subPosY;
+ int subDelay,subSpeed;
+ static const int subDelayDef,subSpeedDef;
  int subAutoFlnm;
  char subFlnm[260];
 

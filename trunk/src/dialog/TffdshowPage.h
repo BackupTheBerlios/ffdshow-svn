@@ -9,6 +9,7 @@ DEFINE_GUID(CLSID_TFFDSHOWPAGE, 0x9a98adcc, 0xc6a4, 0x449e, 0xa8, 0xb1, 0x3, 0x6
 
 struct IffDecoder;
 class TconfPage;
+class TpresetsPage;
 class TffdshowPage : public CBasePropertyPage
 {
 private:
@@ -22,6 +23,7 @@ private:
  void presetTree(void);
  IffDecoder *deci;
  TconfPage  *page;
+ TpresetsPage *pagePresets;
  void sortOrder(void);
  void selectPage(int i),selectPage(TconfPage *Ipage);
  std::vector<TconfPage*> pages;

@@ -66,14 +66,14 @@ void TsharpenPage::sharpen2dlg(void)
 int TsharpenPage::writeSharpenStrength(int x)
 {
  char s[256];
- sprintf(s,"Strength:  %i",x);
+ sprintf(s,"Strength: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_XSHARPENSTRENGTH,WM_SETTEXT,0,LPARAM(s));
  return x;
 }
 int TsharpenPage::writeSharpenThreshold(int x)
 {
  char s[256];
- sprintf(s,"Threshold:  %i",x);
+ sprintf(s,"Threshold: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_XSHARPENTHRESH,WM_SETTEXT,0,LPARAM(s));
  return x;
 }

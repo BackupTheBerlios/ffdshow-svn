@@ -57,10 +57,7 @@ begin
         MInfo.Lines[i]:=Format('CPU #%d - %5.2f%%',[i,GetCPUUsage(i)*100]);
 end;
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *}
-
-interface
 */
-//uses Windows, SysUtils;
 #include "stdafx.h"
 #include "TcpuUsage.h"
 

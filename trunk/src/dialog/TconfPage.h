@@ -12,8 +12,7 @@ protected:
  IffDecoder *deci;
  HINSTANCE hi;
  void createWindow(int IdialogId);
- int cfgGet(unsigned int i),cfgSet(unsigned int i,int val),cfgInv(unsigned int i);
- void loadPreset(void);
+ int  cfgGet(unsigned int i),cfgSet(unsigned int i,int val),cfgInv(unsigned int i);
  void enableWindow(int id,int enable);
  void setCheck(int id,int set);
  bool getCheck(int id);
@@ -34,6 +33,7 @@ public:
  virtual int  getProcessFull(void) {return -1;}
  virtual void setProcessFull(int full) {} 
  virtual void setOrder(int o) {}
+ virtual bool isInPreset(void) {return false;}
  virtual void applySettings(void) {}
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)=0;
 };

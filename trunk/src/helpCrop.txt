@@ -1,5 +1,3 @@
-Cropping or zoom are applied always before any other filters.
-
 Zoom
 Crop
   width and height of cropped area are rounded to multiplies of eight

@@ -11,7 +11,7 @@ private:
  Tpresets localPresets;
  int ncol;
  void addCol(int w,const char *txt,bool right);
- void lvSelectPreset(const char *presetName);
+ void updateCbx(void);
  HWND hlv;
  WNDPROC lvOldWndProc;
  friend static LRESULT CALLBACK lvWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam) ;
@@ -25,6 +25,9 @@ public:
  virtual void cfg2dlg(void);
  virtual void applySettings(void);
  virtual const char* getHelpURL(void) {return "presets.html";}
+// virtual bool isInPreset(void) {return true;}
+
+ void lvSelectPreset(const char *presetName);
 };
 
 #endif 

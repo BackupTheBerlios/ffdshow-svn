@@ -26,6 +26,19 @@
 
 using namespace std;
 
+const char *TfontPage::fontWeights[]=
+{
+ "thin",
+ "extralight",
+ "light",
+ "normal",
+ "medium",
+ "semibold",
+ "bold",
+ "extrabold",
+ "heavy",
+};
+
 static int CALLBACK EnumFamCallBackCharsets(CONST LOGFONT *lpelf,CONST TEXTMETRIC *lpntm,DWORD FontType,LPARAM lParam)
 {
  if (FontType&TRUETYPE_FONTTYPE)
@@ -67,21 +80,8 @@ void TfontPage::init(void)
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETLINESIZE,0,1);
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETPAGESIZE,0,10); 
  
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("thin"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("extralight"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("ultralight"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("light"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("normal"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("regular"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("medium"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("semibold"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("demibold"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("bold"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("extrabold"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("ultrabold"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("heavy"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM("black"));
- 
+ for (i=0;i<sizeof(fontWeights)/sizeof(char*);i++)
+  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_ADDSTRING,0,LPARAM(fontWeights[i]));
  vector<string> sl;
  LOGFONT lf;lf.lfCharSet=DEFAULT_CHARSET;lf.lfPitchAndFamily=0;lf.lfFaceName[0]='\0';
  HDC dc=GetDC(m_hwnd);
@@ -109,6 +109,33 @@ void TfontPage::selectCharset(int ii)
  cfgSet(IDFF_fontCharset,SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_GETITEMDATA,0,0));
 }
 
+void TfontPage::getCharset(int i,char **name)
+{
+ switch (i)
+  {
+   case ANSI_CHARSET       :*name="Ansi";return;
+   case DEFAULT_CHARSET    :*name="Default";return;
+   case SYMBOL_CHARSET     :*name="Symbol";return;
+   case SHIFTJIS_CHARSET   :*name="Shiftjis";return;
+   case HANGUL_CHARSET     :*name="Hangul";return;
+   case GB2312_CHARSET     :*name="Gb2312";return;
+   case CHINESEBIG5_CHARSET:*name="Chinese";return;
+   case OEM_CHARSET        :*name="OEM";return;
+   case JOHAB_CHARSET      :*name="Johab";return;
+   case HEBREW_CHARSET     :*name="Hebrew";return;
+   case ARABIC_CHARSET     :*name="Arabic";return;
+   case GREEK_CHARSET      :*name="Greek";return;
+   case TURKISH_CHARSET    :*name="Turkish";return;
+   case VIETNAMESE_CHARSET :*name="Vietnamese";return;
+   case THAI_CHARSET       :*name="Thai";return;
+   case EASTEUROPE_CHARSET :*name="Easteurope";return;
+   case RUSSIAN_CHARSET    :*name="Russian";return;
+   case MAC_CHARSET        :*name="Mac";return;
+   case BALTIC_CHARSET     :*name="Baltic";return;
+   default                 :*name="unknown";return;
+  }
+}
+
 void TfontPage::fillCharsets(void)
 {
  int oldi=SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_GETCURSEL,0,0);
@@ -125,29 +152,7 @@ void TfontPage::fillCharsets(void)
  for (unsigned int i=0;i<sl.size();i++)
   {
    char *name;
-   switch (sl[i])
-    {
-     case ANSI_CHARSET       :name="Ansi";break;
-     case DEFAULT_CHARSET    :name="Default";break;
-     case SYMBOL_CHARSET     :name="Symbol";break;
-     case SHIFTJIS_CHARSET   :name="Shiftjis";break;
-     case HANGUL_CHARSET     :name="Hangul";break;
-     case GB2312_CHARSET     :name="Gb2312";break;
-     case CHINESEBIG5_CHARSET:name="Chinese";break;
-     case OEM_CHARSET        :name="OEM";break;
-     case JOHAB_CHARSET      :name="Johab";break;
-     case HEBREW_CHARSET     :name="Hebrew";break;
-     case ARABIC_CHARSET     :name="Arabic";break;
-     case GREEK_CHARSET      :name="Greek";break;
-     case TURKISH_CHARSET    :name="Turkish";break;
-     case VIETNAMESE_CHARSET :name="Vietnamese";break;
-     case THAI_CHARSET       :name="Thai";break;
-     case EASTEUROPE_CHARSET :name="Easteurope";break;
-     case RUSSIAN_CHARSET    :name="Russian";break;
-     case MAC_CHARSET        :name="Mac";break;
-     case BALTIC_CHARSET     :name="Baltic";break;
-     default                 :name="unknown";break;
-    }
+   getCharset(sl[i],&name);
    int ii=SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_ADDSTRING,0,LPARAM(name));
    SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_SETITEMDATA,ii,sl[i]);
   }
@@ -163,19 +168,19 @@ void TfontPage::font2dlg(void)
 {
  char s[256];int x;
  x=cfgGet(IDFF_fontSize);
- sprintf(s,"Size:  %i",x);
+ sprintf(s,"Size: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_FONT_SIZE,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SIZE,TBM_SETPOS,TRUE,x);
  x=cfgGet(IDFF_fontSpacing);
- sprintf(s,"Spacing:  %i",x);
+ sprintf(s,"Spacing: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_FONT_SPACING,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SPACING,TBM_SETPOS,TRUE,x);
  x=cfgGet(IDFF_fontShadowStrength);
- sprintf(s,"Shadow intensity:  %i",x);
+ sprintf(s,"Shadow intensity: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_FONT_SHADOW_STRENGTH,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_STRENGTH,TBM_SETPOS,TRUE,x);
  x=cfgGet(IDFF_fontShadowRadius);
- sprintf(s,"Shadow radius:  %i",x);
+ sprintf(s,"Shadow radius: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_FONT_SHADOW_RADIUS,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETPOS,TRUE,x);
 
@@ -284,6 +289,13 @@ HRESULT TfontPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
      break; 
   }   
  return FALSE;
+}
+
+void TfontPage::getTip(char *tipS,int len)
+{
+ char font[256];deci->getFontName(font,255);
+ char *charset;getCharset(cfgGet(IDFF_fontCharset),&charset);
+ sprintf(tipS,"Font: %s, %s charset, size:%i, %s, spacing:%i\nShadow intensity: %i, shadow radius:%i",font,charset,cfgGet(IDFF_fontSize),fontWeights[cfgGet(IDFF_fontWeight)/100-1],cfgGet(IDFF_fontSpacing),cfgGet(IDFF_fontShadowStrength),cfgGet(IDFF_fontShadowRadius));
 }
 
 TfontPage::TfontPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)

@@ -48,22 +48,31 @@ void TsubtitlesPage::interDlg(void)
  setCheck(IDC_CHB_SUBTITLES,cfgGet(IDFF_isSubtitles));
 }
 
-void TsubtitlesPage::sub2dlg(void)
+void TsubtitlesPage::getPosHoriz(int x,char *s)
 {
- char s[256];int x;
- x=cfgGet(IDFF_subPosX);
  char *posS;
  if (x<40) posS="left";
  else if (x>60) posS="right";
  else posS="center";
- sprintf(s,"Horizontal position:  %3i%% (%s)",x,posS);
- SendDlgItemMessage(m_hwnd,IDC_LBL_SUB_POSX,WM_SETTEXT,0,LPARAM(s));
- SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSX,TBM_SETPOS,TRUE,x);
- x=cfgGet(IDFF_subPosY);
+ sprintf(s,"Horizontal position: %3i%% (%s)",x,posS);
+}
+void TsubtitlesPage::getPosVert(int x,char *s)
+{
+ char *posS;
  if (x<40) posS="top";
  else if (x>60) posS="bottom";
  else posS="center";
- sprintf(s,"Vertical position:  %3i%% (%s)",x,posS);
+ sprintf(s,"Vertical position: %3i%% (%s)",x,posS);
+}
+void TsubtitlesPage::sub2dlg(void)
+{
+ char s[256];int x;
+ x=cfgGet(IDFF_subPosX);
+ getPosHoriz(x,s);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_SUB_POSX,WM_SETTEXT,0,LPARAM(s));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSX,TBM_SETPOS,TRUE,x);
+ x=cfgGet(IDFF_subPosY);
+ getPosVert(x,s);
  SendDlgItemMessage(m_hwnd,IDC_LBL_SUB_POSY,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSY,TBM_SETPOS,TRUE,x);
  s[0]='\0';
@@ -121,9 +130,11 @@ HRESULT TsubtitlesPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        loadSubtitles();
        return TRUE;
       case IDC_ED_SUB_DELAY:
-       if (HIWORD(wParam)==EN_CHANGE) 
+       if (HIWORD(wParam)==EN_CHANGE)
         {
-         InvalidateRect(GetDlgItem(m_hwnd,LOWORD(wParam)),NULL,TRUE);
+         HWND hed=GetDlgItem(m_hwnd,IDC_ED_SUB_DELAY);
+         if (hed!=GetFocus()) return FALSE;
+         InvalidateRect(hed,NULL,TRUE);
          BOOL ok;
          int delay=GetDlgItemInt(m_hwnd,IDC_ED_SUB_DELAY,&ok,TRUE);
          if (ok) cfgSet(IDFF_subDelay,delay);
@@ -133,7 +144,9 @@ HRESULT TsubtitlesPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       case IDC_ED_SUB_SPEED:
        if (HIWORD(wParam)==EN_CHANGE) 
         {
-         InvalidateRect(GetDlgItem(m_hwnd,LOWORD(wParam)),NULL,TRUE);
+         HWND hed=GetDlgItem(m_hwnd,IDC_ED_SUB_SPEED);
+         if (hed!=GetFocus()) return FALSE;
+         InvalidateRect(hed,NULL,TRUE);
          BOOL ok;
          int speed=GetDlgItemInt(m_hwnd,IDC_ED_SUB_SPEED,&ok,TRUE);
          if (ok && speed>0) cfgSet(IDFF_subSpeed,speed);
@@ -161,6 +174,26 @@ HRESULT TsubtitlesPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
   } 
  return FALSE;
+}
+
+void TsubtitlesPage::getTip(char *tipS,int len)
+{
+ char horiz[256],vert[256];getPosHoriz(cfgGet(IDFF_subPosX),horiz);getPosVert(cfgGet(IDFF_subPosY),vert);
+ sprintf(tipS,"%s, %s",horiz,vert);
+ int delay=cfgGet(IDFF_subDelay);
+ if (delay!=cfgGet(IDFF_subDelayDef))
+  {
+   char pomS[256];
+   sprintf(pomS,"\nDelay: %i ms",delay);
+   strcat(tipS,pomS);
+  }
+ int speed=cfgGet(IDFF_subSpeed);
+ if (speed!=cfgGet(IDFF_subSpeedDef))
+  {
+   char pomS[256];
+   sprintf(pomS,"\nSpeed: %i/1000",speed);
+   strcat(tipS,pomS);
+  }
 }
 
 TsubtitlesPage::TsubtitlesPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)

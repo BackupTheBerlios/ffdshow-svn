@@ -75,15 +75,15 @@ _REG_OP_N("fullSubtitles",fullSubtitles,0);
 _REG_OP_S("fontName",fontName,"Arial");
 _REG_OP_N("fontCharset",fontCharset,DEFAULT_CHARSET);
 _REG_OP_N("fontSize",fontSize,26);
-_REG_OP_N("fontWeight",fontWeight,FW_NORMAL);
+_REG_OP_N("fontWeight",fontWeight,FW_NORMAL);if (fontWeight>900) fontWeight=900;
 _REG_OP_N("fontColor",fontColor,RGB(255,255,255));
 _REG_OP_N("fontShadowStrength",fontShadowStrength,90);
 _REG_OP_N("fontShadowRadius"  ,fontShadowRadius  ,50);
 _REG_OP_N("fontSpacing",fontSpacing,0);
 _REG_OP_N("subPosX",subPosX,50);
 _REG_OP_N("subPosY",subPosY,90);
-_REG_OP_N("subDelay",subDelay,0);
-_REG_OP_N("subSpeed",subSpeed,1000);
+_REG_OP_N("subDelay",subDelay,subDelayDef);
+_REG_OP_N("subSpeed",subSpeed,subSpeedDef);
 _REG_OP_S("subFlnm",subFlnm,"");
 _REG_OP_N("subAutoFlnm",subAutoFlnm,1);
 

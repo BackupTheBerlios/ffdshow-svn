@@ -7,6 +7,7 @@ struct TdialogSettings
  int dlgRestorePos;
  int dlgPosX,dlgPosY;
  int lvWidth0;
+ int showHints;
  void load(void),save(void);
 };
 

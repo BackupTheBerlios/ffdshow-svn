@@ -19,6 +19,7 @@ public:
  virtual int invInter(void) {return cfgInv(IDFF_isCropNzoom);}
  virtual int getOrder(void) {return 0;}
  virtual void getTip(char *tipS,int len);
+ virtual bool isInPreset(void) {return true;}
 };
 
 #endif 

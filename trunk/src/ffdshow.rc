@@ -1,4 +1,4 @@
-// Microsoft Visual C++ generated resource script.
+//Microsoft Developer Studio generated resource script.
 //
 #include "resource.h"
 
@@ -30,9 +30,9 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 //
 
 IDD_ABOUT DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     CTEXT           "ffdshow MPEG-4 VIDEO DECODER",IDC_STATIC,0,1,253,13,
                     SS_CENTERIMAGE | SS_SUNKEN
@@ -40,68 +40,94 @@ BEGIN
                     SS_CENTERIMAGE
     CTEXT           "libavcodec version",IDC_LBL_AVVERSION,0,24,253,9,
                     SS_CENTERIMAGE
+    CTEXT           "xvid version",IDC_LBL_XVIDVERSION,0,33,253,9,
+                    SS_CENTERIMAGE
     EDITTEXT        IDC_ED_HELP,0,44,253,120,ES_MULTILINE | ES_READONLY | 
                     NOT WS_BORDER | WS_VSCROLL
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,1,43,252,1
-    CTEXT           "xvid version",IDC_LBL_XVIDVERSION,0,33,253,9,
-                    SS_CENTERIMAGE
 END
 
-IDD_FFDSHOW DIALOGEX 0, 0, 348, 185
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+IDD_FFDSHOW DIALOGEX 0, 0, 348, 184
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
     CONTROL         "",IDC_TV_TREE,"SysTreeView32",TVS_DISABLEDRAGDROP | 
-                    TVS_SHOWSELALWAYS | TVS_FULLROWSELECT | WS_BORDER | 
-                    WS_TABSTOP | 0x800,0,1,90,184,WS_EX_CLIENTEDGE
+                    TVS_SHOWSELALWAYS | TVS_INFOTIP | TVS_FULLROWSELECT | 
+                    WS_BORDER | WS_TABSTOP,0,1,90,183,WS_EX_CLIENTEDGE
+    COMBOBOX        IDC_CBX_PRESETS,93,1,98,68,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
     CONTROL         "Process whole image",IDC_CHB_PROCESSFULL,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,97,4,82,10
-    PUSHBUTTON      "Reset",IDC_BT_RESET,244,3,49,12
-    PUSHBUTTON      "Help",IDC_BT_HELP,297,3,49,12
-    CONTROL         "",IDC_TOPLINE,"Static",SS_BLACKRECT,92,17,257,1
+                    BS_AUTOCHECKBOX | WS_TABSTOP,195,3,82,10
+    PUSHBUTTON      "Reset",IDC_BT_RESET,278,2,34,12
+    PUSHBUTTON      "Help",IDC_BT_HELP,314,2,34,12
+    CONTROL         "",IDC_TOPLINE,"Static",SS_BLACKRECT,92,16,257,1
 END
 
 IDD_CODECS DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
-    GROUPBOX        "Supported codecs",-1,0,0,253,94
+    GROUPBOX        "Supported codecs",-1,0,0,126,145
     CONTROL         "XVID",IDC_CHB_XVID,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,10,33,10
     CONTROL         "Decode using XviD",IDC_CHB_XVID_XVID,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,50,10,72,10
-    CONTROL         "DIVX 3",IDC_CHB_DIV3,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,20,39,10
-    CONTROL         "DIVX 4",IDC_CHB_DIVX,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,30,39,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,47,10,74,10
+    CONTROL         "DivX 3",IDC_CHB_DIV3,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,20,37,10
+    CONTROL         "DivX 4",IDC_CHB_DIVX,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,30,37,10
     CONTROL         "Decode using XviD",IDC_CHB_DIVX_XVID,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,50,30,72,10
-    CONTROL         "DIVX 5",IDC_CHB_DX50,"Button",BS_AUTOCHECKBOX | 
+                    BS_AUTOCHECKBOX | WS_TABSTOP,47,30,74,10
+    CONTROL         "DivX 5",IDC_CHB_DX50,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,40,37,10
     CONTROL         "Decode using XviD",IDC_CHB_DX50_XVID,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,50,40,72,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,47,40,74,10
+    CONTROL         "BLZ0",IDC_CHB_BLZ0,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,50,37,10
+    CONTROL         "Decode using XviD",IDC_CHB_BLZ0_XVID,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,47,50,74,10
     CONTROL         "MP43",IDC_CHB_MP43,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,50,35,10
-    CONTROL         "MP42",IDC_CHB_MP42,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,5,60,35,10
-    CONTROL         "H.263+",IDC_CHB_H263,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,81,37,10
-    CONTROL         "MPEG1",IDC_CHB_H264,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,179,20,37,10
-    CONTROL         "MPEG2",IDC_CHB_H265,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,179,30,37,10
-    EDITTEXT        IDC_ED_HELP,0,94,253,70,ES_MULTILINE | ES_READONLY | NOT 
-                    WS_BORDER | WS_VSCROLL
-    CONTROL         "Raw video",IDC_CHB_RAWV,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,179,10,59,10
+    CONTROL         "MP42",IDC_CHB_MP42,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,70,35,10
     CONTROL         "MP41",IDC_CHB_MP41,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,71,35,10
+                    WS_TABSTOP,5,80,35,10
+    CONTROL         "WMV1",IDC_CHB_WMV1,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,90,38,10
+    CONTROL         "H.263+",IDC_CHB_H263,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,100,37,10
+    CONTROL         "MPEG1",IDC_CHB_H264,"Button",BS_AUTOCHECKBOX | 
+                    WS_DISABLED | WS_TABSTOP,5,111,37,10
+    CONTROL         "MPEG2",IDC_CHB_H265,"Button",BS_AUTOCHECKBOX | 
+                    WS_DISABLED | WS_TABSTOP,5,121,37,10
+    CONTROL         "Raw video",IDC_CHB_RAWV,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,132,48,10
+    GROUPBOX        "Supported output colorspaces",-1,127,0,126,145
+    CONTROL         "YV12",IDC_CHB_YV12,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,10,33,10
+    CONTROL         "YUY2",IDC_CHB_YUY2,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,20,35,10
+    CONTROL         "YVYU",IDC_CHB_YVYU,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,30,35,10
+    CONTROL         "UYVY",IDC_CHB_UYVY,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,40,35,10
+    CONTROL         "RGB32",IDC_CHB_RGB32,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,50,37,10
+    CONTROL         "RGB24",IDC_CHB_RGB24,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,60,39,10
+    CONTROL         "RGB16",IDC_CHB_RGB16,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,70,39,10
+    CONTROL         "RGB15",IDC_CHB_RGB15,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,80,39,10
+    CONTROL         "Don't register unchecked codecs",IDC_CHB_CODECS_DONTREG,
+                    "Button",BS_AUTOCHECKBOX | NOT WS_VISIBLE | WS_TABSTOP,5,
+                    148,121,10
 END
 
 IDD_PICTPROP DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -128,7 +154,7 @@ BEGIN
 END
 
 IDD_MISC DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -143,7 +169,7 @@ BEGIN
 END
 
 IDD_PRESETS DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -168,7 +194,7 @@ BEGIN
 END
 
 IDD_POSTPROC DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -215,26 +241,30 @@ BEGIN
 END
 
 IDD_INFO DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX        "Info",IDC_STATIC,0,0,253,55
     CONTROL         "Now playing",IDC_LBL_NOW_PLAYING,"Static",
                     SS_LEFTNOWORDWRAP | SS_NOPREFIX | SS_PATHELLIPSIS | 
                     WS_GROUP,5,10,239,8
-    LTEXT           "Codec",IDC_LBL_NOW_CODEC,6,20,179,8
+    LTEXT           "Codec",IDC_LBL_NOW_CODEC,6,20,67,8
     LTEXT           "Dimensions:",IDC_LBL_NOW_DIMENSIONS,5,31,109,8
-    LTEXT           "FPS:",IDC_LBL_NOW_FPS,125,31,116,8
+    LTEXT           "",IDC_LBL_NOW_FPS,143,31,95,8
+    LTEXT           "Current frame:",IDC_LBL_NOW_FRAME,5,41,85,8
+    LTEXT           "",IDC_LBL_NOW_DECODERFPS,143,41,27,8
+    LTEXT           "Bitrate:",IDC_LBL_NOW_BITRATE,173,41,73,8
     EDITTEXT        IDC_ED_HELP,0,56,253,108,ES_MULTILINE | ES_READONLY | 
                     NOT WS_BORDER | WS_VSCROLL
-    LTEXT           "Decoder FPS:",IDC_LBL_NOW_DECODERFPS,96,41,72,8
-    LTEXT           "Current frame:",IDC_LBL_NOW_FRAME,5,41,85,8
-    LTEXT           "Bitrate:",IDC_LBL_NOW_BITRATE,173,41,73,8
+    LTEXT           "",IDC_LBL_NOW_OUTPUTCOLORSPACE,143,20,103,8
+    RTEXT           "Decoder FPS:",IDC_STATIC,87,41,52,8
+    RTEXT           "FPS:",IDC_STATIC,117,31,22,8
+    RTEXT           "Output colorspace:",IDC_STATIC,77,20,62,8
 END
 
 IDD_NOISE DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -260,7 +290,7 @@ BEGIN
 END
 
 IDD_SHARPEN DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -284,7 +314,7 @@ BEGIN
 END
 
 IDD_BLUR DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -304,7 +334,7 @@ BEGIN
 END
 
 IDD_SUBTITLES DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -332,7 +362,7 @@ BEGIN
 END
 
 IDD_FONT DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -366,9 +396,9 @@ BEGIN
 END
 
 IDD_RESIZEASPECT DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX        "",IDC_STATIC,0,0,253,38
     CONTROL         "Resize",IDC_CHB_RESIZE,"Button",BS_AUTOCHECKBOX | 
@@ -380,22 +410,22 @@ BEGIN
                     WS_EX_RIGHT
     LTEXT           "Warning: settings will be applied when the file will be reopened",
                     IDC_STATIC,8,26,201,8
-    EDITTEXT        IDC_ED_HELP,0,92,253,72,ES_MULTILINE | ES_READONLY | NOT 
-                    WS_BORDER | WS_VSCROLL
     GROUPBOX        "Aspect ratio",IDC_STATIC,0,38,253,54
     CONTROL         "No aspect ratio correction",IDC_RBT_ASPECT_NO,"Button",
                     BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,4,48,99,10
-    LTEXT           "1:1",IDC_LBL_ASPECT_USER,222,80,27,8
     CONTROL         "Keep original aspect ratio",IDC_RBT_ASPECT_KEEP,"Button",
                     BS_AUTORADIOBUTTON | WS_TABSTOP,4,58,191,10
     CONTROL         "Set aspect ratio manually",IDC_RBT_ASPECT_USER,"Button",
                     BS_AUTORADIOBUTTON | WS_TABSTOP,4,68,97,10
     CONTROL         "",IDC_TBR_ASPECT_USER,"msctls_trackbar32",TBS_BOTH | 
                     TBS_NOTICKS | WS_TABSTOP,11,78,205,12
+    LTEXT           "1:1",IDC_LBL_ASPECT_USER,222,80,27,8
+    EDITTEXT        IDC_ED_HELP,0,92,253,72,ES_MULTILINE | ES_READONLY | NOT 
+                    WS_BORDER | WS_VSCROLL
 END
 
 IDD_CROP DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -431,9 +461,9 @@ BEGIN
 END
 
 IDD_DLGMISC DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX        "Tray icon",IDC_STATIC,0,0,253,26
     CONTROL         "Show tray icon",IDC_CHB_TRAYICON,"Button",
@@ -441,12 +471,14 @@ BEGIN
     GROUPBOX        "Configuration dialog",IDC_STATIC,0,26,253,26
     CONTROL         "Restore position",IDC_CHB_DLG_RESTOREPOS,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,5,37,117,8
+    CONTROL         "Show hints",IDC_CHB_DLG_SHOWHINTS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,133,37,117,8
     EDITTEXT        IDC_ED_HELP,0,52,253,112,ES_MULTILINE | ES_READONLY | 
                     NOT WS_BORDER | WS_VSCROLL
 END
 
 IDD_OFFSET DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -470,7 +502,7 @@ BEGIN
 END
 
 IDD_RESIZESETTINGS DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -497,7 +529,7 @@ BEGIN
 END
 
 IDD_SHOWMV DIALOGEX 0, 0, 254, 165
-STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
@@ -516,50 +548,49 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_FFDSHOW             ICON                    "ffdshow.ico"
+IDI_FFDSHOW             ICON    DISCARDABLE     "ffdshow.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // TEXT
 //
 
-IDD_ABOUT               TEXT                    "readme.txt"
-IDD_PICTPROP            TEXT                    "helpPictprop.txt"
-IDD_CROP                TEXT                    "helpCrop.txt"
-IDD_SHARPEN             TEXT                    "helpSharpen.txt"
-IDD_CODECS              TEXT                    "helpCodecs.txt"
-IDD_FONT                TEXT                    "helpFont.txt"
-IDD_INFO                TEXT                    "helpInfo.txt"
-IDD_NOISE               TEXT                    "helpNoise.txt"
-IDD_POSTPROC            TEXT                    "helpPostproc.txt"
-IDD_RESIZEASPECT        TEXT                    "helpResizeAspect.txt"
-IDD_BLUR                TEXT                    "helpBlur.txt"
-IDD_DLGMISC             TEXT                    "helpTray.txt"
-IDD_SUBTITLES           TEXT                    "helpSubtitles.txt"
-IDD_MISC                TEXT                    "helpMisc.txt"
-IDD_OFFSET              TEXT                    "helpOffset.txt"
-IDD_RESIZESETTINGS      TEXT                    "helpResizeSettings.txt"
-IDD_SHOWMV              TEXT                    "helpShowMV.txt"
+IDD_ABOUT               TEXT    MOVEABLE PURE   "readme.txt"
+IDD_PICTPROP            TEXT    MOVEABLE PURE   "helpPictprop.txt"
+IDD_CROP                TEXT    MOVEABLE PURE   "helpCrop.txt"
+IDD_SHARPEN             TEXT    MOVEABLE PURE   "helpSharpen.txt"
+IDD_FONT                TEXT    MOVEABLE PURE   "helpFont.txt"
+IDD_INFO                TEXT    MOVEABLE PURE   "helpInfo.txt"
+IDD_NOISE               TEXT    MOVEABLE PURE   "helpNoise.txt"
+IDD_POSTPROC            TEXT    MOVEABLE PURE   "helpPostproc.txt"
+IDD_RESIZEASPECT        TEXT    MOVEABLE PURE   "helpResizeAspect.txt"
+IDD_BLUR                TEXT    MOVEABLE PURE   "helpBlur.txt"
+IDD_DLGMISC             TEXT    MOVEABLE PURE   "helpTray.txt"
+IDD_SUBTITLES           TEXT    MOVEABLE PURE   "helpSubtitles.txt"
+IDD_MISC                TEXT    MOVEABLE PURE   "helpMisc.txt"
+IDD_OFFSET              TEXT    MOVEABLE PURE   "helpOffset.txt"
+IDD_RESIZESETTINGS      TEXT    MOVEABLE PURE   "helpResizeSettings.txt"
+IDD_SHOWMV              TEXT    MOVEABLE PURE   "helpShowMV.txt"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
 //
 
-IDB_CHECKED             BITMAP                  "checked.bmp"
-IDB_CLEAR               BITMAP                  "empty.bmp"
-IDB_CHB_MASK            BITMAP                  "mask.bmp"
-IDB_ARROWS              BITMAP                  "arrows.bmp"
-IDB_ARROWS_MASK_UD      BITMAP                  "arrows_mask_ud.bmp"
-IDB_ARROWS_MASK_U       BITMAP                  "arrows_mask_u.bmp"
-IDB_ARROWS_MASK_D       BITMAP                  "arrows_mask_d.bmp"
+IDB_CHECKED             BITMAP  MOVEABLE PURE   "checked.bmp"
+IDB_CLEAR               BITMAP  MOVEABLE PURE   "empty.bmp"
+IDB_CHB_MASK            BITMAP  MOVEABLE PURE   "mask.bmp"
+IDB_ARROWS              BITMAP  MOVEABLE PURE   "arrows.bmp"
+IDB_ARROWS_MASK_UD      BITMAP  MOVEABLE PURE   "arrows_mask_ud.bmp"
+IDB_ARROWS_MASK_U       BITMAP  MOVEABLE PURE   "arrows_mask_u.bmp"
+IDB_ARROWS_MASK_D       BITMAP  MOVEABLE PURE   "arrows_mask_d.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Menu
 //
 
-IDR_MENU_PRESET MENU 
+IDR_MENU_PRESET MENU DISCARDABLE 
 BEGIN
     POPUP "New"
     BEGIN
@@ -582,12 +613,17 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO 
+GUIDELINES DESIGNINFO MOVEABLE PURE 
 BEGIN
     IDD_FFDSHOW, DIALOG
     BEGIN
-        RIGHTMARGIN, 347
-        BOTTOMMARGIN, 183
+        TOPMARGIN, 1
+    END
+
+    IDD_CODECS, DIALOG
+    BEGIN
+        VERTGUIDE, 5
+        VERTGUIDE, 199
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -598,17 +634,17 @@ END
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_FFDSHOW             "Configuration"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDD_ABOUT               "About"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDD_BLUR                "Blur"
     IDD_FONT                "Font"
@@ -620,7 +656,7 @@ BEGIN
     IDD_SHOWMV              "Show MV"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDD_SUBTITLES           "Subtitles"
     IDD_CODECS              "Codecs"
@@ -652,12 +688,12 @@ LANGUAGE LANG_SLOVAK, SUBLANG_DEFAULT
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE 
+1 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE 
+2 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "#include ""resource.h""\r\n"
     "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
@@ -666,7 +702,7 @@ BEGIN
     "\0"
 END
 
-3 TEXTINCLUDE 
+3 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "\r\n"
     "\0"

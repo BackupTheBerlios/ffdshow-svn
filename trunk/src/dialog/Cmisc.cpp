@@ -21,14 +21,20 @@
 #include "resource.h"
 #include "IffDecoder.h"
 
+const char *TmiscPage::idctNames[]=
+{
+ "simple (16383)",
+ "normal",
+ "reference",
+ "simple (16384) - deprecated: mapped to simple 16383)",
+ "XviD"
+};
+
 void TmiscPage::init(void)
 {
  SendDlgItemMessage(m_hwnd,IDC_CBX_IDCT,CB_RESETCONTENT,0,0);
- SendDlgItemMessage(m_hwnd,IDC_CBX_IDCT,CB_ADDSTRING,0,LPARAM("simple (16383)"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_IDCT,CB_ADDSTRING,0,LPARAM("normal"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_IDCT,CB_ADDSTRING,0,LPARAM("reference"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_IDCT,CB_ADDSTRING,0,LPARAM("simple (16384) - deprecated: mapped to simple 16383"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_IDCT,CB_ADDSTRING,0,LPARAM("XviD"));
+ for (int i=0;i<sizeof(idctNames)/sizeof(char*);i++)
+  SendDlgItemMessage(m_hwnd,IDC_CBX_IDCT,CB_ADDSTRING,0,LPARAM(idctNames[i]));
  cfg2dlg();
 }
 
@@ -61,6 +67,13 @@ HRESULT TmiscPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     break;
   }
  return FALSE;
+}
+
+void TmiscPage::getTip(char *tipS,int len)
+{
+ if (cfgGet(IDFF_flip)) strcpy(tipS,"Flipping video\n");
+ else tipS[0]='\0';
+ strcat(tipS,"IDCT: ");strcat(tipS,idctNames[cfgGet(IDFF_idct)]);
 }
 
 TmiscPage::TmiscPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)

@@ -64,11 +64,8 @@ CUnknown * WINAPI TffDecoder::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 #ifdef DEBUG
  DbgSetModuleLevel(0xffffffff,0);
 #endif
- TffDecoder * pNewObject = new TffDecoder(punk, phr);
- if (pNewObject == NULL)
-  {
-   *phr = E_OUTOFMEMORY;
-  }
+ TffDecoder * pNewObject=new TffDecoder(punk,phr);
+ if (pNewObject==NULL) *phr=E_OUTOFMEMORY;
  return pNewObject;
 }
 // query interfaces
@@ -483,30 +480,26 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
 {
  DEBUGS("CheckInputType");
 
- if (*mtIn->Type() != MEDIATYPE_Video)
-  {
-   return VFW_E_TYPE_NOT_ACCEPTED;
-  }
+ if (*mtIn->Type()!=MEDIATYPE_Video) return VFW_E_TYPE_NOT_ACCEPTED;
  const GUID formatType=*mtIn->FormatType();
  BITMAPINFOHEADER * hdr;
- __asm emms;
- if (formatType == FORMAT_VideoInfo)
+ if (formatType==FORMAT_VideoInfo)
   {
-   VIDEOINFOHEADER * vih = (VIDEOINFOHEADER *) mtIn->Format();
+   VIDEOINFOHEADER *vih=(VIDEOINFOHEADER*)mtIn->Format();
    AVIfps=(vih->AvgTimePerFrame)?10000000.0/vih->AvgTimePerFrame:25;
-   hdr = &vih->bmiHeader;
+   hdr=&vih->bmiHeader;
   }
- else if (formatType == FORMAT_VideoInfo2)
+ else if (formatType==FORMAT_VideoInfo2)
   {
-   VIDEOINFOHEADER2 * vih2 = (VIDEOINFOHEADER2 *) mtIn->Format();
+   VIDEOINFOHEADER2 *vih2=(VIDEOINFOHEADER2*)mtIn->Format();
    AVIfps=(vih2->AvgTimePerFrame)?10000000.0/vih2->AvgTimePerFrame:25;
-   hdr = &vih2->bmiHeader;
+   hdr=&vih2->bmiHeader;
   }
  #ifdef  FF__MPEG
- else if (formatType == FORMAT_MPEGVideo)
+ else if (formatType==FORMAT_MPEGVideo)
   {
    MPEG1VIDEOINFO *mpeg1info=(MPEG1VIDEOINFO*)mtIn->Format();
-   hdr = &mpeg1info->hdr.bmiHeader;
+   hdr=&mpeg1info->hdr.bmiHeader;
   }
  #endif
  #ifdef FF__MPEG2
@@ -574,54 +567,14 @@ HRESULT TffDecoder::GetMediaType(int iPosition, CMediaType *mtOut)
  vih->bmiHeader.biPlanes=1;
 
  if (iPosition<0) return E_INVALIDARG;
+ if (iPosition>=globalSettings.outputColorspaces.size()) iPosition=globalSettings.outputColorspaces.size()-1;
+ const TglobalSettings::ToutputColorspace *c=&globalSettings.outputColorspaces[iPosition];
+ if (!c->g) return VFW_S_NO_MORE_ITEMS;
+ vih->bmiHeader.biCompression=c->biCompression;
+ vih->bmiHeader.biBitCount=c->biBitCount;
+ mtOut->SetSubtype(c->g);
 
- switch(iPosition)
-  {
-   case 0:
-    vih->bmiHeader.biCompression = MEDIASUBTYPE_YV12.Data1;
-    vih->bmiHeader.biBitCount = 12;
-    mtOut->SetSubtype(&MEDIASUBTYPE_YV12);
-    break;
-   case 1:
-    vih->bmiHeader.biCompression = MEDIASUBTYPE_YUY2.Data1;
-    vih->bmiHeader.biBitCount = 16;
-    mtOut->SetSubtype(&MEDIASUBTYPE_YUY2);
-    break;
-   case 2:
-    vih->bmiHeader.biCompression = MEDIASUBTYPE_YVYU.Data1;
-    vih->bmiHeader.biBitCount = 16;
-    mtOut->SetSubtype(&MEDIASUBTYPE_YVYU);
-    break;
-   case 3:
-    vih->bmiHeader.biCompression = MEDIASUBTYPE_UYVY.Data1;
-    vih->bmiHeader.biBitCount = 16;
-    mtOut->SetSubtype(&MEDIASUBTYPE_UYVY);
-    break;
-   case 4:
-    vih->bmiHeader.biCompression = BI_RGB;
-    vih->bmiHeader.biBitCount = 32;
-    mtOut->SetSubtype(&MEDIASUBTYPE_RGB32);
-    break;
-   case 5:
-    vih->bmiHeader.biCompression = BI_RGB;
-    vih->bmiHeader.biBitCount = 24;
-    mtOut->SetSubtype(&MEDIASUBTYPE_RGB24);
-    break;
-   case 6:
-    vih->bmiHeader.biCompression = BI_RGB;
-    vih->bmiHeader.biBitCount = 16;
-    mtOut->SetSubtype(&MEDIASUBTYPE_RGB555);
-    break;
-   case 7:
-    vih->bmiHeader.biCompression = BI_RGB;
-    vih->bmiHeader.biBitCount = 16;
-    mtOut->SetSubtype(&MEDIASUBTYPE_RGB565);
-    break;
-   default :
-    return VFW_S_NO_MORE_ITEMS;
-  }
-
- vih->bmiHeader.biSizeImage = GetBitmapSize(&vih->bmiHeader);
+ vih->bmiHeader.biSizeImage=GetBitmapSize(&vih->bmiHeader);
 
  mtOut->SetType(&MEDIATYPE_Video);
  mtOut->SetFormatType(&FORMAT_VideoInfo);
@@ -634,67 +587,67 @@ HRESULT TffDecoder::GetMediaType(int iPosition, CMediaType *mtOut)
 // (internal function) change colorspace
 HRESULT TffDecoder::ChangeColorspace(GUID subtype, GUID formattype, void * format)
 {
- if (subtype == MEDIASUBTYPE_YV12)
+ if (subtype==MEDIASUBTYPE_YV12)
   {
    DEBUGS("YV12");
-   m_frame.colorspace = XVID_CSP_YV12;
+   m_frame.colorspace=XVID_CSP_YV12;
   }
- else if (subtype == MEDIASUBTYPE_YUY2)
+ else if (subtype==MEDIASUBTYPE_YUY2)
   {
    DEBUGS("YUY2");
-   m_frame.colorspace = XVID_CSP_YUY2;
+   m_frame.colorspace=XVID_CSP_YUY2;
   }
- else if (subtype == MEDIASUBTYPE_YVYU)
+ else if (subtype==MEDIASUBTYPE_YVYU)
   {
    DEBUGS("YVYU");
-   m_frame.colorspace = XVID_CSP_YVYU;
+   m_frame.colorspace=XVID_CSP_YVYU;
   }
- else if (subtype == MEDIASUBTYPE_UYVY)
+ else if (subtype==MEDIASUBTYPE_UYVY)
   {
    DEBUGS("UYVY");
-   m_frame.colorspace = XVID_CSP_UYVY;
+   m_frame.colorspace=XVID_CSP_UYVY;
   }
- else if (subtype == MEDIASUBTYPE_RGB32)
+ else if (subtype==MEDIASUBTYPE_RGB32)
   {
    DEBUGS("RGB32");
-   m_frame.colorspace = XVID_CSP_VFLIP | XVID_CSP_RGB32;
+   m_frame.colorspace=XVID_CSP_RGB32|XVID_CSP_VFLIP;
   }
- else if (subtype == MEDIASUBTYPE_RGB24)
+ else if (subtype==MEDIASUBTYPE_RGB24)
   {
    DEBUGS("RGB24");
-   m_frame.colorspace = XVID_CSP_VFLIP | XVID_CSP_RGB24;
+   m_frame.colorspace=XVID_CSP_RGB24|XVID_CSP_VFLIP;
   }
- else if (subtype == MEDIASUBTYPE_RGB555)
+ else if (subtype==MEDIASUBTYPE_RGB555)
   {
    DEBUGS("RGB555");
-   m_frame.colorspace = XVID_CSP_VFLIP | XVID_CSP_RGB555;
+   m_frame.colorspace=XVID_CSP_RGB555|XVID_CSP_VFLIP;
   }
- else if (subtype == MEDIASUBTYPE_RGB565)
+ else if (subtype==MEDIASUBTYPE_RGB565)
   {
    DEBUGS("RGB565");
-   m_frame.colorspace = XVID_CSP_VFLIP | XVID_CSP_RGB565;
+   m_frame.colorspace=XVID_CSP_RGB565|XVID_CSP_VFLIP;
   }
- else if (subtype == GUID_NULL)
+ else if (subtype==GUID_NULL)
   {
-   m_frame.colorspace = XVID_CSP_NULL;
+   m_frame.colorspace=XVID_CSP_NULL;
   }
  else
   {
-   m_frame.colorspace = XVID_CSP_NULL;
+   m_frame.colorspace=XVID_CSP_NULL;
    return S_FALSE;
   }
 
- if (formattype == FORMAT_VideoInfo)
+ if (formattype==FORMAT_VideoInfo)
   {
-   VIDEOINFOHEADER * vih = (VIDEOINFOHEADER * )format;
-   m_frame.stride = vih->bmiHeader.biWidth;
-   m_frame.bpp=vih->bmiHeader.biBitCount;
+   VIDEOINFOHEADER *vih=(VIDEOINFOHEADER*)format;
+   m_frame.stride=vih->bmiHeader.biWidth;
+   m_frame.bpp   =vih->bmiHeader.biBitCount;
   }
- else if (formattype == FORMAT_VideoInfo2)
+ else if (formattype==FORMAT_VideoInfo2)
   {
-   VIDEOINFOHEADER2 * vih2 = (VIDEOINFOHEADER2 * )format;
-   m_frame.stride = vih2->bmiHeader.biWidth;
-   m_frame.bpp=vih2->bmiHeader.biBitCount;
+   VIDEOINFOHEADER2 *vih2=(VIDEOINFOHEADER2*)format;
+   m_frame.stride=vih2->bmiHeader.biWidth;
+   m_frame.bpp   =vih2->bmiHeader.biBitCount;
   }
  else
   return S_FALSE;
@@ -706,8 +659,8 @@ HRESULT TffDecoder::ChangeColorspace(GUID subtype, GUID formattype, void * forma
 HRESULT TffDecoder::SetMediaType(PIN_DIRECTION direction, const CMediaType *pmt)
 {
  DEBUGS("SetMediaType");
- if (direction == PINDIR_OUTPUT)
-  return ChangeColorspace(*pmt->Subtype(), *pmt->FormatType(), pmt->Format());
+ if (direction==PINDIR_OUTPUT)
+  return ChangeColorspace(*pmt->Subtype(),*pmt->FormatType(),pmt->Format());
  return S_OK;
 }
 
@@ -826,7 +779,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
  if (pOut->GetPointer((BYTE**)&m_frame.image    )!=S_OK) return S_FALSE;
  m_frame.outLength=pOut->GetActualDataLength();//GetSize();
  m_frame.length   =pIn ->GetActualDataLength();//GetSize();
- if (onInfoMsg2) PostMessage(onInfoWnd,onInfoMsg2,m_frame.length,0);
+ if (onInfoMsg2) PostMessage(onInfoWnd,onInfoMsg2,m_frame.length,m_frame.colorspace);
 
  #ifdef FF__MPEG
  firstFrame=false;
@@ -869,7 +822,15 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
  
  if (presetSettings.isSubtitles)
   {
-   int sframe=1000*(int(t1)-presetSettings.subDelay)/presetSettings.subSpeed;
+   int framesDelay;
+   if (presetSettings.subDelay)
+    {
+     __asm emms;
+     framesDelay=(AVIfps==0)?presetSettings.subDelay:presetSettings.subDelay*AVIfps/1000;
+    }
+   else 
+    framesDelay=0;
+   int sframe=1000*(int(t1)-framesDelay)/presetSettings.subSpeed;
    sub=(sframe<1)?NULL:subs->getSubtitle(sframe);
   }
  else sub=NULL;  
@@ -906,10 +867,10 @@ STDMETHODIMP TffDecoder::GetPages(CAUUID * pPages)
 
  if (globalSettings.trayIcon) tray->show();
 
- pPages->cElems = 1;
- pPages->pElems = (GUID *)CoTaskMemAlloc(pPages->cElems * sizeof(GUID));
- if (pPages->pElems == NULL) return E_OUTOFMEMORY;
- pPages->pElems[0] = CLSID_TFFDSHOWPAGE;
+ pPages->cElems=1;
+ pPages->pElems=(GUID *)CoTaskMemAlloc(pPages->cElems*sizeof(GUID));
+ if (pPages->pElems==NULL) return E_OUTOFMEMORY;
+ pPages->pElems[0]=CLSID_TFFDSHOWPAGE;
 
  return S_OK;
 }

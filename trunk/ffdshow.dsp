@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /G6 /MT /GX /O2 /Ob2 /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /I "src\movie_source" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /Yu"StdAfx.h" /FD /c
+# ADD CPP /nologo /G6 /MT /GX /O2 /Ob2 /I "src" /I "src\settings" /I "src\dialog" /I "src\imgFilters" /I "src\movie_source" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "ARCH_X86" /FR /Yu"StdAfx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0xc09 /d "NDEBUG"

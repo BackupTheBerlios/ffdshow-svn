@@ -81,6 +81,7 @@ void TffdshowPage::selectPage(TconfPage *Ipage)
  ShowWindow(page->m_hwnd,SW_SHOW);
  EnableWindow(GetDlgItem(m_hwnd,IDC_BT_HELP),page->getHelpURL()!=NULL);
  EnableWindow(GetDlgItem(m_hwnd,IDC_BT_RESET),page->reset(true));
+ EnableWindow(GetDlgItem(m_hwnd,IDC_CBX_PRESETS),page->isInPreset());
  int processFull=page->getProcessFull();
  EnableWindow(GetDlgItem(m_hwnd,IDC_CHB_PROCESSFULL),processFull!=-1);
  SendDlgItemMessage(m_hwnd,IDC_CHB_PROCESSFULL,BM_SETCHECK,(processFull==1)?BST_CHECKED:BST_UNCHECKED,0);
@@ -113,6 +114,12 @@ void TffdshowPage::presetChanged(void)
    deci->getActivePresetName(presetName,260);
    sprintf(capt,"%s (%s)",caption,presetName);
    SendMessage(dlg,WM_SETTEXT,0,LPARAM(capt));
+  }
+ if (page)
+  {
+   int processFull=page->getProcessFull();
+   EnableWindow(GetDlgItem(m_hwnd,IDC_CHB_PROCESSFULL),processFull!=-1);
+   SendDlgItemMessage(m_hwnd,IDC_CHB_PROCESSFULL,BM_SETCHECK,(processFull==1)?BST_CHECKED:BST_UNCHECKED,0);
   }
 }
 static int CALLBACK orderCompareFunc(LPARAM lParam1, LPARAM lParam2,LPARAM lParamSort)
@@ -168,6 +175,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  ilArrowUD=ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS_MASK_UD)));
  ilArrowU =ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS_MASK_U)));
  ilArrowD =ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_ARROWS_MASK_D)));
+ SendDlgItemMessage(m_hwnd,IDC_CBX_PRESETS,CB_SETDROPPEDWIDTH,340,0);
  
  TVINSERTSTRUCT tvis;
  tvis.hParent=NULL;
@@ -178,7 +186,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  addTI(tvis,new TdlgMiscPage(this,m_hwnd,deci));
  tvis.item.mask|=TVIF_CHILDREN;
  tvis.item.cChildren=1;
- TconfPage *pagePresets;//presets page must be the last in pages vector
+ //presets page must be the last in pages vector
  htiPresets=addTI(tvis,pagePresets=new TpresetsPage(this,m_hwnd,deci),false);
  tvis.hParent=htiPresets;
  tvis.item.cChildren=0;
@@ -241,8 +249,6 @@ STDMETHODIMP TffdshowPage::Deactivate(void)
 {
  //cfg->save();
  //int beSaved=deci->getParam2(IDFF_presetShouldBeSaved);
- //if (beSaved) deci->loadPreset(NULL);
- //loadPreset();
  deci->setOnChangeMsg(NULL,0);
  HRESULT res=CBasePropertyPage::Deactivate();
  for (vector<TconfPage*>::iterator i=pages.begin();i!=pages.end();i++)
@@ -305,13 +311,22 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
        {
         page->reset(false);
         return TRUE;
-       } 
+       }
       case IDC_CHB_PROCESSFULL:
        {
         int full=page->getProcessFull();
         page->setProcessFull(1-full);
         return TRUE;
-       } 
+       }
+      case IDC_CBX_PRESETS:
+       {
+        char presetName[256],actPresetName[256];
+        SendDlgItemMessage(m_hwnd,IDC_CBX_PRESETS,WM_GETTEXT,255,LPARAM(presetName));
+        deci->getActivePresetName(actPresetName,255);
+        if (_stricmp(presetName,actPresetName)!=0)
+         pagePresets->lvSelectPreset(presetName);
+        return TRUE;
+       }
      }
     break; 
    case WM_NOTIFY:
@@ -330,6 +345,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
          }
         case TVN_GETINFOTIP:
          {
+          if (!deci->getParam2(IDFF_showHints)) return FALSE;
           NMTVGETINFOTIP *nmtvit=LPNMTVGETINFOTIP(lParam);
           TconfPage *page=(TconfPage*)nmtvit->lParam;
           char tipS[1024];

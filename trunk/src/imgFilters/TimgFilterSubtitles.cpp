@@ -21,6 +21,8 @@
 #include "TpresetSettings.h"
 #include "IffDecoder.h"
 
+const int TpresetSettings::subDelayDef=0,TpresetSettings::subSpeedDef=1000;
+
 void TimgFilterSubtitles::process(TffPict *pict,TffRect &rect,const TpresetSettings *cfg)
 {
  if (deci->getParam2(IDFF_fontChanged))

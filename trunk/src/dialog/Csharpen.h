@@ -21,6 +21,7 @@ public:
  virtual int  getProcessFull(void) {return cfgGet(IDFF_fullSharpen);}
  virtual void setProcessFull(int full) {cfgSet(IDFF_fullSharpen,full);} 
  virtual void getTip(char *tipS,int len);
+ virtual bool isInPreset(void) {return true;}
 };
 
 #endif 

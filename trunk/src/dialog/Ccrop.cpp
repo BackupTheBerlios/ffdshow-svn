@@ -51,11 +51,11 @@ void TcropPage::crop2dlg(void)
  enableWindow(IDC_TBR_ZOOMY,!cfgGet(IDFF_magnificationLocked));
  int x=cfgGet(IDFF_magnificationX);
  char s[256];
- sprintf(s,"Horizontal magnification:  %i",x);
+ sprintf(s,"Horizontal magnification: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_ZOOMX,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMX,TBM_SETPOS,TRUE,x);
  x=cfgGet(IDFF_magnificationY);
- sprintf(s,"Vertical magnification:  %i",x);
+ sprintf(s,"Vertical magnification: %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_ZOOMY,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMY,TBM_SETPOS,TRUE,x);
  SetDlgItemInt(m_hwnd,IDC_ED_CROP_LEFT  ,cfgGet(IDFF_cropLeft  ),0);
@@ -149,29 +149,13 @@ HRESULT TcropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 void TcropPage::getTip(char *tipS,int len)
 {
- strcpy(tipS,"Aspect ratio: ");
- switch (cfgGet(IDFF_resizeAspect ))
-  { 
-   case 0:strcat(tipS,"no change");break;
-   case 1:strcat(tipS,"keeping original aspect ratio");break;
-   case 2:
-    {
-     int aspectI=cfgGet(IDFF_aspectRatio);
-     char pomS[256];sprintf(pomS,"set to %3.2f:1",float(aspectI/65536.0));
-     strcat(tipS,pomS);
-     break;
-    }
-  }
- strcat(tipS,"\nCrop & zoom: ");
- char pomS[256];
  if (cfgGet(IDFF_isZoom))
   if (cfgGet(IDFF_magnificationLocked))
-   sprintf(pomS,"zoom: %i%%",cfgGet(IDFF_magnificationX));
+   sprintf(tipS,"zoom: %i%%",cfgGet(IDFF_magnificationX));
   else
-   sprintf(pomS,"horizontal zoom: %i%%, vertical zoom: %i%%",cfgGet(IDFF_magnificationX),cfgGet(IDFF_magnificationY));
+   sprintf(tipS,"horizontal zoom: %i%%, vertical zoom: %i%%",cfgGet(IDFF_magnificationX),cfgGet(IDFF_magnificationY));
  else
-  sprintf(pomS,"crop: left:%i, top:%i, right:%i, bottom:%i",cfgGet(IDFF_cropLeft),cfgGet(IDFF_cropTop),cfgGet(IDFF_cropRight),cfgGet(IDFF_cropBottom));
- strcat(tipS,pomS);
+  sprintf(tipS,"crop: left:%i, top:%i, right:%i, bottom:%i",cfgGet(IDFF_cropLeft),cfgGet(IDFF_cropTop),cfgGet(IDFF_cropRight),cfgGet(IDFF_cropBottom));
 }
 TcropPage::TcropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {

@@ -76,7 +76,7 @@ void TimgFilterResize::process(TffPict *pict,TffRect &rect,const TpresetSettings
  if (r->dx==cfg->resizeDx && r->dy==cfg->resizeDy && cfg->resizeAspect!=2) return;
  if (!swsc || resizeMethodOld!=cfg->resizeMethod || resizeGblurLumOld!=cfg->resizeGblurLum || resizeGblurChromOld!=cfg->resizeGblurChrom || resizeSharpenLumOld!=cfg->resizeSharpenLum || resizeSharpenChromOld!=cfg->resizeSharpenChrom)
   {
-   resizeMethodOld=cfg->resizeMethod;resizeGblurLumOld=cfg->resizeGblurLum;resizeGblurChromOld=cfg->resizeGblurChrom;resizeSharpenLumOld=cfg->resizeSharpenLum || resizeSharpenChromOld!=cfg->resizeSharpenChrom;
+   resizeMethodOld=cfg->resizeMethod;resizeGblurLumOld=cfg->resizeGblurLum;resizeGblurChromOld=cfg->resizeGblurChrom;resizeSharpenLumOld=cfg->resizeSharpenLum;resizeSharpenChromOld=cfg->resizeSharpenChrom;
    done();
    Tpostproc *postproc;deci->getPostproc(&postproc);if (!postproc->ok) return;
    newRect.stride=(cfg->resizeDx/16+2)*16;

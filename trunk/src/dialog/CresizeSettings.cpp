@@ -22,16 +22,22 @@
 #include "IffDecoder.h"
 #include "TffdshowPage.h"
 
+const char *TresizeSettingsPage::algorithmsNames[]=
+{
+ "Fast bilinear",
+ "Bilinear",
+ "Bicubic",
+ "Experimental",
+ "Point",
+ "Area",
+ "Bicublin",
+ "None"
+};
+
 void TresizeSettingsPage::init(void)
 {
- SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("Fast bilinear"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("Bilinear"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("Bicubic"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("Experimental"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("Point"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("Area"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("Bicublin"));
- SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("None"));
+ for (int i=0;i<sizeof(algorithmsNames)/sizeof(char*);i++)
+  SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM(algorithmsNames[i]));
  SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_GBLUR_LUM    ,TBM_SETRANGE,TRUE,MAKELPARAM(0,200));
  SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_GBLUR_LUM    ,TBM_SETLINESIZE,0,5);
  SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_GBLUR_LUM    ,TBM_SETPAGESIZE,0,20); 
@@ -56,10 +62,10 @@ void TresizeSettingsPage::cfg2dlg(void)
 void TresizeSettingsPage::resizeSettings2dlg(void)
 {
  char pomS[256];
- sprintf(pomS,"Luma gaussian blur:  %3.2f"  ,float(cfgGet(IDFF_resizeGblurLum    )/100.0));SendDlgItemMessage(m_hwnd,IDC_LBL_RESIZE_GBLUR_LUM    ,WM_SETTEXT,0,LPARAM(pomS));
- sprintf(pomS,"Chroma gaussian blur:  %3.2f",float(cfgGet(IDFF_resizeGblurChrom  )/100.0));SendDlgItemMessage(m_hwnd,IDC_LBL_RESIZE_GBLUR_CHROM  ,WM_SETTEXT,0,LPARAM(pomS));
- sprintf(pomS,"Luma sharpen:  %3.2f"        ,float(cfgGet(IDFF_resizeSharpenLum  )/100.0));SendDlgItemMessage(m_hwnd,IDC_LBL_RESIZE_SHARPEN_LUM  ,WM_SETTEXT,0,LPARAM(pomS));
- sprintf(pomS,"Chroma sharpen:  %3.2f"      ,float(cfgGet(IDFF_resizeSharpenChrom)/100.0));SendDlgItemMessage(m_hwnd,IDC_LBL_RESIZE_SHARPEN_CHROM,WM_SETTEXT,0,LPARAM(pomS));
+ sprintf(pomS,"Luma gaussian blur: %3.2f"  ,float(cfgGet(IDFF_resizeGblurLum    )/100.0));SendDlgItemMessage(m_hwnd,IDC_LBL_RESIZE_GBLUR_LUM    ,WM_SETTEXT,0,LPARAM(pomS));
+ sprintf(pomS,"Chroma gaussian blur: %3.2f",float(cfgGet(IDFF_resizeGblurChrom  )/100.0));SendDlgItemMessage(m_hwnd,IDC_LBL_RESIZE_GBLUR_CHROM  ,WM_SETTEXT,0,LPARAM(pomS));
+ sprintf(pomS,"Luma sharpen: %3.2f"        ,float(cfgGet(IDFF_resizeSharpenLum  )/100.0));SendDlgItemMessage(m_hwnd,IDC_LBL_RESIZE_SHARPEN_LUM  ,WM_SETTEXT,0,LPARAM(pomS));
+ sprintf(pomS,"Chroma sharpen: %3.2f"      ,float(cfgGet(IDFF_resizeSharpenChrom)/100.0));SendDlgItemMessage(m_hwnd,IDC_LBL_RESIZE_SHARPEN_CHROM,WM_SETTEXT,0,LPARAM(pomS));
 
  SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_GBLUR_LUM    ,TBM_SETPOS,TRUE,cfgGet(IDFF_resizeGblurLum    ));
  SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_GBLUR_CHROM  ,TBM_SETPOS,TRUE,cfgGet(IDFF_resizeGblurChrom  ));
@@ -118,6 +124,11 @@ HRESULT TresizeSettingsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     break;
   }
  return FALSE;
+}
+
+void TresizeSettingsPage::getTip(char *tipS,int len)
+{
+ sprintf(tipS,"Algorithm: %s\nLuma gaussian blur:%3.2f, luma sharpen:%3.2f\nChroma gaussian blur:%3.2f, chroma sharpen:%3.2f",algorithmsNames[cfgGet(IDFF_resizeMethod)],float(cfgGet(IDFF_resizeGblurLum)/100.0),float(cfgGet(IDFF_resizeSharpenLum)/100.0),float(cfgGet(IDFF_resizeGblurChrom)/100.0),float(cfgGet(IDFF_resizeSharpenChrom)/100.0));
 }
 
 TresizeSettingsPage::TresizeSettingsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)

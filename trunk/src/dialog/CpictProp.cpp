@@ -59,7 +59,7 @@ void TpictPropPage::pictProp2dlg(void)
 int TpictPropPage::writeLumGain(int x)
 {
  char s[256];
- sprintf(s,"Luminance gain:  %i",x);
+ sprintf(s,"Luminance gain: %i",x);
  if (x==cfgGet(IDFF_lumGainDef)) strcat(s," (off)");
  SendDlgItemMessage(m_hwnd,IDC_LBL_LUMGAIN,WM_SETTEXT,0,LPARAM(s));
  return x;
@@ -67,7 +67,7 @@ int TpictPropPage::writeLumGain(int x)
 int TpictPropPage::writeLumOffset(int x)
 {
  char s[256];
- sprintf(s,"Luminance offset:  %i",x-256);
+ sprintf(s,"Luminance offset: %i",x-256);
  if (x-256==cfgGet(IDFF_lumOffsetDef)) strcat(s," (off)");
  SendDlgItemMessage(m_hwnd,IDC_LBL_LUMOFFSET,WM_SETTEXT,0,LPARAM(s));
  return x;
@@ -75,7 +75,7 @@ int TpictPropPage::writeLumOffset(int x)
 int TpictPropPage::writeGamma(int x)
 {
  char s[256];
- sprintf(s,"Gamma correction:  %3.2f",float(x/100.0));
+ sprintf(s,"Gamma correction: %3.2f",float(x/100.0));
  if (x==cfgGet(IDFF_gammaCorrectionDef)) strcat(s," (off)");
  SendDlgItemMessage(m_hwnd,IDC_LBL_GAMMA,WM_SETTEXT,0,LPARAM(s));
  return x;
@@ -83,7 +83,7 @@ int TpictPropPage::writeGamma(int x)
 int TpictPropPage::writeHue(int x)
 {
  char s[256];
- sprintf(s,"Hue:  %i",x);
+ sprintf(s,"Hue: %i",x);
  if (x==cfgGet(IDFF_hueDef)) strcat(s," (off)");
  SendDlgItemMessage(m_hwnd,IDC_LBL_HUE,WM_SETTEXT,0,LPARAM(s));
  return x;
@@ -91,7 +91,7 @@ int TpictPropPage::writeHue(int x)
 int TpictPropPage::writeSaturation(int x)
 {
  char s[256];
- sprintf(s,"Saturation:  %i",x);
+ sprintf(s,"Saturation: %i",x);
  if (x==cfgGet(IDFF_saturationDef)) strcat(s," (off)");
  SendDlgItemMessage(m_hwnd,IDC_LBL_SATURATION,WM_SETTEXT,0,LPARAM(s));
  return x;

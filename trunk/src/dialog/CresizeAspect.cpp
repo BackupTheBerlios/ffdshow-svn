@@ -157,7 +157,25 @@ HRESULT TresizeAspectPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
+void TresizeAspectPage::getTip(char *tipS,int len)
+{
+ strcpy(tipS,"Aspect ratio: ");
+ switch (cfgGet(IDFF_resizeAspect))
+  { 
+   case 0:strcat(tipS,"no change");break;
+   case 1:strcat(tipS,"keeping original aspect ratio");break;
+   case 2:
+    {
+     int aspectI=cfgGet(IDFF_aspectRatio);
+     char pomS[256];sprintf(pomS,"set to %3.2f:1",float(aspectI/65536.0));
+     strcat(tipS,pomS);
+     break;
+    }
+  }
+}
+
 TresizeAspectPage::TresizeAspectPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
  createWindow(IDD_RESIZEASPECT);
 }
+

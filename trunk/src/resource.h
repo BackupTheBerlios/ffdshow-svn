@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
+// Microsoft Developer Studio generated include file.
 // Used by ffdshow.rc
 //
 #define VERSION_RES_MINOR_VER           0
@@ -47,7 +47,6 @@
 #define IDC_TBR_RESIZE_SHARPEN_CHROM    1006
 #define IDC_TBR_GAMMA                   1007
 #define IDC_CHB_AUTOQ                   1008
-#define IDC_BT_LUMRESET                 1010
 #define IDC_CHB_XVID                    1011
 #define IDC_CHB_DIV3                    1012
 #define IDC_CHB_DIVX                    1013
@@ -64,10 +63,14 @@
 #define IDC_CHB_DX50_XVID               1018
 #define IDC_LBL_XSHARPENSTRENGTH        1019
 #define IDC_LBL_RESIZE_SHARPEN_LUM      1019
+#define IDC_CHB_BLZ0_XVID               1019
 #define IDC_TBR_XSHARPENSTRENGTH        1020
 #define IDC_LBL_RESIZE_SHARPEN_CHROM    1020
+#define IDC_CHB_YV12                    1020
 #define IDC_LBL_XSHARPENTHRESH          1021
+#define IDC_CHB_YUY2                    1021
 #define IDC_TBR_XSHARPENTHRESH          1022
+#define IDC_CHB_YVYU                    1022
 #define IDC_CHB_MP42                    1023
 #define IDC_TBR_BLUR_STRENGTH           1023
 #define IDC_CHB_MP43                    1024
@@ -75,10 +78,15 @@
 #define IDC_LBL_HUE                     1025
 #define IDC_CHB_MP41                    1025
 #define IDC_LBL_SATURATION              1026
+#define IDC_CHB_WMV1                    1026
 #define IDC_RBT_PPPRESETS               1027
+#define IDC_CHB_UYVY                    1027
 #define IDC_RBT_PPCUSTOM                1028
+#define IDC_CHB_RGB24                   1028
 #define IDC_CHB_DEBLOCKV_LUM            1029
+#define IDC_CHB_RGB16                   1029
 #define IDC_CHB_DEBLOCKH_LUM            1030
+#define IDC_CHB_RGB15                   1030
 #define IDC_CHB_DERING_LUM              1031
 #define IDC_CHB_DEBLOCKV_CHROM          1032
 #define VERSION_RES_LANGUAGE            0x409
@@ -99,11 +107,14 @@
 #define IDC_LBL_NOISESTRENGTH_CHROMA    1049
 #define IDC_CHB_H264                    1049
 #define IDC_LBL_NOW_PLAYING             1050
+#define IDC_CHB_BLZ0                    1050
 #define IDC_CHB_AUTOPRESET              1051
+#define IDC_CHB_RGB32                   1051
 #define IDC_CHB_H265                    1052
 #define IDC_TBR_NOISESTRENGTH_CHROMA    1053
 #define IDC_LBL_NOW_DIMENSIONS          1054
 #define IDC_LBL_NOW_CODEC               1055
+#define IDC_LBL_NOW_OUTPUTCOLORSPACE    1056
 #define IDC_LBL_NOW_FPS                 1057
 #define IDC_LBL_NOW_DECODERFPS          1058
 #define IDC_LBL_NOW_FRAME               1059
@@ -119,6 +130,7 @@
 #define IDC_CHB_DLG_RESTOREPOS          1071
 #define IDC_LBL_FFDSHOWVERSION          1072
 #define IDC_CHB_PICTPROP                1072
+#define IDC_CHB_DLG_SHOWHINTS           1072
 #define IDC_CHB_POSTPROC                1073
 #define IDC_LBL_XVIDVERSION             1073
 #define IDC_CHB_SHOWMV                  1074
@@ -189,14 +201,14 @@
 #define IDC_TBR_OFFSETUV_X              1154
 #define IDC_BT_PRESET_SAVETOFILE        1155
 #define IDC_BT_PRESET_READFROMFILE      1156
-#define IDC_BT_PRESET_HELP              1157
 #define IDC_LBL_DEBLOCKSTRENGTH         1158
 #define IDC_TBR_DEBLOCKSTRENGTH         1159
 #define IDC_TOPLINE                     1161
 #define IDC_BT_RESET                    1162
-#define IDC_BUTTON3                     1163
 #define IDC_BT_HELP                     1163
 #define IDC_CHB_PROCESSFULL             1164
+#define IDC_CBX_PRESETS                 1165
+#define IDC_CHB_CODECS_DONTREG          1166
 #define VERSION_RES_CHARSET             1252
 #define ID_MNI_PRESET_NEWFROMDEFAULT    40004
 #define ID_MNI_PRESET_NEWFROMSELECTED   40005
@@ -210,7 +222,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        157
 #define _APS_NEXT_COMMAND_VALUE         40009
-#define _APS_NEXT_CONTROL_VALUE         1165
+#define _APS_NEXT_CONTROL_VALUE         1167
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

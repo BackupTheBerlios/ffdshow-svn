@@ -176,9 +176,6 @@
 					RelativePath="src\helpBlur.txt">
 				</File>
 				<File
-					RelativePath="src\helpCodecs.txt">
-				</File>
-				<File
 					RelativePath="src\helpCrop.txt">
 				</File>
 				<File

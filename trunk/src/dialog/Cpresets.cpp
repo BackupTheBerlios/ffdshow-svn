@@ -24,6 +24,8 @@
 #include "TpresetSettings.h"
 #include "ffdebug.h"
 
+#define FFPRESET_FILTER "ffdshow preset (*."FFPRESET_EXT")\0*."FFPRESET_EXT"\0All files (*.*)\0*.*\0\0"
+
 static LRESULT CALLBACK lvWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam) 
 { 
  TpresetsPage *presetsPage=(TpresetsPage*)GetWindowLong(hwnd,GWL_USERDATA);
@@ -65,6 +67,15 @@ void TpresetsPage::init(void)
  lvSelectPreset(oldActivePresetName);
  cfg2dlg();
 }
+void TpresetsPage::updateCbx(void)
+{
+ HWND pcbx=GetDlgItem(parent->m_hwnd,IDC_CBX_PRESETS);
+ SendMessage(pcbx,CB_RESETCONTENT,0,0);
+ for (unsigned int i=0;i<localPresets.size();i++)
+  SendMessage(pcbx,CB_ADDSTRING,0,LPARAM(localPresets[i]->presetName));
+ int sel=ListView_GetNextItem(hlv,-1,LVNI_SELECTED);
+ SendMessage(pcbx,CB_SETCURSEL,sel,0);
+}
 void TpresetsPage::lvSelectPreset(const char *presetName)
 {
  for (unsigned int i=0;i<localPresets.size();i++)
@@ -73,6 +84,7 @@ void TpresetsPage::lvSelectPreset(const char *presetName)
     ListView_SetItemState(hlv,i,LVIS_SELECTED,LVIS_SELECTED);
     deci->setPresetPtr(localPresets[i]);
     parent->presetChanged();
+    updateCbx();
     enableWindow(IDC_BT_PRESET_REMOVE,i);
     ListView_EnsureVisible(hlv,i,FALSE);
     return;
@@ -149,7 +161,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             memset(&ofn,0,sizeof(ofn));
             ofn.lStructSize    =sizeof(OPENFILENAME);
             ofn.hwndOwner      =m_hwnd;
-            ofn.lpstrFilter    ="ffdshow preset (*."FFPRESET_EXT")\0*."FFPRESET_EXT"\0All files (*.*)\0*.*\0\0";
+            ofn.lpstrFilter    =FFPRESET_FILTER;
             ofn.lpstrInitialDir=".";
             ofn.lpstrFile      =fileDlgFlnm;
             ofn.lpstrTitle     ="Load ffdshow preset";
@@ -184,7 +196,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         memset(&ofn,0,sizeof(ofn));
         ofn.lStructSize    =sizeof(OPENFILENAME);
         ofn.hwndOwner      =m_hwnd;
-        ofn.lpstrFilter    ="ffdshow preset (*."FFPRESET_EXT")\0*."FFPRESET_EXT"\0All files (*.*)\0*.*\0\0";
+        ofn.lpstrFilter    =FFPRESET_FILTER;
         ofn.lpstrInitialDir=".";
         ofn.lpstrFile      =presetFlnm;
         ofn.lpstrTitle     ="Load ffdshow preset";
@@ -209,7 +221,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         memset(&ofn,0,sizeof(ofn));
         ofn.lStructSize    =sizeof(OPENFILENAME);
         ofn.hwndOwner      =m_hwnd;
-        ofn.lpstrFilter    ="ffdshow preset (*."FFPRESET_EXT")\0*."FFPRESET_EXT"\0All files (*.*)\0*.*\0\0";
+        ofn.lpstrFilter    =FFPRESET_FILTER;
         ofn.lpstrFile      =presetFlnm;
         ofn.lpstrInitialDir=".";
         ofn.lpstrTitle     ="Save ffdshow preset";
@@ -260,6 +272,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           localPresets.nextUniqueName(presetName);
           deci->renameActivePreset(presetName);
           parent->presetChanged();
+          updateCbx();
           InvalidateRect(hlv,NULL,false);
          } 
         else if (menuCmd==ID_MNI_PRESET_RENAME)
@@ -282,8 +295,6 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           NMLVDISPINFO *nmdi=(NMLVDISPINFO*)(lParam);
           int i=nmdi->item.iItem;
           if (i==-1) break;
-          //if (di->item.mask&LVIF_STATE) di->item.state|=0;
-          //if (di->item.mask&LVIF_IMAGE) di->item.iImage=items[i]->getImageIndex();
           if (nmdi->item.mask&LVIF_TEXT)
            strcpy(nmdi->item.pszText,localPresets[i]->presetName);
           return TRUE;
@@ -342,6 +353,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             deci->renameActivePreset(presetName);
             SetWindowLong(m_hwnd,DWL_MSGRESULT,TRUE);
             parent->presetChanged();
+            updateCbx();
            }
           else
            SetWindowLong(m_hwnd,DWL_MSGRESULT,FALSE);
@@ -356,8 +368,6 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
            } 
           if (lvcd->nmcd.dwDrawStage==CDDS_ITEMPREPAINT)
            {
-            //TconfPage *page=(TconfPage*)tvcd->nmcd.lItemlParam;
-            //if (page->getInter()==-1) return FALSE;
             if (!italicFont)
              {
               LOGFONT oldFont;

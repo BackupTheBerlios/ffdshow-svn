@@ -22,6 +22,7 @@ public:
  virtual int  getProcessFull(void) {return cfgGet(IDFF_fullPictProp);}
  virtual void setProcessFull(int full) {cfgSet(IDFF_fullPictProp,full);} 
  virtual void getTip(char *tipS,int len);
+ virtual bool isInPreset(void) {return true;}
 };
 
 #endif 

@@ -20,9 +20,10 @@
 #include "Cinfo.h"
 #include "resource.h"
 #include "IffDecoder.h"
+#include "xvid\xvid.h"
 
-#define WM_FFONINFO1 WM_APP+2
-#define WM_FFONINFO2 WM_APP+3
+#define WM_FFONINFO1 WM_APP+2 //wParam=fps*1000    , lParam=current frame
+#define WM_FFONINFO2 WM_APP+3 //wParam=frame bytest, lParam=output colorspace FOURCC
 
 void TinfoPage::init(void)
 {
@@ -51,10 +52,10 @@ void TinfoPage::cfg2dlg(void)
    SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_DIMENSIONS,WM_SETTEXT,0,LPARAM(pomS));
   } 
  if (deci->getAVIfps(&x)!=S_OK)
-  SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_FPS,WM_SETTEXT,0,LPARAM("FPS:"));
+  SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_FPS,WM_SETTEXT,0,LPARAM(""));
  else
   {
-   sprintf(pomS,"FPS: %-6.2f",float(x/1000.0));
+   sprintf(pomS,"%-6.2f",float(x/1000.0));
    SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_FPS,WM_SETTEXT,0,LPARAM(pomS));
   } 
 }
@@ -64,7 +65,7 @@ HRESULT TinfoPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  if (uMsg==WM_FFONINFO1)
   {
    char pomS[256];
-   sprintf(pomS,"Decoder FPS: %u",wParam/1000);
+   sprintf(pomS,"%u",wParam/1000);
    SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_DECODERFPS,WM_SETTEXT,0,LPARAM(pomS));
    sprintf(pomS,"Current frame: %u",lParam);
    SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_FRAME     ,WM_SETTEXT,0,LPARAM(pomS));
@@ -83,6 +84,26 @@ HRESULT TinfoPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
      sprintf(pomS,"Bitrate: %u kBps",8*Bps/1024);
      SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_BITRATE,WM_SETTEXT,0,LPARAM(pomS));
     }
+   char pomS[256],*colorspaceName;
+   bool flipped=false;
+   if (lParam&XVID_CSP_VFLIP) {flipped=true;lParam&=~XVID_CSP_VFLIP;}
+   switch (lParam)
+    {
+     case XVID_CSP_RGB24 :colorspaceName="RGB24";break;
+     case XVID_CSP_YV12  :colorspaceName="YV12" ;break;
+     case XVID_CSP_YUY2  :colorspaceName="YUY2" ;break;
+     case XVID_CSP_UYVY  :colorspaceName="UYVY" ;break;
+     case XVID_CSP_I420  :colorspaceName="I420" ;break;
+     case XVID_CSP_RGB555:colorspaceName="RGB15";break;
+     case XVID_CSP_RGB565:colorspaceName="RGB16";break;
+     case XVID_CSP_USER  :colorspaceName="USER" ;break;
+     case XVID_CSP_YVYU  :colorspaceName="YVYU" ;break;
+     case XVID_CSP_RGB32 :colorspaceName="RGB32";break;
+     case XVID_CSP_NULL  :colorspaceName="NULL" ;break;
+     default:colorspaceName="unknown";break;
+    };
+   sprintf(pomS,"%s%s",colorspaceName,flipped?" (flipped)":"");
+   SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_OUTPUTCOLORSPACE,WM_SETTEXT,0,LPARAM(pomS));
    return TRUE;
   }
  else if (uMsg==WM_DESTROY)

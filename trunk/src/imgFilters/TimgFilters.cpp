@@ -83,7 +83,7 @@ void TimgFilters::process(const TglobalSettings *global,const TpresetSettings *c
    subtitles->process(pict,rect,cfg);
   else if (i==cfg->orderOffset && cfg->isOffset)
    offset->process(pict,rect,cfg);
-  else if (i==cfg->orderResize && (cfg->isResize || cfg->resizeAspect!=0))
+  else if (i==cfg->orderResize)
    resize->process(pict,rect,cfg);
   else if (i==cfg->orderShowMV && global->isShowMV) 
    showMV->process(pict,rect,cfg);

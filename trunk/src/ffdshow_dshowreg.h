@@ -16,6 +16,8 @@ const AMOVIESETUP_MEDIATYPE sudInputPinTypes[]=
  { &MEDIATYPE_Video, &CLSID_MP41 },
  { &MEDIATYPE_Video, &CLSID_h263 },
  { &MEDIATYPE_Video, &CLSID_H263 },
+ { &MEDIATYPE_Video, &CLSID_blz0 },
+ { &MEDIATYPE_Video, &CLSID_BLZ0 },
  { &MEDIATYPE_Video, &CLSID_wmv1 },
  { &MEDIATYPE_Video, &CLSID_WMV1 },
 #ifdef FF__MPEG

@@ -18,6 +18,7 @@ public:
  virtual int getOrder(void) {return cfgGet(IDFF_orderShowMV);}
  virtual void setOrder(int o) {cfgSet(IDFF_orderShowMV,o);}
  virtual void getTip(char *tipS,int len);
+ virtual bool isInPreset(void) {return true;}
 };
 
 #endif 

@@ -13,17 +13,18 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define FFDSHOW_NAME_L  L"ffdshow MPEG-4 Video Decoder"
 
 #define IDFF_autoPreset            1  //automatic preset loading enabled
-#define IDFF_lastPage              2  //last active page in configuration dialog
-#define IDFF_dlgRestorePos         9
-#define IDFF_dlgPosX              10
-#define IDFF_dlgPosY              11
-#define IDFF_lvWidth0             12
 #define IDFF_trayIcon              3  //is tray icon visible
 #define IDFF_cfgDlgHnwd            4  //handle to configuration dialog
 #define IDFF_autoPresetFileFirst   5  //try to load preset from file
 #define IDFF_autoLoadedFromFile    6
 #define IDFF_inPlayer              7
-#define IDFF_cropChanged          14 
+
+#define IDFF_dlgRestorePos         9
+#define IDFF_dlgPosX              10
+#define IDFF_dlgPosY              11
+#define IDFF_lvWidth0             12
+#define IDFF_showHints            13
+#define IDFF_lastPage              2  //last active page in configuration dialog
 
 #define IDFF_isPostproc          106
 #define IDFF_orderPostproc       109
@@ -95,6 +96,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_autocrop            719
 #define IDFF_magnificationY      720
 #define IDFF_magnificationLocked 721
+#define IDFF_cropChanged         724 
 
 #define IDFF_isSubtitles         801
 #define IDFF_orderSubtitles      815
@@ -109,7 +111,9 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_subPosX             810
 #define IDFF_subPosY             811
 #define IDFF_subDelay            812
+#define IDFF_subDelayDef         818
 #define IDFF_subSpeed            813
+#define IDFF_subSpeedDef         819
 #define IDFF_subAutoFlnm         814
 #define IDFF_fontChanged         816
 
@@ -140,7 +144,19 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_mp42               1006
 #define IDFF_mp41               1007
 #define IDFF_h263               1008
+#define IDFF_blz0               1010
+#define IDFF_wmv1               1011
 #define IDFF_rawv               1009
+
+#define IDFF_outYV12            1301
+#define IDFF_outYUY2            1302
+#define IDFF_outYVYU            1303
+#define IDFF_outUYVY            1304
+#define IDFF_outRGB32           1305
+#define IDFF_outRGB24           1306
+#define IDFF_outRGB555          1307
+#define IDFF_outRGB565          1308
+
 
 struct TpresetSettings;
 class Tpresets;
