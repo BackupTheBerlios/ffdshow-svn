@@ -16,20 +16,19 @@ public:
 };
 
 struct subtitle;
-struct TpresetSettings;
+struct TfontSettings;
 class Tfont
 {
 private:
  HFONT hf;HDC hdc;
  std::vector<Tchar*> c;
  subtitle *oldsub;
- int shadowStrength,shadowRadius;
  int colorY,colorU,colorV;
  int matrix[5][5];
 public:
  Tfont(void);
  ~Tfont();
- void init(const TpresetSettings *cfg);
+ void init(const TfontSettings *cfg);
  void print(unsigned char *dstY,unsigned char *dstU,unsigned char *dstV,unsigned int dx,unsigned int stride,unsigned int dy,subtitle *sub,int posX,int posY);
  void done(void);
 };

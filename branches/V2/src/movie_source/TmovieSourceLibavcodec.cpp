@@ -85,8 +85,8 @@ void TmovieSourceLibavcodec::done(void)
 }
 TffPict2 TmovieSourceLibavcodec::getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen,int &used_bytes,int &got_picture)
 {
- if (cfg->idct!=idctOld)
-  switch (idctOld=cfg->idct)
+ if (cfg->settings.idct!=idctOld)
+  switch (idctOld=cfg->settings.idct)
    {  
     case 2:set_ff_idct(idct_ref);break;
     case 4:set_ff_idct(xvid_idct_ptr);break;

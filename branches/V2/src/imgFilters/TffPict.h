@@ -126,15 +126,16 @@ public:
 struct TffPict2
 {
 public:
- TffPict2(unsigned char *Iy,unsigned char *Iu,unsigned char *Iv,int stride,const Trect &r,bool Iro):y(Iy),u(Iu),v(Iv),ro(Iro)
+ TffPict2(unsigned char *Iy,unsigned char *Iu,unsigned char *Iv,int stride,const Trect &r,bool ro):y(Iy),u(Iu),v(Iv)
   {
+   roY=roU=roV=ro;
    rect.stride=stride;
    rect.full=rect.clip=r;
    rect.calcDiff();
   }
  TffRect rect;
  unsigned char *y,*u,*v;
- bool ro;
+ bool roY,roU,roV;
 };
 
 #endif

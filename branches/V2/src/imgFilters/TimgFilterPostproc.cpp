@@ -19,13 +19,11 @@
 #include "stdafx.h"
 #include "TcpuUsage.h"
 #include "TimgFilterPostproc.h"
-#include "TpresetSettings.h"
+#include "TfilterPostproc.h"
 #include "Tpostproc.h"
 #include "TmovieSource.h"
 #include "IffDecoder.h"
 #include "ffdebug.h"
-
-const int TpresetSettings::deblockStrengthDef=256;
 
 TimgFilterPostproc::TimgFilterPostproc(void)
 {
@@ -36,13 +34,15 @@ TimgFilterPostproc::~TimgFilterPostproc()
 {
  delete cpu;
 }
-void TimgFilterPostproc::process(TffPict2 &pict,const TpresetSettings *cfg)
+void TimgFilterPostproc::process(TffPict2 &pict,const Tfilter *cfg0)
 {
+ const TfilterPostproc *cfg=(const TfilterPostproc*)cfg0;
+ if (!cfg->is) return;
  TmovieSource *movie;deci->getMovieSource(&movie);
  Tpostproc *postproc;deci->getPostproc(&postproc);
  if (!postproc->ok) return;
  int currentq=deci->getParam2(IDFF_currentq);
- if (cpus>0 && cfg->autoq && cfg->ppqual)
+ if (cpus>0 && cfg->settings.autoq && cfg->settings.qual)
   {
    cpu->CollectCPUData();
    if (cpu->GetCPUUsage(0)>90)
@@ -51,21 +51,21 @@ void TimgFilterPostproc::process(TffPict2 &pict,const TpresetSettings *cfg)
     }
    else
     {
-     if (currentq<cfg->ppqual) currentq++ ;
+     if (currentq<cfg->settings.qual) currentq++ ;
     }
    deci->putParam(IDFF_currentq,currentq); 
   }
  int ppmode=postproc->getPPmode(cfg,currentq);
  if (ppmode)
   {
-   Trect *r=init(&pict.rect,cfg->fullPostproc);
+   Trect *r=init(&pict.rect,cfg->full);
    if (dxY<16 || dyY<16) return;
    const unsigned char *tempPict1[3]={getCurY (pict)+r->diffY,getCurU (pict)+r->diffUV,getCurV (pict)+r->diffUV};
    unsigned char       *tempPict2[3]={getNextY(pict)+r->diffY,getNextU(pict)+r->diffUV,getNextV(pict)+r->diffUV};
-   if (cfg->deblockStrength!=TpresetSettings::deblockStrengthDef/* || afterResize*/)
+   if (cfg->settings.deblockStrength!=cfg->deblockStrengthDef/* || afterResize*/)
     for (unsigned int i=0;i<movie->quantDx*movie->quantDy;i++)
      {
-      int q=(/*((afterResize)?16:*/movie->quant[i]/*)*/*cfg->deblockStrength)/256;
+      int q=(/*((afterResize)?16:*/movie->quant[i]/*)*/*cfg->settings.deblockStrength)/256;
       if (q<1) q=1;else if (q>31) q=31;
       movie->quant[i]=q;
      }

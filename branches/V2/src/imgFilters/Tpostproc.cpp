@@ -20,7 +20,7 @@
 #include "Tpostproc.h"
 #include "TpresetSettings.h"
 #include "xvid\utils\mem_align.h"
-
+#include "TfilterPostproc.h"
 
 void Tpostproc::init(void)
 {
@@ -54,12 +54,13 @@ void Tpostproc::done(void)
  ok=false;
 }
 
-int Tpostproc::getPPmode(const TpresetSettings *cfg,int currentq)
+int Tpostproc::getPPmode(const Tfilter *cfg0,int currentq)
 {
+ TfilterPostproc *cfg=(TfilterPostproc*)cfg0;
  int result=0;
- if (!cfg->ppIsCustom)
+ if (!cfg->settings.isCustom)
   {
-   int ppqual=cfg->autoq?currentq:cfg->ppqual;
+   int ppqual=cfg->settings.autoq?currentq:cfg->settings.qual;
    if (ppqual<0) ppqual=0;
    if (ppqual>GET_PP_QUALITY_MAX) ppqual=GET_PP_QUALITY_MAX;
    static const int ppPresets[1+GET_PP_QUALITY_MAX]=
@@ -75,9 +76,9 @@ int Tpostproc::getPPmode(const TpresetSettings *cfg,int currentq)
    result=ppPresets[ppqual];
   }
  else
-  result=cfg->ppcustom;  
- if (cfg->levelFixLum) result|=LUM_LEVEL_FIX;
- if (cfg->levelFixChrom) result|=CHROM_LEVEL_FIX;
- if (cfg->isDeinterlace) result|=CUBIC_IPOL_DEINT_FILTER;
+  result=cfg->settings.custom;  
+ if (cfg->settings.levelFixLum) result|=LUM_LEVEL_FIX;
+ if (cfg->settings.levelFixChrom) result|=CHROM_LEVEL_FIX;
+ //if (cfg->isDeinterlace) result|=CUBIC_IPOL_DEINT_FILTER;
  return result;
 }

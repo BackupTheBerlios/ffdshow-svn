@@ -17,45 +17,48 @@
  */
 
 #include "stdafx.h"
-#include "TimgFilterCrop.h"
-#include "TpresetSettings.h"
+#include "TimgFilterCropNzoom.h"
+#include "TfilterCropNzoom.h"
 #include "IffDecoder.h"
 
-TimgFilterCrop::TimgFilterCrop(void)
+TimgFilterCropNzoom::TimgFilterCropNzoom(void)
 {
+ settingsOld.magnificationX=-1;
  cropDx=-1;
 }
 
-void TimgFilterCrop::calcCrop(const Trect *r,const TpresetSettings *cfg)
+void TimgFilterCropNzoom::calcCrop(const Trect *r,const TfilterCropNzoom *cfg)
 {
- if (cfg->isZoom)
+ if (cfg->is)
   {
-   cropDx=((100-cfg->magnificationX)*r->dx)/100;
-   cropDy=((100-cfg->magnificationY)*r->dy)/100;
+   cropDx=((100-cfg->settings.magnificationX)*r->dx)/100;
+   cropDy=((100-cfg->settings.magnificationY)*r->dy)/100;
    cropLeft=(r->dx-cropDx)/2;
    cropTop =(r->dy-cropDy)/2;
   }
  else
   {
-   cropDx=r->dx-(cfg->cropLeft+cfg->cropRight );
-   cropDy=r->dy-(cfg->cropTop +cfg->cropBottom);
-   cropLeft=cfg->cropLeft;cropTop=cfg->cropTop;
+   cropDx=r->dx-(cfg->settings.cropLeft+cfg->settings.cropRight );
+   cropDy=r->dy-(cfg->settings.cropTop +cfg->settings.cropBottom);
+   cropLeft=cfg->settings.cropLeft;cropTop=cfg->settings.cropTop;
   }
  cropDx&=~7;cropDy&=~7;if (cropDx<=0) cropDx=8;if (cropDy<=0) cropDy=8;
  if (cropLeft+cropDx>=r->dx) cropLeft=r->dx-cropDx;if (cropTop+cropDy>=r->dy) cropTop=r->dy-cropDy;
  if (cropLeft>=r->dx-8) cropLeft=r->dx-8;if (cropTop>=r->dy-8) cropTop=r->dy-8;
 }
-void TimgFilterCrop::done(void)
+void TimgFilterCropNzoom::done(void)
 {
  cropDx=cropDy=-1;
 }
-void TimgFilterCrop::process(TffPict2 &pict,const TpresetSettings *cfg)
+void TimgFilterCropNzoom::process(TffPict2 &pict,const Tfilter *cfg0)
 {
+ const TfilterCropNzoom *cfg=(const TfilterCropNzoom*)cfg0;
+ if (!cfg->is) return;
  Trect *r=init(&pict.rect,0);
- if (cropDx==-1 || deci->getParam2(IDFF_cropChanged))
+ if (cropDx==-1 || cfg->settings!=settingsOld)
   {
+   settingsOld=cfg->settings;
    calcCrop(r,cfg);
-   deci->putParam(IDFF_cropChanged,0);
   }
  r->x=cropLeft;r->y=cropTop;r->dx=cropDx;r->dy=cropDy;r->calcDiff(pict.rect.stride);
 }

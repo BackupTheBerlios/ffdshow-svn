@@ -75,8 +75,3 @@ void TmiscPage::getTip(char *tipS,int len)
  else tipS[0]='\0';
  strcat(tipS,"IDCT: ");strcat(tipS,idctNames[cfgGet(IDFF_idct)]);
 }
-
-TmiscPage::TmiscPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_MISC);
-}

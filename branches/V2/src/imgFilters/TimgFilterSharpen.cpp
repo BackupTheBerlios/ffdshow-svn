@@ -19,13 +19,10 @@
 
 #include "stdafx.h"
 #include "TimgFilterSharpen.h"
-#include "TpresetSettings.h"
+#include "TfilterSharpen.h"
 #include "Tconfig.h"
 #include "xvid\utils\mem_align.h"
 #include "xvid\xvid.h"
-
-const int TpresetSettings::xsharp_strengthDef=20,TpresetSettings::xsharp_thresholdDef=150;
-const int TpresetSettings::unsharp_strengthDef=40,TpresetSettings::unsharp_thresholdDef=0;
 
 TimgFilterSharpen::TimgFilterSharpen(void)
 {
@@ -55,7 +52,7 @@ void TimgFilterSharpen::done(void)
   } 
 }
 
-void TimgFilterSharpen::xsharpen(const unsigned char *src,unsigned char *dst,const TpresetSettings *cfg)
+void TimgFilterSharpen::xsharpen(const unsigned char *src,unsigned char *dst,const TfilterSharpen *cfg)
 {
  int dx=dxY,stride=strideY,dy=dyY;
  const unsigned char *srcLnEnd=src+stride*dy;
@@ -159,9 +156,9 @@ void TimgFilterSharpen::xsharpen(const unsigned char *src,unsigned char *dst,con
   }
  #else    
  static __declspec(align(8)) const __int64 ones=0xffffffffffffffff;
- __int64 mfd_strength=cfg->xsharp_strength; // 0-127
+ __int64 mfd_strength=cfg->settings.xsharpStrength; // 0-127
  __int64 mfd_strengthInv=127-mfd_strength;
- __int64 mfd_threshold=cfg->xsharp_threshold; // 0-255
+ __int64 mfd_threshold=cfg->settings.xsharpThreshold; // 0-255
  static __declspec(align(8)) __int64 mtf_strength64;
  static __declspec(align(8)) __int64 mtf_strengthInv64;
  static __declspec(align(8)) __int64 mtf_thresh64;
@@ -265,7 +262,7 @@ void TimgFilterSharpen::xsharpen(const unsigned char *src,unsigned char *dst,con
  __asm emms; 
 }
 
-void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,const TpresetSettings *cfg)
+void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,const TfilterSharpen *cfg)
 {
  unsigned int dx=dxY,stride=strideY,dy=dyY;
  memcpy(dst,src,dx);
@@ -319,8 +316,8 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
 
  static const __int64 div9=7281;
  static __declspec(align(8)) const __int64 div9_64=(div9<<48)+(div9<<32)+(div9<<16)+div9;
- __int64 T=cfg->unsharp_threshold;
- __int64 C=cfg->unsharp_strength+C_SCALE;  //strength = 0-250
+ __int64 T=cfg->settings.unsharpThreshold;
+ __int64 C=cfg->settings.unsharpStrength+C_SCALE;  //strength = 0-250
  static __declspec(align(8)) __int64 T_64;
  T_64=(T<<48)+(T<<32)+(T<<16)+T;
  static __declspec(align(8)) __int64 C_64;
@@ -429,11 +426,13 @@ void TimgFilterSharpen::unsharpen(const unsigned char *src,unsigned char *dst,co
   }
 }
 
-void TimgFilterSharpen::process(TffPict2 &pict,const TpresetSettings *cfg)
+void TimgFilterSharpen::process(TffPict2 &pict,const Tfilter *cfg0)
 {
- if (cfg->xsharp_strength==cfg->xsharp_strengthDef && cfg->unsharp_strength!=cfg->unsharp_strengthDef) return;
- Trect *r=init(&pict.rect,cfg->fullSharpen);
- switch (cfg->sharpenMethod)
+ const TfilterSharpen *cfg=(const TfilterSharpen*)cfg0;
+ if (!cfg->is) return;
+ if (cfg->settings.xsharpStrength==cfg->xsharpStrengthDef && cfg->settings.unsharpStrength!=cfg->unsharpStrengthDef) return;
+ Trect *r=init(&pict.rect,cfg->full);
+ switch (cfg->settings.method)
   {
    case 0:
     if (config.cpu_flags&XVID_CPU_MMXEXT)

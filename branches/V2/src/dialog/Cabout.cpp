@@ -40,8 +40,3 @@ void TaboutPage::init(void)
  strcpy(vers,"DirectShow filter build date: "__DATE__" , "__TIME__);
  SendDlgItemMessage(m_hwnd,IDC_LBL_FFDSHOWVERSION,WM_SETTEXT,0,LPARAM(vers));
 }
-
-TaboutPage::TaboutPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_ABOUT);
-}

@@ -153,6 +153,8 @@ char *sub_readtext(char *source, char **dest) {
     int len=0;
     char *p=source;
 
+//    printf("src=%p  dest=%p  \n",source,dest);
+
     while ( !eol(*p) && *p!= '|' ) {
 	p++,len++;
     }
@@ -213,13 +215,14 @@ subtitle *sub_read_line_subrip(FILE *fd, subtitle *current,float fps) {
 
 	p=q=line;
 	for (current->lines=1; current->lines < SUB_MAX_TEXT; current->lines++) {
-	    for (q=p,len=0; *p && *p!='\r' && *p!='\n' && strncmp(p,"[br]",4); p++,len++);
+	    for (q=p,len=0; *p && *p!='\r' && *p!='\n' && *p!='|' && strncmp(p,"[br]",4); p++,len++);
 	    current->text[current->lines-1]=(char *)malloc (len+1);
 	    if (!current->text[current->lines-1]) return (subtitle*)ERR;
 	    strncpy (current->text[current->lines-1], q, len);
 	    current->text[current->lines-1][len]='\0';
 	    if (!*p || *p=='\r' || *p=='\n') break;
-	    while (*p++!=']');
+	    if (*p=='|') p++;
+	    else while (*p++!=']');
 	}
 	break;
     }
@@ -377,6 +380,19 @@ subtitle *sub_read_line_rt(FILE *fd,subtitle *current,float fps) {
 }
 
 subtitle *sub_read_line_ssa(FILE *fd,subtitle *current,float fps) {
+/*
+ * Sub Station Alpha v4 (and v2?) scripts have 9 commas before subtitle
+ * other Sub Station Alpha scripts have only 8 commas before subtitle
+ * Reading the "ScriptType:" field is not reliable since many scripts appear
+ * w/o it
+ *
+ * http://www.scriptclub.org is a good place to find more examples
+ * http://www.eswat.demon.co.uk is where the SSA specs can be found
+ */
+        int comma;
+        static int max_comma = 32; /* let's use 32 for the case that the */
+                    /*  amount of commas increase with newer SSA versions */
+
 	int hour1, min1, sec1, hunsec1,
 	    hour2, min2, sec2, hunsec2, nothing;
 	int num;
@@ -393,10 +409,19 @@ subtitle *sub_read_line_ssa(FILE *fd,subtitle *current,float fps) {
 			&hour1, &min1, &sec1, &hunsec1,
 			&hour2, &min2, &sec2, &hunsec2,
 			line3) < 9);
-	line2=strstr(line3,",,");
-	if (!line2) return NULL;
-	line2 ++;
-	line2 ++;
+
+        line2=strchr(line3, ',');
+
+        for (comma = 4; comma < max_comma; comma ++)
+          {
+            tmp = line2;
+            if(!(tmp=strchr(++tmp, ','))) break;
+            if(*(++tmp) == ' ') break; 
+                  /* a space after a comma means we're already in a sentence */
+            line2 = tmp;
+          }
+
+        if(comma < max_comma)max_comma = comma;
 
 	current->lines=0;num=0;
 	current->start = hour1*(60*60*fps)+min1*(60*fps)+sec1*fps+hunsec1*(fps/1000);
@@ -665,7 +690,7 @@ subtitle* subcp_recode (subtitle *sub)
 		ileft = strlen(ip);
 		oleft = ICBUFFSIZE - 1;
 
-		if (iconv(icdsc, (const char **) &ip, &ileft,
+		if (iconv(icdsc, &ip, &ileft,
 			  &op, &oleft) == (size_t)(-1)) {
 			mp_msg(MSGT_SUBREADER,MSGL_WARN,"SUB: error recoding line.\n");
 			l++;

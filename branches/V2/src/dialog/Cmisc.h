@@ -8,7 +8,7 @@ class TmiscPage :public TconfPage
 private:
  static const char *idctNames[];
 public:
- TmiscPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+ virtual int getDialogID(void) {return IDD_MISC;}
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
  virtual void init(void);
  virtual void cfg2dlg(void);

@@ -6,7 +6,7 @@
 class TcodecsPage :public TconfPage
 {
 public:
- TcodecsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+ virtual int getDialogID(void) {return IDD_CODECS;}
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
  virtual void init(void);
  virtual void cfg2dlg(void);

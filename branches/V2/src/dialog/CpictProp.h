@@ -9,18 +9,12 @@ private:
  int writeLumGain(int x),writeLumOffset(int x),writeGamma(int x),writeHue(int x),writeSaturation(int x);
  void pictProp2dlg(void);
 public:
- TpictPropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+ virtual int getDialogID(void) {return IDD_PICTPROP;}
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
  virtual void init(void);
  virtual void cfg2dlg(void);
- virtual void interDlg(void);
- virtual int getInter(void) {return cfgGet(IDFF_isPictProp);}
- virtual int invInter(void) {return cfgInv(IDFF_isPictProp);}
- virtual int getOrder(void) {return cfgGet(IDFF_orderPictProp);}
- virtual void setOrder(int o) {cfgSet(IDFF_orderPictProp,o);}
+ virtual int getInterDlgID(void) {return IDC_CHB_PICTPROP;}
  virtual bool reset(bool testOnly);
- virtual int  getProcessFull(void) {return cfgGet(IDFF_fullPictProp);}
- virtual void setProcessFull(int full) {cfgSet(IDFF_fullPictProp,full);} 
  virtual void getTip(char *tipS,int len);
  virtual bool isInPreset(void) {return true;}
 };

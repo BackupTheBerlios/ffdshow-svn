@@ -13,7 +13,7 @@ private:
  COLORREF custColors[16];
  static const char *fontWeights[];
 public:
- TfontPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+ virtual int getDialogID(void) {return IDD_FONT;}
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
  virtual void init(void);
  virtual void cfg2dlg(void);

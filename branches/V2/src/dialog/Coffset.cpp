@@ -87,7 +87,7 @@ HRESULT ToffsetPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (LOWORD(wParam))  
      {
       case IDC_CHB_OFFSET:
-       cfgSet(IDFF_isOffset,getCheck(IDC_CHB_OFFSET));
+       setInter(getCheck(IDC_CHB_OFFSET));
        parent->drawInter();
        return TRUE;
      }
@@ -96,15 +96,7 @@ HRESULT ToffsetPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
-void ToffsetPage::interDlg(void)
-{
- setCheck(IDC_CHB_OFFSET,cfgGet(IDFF_isOffset));
-}
 void ToffsetPage::getTip(char *tipS,int len)
 {
  sprintf(tipS,"luma offset:[%i,%i] chroma offset:[%i,%i]",cfgGet(IDFF_offsetY_X),cfgGet(IDFF_offsetY_Y),cfgGet(IDFF_offsetU_X),cfgGet(IDFF_offsetU_Y));
-}
-ToffsetPage::ToffsetPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_OFFSET);
 }

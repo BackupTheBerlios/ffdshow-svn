@@ -19,12 +19,14 @@
 
 #include "stdafx.h"
 #include "TimgFilterShowMV.h"
-#include "TpresetSettings.h"
+#include "TfilterShowMV.h"
 #include "TmovieSource.h"
 #include "IffDecoder.h"
 
-void TimgFilterShowMV::process(TffPict2 &pict,const TpresetSettings *cfg)
+void TimgFilterShowMV::process(TffPict2 &pict,const Tfilter *cfg0)
 {
+ const TfilterShowMV *cfg=(const TfilterShowMV*)cfg0;
+ if (!cfg->is) return;
  TmovieSource *movie;
  deci->getMovieSource(&movie);
  TmovieSource::TmotionVectors mv=movie->getMV();

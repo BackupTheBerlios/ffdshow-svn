@@ -1,4 +1,4 @@
-/*
+i/*
  * Copyright (c) 2002 Milan Cutka
  * based on config.cpp from XviD DirectShow filter
  *
@@ -26,22 +26,10 @@
 #include "TconfPage.h"
 #include "Ccodecs.h"
 #include "Cinfo.h"
-#include "Ctray.h"
+#include "CdlgMisc.h"
 #include "Cpresets.h"
-#include "CpostProc.h"
-#include "CpictProp.h"
-#include "Cnoise.h"
-#include "Csharpen.h"
-#include "Cblur.h"
-#include "Csubtitles.h"
-#include "Cfont.h"
-#include "CresizeAspect.h"
-#include "CresizeSettings.h"
-#include "Ccrop.h"
 #include "Cmisc.h"
 #include "Cabout.h"
-#include "Coffset.h"
-#include "CshowMV.h"
 
 using namespace std;
 
@@ -132,6 +120,7 @@ void TffdshowPage::selectPage(TconfPage *Ipage)
 }
 HTREEITEM TffdshowPage::addTI(TVINSERTSTRUCT &tvis,TconfPage *page,bool push)
 {
+ page->create(this,m_hwnd,deci);
  tvis.item.lParam=(LPARAM)page;if (push) pages.push_back(page);
  tvis.item.pszText=page->dialogName;;
  HTREEITEM hti=TreeView_InsertItem(htv,&tvis);
@@ -168,7 +157,7 @@ void TffdshowPage::presetChanged(void)
 }
 static int CALLBACK orderCompareFunc(LPARAM lParam1, LPARAM lParam2,LPARAM lParamSort)
 {
- int o1=((TconfPage*)lParam1)->getOrder(),o2=((TconfPage*)lParam2)->getOrder();
+ int o1=((TconfPage*)lParam1)->index,o2=((TconfPage*)lParam2)->index;
  //DEBUGS2("sort",o1,o2);
  if (o1==-1 && o2==-1) return 0;
  if (o1==-1) return 1;
@@ -230,15 +219,37 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  tvis.hParent=NULL;
  tvis.hInsertAfter=TVI_LAST;
  tvis.item.mask=TVIF_PARAM|TVIF_TEXT;
- addTI(tvis,new TcodecsPage(this,m_hwnd,deci));
- addTI(tvis,new TinfoPage(this,m_hwnd,deci));
- addTI(tvis,new TdlgMiscPage(this,m_hwnd,deci));
+ addTI(tvis,new TcodecsPage);
+ addTI(tvis,new TinfoPage);
+ addTI(tvis,new TdlgMiscPage);
  tvis.item.mask|=TVIF_CHILDREN;
  tvis.item.cChildren=1;
  //presets page must be the last in pages vector
- htiPresets=addTI(tvis,pagePresets=new TpresetsPage(this,m_hwnd,deci),false);
+ htiPresets=addTI(tvis,pagePresets,false);
  tvis.hParent=htiPresets;
  tvis.item.cChildren=0;
+ unsigned int cnt;deci->presetGetNumFilters(&cnt);
+ for (unsigned int i=0;i<cnt;i++)
+  {
+   TconfPage *page,*subPage;
+   deci->presetGetConfPage(i,&page);deci->presetGetConfSubPage(i,&subPage);
+   if (page)
+    {
+     tvis.item.cChildren=(subPage)?1:0;
+     HTREEITEM htiParent=addTI(tvis,page);
+     page->index=i;
+     tvis.item.cChildren=0;
+     if (subPage)
+      {
+       tvis.hParent=htiParent;
+       addTI(tvis,page);
+       tvis.hParent=htiPresets;
+       TreeView_Expand(htv,htiParent,TVE_EXPAND);
+      }
+    }  
+  }
+/*  
+ addTI(tvis,new TcropPage(this,m_hwnd,deci));
  addTI(tvis,new TpostProcPage(this,m_hwnd,deci)); 
  addTI(tvis,new TpictPropPage(this,m_hwnd,deci)); 
  addTI(tvis,new TnoisePage(this,m_hwnd,deci));    
@@ -260,11 +271,11 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  addTI(tvis,new TresizeSettingsPage(this,m_hwnd,deci));
  TreeView_Expand(htv,htiResizeAspect,TVE_EXPAND);
  tvis.hParent=htiPresets;
- addTI(tvis,new TcropPage(this,m_hwnd,deci));
- addTI(tvis,new TmiscPage(this,m_hwnd,deci));
+*/ 
+ addTI(tvis,new TmiscPage);
  sortOrder();
  tvis.hParent=NULL;
- addTI(tvis,new TaboutPage(this,m_hwnd,deci));
+ addTI(tvis,new TaboutPage);
  pages.push_back(pagePresets);
  TreeView_SetIndent(htv,24);
  //TreeView_SetItemHeight(htv,26);
@@ -273,7 +284,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  for (HTREEITEM hti=TreeView_GetRoot(htv);hti;hti=TreeView_GetNextVisible(htv,hti))
   {
    TconfPage *page=hti2page(hti);
-   if (page->dialogId==lastPage)
+   if (page->getDialogID()==lastPage)
     {
      TreeView_SelectItem(htv,hti);
      break;
@@ -363,8 +374,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
        }
       case IDC_CHB_PROCESSFULL:
        {
-        int full=page->getProcessFull();
-        page->setProcessFull(1-full);
+        deci->presetSetFilterFull(page->index,1-deci->presetGetFilterFull2(page->index));
         return TRUE;
        }
       case IDC_CBX_PRESETS:
@@ -389,7 +399,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           NMTREEVIEW *nmtv=LPNMTREEVIEW(lParam);
           TconfPage *page=(TconfPage*)nmtv->itemNew.lParam;
           selectPage(page);
-          deci->putParam(IDFF_lastPage,page->dialogId);
+          deci->putParam(IDFF_lastPage,page->getDialogID());
           return TRUE;
          }
         case TVN_GETINFOTIP:
@@ -422,7 +432,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           if (tvcd->nmcd.dwDrawStage==CDDS_ITEMPREPAINT)
            {
             TconfPage *page=(TconfPage*)tvcd->nmcd.lItemlParam;
-            if (page->getInter()==-1 && page->getOrder()==-1) return FALSE;
+            if (page->index==-1 && page->index==-1) return FALSE;
             SetWindowLong(m_hwnd,DWL_MSGRESULT,CDRF_NOTIFYPOSTPAINT);
             return TRUE;
            }
@@ -433,12 +443,12 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             rr.left-=24;
             //DEBUGS2("tv rect",rr.left,rr.top);
             TconfPage *page=(TconfPage*)tvcd->nmcd.lItemlParam;
-            if (page->getInter()!=-1) ImageList_Draw(hil,page->getInter()?ilChecked:ilClear,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+8+rr.left,tvcd->nmcd.rc.top+(rcDy-16)/2,ILD_TRANSPARENT);
-            if (page->getOrder()>=deci->getMinOrder2() && page->getOrder()<=deci->getMaxOrder2() && (tvcd->nmcd.uItemState&CDIS_SELECTED)) 
+            if (page->index!=-1) ImageList_Draw(hil,deci->presetGetFilterIs2(page->index)?ilChecked:ilClear,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+8+rr.left,tvcd->nmcd.rc.top+(rcDy-16)/2,ILD_TRANSPARENT);
+            if (page->index>=0 && page->index<deci->presetGetNumFilters2() && (tvcd->nmcd.uItemState&CDIS_SELECTED)) 
              {
               int img;
-              if (page->getOrder()==deci->getMinOrder2()) img=ilArrowD;
-              else if (page->getOrder()==deci->getMaxOrder2()) img=ilArrowU;
+              if (page->index==0) img=ilArrowD;
+              else if (page->index==deci->presetGetNumFilters2()-1) img=ilArrowU;
               else img=ilArrowUD;
               ImageList_DrawEx(hil,img,tvcd->nmcd.hdc,tvcd->nmcd.rc.left+2+rr.left,tvcd->nmcd.rc.top+(rcDy-16)/2,5,16,CLR_DEFAULT,CLR_DEFAULT,ILD_TRANSPARENT);
              }
@@ -471,12 +481,12 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           else if (ps.x>=2 && ps.x<=7 && TreeView_GetSelection(htv)==tvhti.hItem)
            {
             int center=(r.bottom-r.top)/2;
-            if (ps.y>center-6 && ps.y<center-1 && page->getOrder()>deci->getMinOrder2())
+            if (ps.y>center-6 && ps.y<center-1 && page->index>0)
              {
               swap(-1);
               return TRUE;
              }
-            else if (ps.y>center+1 && ps.y<center+6 && page->getOrder()<deci->getMaxOrder2())
+            else if (ps.y>center+1 && ps.y<center+6 && page->index<deci->presetGetNumFilters2()-1)
              {
               swap(1);
               return TRUE;
@@ -513,27 +523,16 @@ void TffdshowPage::setChange(void)
 void TffdshowPage::invInter(TconfPage *page,RECT *r)
 {
  if (!page) page=this->page;
- page->invInter();
+ deci->presetSetFilterIs(page->index,1-deci->presetGetFilterIs2(page->index));
  InvalidateRect(htv,r,FALSE);
  SetWindowLong(m_hwnd,DWL_MSGRESULT,TRUE);
  return;
 }
 void TffdshowPage::swap(int direction)
 {
- if (page->getOrder()==-1) return;
- HTREEITEM hti0;
- switch (direction)
-  {
-   case -1:if (page->getOrder()<=deci->getMinOrder2()) return;
-           hti0=TreeView_GetPrevSibling(htv,page->hti);
-           break;
-   case  1:if (page->getOrder()>=deci->getMaxOrder2()) return;
-           hti0=TreeView_GetNextSibling(htv,page->hti);
-           break;
-   default:return;
-  }
- int o1=hti2page(hti0)->getOrder(),o2=hti2page(page->hti)->getOrder();
- hti2page(hti0)->setOrder(o2);hti2page(page->hti)->setOrder(o1);
+ if (page->index==-1) return;
+ if ((direction==-1 &&page->index<=0) || (direction==1 && page->index>=deci->presetGetNumFilters2()-1)) return;
+ deci->presetSetFilterOrder(page->index,page->index+direction);
  sortOrder();
 }
 
@@ -553,7 +552,7 @@ STDMETHODIMP_(ULONG) TffdshowPage::Release()
 }
 #endif
 
-/* -------------------- configure ---------------------- */
+// -------------------- configure ---------------------- 
 void CALLBACK configure(HWND hwnd,HINSTANCE hinst,LPTSTR lpCmdLine,int nCmdShow)
 {
  IffDecoder *iff;

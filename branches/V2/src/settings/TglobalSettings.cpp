@@ -19,7 +19,7 @@
 #include "stdafx.h"
 #include "Tconfig.h"
 #include "TglobalSettings.h"
-#include "TpresetSettings.h"
+#include "IffConstants.h"
 #include "reg.h"
 #include "ffdshow_mediaguids.h"
 #include "ffmpeg\libavcodec\avcodec.h"
@@ -28,78 +28,71 @@
 
 using namespace std;
 
+void TglobalSettings::reg_op_HKLM(TregOp &t)
+{
+ t._REG_OP_N("xvid",xvid,1);
+ t._REG_OP_N("div3",div3,0);
+ t._REG_OP_N("divx",divx,0);
+ t._REG_OP_N("dx50",dx50,0);
+ t._REG_OP_N("blz0",blz0,0);
+ t._REG_OP_N("mp43",mp43,0);
+ t._REG_OP_N("mp42",mp42,0);
+ t._REG_OP_N("mp41",mp41,0);
+ t._REG_OP_N("h263",h263,0);
+ t._REG_OP_N("wmv1",wmv1,0);
+ t._REG_OP_N("rawv",rawv,0);
+ t._REG_OP_N("dontRegisterUnused",dontRegisterUnused,0);
+ t._REG_OP_N("outYV12"  ,outYV12  ,1);
+ t._REG_OP_N("outYUY2"  ,outYUY2  ,1);
+ t._REG_OP_N("outYVYU"  ,outYVYU  ,1);
+ t._REG_OP_N("outUYVY"  ,outUYVY  ,1);
+ t._REG_OP_N("outRGB32" ,outRGB32 ,1);
+ t._REG_OP_N("outRGB24" ,outRGB24 ,1);
+ t._REG_OP_N("outRGB555",outRGB555,1);
+ t._REG_OP_N("outRGB565",outRGB565,1);
+}
+void TglobalSettings::reg_op_HKCU(TregOp &t)
+{
+ t._REG_OP_N("autoPreset",autoPreset,0);
+ t._REG_OP_N("trayIcon",trayIcon,0);
+ t._REG_OP_N("autoPresetFileFirst",autoPresetFileFirst,0);
+ t._REG_OP_S("activePreset",defaultPreset,FFPRESET_DEFAULT);
+}
 void TglobalSettings::load(void)
 {
- HKEY hKey;DWORD size;
- RegOpenKeyEx(HKEY_LOCAL_MACHINE,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,KEY_READ,&hKey);
- REG_GET_N("xvid",xvid,1);if (!config.isXviD && xvid==2) xvid=1;if (!config.isLibavcodec && config.isXviD && xvid) xvid=2;if (!config.isLibavcodec && !config.isXviD) xvid=0;
- REG_GET_N("div3",div3,0);if (!config.isLibavcodec) div3=0;
- REG_GET_N("divx",divx,0);if (!config.isXviD && divx==2) divx=1;if (!config.isLibavcodec && config.isXviD && divx) divx=2;if (!config.isLibavcodec && !config.isXviD) divx=0;
- REG_GET_N("dx50",dx50,0);if (!config.isXviD && dx50==2) dx50=1;if (!config.isLibavcodec && config.isXviD && dx50) dx50=2;if (!config.isLibavcodec && !config.isXviD) dx50=0;
- REG_GET_N("blz0",blz0,0);if (!config.isXviD && blz0==2) blz0=1;if (!config.isLibavcodec && config.isXviD && blz0) blz0=2;if (!config.isLibavcodec && !config.isXviD) blz0=0;
- REG_GET_N("mp43",mp43,0);if (!config.isLibavcodec) mp43=0;
- REG_GET_N("mp42",mp42,0);if (!config.isLibavcodec) mp42=0;
- REG_GET_N("mp41",mp41,0);if (!config.isLibavcodec) mp41=0;
- REG_GET_N("h263",h263,0);if (!config.isLibavcodec) h263=0;
- REG_GET_N("wmv1",wmv1,0);if (!config.isLibavcodec) wmv1=0;
- REG_GET_N("rawv",rawv,0);
- REG_GET_N("dontRegisterUnused",dontRegisterUnused,0);
+ TregOpRegRead t1(HKEY_LOCAL_MACHINE,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD);
+ reg_op_HKLM(t1);
+ if (!config.isXviD && xvid==2) xvid=1;if (!config.isLibavcodec && config.isXviD && xvid) xvid=2;if (!config.isLibavcodec && !config.isXviD) xvid=0;
+ if (!config.isLibavcodec) div3=0;
+ if (!config.isXviD && divx==2) divx=1;if (!config.isLibavcodec && config.isXviD && divx) divx=2;if (!config.isLibavcodec && !config.isXviD) divx=0;
+ if (!config.isXviD && dx50==2) dx50=1;if (!config.isLibavcodec && config.isXviD && dx50) dx50=2;if (!config.isLibavcodec && !config.isXviD) dx50=0;
+ if (!config.isXviD && blz0==2) blz0=1;if (!config.isLibavcodec && config.isXviD && blz0) blz0=2;if (!config.isLibavcodec && !config.isXviD) blz0=0;
+ if (!config.isLibavcodec) mp43=0;
+ if (!config.isLibavcodec) mp42=0;
+ if (!config.isLibavcodec) mp41=0;
+ if (!config.isLibavcodec) h263=0;
+ if (!config.isLibavcodec) wmv1=0;
  outputColorspaces.clear();
- REG_GET_N("outYV12"  ,outYV12  ,1);if (outYV12  ) outputColorspaces.push_back(ToutputColorspace(MEDIASUBTYPE_YV12.Data1,&MEDIASUBTYPE_YV12  ,12));
- REG_GET_N("outYUY2"  ,outYUY2  ,1);if (outYUY2  ) outputColorspaces.push_back(ToutputColorspace(MEDIASUBTYPE_YUY2.Data1,&MEDIASUBTYPE_YUY2  ,16));
- REG_GET_N("outYVYU"  ,outYVYU  ,1);if (outYVYU  ) outputColorspaces.push_back(ToutputColorspace(MEDIASUBTYPE_YVYU.Data1,&MEDIASUBTYPE_YVYU  ,16));
- REG_GET_N("outUYVY"  ,outUYVY  ,1);if (outUYVY  ) outputColorspaces.push_back(ToutputColorspace(MEDIASUBTYPE_UYVY.Data1,&MEDIASUBTYPE_UYVY  ,16));
- REG_GET_N("outRGB32" ,outRGB32 ,1);if (outRGB32 ) outputColorspaces.push_back(ToutputColorspace(BI_RGB                 ,&MEDIASUBTYPE_RGB32 ,32));
- REG_GET_N("outRGB24" ,outRGB24 ,1);if (outRGB24 ) outputColorspaces.push_back(ToutputColorspace(BI_RGB                 ,&MEDIASUBTYPE_RGB24 ,24));
- REG_GET_N("outRGB555",outRGB555,1);if (outRGB555) outputColorspaces.push_back(ToutputColorspace(BI_RGB                 ,&MEDIASUBTYPE_RGB555,16));
- REG_GET_N("outRGB565",outRGB565,1);if (outRGB565) outputColorspaces.push_back(ToutputColorspace(BI_RGB                 ,&MEDIASUBTYPE_RGB565,16));
+ if (outYV12  ) outputColorspaces.push_back(ToutputColorspace(MEDIASUBTYPE_YV12.Data1,&MEDIASUBTYPE_YV12  ,12));
+ if (outYUY2  ) outputColorspaces.push_back(ToutputColorspace(MEDIASUBTYPE_YUY2.Data1,&MEDIASUBTYPE_YUY2  ,16));
+ if (outYVYU  ) outputColorspaces.push_back(ToutputColorspace(MEDIASUBTYPE_YVYU.Data1,&MEDIASUBTYPE_YVYU  ,16));
+ if (outUYVY  ) outputColorspaces.push_back(ToutputColorspace(MEDIASUBTYPE_UYVY.Data1,&MEDIASUBTYPE_UYVY  ,16));
+ if (outRGB32 ) outputColorspaces.push_back(ToutputColorspace(BI_RGB                 ,&MEDIASUBTYPE_RGB32 ,32));
+ if (outRGB24 ) outputColorspaces.push_back(ToutputColorspace(BI_RGB                 ,&MEDIASUBTYPE_RGB24 ,24));
+ if (outRGB555) outputColorspaces.push_back(ToutputColorspace(BI_RGB                 ,&MEDIASUBTYPE_RGB555,16));
+ if (outRGB565) outputColorspaces.push_back(ToutputColorspace(BI_RGB                 ,&MEDIASUBTYPE_RGB565,16));
  outputColorspaces.push_back(ToutputColorspace(0,NULL,0));
- RegCloseKey(hKey);
- RegOpenKeyEx(HKEY_CURRENT_USER, FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,KEY_READ,&hKey);
- REG_GET_N("autoPreset",autoPreset,0);
- REG_GET_N("trayIcon",trayIcon,0);
- REG_GET_N("autoPresetFileFirst",autoPresetFileFirst,0);
- REG_GET_S("activePreset",defaultPreset,FFPRESET_DEFAULT);
- REG_GET_N("showMV",isShowMV,0);
- RegCloseKey(hKey); 
+
+ TregOpRegRead t2(HKEY_CURRENT_USER,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD);
+ reg_op_HKCU(t2);
 }
 
 void TglobalSettings::save(void)
 {
- HKEY hKey;DWORD dispo;
- if (RegCreateKeyEx(HKEY_LOCAL_MACHINE,FFDSHOW_REG_PARENT "\\" FFDSHOW_REG_CHILD,0,FFDSHOW_REG_CLASS,REG_OPTION_NON_VOLATILE,KEY_WRITE,0,&hKey,&dispo)==ERROR_SUCCESS)
-  {
-   REG_SET_N("xvid",xvid,0);
-   REG_SET_N("div3",div3,0);
-   REG_SET_N("divx",divx,0);
-   REG_SET_N("dx50",dx50,0);
-   REG_SET_N("mp43",mp43,0);
-   REG_SET_N("mp42",mp42,0);
-   REG_SET_N("mp41",mp41,0);
-   REG_SET_N("h263",h263,0);
-   REG_SET_N("blz0",blz0,0);
-   REG_SET_N("wmv1",wmv1,0);
-   REG_SET_N("rawv",rawv,0);
-   REG_SET_N("dontRegisterUnused",dontRegisterUnused,0);
-   REG_SET_N("outYV12"  ,outYV12,0);
-   REG_SET_N("outYUY2"  ,outYUY2,0);
-   REG_SET_N("outYVYU"  ,outYVYU,0);
-   REG_SET_N("outUYVY"  ,outUYVY,0);
-   REG_SET_N("outRGB32" ,outRGB32,0);
-   REG_SET_N("outRGB24" ,outRGB24,0);
-   REG_SET_N("outRGB555",outRGB555,0);
-   REG_SET_N("outRGB565",outRGB565,0);
-   RegCloseKey(hKey);
-  } 
- if (RegCreateKeyEx(HKEY_CURRENT_USER,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,FFDSHOW_REG_CLASS,REG_OPTION_NON_VOLATILE,KEY_WRITE,0,&hKey,&dispo)==ERROR_SUCCESS)
-  {
-   REG_SET_N("autoPreset",autoPreset,0);
-   REG_SET_N("autoPresetFileFirst",autoPresetFileFirst,0);
-   REG_SET_N("trayIcon",trayIcon,0);
-   REG_SET_S("activePreset",defaultPreset,"");
-   REG_SET_N("showMV",isShowMV,0);
-   RegCloseKey(hKey);
-  }
+ TregOpRegWrite t1(HKEY_LOCAL_MACHINE,FFDSHOW_REG_PARENT "\\" FFDSHOW_REG_CHILD);
+ reg_op_HKLM(t1);
+ TregOpRegWrite t2(HKEY_CURRENT_USER,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD);
+ reg_op_HKCU(t2);
 }
 
 #define FF_FOURCC(fourCC1,fourCC2,testVar,codecId)          \

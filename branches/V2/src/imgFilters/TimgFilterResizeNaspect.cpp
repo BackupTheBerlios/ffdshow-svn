@@ -17,19 +17,18 @@
  */
 
 #include "stdafx.h"
-#include "TimgFilterResize.h"
-#include "TpresetSettings.h"
+#include "TimgFilterResizeNaspect.h"
+#include "TfilterResizeNaspect.h"
 #include "IffDecoder.h"
 #include "Tpostproc.h"
 #include "mplayer\libmpcodecs\img_format.h"
 
-const TpresetSettings::resizeMethodNone=11;
-
-TimgFilterResize::TimgFilterResize(void)
+TimgFilterResizeNaspect::TimgFilterResizeNaspect(void)
 {
+ oldSettings.method=-1;
  swsc=NULL;
 }
-void TimgFilterResize::done(void)
+void TimgFilterResizeNaspect::done(void)
 {
  if (swsc && swsc!=(void*)-1) 
   {
@@ -38,22 +37,22 @@ void TimgFilterResize::done(void)
    swsc=NULL;
   }
 }
-Trect TimgFilterResize::calcNewClip(const TpresetSettings *cfg,const Trect &oldClip,const Trect &newFull)
+Trect TimgFilterResizeNaspect::calcNewClip(const TfilterResizeNaspect *cfg,const Trect &oldClip,const Trect &newFull)
 {
  Trect newClip;
- if (cfg->isAspect==0)
+ if (cfg->settings.isAspect==0)
   newClip=newFull;
  else
   {
    int ax,ay;
-   if (cfg->isAspect==1)
+   if (cfg->settings.isAspect==1)
     {
      ax=oldClip.dx;
      ay=oldClip.dy;
     }
    else
     {
-     ax=cfg->aspectRatio;
+     ax=cfg->settings.aspectRatio;
      ay=1<<16;
     }
    newClip.dx=newFull.dx;
@@ -69,22 +68,23 @@ Trect TimgFilterResize::calcNewClip(const TpresetSettings *cfg,const Trect &oldC
   }
  return newClip;
 }
-void TimgFilterResize::process(TffPict2 &pict,const TpresetSettings *cfg)
+void TimgFilterResizeNaspect::process(TffPict2 &pict,const Tfilter *cfg0)
 {
- Trect *r=init(&pict.rect,cfg->fullResize);
- if (r->dx==cfg->resizeDx && r->dy==cfg->resizeDy && cfg->isAspect!=2) return;
- if (!swsc || deci->getParam2(IDFF_resizeChanged))
+ const TfilterResizeNaspect *cfg=(const TfilterResizeNaspect*)cfg0;
+ Trect *r=init(&pict.rect,cfg->full);
+ if (r->dx==cfg->settings.dx && r->dy==cfg->settings.dy && cfg->settings.isAspect!=2) return;
+ if (!swsc || cfg->settings!=oldSettings)
   {
-   deci->putParam(IDFF_resizeChanged,0);
+   oldSettings=cfg->settings;
    done();
    Tpostproc *postproc;deci->getPostproc(&postproc);if (!postproc->ok) return;
-   newRect.stride=(cfg->resizeDx/16+2)*16;
-   newRect.full=Trect(0,0,cfg->resizeDx,cfg->resizeDy,newRect.stride);
-   if (cfg->resizeMethod!=cfg->resizeMethodNone)
+   newRect.stride=(cfg->settings.dx/16+2)*16;
+   newRect.full=Trect(0,0,cfg->settings.dx,cfg->settings.dy,newRect.stride);
+   if (cfg->settings.method!=TfilterResizeNaspect::methodNone)
     {
      newRect.clip=calcNewClip(cfg,*r,newRect.full);newRect.clip.calcDiff(newRect.stride);
      __asm emms;
-     swsc=postproc->getSwsContextFromCmdLine(r->dx,r->dy,IMGFMT_YV12,newRect.clip.dx,newRect.clip.dy,IMGFMT_YV12,cfg->resizeMethod,cfg->resizeGblurLum,cfg->resizeGblurChrom,cfg->resizeSharpenLum,cfg->resizeSharpenChrom);
+     swsc=postproc->getSwsContextFromCmdLine(r->dx,r->dy,IMGFMT_YV12,newRect.clip.dx,newRect.clip.dy,IMGFMT_YV12,cfg->settings.method,cfg->settings.GblurLum,cfg->settings.GblurChrom,cfg->settings.sharpenLum,cfg->settings.sharpenChrom);
     }
    else 
     {

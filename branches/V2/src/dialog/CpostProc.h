@@ -3,22 +3,16 @@
 
 #include "TconfPage.h"
 
-class TpostProcPage :public TconfPage
+class TpostprocPage :public TconfPage
 {
 private:
- void postProc2dlg(void),setPPchbs(void);
+ void postproc2dlg(void),setPPchbs(void);
 public:
- TpostProcPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+ virtual int getDialogID(void) {return IDD_POSTPROC;}
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
  virtual void init(void);
  virtual void cfg2dlg(void);
- virtual void interDlg(void);
- virtual int getInter(void) {return cfgGet(IDFF_isPostproc);}
- virtual int invInter(void) {return cfgInv(IDFF_isPostproc);}
- virtual int getOrder(void) {return cfgGet(IDFF_orderPostproc);}
- virtual void setOrder(int o) {cfgSet(IDFF_orderPostproc,o);}
- virtual int  getProcessFull(void) {return cfgGet(IDFF_fullPostproc);}
- virtual void setProcessFull(int full) {cfgSet(IDFF_fullPostproc,full);} 
+ virtual int getInterDlgID(void) {return IDC_CHB_POSTPROC;}
  virtual void getTip(char *tipS,int len);
  virtual bool isInPreset(void) {return true;}
 };

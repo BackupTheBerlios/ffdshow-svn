@@ -72,14 +72,14 @@ void TpresetsPage::updateCbx(void)
  HWND pcbx=GetDlgItem(parent->m_hwnd,IDC_CBX_PRESETS);
  SendMessage(pcbx,CB_RESETCONTENT,0,0);
  for (unsigned int i=0;i<localPresets.size();i++)
-  SendMessage(pcbx,CB_ADDSTRING,0,LPARAM(localPresets[i]->presetName));
+  SendMessage(pcbx,CB_ADDSTRING,0,LPARAM(localPresets[i]->settings.presetName));
  int sel=ListView_GetNextItem(hlv,-1,LVNI_SELECTED);
  SendMessage(pcbx,CB_SETCURSEL,sel,0);
 }
 void TpresetsPage::lvSelectPreset(const char *presetName)
 {
  for (unsigned int i=0;i<localPresets.size();i++)
-  if (_stricmp(presetName,localPresets[i]->presetName)==0)
+  if (_stricmp(presetName,localPresets[i]->settings.presetName)==0)
    {
     ListView_SetItemState(hlv,i,LVIS_SELECTED,LVIS_SELECTED);
     deci->setPresetPtr(localPresets[i]);
@@ -170,7 +170,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
             ofn.Flags          =OFN_PATHMUSTEXIST|OFN_FILEMUSTEXIST|OFN_ENABLESIZING;
             if (GetOpenFileName(&ofn))
              {
-              newPreset=new TpresetSettings;
+              newPreset=new TpresetSettings(deci);
               newPreset->loadFile(fileDlgFlnm);
              }
             break; 
@@ -181,7 +181,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           localPresets.nextUniqueName(newPreset);
           localPresets.storePreset(newPreset); 
           ListView_SetItemCountEx(hlv,localPresets.size(),0);
-          lvSelectPreset(newPreset->presetName);
+          lvSelectPreset(newPreset->settings.presetName);
           //SetActiveWindow(hlv);
           //PostMessage(hlv,LVM_EDITLABEL,ListView_GetNextItem(hlv,-1,LVNI_SELECTED),0); 
          } 
@@ -191,7 +191,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        {
         int i=ListView_GetNextItem(hlv,-1,LVNI_SELECTED);
         char presetFlnm[MAX_PATH];
-        _splitpath(localPresets[i]->presetName,NULL,NULL,presetFlnm,NULL);
+        _splitpath(localPresets[i]->settings.presetName,NULL,NULL,presetFlnm,NULL);
         OPENFILENAME ofn;
         memset(&ofn,0,sizeof(ofn));
         ofn.lStructSize    =sizeof(OPENFILENAME);
@@ -205,9 +205,9 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         ofn.Flags          =OFN_PATHMUSTEXIST|OFN_FILEMUSTEXIST|OFN_ENABLESIZING;
         if (GetOpenFileName(&ofn))
          {
-          char presetName[260];strcpy(presetName,localPresets[i]->presetName);
+          char presetName[260];strcpy(presetName,localPresets[i]->settings.presetName);
           localPresets[i]->loadFile(presetFlnm);
-          strcpy(localPresets[i]->presetName,presetName);
+          strcpy(localPresets[i]->settings.presetName,presetName);
           lvSelectPreset(presetName);
          }
         return TRUE; 
@@ -216,7 +216,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        {
         int i=ListView_GetNextItem(hlv,-1,LVNI_SELECTED);
         char presetFlnm[MAX_PATH];
-        _splitpath(localPresets[i]->presetName,NULL,NULL,presetFlnm,NULL);
+        _splitpath(localPresets[i]->settings.presetName,NULL,NULL,presetFlnm,NULL);
         OPENFILENAME ofn;
         memset(&ofn,0,sizeof(ofn));
         ofn.lStructSize    =sizeof(OPENFILENAME);
@@ -241,7 +241,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           ListView_GetItemText(hlv,i,0,presetName,1023);
           localPresets.removePreset(presetName);
           if (deci->isDefaultPreset(presetName)==S_OK)
-           deci->setDefaultPresetName(localPresets[0]->presetName);
+           deci->setDefaultPresetName(localPresets[0]->settings.presetName);
           ListView_SetItemCountEx(hlv,localPresets.size(),0);
           ListView_GetItemText(hlv,0,0,presetName,1023);
           lvSelectPreset(presetName);
@@ -296,7 +296,7 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
           int i=nmdi->item.iItem;
           if (i==-1) break;
           if (nmdi->item.mask&LVIF_TEXT)
-           strcpy(nmdi->item.pszText,localPresets[i]->presetName);
+           strcpy(nmdi->item.pszText,localPresets[i]->settings.presetName);
           return TRUE;
          }
         case LVN_ITEMCHANGED:
@@ -379,11 +379,11 @@ HRESULT TpresetsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
               boldFont=CreateFontIndirect(&oldFont);
              }
             TpresetSettings *preset=localPresets[lvcd->nmcd.dwItemSpec];
-            if (preset->autoLoadedFromFile) 
+            if (preset->settings.autoLoadedFromFile) 
              SelectObject(lvcd->nmcd.hdc,italicFont);
             char defaultPreset[260];
             deci->getDefaultPresetName(defaultPreset,260); 
-            if (_stricmp(defaultPreset,preset->presetName)==0)
+            if (_stricmp(defaultPreset,preset->settings.presetName)==0)
              SelectObject(lvcd->nmcd.hdc,boldFont);
             SetWindowLong(m_hwnd,DWL_MSGRESULT,/*CDRF_NOTIFYPOSTPAINT*/CDRF_NEWFONT);
             return TRUE;
@@ -400,14 +400,9 @@ void TpresetsPage::applySettings(void)
 {
  deci->setPresets(&localPresets);
  deci->savePresets();
- strcpy(oldActivePresetName,localPresets[ListView_GetNextItem(hlv,-1,LVNI_SELECTED)]->presetName);
+ strcpy(oldActivePresetName,localPresets[ListView_GetNextItem(hlv,-1,LVNI_SELECTED)]->settings.presetName);
 }
 TpresetsPage::~TpresetsPage()
 {
  deci->setActivePreset(oldActivePresetName);
-}
-
-TpresetsPage::TpresetsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_PRESETS);
 }

@@ -5,14 +5,16 @@
 #include <string>
 #include "TpresetSettings.h"
 
+class IffDecoder;
 class Tpresets :public std::vector<TpresetSettings*>
 {
 private:
+ IffDecoder *deci;
  iterator findPreset(const char *presetName);
  void listRegKeys(std::vector<std::string> &list);
 public:
  ~Tpresets();
- void init(void);
+ void init(IffDecoder *Ideci);
  void done(void);
  TpresetSettings* getPreset(const char *presetName);
  TpresetSettings* getAutoPreset(const char *flnm,bool filefirst);

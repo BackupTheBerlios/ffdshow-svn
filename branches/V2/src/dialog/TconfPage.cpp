@@ -43,9 +43,13 @@ static INT_PTR CALLBACK dlgWndProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lPar
   }
 }
 
-void TconfPage::createWindow(int IdialogId)
+TconfPage::TconfPage(void)
 {
- dialogId=IdialogId;
+ helpStr=NULL;
+}
+
+void TconfPage::createWindow(int dialogId)
+{
  hi=(HINSTANCE)GetWindowLong(hwndParent,GWL_HINSTANCE);
  m_hwnd=CreateDialogParam(hi,MAKEINTRESOURCE(dialogId),hwndParent,dlgWndProc,LPARAM(this));
  dialogName[0]='\0';
@@ -65,13 +69,14 @@ void TconfPage::createWindow(int IdialogId)
   }
 }
 
-TconfPage::TconfPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci)
+TconfPage* TconfPage::create(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci)
 {
- assert(Ideci);
+ index=-1;
  deci=Ideci;
  parent=Iparent;
  hwndParent=IhwndParent;
- helpStr=NULL;
+ createWindow(getDialogID());
+ return this;
 }
 
 TconfPage::~TconfPage()
@@ -109,4 +114,18 @@ bool TconfPage::getCheck(int id)
 void TconfPage::enableWindow(int id,int enable)
 {
  EnableWindow(GetDlgItem(m_hwnd,id),enable);
+}
+int TconfPage::getProcessFull(void)
+{
+ if (index==-1) return -1;
+ return deci->presetGetFilterFull2(index);
+}
+void TconfPage::interDlg(void)
+{
+ int id=getInterDlgID();
+ if (id) setCheck(id,deci->presetGetFilterIs2(index));
+}
+void TconfPage::setInter(bool is)
+{
+ deci->presetSetFilterIs(index,is);
 }

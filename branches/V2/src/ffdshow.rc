@@ -397,7 +397,7 @@ BEGIN
                     NOT WS_BORDER | WS_VSCROLL
 END
 
-IDD_RESIZEASPECT DIALOGEX 0, 0, 254, 165
+IDD_RESIZENASPECT DIALOGEX 0, 0, 254, 165
 STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
@@ -426,14 +426,14 @@ BEGIN
                     WS_BORDER | WS_VSCROLL
 END
 
-IDD_CROP DIALOGEX 0, 0, 254, 165
+IDD_CROPNZOOM DIALOGEX 0, 0, 254, 165
 STYLE DS_SETFONT | DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     GROUPBOX        "",IDC_STATIC,0,0,253,61
-    CONTROL         "Crop && zoom",IDC_CHB_CROP,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,4,0,55,10
+    CONTROL         "Crop && zoom",IDC_CHB_CROPNZOOM,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,4,0,55,10
     CONTROL         "Zoom",IDC_RBT_ZOOM,"Button",BS_AUTORADIOBUTTON | 
                     WS_GROUP | WS_TABSTOP,4,11,33,10
     CONTROL         "Crop",IDC_RBT_CROP,"Button",BS_AUTORADIOBUTTON | 
@@ -559,13 +559,13 @@ IDI_FFDSHOW             ICON                    "ffdshow.ico"
 
 IDD_ABOUT               TEXT                    "readme.txt"
 IDD_PICTPROP            TEXT                    "helpPictprop.txt"
-IDD_CROP                TEXT                    "helpCrop.txt"
+IDD_CROPNZOOM           TEXT                    "helpCrop.txt"
 IDD_SHARPEN             TEXT                    "helpSharpen.txt"
 IDD_FONT                TEXT                    "helpFont.txt"
 IDD_INFO                TEXT                    "helpInfo.txt"
 IDD_NOISE               TEXT                    "helpNoise.txt"
 IDD_POSTPROC            TEXT                    "helpPostproc.txt"
-IDD_RESIZEASPECT        TEXT                    "helpResizeAspect.txt"
+IDD_RESIZENASPECT       TEXT                    "helpResizeAspect.txt"
 IDD_BLUR                TEXT                    "helpBlur.txt"
 IDD_DLGMISC             TEXT                    "helpTray.txt"
 IDD_SUBTITLES           TEXT                    "helpSubtitles.txt"
@@ -650,8 +650,8 @@ STRINGTABLE
 BEGIN
     IDD_BLUR                "Blur"
     IDD_FONT                "Font"
-    IDD_RESIZEASPECT        "Resize & aspect"
-    IDD_CROP                "Crop"
+    IDD_RESIZENASPECT       "Resize & aspect"
+    IDD_CROPNZOOM           "Crop"
     IDD_DLGMISC             "Tray & dialog settings"
     IDD_OFFSET              "Offset"
     IDD_RESIZESETTINGS      "Settings"

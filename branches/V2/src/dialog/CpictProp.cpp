@@ -120,7 +120,7 @@ HRESULT TpictPropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (LOWORD(wParam))  
      {
       case IDC_CHB_PICTPROP:
-       cfgSet(IDFF_isPictProp,getCheck(IDC_CHB_PICTPROP));
+       setInter(getCheck(IDC_CHB_PICTPROP));
        parent->drawInter();
        return TRUE;
      }
@@ -129,10 +129,6 @@ HRESULT TpictPropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
-void TpictPropPage::interDlg(void)
-{
- setCheck(IDC_CHB_PICTPROP,cfgGet(IDFF_isPictProp));
-}
 void TpictPropPage::getTip(char *tipS,int len)
 {
  sprintf(tipS,"luma gain:%i, luma offset:%i, gamma:%5.2f, hue:%i, saturation:%i",cfgGet(IDFF_lumGain),cfgGet(IDFF_lumOffset),float(cfgGet(IDFF_gammaCorrection)/100.0),cfgGet(IDFF_hue),cfgGet(IDFF_saturation));
@@ -146,9 +142,4 @@ bool TpictPropPage::reset(bool testOnly)
  SendDlgItemMessage(m_hwnd,IDC_TBR_HUE       ,TBM_SETPOS,TRUE,writeHue(cfgSet(IDFF_hue,cfgGet(IDFF_hueDef))));
  SendDlgItemMessage(m_hwnd,IDC_TBR_SATURATION,TBM_SETPOS,TRUE,writeSaturation(cfgSet(IDFF_saturation,cfgGet(IDFF_saturationDef))));
  return true;
-}
-
-TpictPropPage::TpictPropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_PICTPROP);
 }

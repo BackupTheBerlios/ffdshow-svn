@@ -36,9 +36,15 @@
 #include <olectlid.h>
 #endif
 #include <dvdmedia.h>   // VIDEOINFOHEADER2
+#include <vector>
+
+using namespace std;
 
 #include "Tconfig.h"
 #include "TpresetSettings.h"
+#include "Tfilter.h"
+#include "TfilterResizeNaspect.h"
+#include "TimgFilter.h"
 #include "ffdebug.h"
 #include "ffmpeg\libavcodec\avcodec.h"
 #include "xvid\xvid.h"
@@ -52,7 +58,6 @@
 #include "TtrayIcon.h"
 #include "TffRect.h"
 #include "TffPict.h"
-#include "TimgFilters.h"
 #include "subtitles\Tsubtitles.h"
 
 #include "ffdshow_mediaguids.h"
@@ -112,30 +117,13 @@ STDMETHODIMP TffDecoder::putParam(unsigned int paramID, int  val)
    #include "ffdshow_params.h"
    default:return S_FALSE;
   }
- if (paramID!=IDFF_lastPage && paramID!=IDFF_cropChanged && paramID!=IDFF_fontChanged && paramID!=IDFF_resizeChanged) sendOnChange();
+ if (paramID!=IDFF_lastPage) sendOnChange();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::notifyParamsChanged(void)
 {
- onSubsChanged();
- onCropChanged();
  onTrayIconChanged();
  return S_OK;
-}
-void TffDecoder::onSubsChanged(void)
-{
- fontChanged=true;
-}
-void TffDecoder::onCropChanged(void)
-{
- if (!presetSettings) return;
- cropChanged=true;
- if (presetSettings->magnificationLocked) presetSettings->magnificationY=presetSettings->magnificationX;
-}
-void TffDecoder::onResizeChanged(void)
-{
- if (!presetSettings) return;
- resizeChanged=true;
 }
 void TffDecoder::onTrayIconChanged(void)
 {
@@ -152,8 +140,8 @@ STDMETHODIMP TffDecoder::getPresetName(unsigned int i,char *buf,unsigned int len
 {
  if (!buf) return E_POINTER;
  if (i>=presets.size()) return S_FALSE;
- if (len<strlen(presets[i]->presetName)+1) return E_OUTOFMEMORY;
- strcpy(buf,presets[i]->presetName);
+ if (len<strlen(presets[i]->settings.presetName)+1) return E_OUTOFMEMORY;
+ strcpy(buf,presets[i]->settings.presetName);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getPresets(Tpresets *presets2)
@@ -180,7 +168,7 @@ STDMETHODIMP TffDecoder::savePresets(void)
 STDMETHODIMP TffDecoder::setPresetPtr(TpresetSettings *preset)
 {
  if (!preset) return E_POINTER;
- presetSettings=preset;currentq=presetSettings->ppqual;
+ presetSettings=preset;//currentq=presetSettings->postproc.settings.qual;
  notifyParamsChanged();
  sendOnChange();
  return S_OK;
@@ -189,8 +177,8 @@ STDMETHODIMP TffDecoder::getActivePresetName(char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
  if (!presetSettings) return S_FALSE;
- if (len<strlen(presetSettings->presetName)+1) return E_OUTOFMEMORY;
- strcpy(buf,presetSettings->presetName);
+ if (len<strlen(presetSettings->settings.presetName)+1) return E_OUTOFMEMORY;
+ strcpy(buf,presetSettings->settings.presetName);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::setActivePreset(const char *name)
@@ -242,6 +230,14 @@ STDMETHODIMP TffDecoder::getAVIfps(unsigned int *fps1000)
  *fps1000=1000*AVIfps;
  return S_OK;
 }
+STDMETHODIMP TffDecoder::getAVIfps2(void)
+{
+ return 1000*AVIfps;
+}
+STDMETHODIMP TffDecoder::getCurrentFrame2(void)
+{
+ return t1;
+}
 STDMETHODIMP TffDecoder::saveActivePreset(const char *name)
 {
  if (!presetSettings) return S_FALSE;
@@ -259,16 +255,16 @@ STDMETHODIMP TffDecoder::loadActivePresetFromFile(const char *flnm)
 {
  //TODO: check load success
  if (!flnm) return S_FALSE;
- if (!presetSettings) presetSettings=new TpresetSettings;
- presetSettings->loadFile(flnm);currentq=presetSettings->ppqual;
+ if (!presetSettings) presetSettings=new TpresetSettings(this);
+ presetSettings->loadFile(flnm);//currentq=presetSettings->postproc.settings.qual;
  presets.storePreset(presetSettings);
  notifyParamsChanged();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::removePreset(const char *name)
 {
- if (_stricmp(presetSettings->presetName,globalSettings.defaultPreset)==0)
-  setDefaultPresetName(presets[0]->presetName);
+ if (_stricmp(presetSettings->settings.presetName,globalSettings.defaultPreset)==0)
+  setDefaultPresetName(presets[0]->settings.presetName);
  return presets.removePreset(name)?S_OK:S_FALSE;
 }
 STDMETHODIMP TffDecoder::getAVcodecVersion(char *buf,unsigned int len)
@@ -303,33 +299,27 @@ STDMETHODIMP TffDecoder::getOutputDimensions(unsigned int *x,unsigned int *y)
  *x=outDx;*y=outDx;
  return S_OK;
 }
-STDMETHODIMP TffDecoder::getPPmode(unsigned int *ppmode)
-{
- if (!imgFilters) return S_FALSE;
- *ppmode=(postproc.ok)?Tpostproc::getPPmode(presetSettings,currentq):0;
- return S_OK;
-}
+/*
 STDMETHODIMP TffDecoder::getFontName(char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
- if (len<strlen(presetSettings->fontName)+1) return E_OUTOFMEMORY;
- strcpy(buf,presetSettings->fontName);
+ if (len<strlen(presetSettings->subtitles.fontSettings.settings.name)+1) return E_OUTOFMEMORY;
+ strcpy(buf,presetSettings->subtitles.fontSettings.settings.name);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::setFontName(const char *name)
 {
  if (!name) return E_POINTER;
  if (strlen(name)>255) return  S_FALSE;
- strcpy(presetSettings->fontName,name);
- onSubsChanged();
+ strcpy(presetSettings->subtitles.fontSettings.settings.name,name);
  sendOnChange();
  return S_OK;
 }
 STDMETHODIMP TffDecoder::getSubFlnm(char *buf,unsigned int len)
 {
  if (!buf) return E_POINTER;
- if (len<strlen(presetSettings->subFlnm)+1) return E_OUTOFMEMORY;
- strcpy(buf,presetSettings->subFlnm);
+ if (len<strlen(presetSettings->subtitles.settings.flnm)+1) return E_OUTOFMEMORY;
+ strcpy(buf,presetSettings->subtitles.settings.flnm);
  return S_OK;
 }
 STDMETHODIMP TffDecoder::loadSubtitles(const char *flnm)
@@ -339,23 +329,16 @@ STDMETHODIMP TffDecoder::loadSubtitles(const char *flnm)
  if (subs)
   {
    subs->init(NULL,flnm,AVIfps);
-   strcpy(presetSettings->subFlnm,subs->flnm);
+   strcpy(presetSettings->subtitles.settings.flnm,subs->flnm);
   }
- else strcpy(presetSettings->subFlnm,flnm);
+ else strcpy(presetSettings->subtitles.settings.flnm,flnm);
  sendOnChange();
  return S_OK;
 }
+*/
 STDMETHODIMP TffDecoder::getRealCrop(unsigned int *left,unsigned int *top,unsigned int *right,unsigned int *bottom)
 {
  return E_NOTIMPL;
-}
-STDMETHODIMP TffDecoder::getMinOrder2(void)
-{
- return TpresetSettings::min_order;
-}
-STDMETHODIMP TffDecoder::getMaxOrder2(void)
-{
- return TpresetSettings::max_order;
 }
 STDMETHODIMP TffDecoder::saveGlobalSettings(void)
 {
@@ -381,8 +364,8 @@ STDMETHODIMP TffDecoder::renameActivePreset(const char *newName)
 {
  if (!newName) return E_POINTER;
  if (strlen(newName)>260) return E_OUTOFMEMORY;
- int res=_stricmp(presetSettings->presetName,globalSettings.defaultPreset);
- strcpy(presetSettings->presetName,newName);
+ int res=_stricmp(presetSettings->settings.presetName,globalSettings.defaultPreset);
+ strcpy(presetSettings->settings.presetName,newName);
  if (res==0) setDefaultPresetName(newName);
  sendOnChange();
  return S_OK;
@@ -431,36 +414,131 @@ STDMETHODIMP TffDecoder::getPostproc(Tpostproc* *postprocPtr)
  *postprocPtr=&postproc;
  return S_OK;
 }
-STDMETHODIMP TffDecoder::getSubtitle(subtitle* *subPtr)
+STDMETHODIMP TffDecoder::presetGetNumFilters(unsigned int *num)
 {
- if (!subPtr) return S_FALSE;
- *subPtr=sub;
+ *num=-1;
+ if (!presetSettings) return S_FALSE;
+ *num=presetSettings->filters.size();
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::presetGetNumFilters2(void)
+{
+ return (presetSettings)?presetSettings->filters.size():-1;
+}
+STDMETHODIMP TffDecoder::presetGetFilterName(unsigned int i,char *buf,unsigned int len)
+{
+ if (!presetSettings || i>=presetSettings->filters.size()) return S_FALSE;
+ const char *name=presetSettings->filters[i]->getName();
+ if (len<strlen(name)+1) return E_OUTOFMEMORY;
+ strcpy(buf,name);
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::presetGetFilterIs2(unsigned int i)
+{
+ if (!presetSettings || i>=presetSettings->filters.size()) return -1;
+ return presetSettings->filters[i]->is;
+}
+STDMETHODIMP TffDecoder::presetSetFilterIs(unsigned int i,int Iis)
+{
+ if (!presetSettings || i>=presetSettings->filters.size()) return S_FALSE;
+ presetSettings->filters[i]->is=Iis;
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::presetGetFilterFull2(unsigned int i)
+{
+ if (!presetSettings || i>=presetSettings->filters.size()) return -1;
+ return presetSettings->filters[i]->full;
+}
+STDMETHODIMP TffDecoder::presetSetFilterFull(unsigned int i,int Ifull)
+{
+ if (!presetSettings || i>=presetSettings->filters.size()) return S_FALSE;
+ presetSettings->filters[i]->full=Ifull;
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::presetGetConfPage(unsigned int i,TconfPage* *page)
+{
+ if (!presetSettings || i>=presetSettings->filters.size()) return S_FALSE;
+ *page=presetSettings->filters[i]->getConfPage();
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::presetGetConfSubPage(unsigned int i,TconfPage* *subPage)
+{
+ if (!presetSettings || i>=presetSettings->filters.size()) return S_FALSE;
+ *subPage=presetSettings->filters[i]->getConfPage();
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::presetSetFilterOrder(unsigned int oldOrder,unsigned int newOrder)
+{
+ //TODO: set filter order
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::presetGetPPmode(unsigned int index,unsigned int *ppmode)
+{
+ *ppmode=(postproc.ok)?Tpostproc::getPPmode(presetSettings->filters[index],currentq):0;
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::presetGetParam(unsigned int index,unsigned int paramID,int *value)
+{
+ if (!presetSettings || index>=presetSettings->filters.size()) return S_FALSE;
+ return presetSettings->filters[index]->getParam(paramID,*value)?S_OK:S_FALSE;
+}
+STDMETHODIMP TffDecoder::presetGetParam2(unsigned int index,unsigned int paramID)
+{
+ if (!presetSettings || index>=presetSettings->filters.size()) return 0;
+ int val;
+ presetSettings->filters[index]->getParam(paramID,val);
+ return val;
+}
+STDMETHODIMP TffDecoder::presetPutParam(unsigned int index,unsigned int paramID,int value)
+{
+ if (!presetSettings || index>=presetSettings->filters.size()) return S_FALSE;
+ return presetSettings->filters[index]->setParam(paramID,value)?(sendOnChange(),S_OK):S_FALSE;
+}
+STDMETHODIMP TffDecoder::presetGetParamStr(unsigned int index,unsigned int paramID,char *value,unsigned int len)
+{
+ if (!presetSettings || index>=presetSettings->filters.size()) return S_FALSE;
+ char pomS[1024];
+ bool ok=presetSettings->filters[index]->getParam(paramID,pomS);
+ if (!ok) return S_FALSE;
+ if (len<strlen(pomS)+1) return E_OUTOFMEMORY;
+ strcpy(value,pomS);
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::presetPutParamStr(unsigned int index,unsigned int paramID,char *value)
+{
+ if (!presetSettings || index>=presetSettings->filters.size()) return S_FALSE;
+ return presetSettings->filters[index]->setParam(paramID,value)?(sendOnChange(),S_OK):S_FALSE;
+}
+STDMETHODIMP TffDecoder::getCfcs(void* *cfcs)
+{
+ *cfcs=&this->cfcs;
  return S_OK;
 }
 
 // constructor
-TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME("CffDecoder"),punk,/*CLSID_XVID*/CLSID_FFDSHOW)
+TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME("CffDecoder"),punk,CLSID_FFDSHOW)
 {
  DEBUGS("Constructor");
  ASSERT(phr);
 
  InitCommonControls();
+ Tfilter::init(&cfcs,this);
 
  AVIname[0]=AVIfourcc[0]='\0';
- AVIdx=AVIdy=outDx=outDy=0;AVIfps=0;
+ AVIdx=AVIdy=outDx=outDy=0;AVIfps=0;t1=0;
  cfgDlgHnwd=NULL;inPlayer=1;
- movie=NULL;tray=NULL;subs=NULL;sub=NULL;imgFilters=NULL;
+ movie=NULL;tray=NULL;
  onChangeWnd=NULL;onChangeMsg=0;
  onInfoWnd=NULL;onInfoMsg1=onInfoMsg2=0;
  codecId=CODEC_ID_NONE;
- cropChanged=resizeChanged=true;
  lastTime=clock();
 
  config.init();
  globalSettings.load();
  dialogSettings.load();
- presets.init();
+ presets.init(this);
  setActivePreset(globalSettings.defaultPreset);
+ filterResizeNaspect=(TfilterResizeNaspect*)(presetSettings->getFilter(IDFF_filterResizeNaspect));
 
  tray=new TtrayIcon(this,g_hInst);
 }
@@ -471,9 +549,8 @@ TffDecoder::~TffDecoder()
  __asm emms;
  DEBUGS("Destructor");
  if (movie) delete movie;movie=NULL;
- if (imgFilters) delete imgFilters;imgFilters=NULL;
  postproc.done();
- if (subs) delete subs;subs=NULL;
+ Tfilter::done();
  delete tray;tray=NULL;
 }
 
@@ -539,8 +616,8 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    int cnt=loadAVInameAndPreset();
    if (cnt>1) return VFW_E_TYPE_NOT_ACCEPTED;
    postproc.init();
-   isResize=(presetSettings->isResize!=0)&&postproc.ok;
-   outDx=(isResize)?presetSettings->resizeDx:AVIdx;outDy=(isResize)?presetSettings->resizeDy:AVIdy;
+   isResize=(filterResizeNaspect->is!=0)&&postproc.ok;
+   outDx=(isResize)?filterResizeNaspect->settings.dx:AVIdx;outDy=(isResize)?filterResizeNaspect->settings.dy:AVIdy;
    #ifdef FF__MPEG
    if (formatType==FORMAT_MPEGVideo)
     {
@@ -738,7 +815,8 @@ int TffDecoder::loadAVInameAndPreset(void)
 HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
 {
  //DEBUGS("Transform");
- LONGLONG t1=-1,t2=-1;pIn->GetMediaTime(&t1,&t2);
+ t1=-1;LONGLONG t2=-1;
+ pIn->GetMediaTime(&t1,&t2);
  if (onInfoMsg1)
   {
    clock_t t=clock();
@@ -746,13 +824,8 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    PostMessage(onInfoWnd,onInfoMsg1,fps,(int)t1);
    lastTime=t;
   }
- if (!subs)
-  {
-   if (globalSettings.trayIcon) tray->show();
-   if (!subs) subs=new Tsubtitles;
-   if (AVIname[0]=='\0') loadAVInameAndPreset();
-   subs->init(AVIname,NULL,AVIfps);strcpy(presetSettings->subFlnm,subs->flnm);
-  }
+  
+ if (!movie && globalSettings.trayIcon) tray->show();
 
  if (t1==0 && movie)
   {
@@ -798,7 +871,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   }
 
  TpresetSettings presetSettings=*this->presetSettings;
- presetSettings.isResize=isResize;presetSettings.resizeDx=outDx;presetSettings.resizeDy=outDy;
+ filterResizeNaspect->is=isResize;filterResizeNaspect->settings.dx=outDx;filterResizeNaspect->settings.dy=outDy;
  AVPicture avpict;memset(&avpict,0,sizeof(avpict));
  int got_picture=0,ret;
  TffPict2 pict=movie->getFrame(&globalSettings,&presetSettings,(unsigned char*)m_frame.bitstream,m_frame.length,ret,got_picture);
@@ -821,36 +894,26 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    }
  //else DEBUGS("got image");
 
- if (!imgFilters) imgFilters=new TimgFilters(this);
- 
- if (presetSettings.isSubtitles)
-  {
-   int framesDelay;
-   if (presetSettings.subDelay)
-    {
-     __asm emms;
-     framesDelay=(AVIfps==0)?presetSettings.subDelay:presetSettings.subDelay*AVIfps/1000;
-    }
-   else 
-    framesDelay=0;
-   int sframe=1000*(int(t1)-framesDelay)/presetSettings.subSpeed;
-   sub=(sframe<1)?NULL:subs->getSubtitle(sframe);
-  }
- else sub=NULL;  
- 
  IMAGE destPict;
  if (m_frame.stride<outDx)
   {
    char pomS[256];sprintf(pomS,"here would be an error: stride:%u, AVIdx:%u\n",m_frame.stride,AVIdx);DEBUGS(pomS);
    return S_FALSE;
   }
- imgFilters->process(&globalSettings,&presetSettings,pict);
+ //imgFilters->process(&globalSettings,&presetSettings,pict);
+ for (vector<Tfilter*>::const_iterator i=presetSettings.filters.begin();i!=presetSettings.filters.end();i++)
+  {
+   Tfilter *fs=*i;
+   TimgFilter *f=fs->getImgFilter();
+   f->process(pict,fs);
+  } 
+ 
  destPict.y=pict.y;destPict.u=pict.u;destPict.v=pict.v;
  image_output(&destPict,
               pict.rect.full.dx,pict.rect.full.dy,pict.rect.stride,
               (unsigned char*)m_frame.image,
               m_frame.stride,
-              m_frame.colorspace^(presetSettings.flip?XVID_CSP_VFLIP:0));
+              m_frame.colorspace^(presetSettings.settings.flip?XVID_CSP_VFLIP:0));
  return S_OK;
 }
 

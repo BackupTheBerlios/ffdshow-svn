@@ -18,12 +18,12 @@
 
 #include "stdafx.h"
 #include "IffDecoder.h"
-#include "CresizeAspect.h"
+#include "CresizeNaspect.h"
 #include "resource.h"
 #include "IffDecoder.h"
 #include "TffdshowPage.h"
 
-void TresizeAspectPage::init(void)
+void TresizeNaspectPage::init(void)
 {
  red=NULL;
 
@@ -34,20 +34,20 @@ void TresizeAspectPage::init(void)
  cfg2dlg();
 }
 
-void TresizeAspectPage::cfg2dlg(void)
+void TresizeNaspectPage::cfg2dlg(void)
 {
  resize2dlg();
  aspect2dlg();
 }
 
-void TresizeAspectPage::resize2dlg(void)
+void TresizeNaspectPage::resize2dlg(void)
 {
- setCheck(IDC_CHB_RESIZE,cfgGet(IDFF_isResize));
+ setCheck(IDC_CHB_RESIZE,deci->presetGetFilterIs2(index));
  SetDlgItemInt(m_hwnd,IDC_ED_RESIZEDX,cfgGet(IDFF_resizeDx),0);
  SetDlgItemInt(m_hwnd,IDC_ED_RESIZEDY,cfgGet(IDFF_resizeDy),0);
 }
 
-void TresizeAspectPage::aspect2dlg(void)
+void TresizeNaspectPage::aspect2dlg(void)
 {
  int ra=cfgGet(IDFF_isAspect);
  setCheck(IDC_RBT_ASPECT_NO  ,ra==0);
@@ -67,7 +67,7 @@ void TresizeAspectPage::aspect2dlg(void)
  SendDlgItemMessage(m_hwnd,IDC_TBR_ASPECT_USER,TBM_SETPOS,TRUE,aspectI/256);
 }
 
-bool TresizeAspectPage::applyResizeXY(bool checkOnly)
+bool TresizeNaspectPage::applyResizeXY(bool checkOnly)
 {
  BOOL ok;
  int x=GetDlgItemInt(m_hwnd,IDC_ED_RESIZEDX,&ok,FALSE);
@@ -82,7 +82,7 @@ bool TresizeAspectPage::applyResizeXY(bool checkOnly)
  parent->setChange(); 
  return true;
 }
-bool TresizeAspectPage::sizeOK(HWND hed)
+bool TresizeNaspectPage::sizeOK(HWND hed)
 {
  char pomS[256];
  SendMessage(hed,WM_GETTEXT,255,LPARAM(pomS));
@@ -92,7 +92,7 @@ bool TresizeAspectPage::sizeOK(HWND hed)
  return true;
 }
 
-HRESULT TresizeAspectPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
+HRESULT TresizeNaspectPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
@@ -113,7 +113,7 @@ HRESULT TresizeAspectPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (LOWORD(wParam))  
      {
       case IDC_CHB_RESIZE:
-       cfgSet(IDFF_isResize,getCheck(IDC_CHB_RESIZE));
+       setInter(getCheck(IDC_CHB_RESIZE));
        return TRUE; 
       case IDC_ED_RESIZEDX:
       case IDC_ED_RESIZEDY:
@@ -157,7 +157,7 @@ HRESULT TresizeAspectPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
-void TresizeAspectPage::getTip(char *tipS,int len)
+void TresizeNaspectPage::getTip(char *tipS,int len)
 {
  strcpy(tipS,"Aspect ratio: ");
  switch (cfgGet(IDFF_isAspect))
@@ -173,9 +173,3 @@ void TresizeAspectPage::getTip(char *tipS,int len)
     }
   }
 }
-
-TresizeAspectPage::TresizeAspectPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_RESIZEASPECT);
-}
-

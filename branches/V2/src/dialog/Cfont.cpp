@@ -144,7 +144,7 @@ void TfontPage::fillCharsets(void)
  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_CHARSET,CB_RESETCONTENT,0,0);
  vector<int> sl;
  LOGFONT lf;
- deci->getFontName(lf.lfFaceName,LF_FACESIZE);
+ deci->presetGetParamStr(index,IDFF_fontName,lf.lfFaceName,LF_FACESIZE);
  lf.lfCharSet=DEFAULT_CHARSET;lf.lfPitchAndFamily=0;
  HDC dc=GetDC(m_hwnd);
  EnumFontFamiliesEx(dc,&lf,EnumFamCallBackCharsets,LPARAM(&sl),0); 
@@ -185,7 +185,7 @@ void TfontPage::font2dlg(void)
  SendDlgItemMessage(m_hwnd,IDC_TBR_FONT_SHADOW_RADIUS,TBM_SETPOS,TRUE,x);
 
  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_WEIGHT,CB_SETCURSEL,cfgGet(IDFF_fontWeight)/100-1,0);
- char fontname[256];deci->getFontName(fontname,255);
+ char fontname[256];deci->presetGetParamStr(index,IDFF_fontName,fontname,255);
  SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_NAME,CB_SELECTSTRING,-1,LPARAM(fontname));
  fillCharsets();
  selectCharset(cfgGet(IDFF_fontCharset));
@@ -234,7 +234,7 @@ HRESULT TfontPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
          int i=SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_NAME,CB_GETCURSEL,0,0);
          char pomS[256];
          SendDlgItemMessage(m_hwnd,IDC_CBX_FONT_NAME,CB_GETLBTEXT,i,LPARAM(pomS));
-         deci->setFontName(pomS);
+         deci->presetPutParamStr(index,IDFF_fontName,pomS);
          fillCharsets();
          return TRUE;
         }
@@ -293,12 +293,7 @@ HRESULT TfontPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void TfontPage::getTip(char *tipS,int len)
 {
- char font[256];deci->getFontName(font,255);
+ char font[256];deci->presetGetParamStr(index,IDFF_fontName,font,255);
  char *charset;getCharset(cfgGet(IDFF_fontCharset),&charset);
  sprintf(tipS,"Font: %s, %s charset, size:%i, %s, spacing:%i\nShadow intensity: %i, shadow radius:%i",font,charset,cfgGet(IDFF_fontSize),fontWeights[cfgGet(IDFF_fontWeight)/100-1],cfgGet(IDFF_fontSpacing),cfgGet(IDFF_fontShadowStrength),cfgGet(IDFF_fontShadowRadius));
-}
-
-TfontPage::TfontPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_FONT);
 }

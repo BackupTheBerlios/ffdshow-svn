@@ -18,7 +18,7 @@ private:
  char fileDlgFlnm[MAX_PATH];
  HFONT italicFont,boldFont;
 public:
- TpresetsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+ virtual int getDialogID(void) {return IDD_PRESETS;}
  virtual ~TpresetsPage();
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
  virtual void init(void);

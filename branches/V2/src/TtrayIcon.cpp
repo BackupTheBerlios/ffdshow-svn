@@ -24,6 +24,7 @@
 
 #define TRAYICON 2999
 #define MSG_TRAYICON (WM_APP+9)
+#define IDC_FIRST_FILTER 2999
 #define IDC_FIRST_PRESET 3999
 
 void TtrayIcon::insertSeparator(HMENU hm,int &ord)
@@ -88,7 +89,7 @@ HMENU TtrayIcon::createMenu(void)
  deci->getNumPresets(&len);
  char actPreset[1024];
  deci->getActivePresetName(actPreset,1023);
- int i;
+ unsigned int i;
  for (i=0;i<len;i++)
   {
    char preset[1024];
@@ -96,21 +97,14 @@ HMENU TtrayIcon::createMenu(void)
    insertMenuItem(hm,ord,IDC_FIRST_PRESET+i,preset,_stricmp(preset,actPreset)==0);
   }
  insertSeparator(hm,ord);
-
- insertMenuItem(hm,ord,IDC_CHB_CROP,"Crop",IDFF_isCropNzoom);
- for (i=deci->getMinOrder2();i<=deci->getMaxOrder2();i++)
-  if      (i==cfgGet(IDFF_orderPostproc )) insertMenuItem(hm,ord,IDC_CHB_POSTPROC,"Postprocessing",IDFF_isPostproc);
-   // insertSubmenu(hm,ord,"Postprocessing settings",createPostProcMenu());
-   // insertSeparator(hm,ord);
-  else if (i==cfgGet(IDFF_orderPictProp )) insertMenuItem(hm,ord,IDC_CHB_PICTPROP,"Picture properties",IDFF_isPictProp);
-   // insertSeparator(hm,ord);
-  else if (i==cfgGet(IDFF_orderNoise    )) insertMenuItem(hm,ord,IDC_CHB_NOISE,"Noise",IDFF_isNoise);
-   // insertSeparator(hm,ord);
-  else if (i==cfgGet(IDFF_orderBlur     )) insertMenuItem(hm,ord,IDC_CHB_BLUR,"Blur",IDFF_isBlur);
-  else if (i==cfgGet(IDFF_orderSharpen  )) insertMenuItem(hm,ord,IDC_CHB_SHARPEN,"Sharpen",IDFF_isSharpen);
-  else if (i==cfgGet(IDFF_orderSubtitles)) insertMenuItem(hm,ord,IDC_CHB_SUBTITLES,"Subtitles",IDFF_isSubtitles);
-  else if (i==cfgGet(IDFF_orderOffset   )) insertMenuItem(hm,ord,IDC_CHB_OFFSET,"Offset",IDFF_isOffset);
-  else if (i==cfgGet(IDFF_orderShowMV   )) insertMenuItem(hm,ord,IDC_CHB_SHOWMV,"Show motion vectors",IDFF_isShowMV);
+ unsigned int cnt;
+ deci->presetGetNumFilters(&cnt);
+ for (i=0;i<cnt;i++)
+  {
+   char filterName[260];
+   deci->presetGetFilterName(i,filterName,260);
+   insertMenuItem(hm,ord,IDC_FIRST_FILTER+i,filterName,deci->presetGetFilterIs2(i)==1);   
+  }
  insertSeparator(hm,ord);
  insertMenuItem(hm,ord,IDC_CHB_FLIP,"Flip",IDFF_flip);
 
@@ -149,38 +143,16 @@ static LRESULT CALLBACK trayWndProc(HWND hwnd, UINT msg, WPARAM wprm, LPARAM lpr
           GetMenuItemInfo(hm,i,TRUE,&mii);
           ti->deci->setActivePreset(preset);
          }
-        else
+        else if (cmd>=IDC_FIRST_FILTER)
+         {
+          int i=cmd-IDC_FIRST_FILTER;
+          ti->deci->presetSetFilterIs(i,1-ti->deci->presetGetFilterIs2(i));
+         }
+        else  
          switch (cmd)
           {
-           case IDC_CHB_POSTPROC:
-            ti->negate_Param(IDFF_isPostproc);
-            break;
-           case IDC_CHB_PICTPROP:
-            ti->negate_Param(IDFF_isPictProp);
-            break;
-           case IDC_CHB_NOISE:
-            ti->negate_Param(IDFF_isNoise);
-            break;
-           case IDC_CHB_BLUR:
-            ti->negate_Param(IDFF_isBlur);
-            break;
-           case IDC_CHB_SHARPEN:
-            ti->negate_Param(IDFF_isSharpen);
-            break;
-           case IDC_CHB_CROP:
-            ti->negate_Param(IDFF_isCropNzoom);
-            break;
            case IDC_CHB_FLIP:
-            ti->negate_Param(IDFF_flip);
-            break;
-           case IDC_CHB_SUBTITLES:
-            ti->negate_Param(IDFF_isSubtitles);
-            break;
-           case IDC_CHB_OFFSET:
-            ti->negate_Param(IDFF_isOffset);
-            break;
-           case IDC_CHB_SHOWMV:
-            ti->negate_Param(IDFF_isShowMV);
+            ti->negateParam(IDFF_flip);
             break;
           }
         DestroyMenu(hm);
@@ -264,7 +236,7 @@ void TtrayIcon::hide(void)
   }
 }
 
-int TtrayIcon::negate_Param(int id)
+int TtrayIcon::negateParam(int id)
 {
  int oldVal=deci->getParam2(id);
  oldVal=1-oldVal;

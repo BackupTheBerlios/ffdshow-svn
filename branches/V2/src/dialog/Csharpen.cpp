@@ -101,7 +101,7 @@ HRESULT TsharpenPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (LOWORD(wParam))  
      {
       case IDC_CHB_SHARPEN:
-       cfgSet(IDFF_isSharpen,getCheck(IDC_CHB_SHARPEN));
+       setInter(getCheck(IDC_CHB_SHARPEN));
        parent->drawInter();
        return TRUE;
       case IDC_RBT_SHARPEN_XSHARPEN:
@@ -115,17 +115,9 @@ HRESULT TsharpenPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
-void TsharpenPage::interDlg(void)
-{
- setCheck(IDC_CHB_SHARPEN,cfgGet(IDFF_isSharpen));
-}
 void TsharpenPage::getTip(char *tipS,int len)
 {
  char tstr[256];
  sprintf(tstr," threshold: %i",cfgGet(IDFF_xsharp_threshold));
  sprintf(tipS,"method:%s, strength:%i%s",(cfgGet(IDFF_sharpenMethod)==0)?"xsharpen":"unsharp mask",(cfgGet(IDFF_sharpenMethod)==0)?cfgGet(IDFF_xsharp_strength):cfgGet(IDFF_unsharp_strength),(cfgGet(IDFF_sharpenMethod)==0)?tstr:"");
-}
-TsharpenPage::TsharpenPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_SHARPEN);
 }

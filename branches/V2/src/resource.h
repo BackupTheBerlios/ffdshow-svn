@@ -24,8 +24,8 @@
 #define IDB_CLEAR                       128
 #define IDB_CHB_MASK                    129
 #define IDD_FONT                        132
-#define IDD_RESIZEASPECT                133
-#define IDD_CROP                        134
+#define IDD_RESIZENASPECT               133
+#define IDD_CROPNZOOM                   134
 #define IDD_DLGMISC                     136
 #define IDD_OFFSET                      137
 #define IDD_RESIZESETTINGS              138
@@ -95,7 +95,6 @@
 #define IDC_CHB_LEVELFIX_LUM            1035
 #define IDC_CHB_LEVELFIX_CHROM          1036
 #define IDC_LBL_GAMMA                   1037
-#define IDC_CHB_LEVELFIX_LUM2           1037
 #define IDC_CHB_DEINTERLACE             1037
 #define IDC_CHB_NOISE                   1038
 #define IDC_CHB_NOISE_UNIFORM           1039
@@ -186,8 +185,8 @@
 #define IDC_CHB_SUB_AUTOFLNM            1133
 #define IDC_CHB_BLUR                    1134
 #define IDC_LBL_BLUR_STRENGTH           1136
-#define IDC_CHB_CROP                    1137
 #define IDC_LBL_BLUR_TEMPSMOOTH         1137
+#define IDC_CHB_CROPNZOOM               1137
 #define IDC_RBT_ZOOM                    1138
 #define IDC_RBT_CROP                    1139
 #define IDC_CHB_MAGNIFICATION_LOCKED    1140

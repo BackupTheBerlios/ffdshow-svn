@@ -19,7 +19,7 @@
 #include "stdafx.h"
 #include "Tconfig.h"
 #include "xvid\xvid.h"
-#include "settings\reg.h"
+#include "reg.h"
 #include "TmovieSourceLibavcodec.h"
 #include "TmovieSourceXviD.h"
 
@@ -29,12 +29,10 @@ int Tconfig::cpu_flags=0;
 
 void Tconfig::init(void)
 {
- HKEY hKey;DWORD size;
- RegOpenKeyEx(HKEY_LOCAL_MACHINE,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,KEY_READ,&hKey);
  char sysdir[256];
  GetSystemDirectory(sysdir,255);
- REG_GET_S("pth",pth,sysdir);
- RegCloseKey(hKey);
+ TregOpRegRead t(HKEY_LOCAL_MACHINE,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD);
+ t._REG_OP_S("pth",pth,sysdir);
 
  if (strlen(pth) && pth[strlen(pth)-1]!='\\') strcat(pth,"\\");
  XVID_INIT_PARAM xip;

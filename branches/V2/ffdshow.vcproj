@@ -21,7 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="src;src\settings;src\dialog;src\imgFilters;src\movie_source"
+				AdditionalIncludeDirectories="src;src\settings;src\dialog;src\imgFilters;src\movie_source;src\filters"
 				PreprocessorDefinitions="DEBUG,_DEBUG;WIN32;_WINDOWS;ARCH_X86"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -93,7 +93,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="src;src\settings;src\dialog;src\imgFilters;src\movie_source"
+				AdditionalIncludeDirectories="src;src\settings;src\dialog;src\imgFilters;src\movie_source;src\filters"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;ARCH_X86"
 				StringPooling="TRUE"
 				ExceptionHandling="TRUE"
@@ -284,6 +284,9 @@
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
+			<File
+				RelativePath="src\IffConstants.h">
+			</File>
 			<File
 				RelativePath="src\IffDecoder.h">
 			</File>
@@ -640,6 +643,9 @@
 				RelativePath="src\subtitles\Tfont.h">
 			</File>
 			<File
+				RelativePath="src\subtitles\TfontSettings.h">
+			</File>
+			<File
 				RelativePath="src\subtitles\Tsubtitles.cpp">
 			</File>
 			<File
@@ -683,34 +689,10 @@
 				RelativePath="src\imgFilters\TimgFilterBlur.h">
 			</File>
 			<File
-				RelativePath="src\imgFilters\TimgFilterChroma.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AssemblerOutput="4"/>
-				</FileConfiguration>
+				RelativePath="src\imgFilters\TimgFilterCropNzoom.cpp">
 			</File>
 			<File
-				RelativePath="src\imgFilters\TimgFilterChroma.h">
-			</File>
-			<File
-				RelativePath="src\imgFilters\TimgFilterCrop.cpp">
-			</File>
-			<File
-				RelativePath="src\imgFilters\TimgFilterCrop.h">
-			</File>
-			<File
-				RelativePath="src\imgFilters\TimgFilterLuma.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AssemblerOutput="4"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="src\imgFilters\TimgFilterLuma.h">
+				RelativePath="src\imgFilters\TimgFilterCropNzoom.h">
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterNoise.cpp">
@@ -731,16 +713,22 @@
 				RelativePath="src\imgFilters\TimgFilterOffset.h">
 			</File>
 			<File
+				RelativePath="src\imgFilters\TimgFilterPictProp.cpp">
+			</File>
+			<File
+				RelativePath="src\imgFilters\TimgFilterPictProp.h">
+			</File>
+			<File
 				RelativePath="src\imgFilters\TimgFilterPostproc.cpp">
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterPostproc.h">
 			</File>
 			<File
-				RelativePath="src\imgFilters\TimgFilterResize.cpp">
+				RelativePath="src\imgFilters\TimgFilterResizeNaspect.cpp">
 			</File>
 			<File
-				RelativePath="src\imgFilters\TimgFilterResize.h">
+				RelativePath="src\imgFilters\TimgFilterResizeNaspect.h">
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterSharpen.cpp">
@@ -771,25 +759,6 @@
 			</File>
 			<File
 				RelativePath="src\imgFilters\TimgFilterSubtitles.h">
-			</File>
-			<File
-				RelativePath="src\imgFilters\TimgFilterTimesmooth.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AssemblerOutput="4"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="src\imgFilters\TimgFilterTimesmooth.h">
-			</File>
-			<File
-				RelativePath="src\imgFilters\TimgFilters.cpp">
-			</File>
-			<File
-				RelativePath="src\imgFilters\TimgFilters.h">
 			</File>
 			<File
 				RelativePath="src\imgFilters\Tpostproc.cpp">
@@ -847,10 +816,16 @@
 				RelativePath="src\dialog\Ccodecs.h">
 			</File>
 			<File
-				RelativePath="src\dialog\Ccrop.cpp">
+				RelativePath="src\dialog\CcropNzoom.cpp">
 			</File>
 			<File
-				RelativePath="src\dialog\Ccrop.h">
+				RelativePath="src\dialog\CcropNzoom.h">
+			</File>
+			<File
+				RelativePath="src\dialog\CdlgMisc.cpp">
+			</File>
+			<File
+				RelativePath="src\dialog\CdlgMisc.h">
 			</File>
 			<File
 				RelativePath="src\dialog\Cfont.cpp">
@@ -901,10 +876,10 @@
 				RelativePath="src\dialog\Cpresets.h">
 			</File>
 			<File
-				RelativePath="src\dialog\CresizeAspect.cpp">
+				RelativePath="src\dialog\CresizeNaspect.cpp">
 			</File>
 			<File
-				RelativePath="src\dialog\CresizeAspect.h">
+				RelativePath="src\dialog\CresizeNaspect.h">
 			</File>
 			<File
 				RelativePath="src\dialog\CresizeSettings.cpp">
@@ -929,12 +904,6 @@
 			</File>
 			<File
 				RelativePath="src\dialog\Csubtitles.h">
-			</File>
-			<File
-				RelativePath="src\dialog\Ctray.cpp">
-			</File>
-			<File
-				RelativePath="src\dialog\Ctray.h">
 			</File>
 			<File
 				RelativePath="src\dialog\TconfPage.cpp">
@@ -972,6 +941,12 @@
 			</File>
 			<File
 				RelativePath="src\settings\TpresetSettings.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AssemblerOutput="4"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="src\settings\TpresetSettings.h">
@@ -984,9 +959,6 @@
 			</File>
 			<File
 				RelativePath="src\ffdshow_params.h">
-			</File>
-			<File
-				RelativePath="src\settings\presets_template.h">
 			</File>
 			<File
 				RelativePath="src\settings\reg.h">
@@ -1033,6 +1005,76 @@
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="0"/>
 				</FileConfiguration>
+			</File>
+		</Filter>
+		<Filter
+			Name="filters"
+			Filter="">
+			<File
+				RelativePath="src\filters\Tfilter.cpp">
+			</File>
+			<File
+				RelativePath="src\filters\Tfilter.h">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterBlur.cpp">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterBlur.h">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterCropNzoom.cpp">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterCropNzoom.h">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterNoise.cpp">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterNoise.h">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterOffset.cpp">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterOffset.h">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterPictProp.cpp">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterPictProp.h">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterPostproc.cpp">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterPostproc.h">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterResizeNaspect.cpp">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterResizeNaspect.h">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterSharpen.cpp">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterSharpen.h">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterShowMV.cpp">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterShowMV.h">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterSubtitles.cpp">
+			</File>
+			<File
+				RelativePath="src\filters\TfilterSubtitles.h">
 			</File>
 		</Filter>
 	</Files>

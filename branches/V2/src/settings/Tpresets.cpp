@@ -52,9 +52,10 @@ void Tpresets::listRegKeys(std::vector<string> &list)
   }
  RegCloseKey(hKey);
 }
-void Tpresets::init(void)
+void Tpresets::init(IffDecoder *Ideci)
 {
- TpresetSettings *def=new TpresetSettings;
+ deci=Ideci;
+ TpresetSettings *def=new TpresetSettings(deci);
  def->loadDefault();
  push_back(def);
 
@@ -63,7 +64,7 @@ void Tpresets::init(void)
  for (vector<string>::iterator i=keys.begin();i!=keys.end();i++)
   if (findPreset(i->c_str())==end()) 
    {
-    TpresetSettings *preset=new TpresetSettings(i->c_str());
+    TpresetSettings *preset=new TpresetSettings(deci,i->c_str());
     preset->loadReg();
     push_back(preset);
    }
@@ -79,14 +80,14 @@ void Tpresets::done(void)
 Tpresets::iterator Tpresets::findPreset(const char *presetName)
 {
  for (iterator i=begin();i!=end();i++)
-  if (_stricoll(presetName,(*i)->presetName)==0)
+  if (_stricoll(presetName,(*i)->settings.presetName)==0)
    return i;
  return end();  
 }
 
 void Tpresets::storePreset(TpresetSettings *preset)
 {
- iterator i=findPreset(preset->presetName);
+ iterator i=findPreset(preset->settings.presetName);
  if (i!=end())
   *i=preset;
  else
@@ -103,7 +104,7 @@ TpresetSettings* Tpresets::getPreset(const char *presetName)
 void Tpresets::savePreset(TpresetSettings *preset,const char *presetName)
 {
  if (presetName)
-  strcpy(preset->presetName,presetName);
+  strcpy(preset->settings.presetName,presetName);
  preset->saveReg();
  storePreset(preset);
 }
@@ -127,7 +128,7 @@ bool Tpresets::removePreset(const char *presetName)
 
 void Tpresets::nextUniqueName(TpresetSettings *preset)
 {
- nextUniqueName(preset->presetName);
+ nextUniqueName(preset->settings.presetName);
 }
 void Tpresets::nextUniqueName(char *presetName)
 {
@@ -147,7 +148,7 @@ void Tpresets::nextUniqueName(char *presetName)
 void Tpresets::saveRegAll(void)
 {
  for (iterator ii=begin();ii!=end();ii++)
-  if (!(*ii)->autoLoadedFromFile)
+  if (!(*ii)->settings.autoLoadedFromFile)
    (*ii)->saveReg();
 
  vector<string> keys;
@@ -170,10 +171,10 @@ TpresetSettings* Tpresets::getAutoPreset(const char *AVIname,bool filefirst)
    _makepath(presetFlnm,drive,path,name,FFPRESET_EXT);
    if (GetFileAttributes(presetFlnm)!=INVALID_FILE_ATTRIBUTES)
     {
-     TpresetSettings *preset=new TpresetSettings(AVIname);
+     TpresetSettings *preset=new TpresetSettings(deci,AVIname);
      preset->loadFile(presetFlnm);
-     TpresetSettings::normalizePresetName(preset->presetName,AVIname);
-     preset->autoLoadedFromFile=true;
+     TpresetSettings::normalizePresetName(preset->settings.presetName,AVIname);
+     preset->settings.autoLoadedFromFile=true;
      nextUniqueName(preset);
      push_back(preset);
      return preset;

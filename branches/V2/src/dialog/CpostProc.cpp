@@ -25,7 +25,7 @@
 
 #define POSTPROC_TIMER 1999
 
-void TpostProcPage::init(void)
+void TpostprocPage::init(void)
 {
  if (cfgGet(IDFF_inPlayer)) SetTimer(m_hwnd,POSTPROC_TIMER,100,NULL);
  SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_SETRANGE,TRUE,MAKELONG(0,6));
@@ -38,12 +38,12 @@ void TpostProcPage::init(void)
  cfg2dlg();
 }
 
-void TpostProcPage::cfg2dlg(void)
+void TpostprocPage::cfg2dlg(void)
 {
- postProc2dlg();
+ postproc2dlg();
 }
 
-void TpostProcPage::postProc2dlg(void)
+void TpostprocPage::postproc2dlg(void)
 {
  SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_SETPOS,TRUE,cfgGet(IDFF_ppqual));
  setCheck(IDC_CHB_AUTOQ    , cfgGet(IDFF_autoq));
@@ -55,11 +55,10 @@ void TpostProcPage::postProc2dlg(void)
  char pomS[256];
  sprintf(pomS,"Processing strength: %i%%",100*cfgGet(IDFF_deblockStrength)/256);
  SendDlgItemMessage(m_hwnd,IDC_LBL_DEBLOCKSTRENGTH,WM_SETTEXT,0,LPARAM(pomS));
- setCheck(IDC_CHB_DEINTERLACE,cfgGet(IDFF_isDeinterlace));
  setPPchbs();
 }
 
-void TpostProcPage::setPPchbs(void)
+void TpostprocPage::setPPchbs(void)
 {
  unsigned int ppmode;
  if (cfgGet(IDFF_ppIsCustom)) 
@@ -80,7 +79,7 @@ void TpostProcPage::setPPchbs(void)
    enableWindow(IDC_CHB_DEBLOCKH_CHROM,false);
    enableWindow(IDC_CHB_DERING_LUM    ,false);
    enableWindow(IDC_CHB_DERING_CHROM  ,false);
-   deci->getPPmode(&ppmode);
+   deci->presetGetPPmode(index,&ppmode);
   }
  setCheck(IDC_CHB_DEBLOCKV_LUM  ,ppmode&LUM_V_DEBLOCK);
  setCheck(IDC_CHB_DEBLOCKH_LUM  ,ppmode&LUM_H_DEBLOCK);
@@ -90,7 +89,7 @@ void TpostProcPage::setPPchbs(void)
  setCheck(IDC_CHB_DERING_CHROM  ,ppmode&CHROM_DERING);
 }
 
-HRESULT TpostProcPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
+HRESULT TpostprocPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
@@ -105,7 +104,7 @@ HRESULT TpostProcPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     else if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH))
      {
       cfgSet(IDFF_deblockStrength,SendDlgItemMessage(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH,TBM_GETPOS,0,0));
-      postProc2dlg();
+      postproc2dlg();
       return TRUE;
      }
     break;  
@@ -113,7 +112,7 @@ HRESULT TpostProcPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (LOWORD(wParam))  
      {
       case IDC_CHB_POSTPROC:
-       cfgSet(IDFF_isPostproc,getCheck(IDC_CHB_POSTPROC));
+       setInter(getCheck(IDC_CHB_POSTPROC));
        parent->drawInter();
        return TRUE;
       case IDC_RBT_PPPRESETS:
@@ -151,9 +150,6 @@ HRESULT TpostProcPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         cfgSet(IDFF_levelFixChrom,getCheck(IDC_CHB_LEVELFIX_CHROM));
         return TRUE;
        }
-      case IDC_CHB_DEINTERLACE:
-       cfgSet(IDFF_isDeinterlace,getCheck(IDC_CHB_DEINTERLACE));
-       return TRUE;
      }  
     break; 
    case WM_TIMER:
@@ -172,11 +168,7 @@ HRESULT TpostProcPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
-void TpostProcPage::interDlg(void)
-{
- setCheck(IDC_CHB_POSTPROC,cfgGet(IDFF_isPostproc));
-}
-void TpostProcPage::getTip(char *tipS,int len)
+void TpostprocPage::getTip(char *tipS,int len)
 {
  char pomS[256];
  tipS[0]='\0';
@@ -191,8 +183,4 @@ void TpostProcPage::getTip(char *tipS,int len)
    if (cfgGet(IDFF_autoq)) strcat(tipS," automatic");
   } 
  if (cfgGet(IDFF_levelFixChrom) || cfgGet(IDFF_levelFixLum)) strcat(tipS,", level fix"); 
-}
-TpostProcPage::TpostProcPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_POSTPROC);
 }

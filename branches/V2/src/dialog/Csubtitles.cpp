@@ -43,11 +43,6 @@ void TsubtitlesPage::cfg2dlg(void)
  sub2dlg();
 }
 
-void TsubtitlesPage::interDlg(void)
-{
- setCheck(IDC_CHB_SUBTITLES,cfgGet(IDFF_isSubtitles));
-}
-
 void TsubtitlesPage::getPosHoriz(int x,char *s)
 {
  char *posS;
@@ -76,7 +71,7 @@ void TsubtitlesPage::sub2dlg(void)
  SendDlgItemMessage(m_hwnd,IDC_LBL_SUB_POSY,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_SUB_POSY,TBM_SETPOS,TRUE,x);
  s[0]='\0';
- deci->getSubFlnm(s,255);
+ deci->presetGetParamStr(index,IDFF_subFlnm,s,255);
  SendDlgItemMessage(m_hwnd,IDC_CBX_SUB_FLNM,WM_SETTEXT,0,LPARAM(s));
  setCheck(IDC_CHB_SUB_AUTOFLNM,cfgGet(IDFF_subAutoFlnm));
  x=cfgGet(IDFF_subDelay);
@@ -95,7 +90,7 @@ void TsubtitlesPage::loadSubtitles(void)
 {
  char flnm[1024];
  SendDlgItemMessage(m_hwnd,IDC_CBX_SUB_FLNM,WM_GETTEXT,1023,LPARAM(flnm));
- deci->loadSubtitles(flnm);
+ deci->presetPutParamStr(index,IDFF_subFlnm,flnm);
  sub2dlg(); 
 }
 
@@ -120,7 +115,7 @@ HRESULT TsubtitlesPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (LOWORD(wParam))  
      {
       case IDC_CHB_SUBTITLES:
-       cfgSet(IDFF_isSubtitles,getCheck(IDC_CHB_SUBTITLES));
+       setInter(getCheck(IDC_CHB_SUBTITLES));
        parent->drawInter();
        return TRUE; 
       case IDC_CHB_SUB_AUTOFLNM:
@@ -194,9 +189,4 @@ void TsubtitlesPage::getTip(char *tipS,int len)
    sprintf(pomS,"\nSpeed: %i/1000",speed);
    strcat(tipS,pomS);
   }
-}
-
-TsubtitlesPage::TsubtitlesPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_SUBTITLES);
 }

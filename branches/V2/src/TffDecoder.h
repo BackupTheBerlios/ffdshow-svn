@@ -8,9 +8,8 @@
 #include "Tpostproc.h"
 
 class TtrayIcon;
-class Tsubtitles;
-class TimgFilters;
 struct TpresetSettings;
+struct TfilterResizeNaspect;
 class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpecifyPropertyPages
 {
 public:
@@ -55,6 +54,7 @@ public:
  STDMETHODIMP getAVIfourcc(char *buf,unsigned int len);
  STDMETHODIMP getAVIdimensions(unsigned int *x,unsigned int *y);
  STDMETHODIMP getAVIfps(unsigned int *fps1000);
+ STDMETHODIMP getAVIfps2(void);
  STDMETHODIMP saveActivePreset(const char *name);
  STDMETHODIMP saveActivePresetToFile(const char *flnm);
  STDMETHODIMP loadActivePresetFromFile(const char *flnm);
@@ -62,14 +62,11 @@ public:
  STDMETHODIMP notifyParamsChanged(void);
  STDMETHODIMP getAVcodecVersion(char *buf,unsigned int len);
  STDMETHODIMP getXvidVersion(char *buf,unsigned int len);
- STDMETHODIMP getPPmode(unsigned int *ppmode);
- STDMETHODIMP getFontName(char *buf,unsigned int len);
- STDMETHODIMP setFontName(const char *name);
- STDMETHODIMP getSubFlnm(char *buf,unsigned int len);
- STDMETHODIMP loadSubtitles(const char *flnm);
+ //STDMETHODIMP getFontName(char *buf,unsigned int len);
+ //STDMETHODIMP setFontName(const char *name);
+ //STDMETHODIMP getSubFlnm(char *buf,unsigned int len);
+ //STDMETHODIMP loadSubtitles(const char *flnm);
  STDMETHODIMP getRealCrop(unsigned int *left,unsigned int *top,unsigned int *right,unsigned int *bottom);
- STDMETHODIMP getMinOrder2(void);
- STDMETHODIMP getMaxOrder2(void);
  STDMETHODIMP saveGlobalSettings(void);
  STDMETHODIMP loadGlobalSettings(void);
  STDMETHODIMP saveDialogSettings(void);
@@ -87,27 +84,45 @@ public:
  STDMETHODIMP showCfgDlg(HWND owner);
  STDMETHODIMP getMovieSource(TmovieSource* *moviePtr);
  STDMETHODIMP getPostproc(Tpostproc* *postprocPtr);
- STDMETHODIMP getSubtitle(subtitle* *subPtr);
  STDMETHODIMP getOutputDimensions(unsigned int *x,unsigned int *y);
+ STDMETHODIMP presetGetNumFilters(unsigned int *num);
+ STDMETHODIMP presetGetNumFilters2(void);
+ STDMETHODIMP presetGetFilterName(unsigned int i,char *buf,unsigned int len);
+ STDMETHODIMP presetGetFilterIs2(unsigned int i);
+ STDMETHODIMP presetSetFilterIs(unsigned int i,int Iis);
+ STDMETHODIMP presetGetFilterFull2(unsigned int i);
+ STDMETHODIMP presetSetFilterFull(unsigned int i,int Ifull);
+ STDMETHODIMP presetGetConfPage(unsigned int i,TconfPage* *page); 
+ STDMETHODIMP presetGetConfSubPage(unsigned int i,TconfPage* *subPage); 
+ STDMETHODIMP presetSetFilterOrder(unsigned int oldOrder,unsigned int newOrder);
+ STDMETHODIMP presetGetPPmode(unsigned int index,unsigned int *ppmode);
+ STDMETHODIMP presetGetParam(unsigned int index,unsigned int paramID,int *value);
+ STDMETHODIMP presetGetParam2(unsigned int index,unsigned int paramID);
+ STDMETHODIMP presetPutParam(unsigned int index,unsigned int paramID,int value);
+ STDMETHODIMP presetGetParamStr(unsigned int index,unsigned int paramID,char *value,unsigned int len);
+ STDMETHODIMP presetPutParamStr(unsigned int index,unsigned int paramID,char *value);
+ STDMETHODIMP getCurrentFrame2(void);
+ STDMETHODIMP getCfcs(void* *cfcs);
 
 private:
  TtrayIcon *tray;
+ Tfilter::TcreateFcVector cfcs;
  TpresetSettings *presetSettings;
  TglobalSettings globalSettings;
  TdialogSettings dialogSettings;
  Tpresets presets;
  int inPlayer;
- int fontChanged,cropChanged,resizeChanged,currentq;
+ int currentq;
  int cfgDlgHnwd;
  char AVIname[1024],AVIfourcc[10];
  int loadAVInameAndPreset(void);
- void onSubsChanged(void),onCropChanged(void),onResizeChanged(void),onTrayIconChanged(void);
+ void onTrayIconChanged(void);
  HRESULT ChangeColorspace(GUID subtype,GUID formattype,void * format);
  HWND onChangeWnd;unsigned int onChangeMsg;
  HWND onInfoWnd;unsigned int onInfoMsg1,onInfoMsg2;
  void sendOnChange(void);
 
- unsigned int AVIdx,AVIdy;double AVIfps;
+ unsigned int AVIdx,AVIdy;double AVIfps;LONGLONG t1;
  bool isResize;unsigned int outDx,outDy;
  struct
   {
@@ -121,9 +136,8 @@ private:
   } m_frame;
 
  TmovieSource *movie;
+ TfilterResizeNaspect *filterResizeNaspect;
  Tpostproc postproc;
- TimgFilters *imgFilters;
- Tsubtitles *subs;subtitle *sub;
  int codecId;
  clock_t lastTime;
 };

@@ -20,30 +20,24 @@
 #include "reg.h"
 #include "TdialogSettings.h"
 
+void TdialogSettings::reg_op(TregOp &t)
+{
+ t._REG_OP_N("lastPage",lastPage,0);
+ t._REG_OP_N("dlgRestorePos",dlgRestorePos,0);
+ t._REG_OP_N("dlgPosX",dlgPosX,0);
+ t._REG_OP_N("dlgPosY",dlgPosY,0);
+ t._REG_OP_N("lvWidth0",lvWidth0,300);
+ t._REG_OP_N("showHints",showHints,1);
+}
+
 void TdialogSettings::load(void)
 {
- HKEY hKey;DWORD size;
- RegOpenKeyEx(HKEY_CURRENT_USER, FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,KEY_READ,&hKey);
- REG_GET_N("lastPage",lastPage,0);
- REG_GET_N("dlgRestorePos",dlgRestorePos,0);
- REG_GET_N("dlgPosX",dlgPosX,0);
- REG_GET_N("dlgPosY",dlgPosY,0);
- REG_GET_N("lvWidth0",lvWidth0,300);
- REG_GET_N("showHints",showHints,1);
- RegCloseKey(hKey); 
+ TregOpRegRead t(HKEY_CURRENT_USER,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD);
+ reg_op(t);
 }
 
 void TdialogSettings::save(void)
 {
- HKEY hKey;DWORD dispo;
- if (RegCreateKeyEx(HKEY_CURRENT_USER,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD,0,FFDSHOW_REG_CLASS,REG_OPTION_NON_VOLATILE,KEY_WRITE,0,&hKey,&dispo)==ERROR_SUCCESS)
-  {
-   REG_SET_N("lastPage",lastPage,0);
-   REG_SET_N("dlgRestorePos",dlgRestorePos,0);
-   REG_SET_N("dlgPosX",dlgPosX,0);
-   REG_SET_N("dlgPosY",dlgPosY,0);
-   REG_SET_N("lvWidth0",lvWidth0,0);
-   REG_SET_N("showHints",showHints,0);
-   RegCloseKey(hKey);
-  }
+ TregOpRegWrite t(HKEY_CURRENT_USER,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD);
+ reg_op(t);
 }

@@ -19,10 +19,10 @@
 #include "stdafx.h"
 #include "IffDecoder.h"
 #include "TffdshowPage.h"
-#include "Ccrop.h"
+#include "CcropNzoom.h"
 #include "resource.h"
 
-void TcropPage::init(void)
+void TcropNzoomPage::init(void)
 {
  red=NULL;
 
@@ -36,13 +36,13 @@ void TcropPage::init(void)
  cfg2dlg();
 }
 
-void TcropPage::cfg2dlg(void)
+void TcropNzoomPage::cfg2dlg(void)
 {
  interDlg();
  crop2dlg();
 }
 
-void TcropPage::crop2dlg(void)
+void TcropNzoomPage::crop2dlg(void)
 {
  setCheck(IDC_RBT_ZOOM,cfgGet(IDFF_isZoom));
  setCheck(IDC_RBT_CROP,!cfgGet(IDFF_isZoom));
@@ -64,12 +64,7 @@ void TcropPage::crop2dlg(void)
  SetDlgItemInt(m_hwnd,IDC_ED_CROP_BOTTOM,cfgGet(IDFF_cropBottom),0);
 }
 
-void TcropPage::interDlg(void)
-{
- setCheck(IDC_CHB_CROP,cfgGet(IDFF_isCropNzoom));
-}
-
-bool TcropPage::cropOK(HWND hed)
+bool TcropNzoomPage::cropOK(HWND hed)
 {
  char pomS[256];
  SendMessage(hed,WM_GETTEXT,255,LPARAM(pomS));
@@ -80,7 +75,7 @@ bool TcropPage::cropOK(HWND hed)
  return true;
 }
 
-HRESULT TcropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
+HRESULT TcropNzoomPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
@@ -100,8 +95,8 @@ HRESULT TcropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
    case WM_COMMAND:
     switch (LOWORD(wParam))  
      {
-      case IDC_CHB_CROP:
-       cfgSet(IDFF_isCropNzoom,getCheck(IDC_CHB_CROP));
+      case IDC_CHB_CROPNZOOM:
+       setInter(getCheck(IDC_CHB_CROPNZOOM));
        parent->drawInter();
        return TRUE; 
       case IDC_RBT_ZOOM:
@@ -147,7 +142,7 @@ HRESULT TcropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
   }   
  return FALSE;
 }
-void TcropPage::getTip(char *tipS,int len)
+void TcropNzoomPage::getTip(char *tipS,int len)
 {
  if (cfgGet(IDFF_isZoom))
   if (cfgGet(IDFF_magnificationLocked))
@@ -156,8 +151,4 @@ void TcropPage::getTip(char *tipS,int len)
    sprintf(tipS,"horizontal zoom: %i%%, vertical zoom: %i%%",cfgGet(IDFF_magnificationX),cfgGet(IDFF_magnificationY));
  else
   sprintf(tipS,"crop: left:%i, top:%i, right:%i, bottom:%i",cfgGet(IDFF_cropLeft),cfgGet(IDFF_cropTop),cfgGet(IDFF_cropRight),cfgGet(IDFF_cropBottom));
-}
-TcropPage::TcropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_CROP);
 }

@@ -20,82 +20,42 @@
 #include "reg.h"
 #include "TpresetSettings.h"
 #include "ffdebug.h"
+#include <algorithm>
+#include "IffDecoder.h"
+#include "Tfilter.h"
 
-const int TpresetSettings::min_order=1;
-const int TpresetSettings::orderPostprocDef=1;
-const int TpresetSettings::orderPictPropDef=2;
-const int TpresetSettings::orderOffsetDef=3;
-const int TpresetSettings::orderBlurDef=4;
-const int TpresetSettings::orderSharpenDef=5;
-const int TpresetSettings::orderNoiseDef=6;
-const int TpresetSettings::orderSubtitlesDef=7;
-const int TpresetSettings::orderResizeDef=8;
-const int TpresetSettings::orderShowMVdef=9;
-const int TpresetSettings::max_order=9;
+using namespace std;
 
-TpresetSettings::TpresetSettings(const char *IpresetName) 
+TpresetSettings::TpresetSettings(IffDecoder *deci,const char *IpresetName) 
 {
- strcpy(presetName,IpresetName);
- autoLoadedFromFile=0;
+ strcpy(settings.presetName,IpresetName);
+ settings.autoLoadedFromFile=0;
+ initFilters(deci);
 }
-void TpresetSettings::loadDefault(void)
+TpresetSettings::TpresetSettings(TpresetSettings &orig)
 {
- strcpy(presetName,FFPRESET_DEFAULT);
- loadReg();
+ doneFilters();
+ settings=orig.settings;
+ for (vector<Tfilter*>::iterator i=orig.filters.begin();i!=orig.filters.end();i++)
+  filters.push_back((*i)->duplicate());
 }
-void TpresetSettings::loadReg(void)
+TpresetSettings::~TpresetSettings()
 {
- char presetRegStr[256];
- sprintf(presetRegStr,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD"\\%s",presetName);
- HKEY hKey;DWORD size;
- RegOpenKeyEx(HKEY_CURRENT_USER, presetRegStr, 0, KEY_READ, &hKey);
- 
- #undef _REG_OP_N
- #undef _REG_OP_S
- #define _REG_OP_N REG_GET_N
- #define _REG_OP_S REG_GET_S
- #include "presets_template.h"
- 
- RegCloseKey(hKey);
+ doneFilters();
 }
-void TpresetSettings::saveReg(void)
+void TpresetSettings::initFilters(IffDecoder *deci)
 {
- char presetRegStr[256];
- sprintf(presetRegStr,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD"\\%s",presetName);
- HKEY hKey;DWORD dispo;
- if (RegCreateKeyEx(HKEY_CURRENT_USER,presetRegStr,0,FFDSHOW_REG_CLASS,REG_OPTION_NON_VOLATILE, KEY_WRITE,0,&hKey, &dispo)!=ERROR_SUCCESS) return;
-
- #undef _REG_OP_N
- #undef _REG_OP_S
- #define _REG_OP_N REG_SET_N
- #define _REG_OP_S REG_SET_S
- #include "presets_template.h"
-
- RegCloseKey(hKey);
+ doneFilters();
+ Tfilter::TcreateFcVector *cfcs;deci->getCfcs((void**)&cfcs);
+ for (Tfilter::TcreateFcVector::iterator i=cfcs->begin();i!=cfcs->end();i++)
+  filters.push_back((*i)());
+ sortOrder();
 }
-void TpresetSettings::loadFile(const char *flnm)
+void TpresetSettings::doneFilters(void)
 {
- char sections[4096]="";
- GetPrivateProfileSectionNames(sections,4095,flnm);
- if (sections[0]=='\0') return;
- _splitpath(flnm,NULL,NULL,presetName,NULL);
- char pomS[256],propS[256];
- #undef _REG_OP_N
- #undef _REG_OP_S
- #define _REG_OP_N REG_GET_N_FILE
- #define _REG_OP_S REG_GET_S_FILE
- #include "presets_template.h"
-}
-void TpresetSettings::saveFile(const char *flnm)
-{
- char pomS[256];
-
- DeleteFile(flnm);
- #undef _REG_OP_N
- #undef _REG_OP_S
- #define _REG_OP_N REG_SET_N_FILE
- #define _REG_OP_S REG_SET_S_FILE
- #include "presets_template.h"
+ for (vector<Tfilter*>::iterator i=filters.begin();i!=filters.end();i++)
+  delete *i;
+ filters.clear(); 
 }
 
 bool TpresetSettings::isValidPresetName(const char *presetName)
@@ -104,4 +64,64 @@ bool TpresetSettings::isValidPresetName(const char *presetName)
  for (unsigned int i=0;i<strlen(presetName);i++)
   if (presetName[i]=='*' || presetName[i]=='?') return false;
  return true; 
+}
+
+void TpresetSettings::loadDefault(void)
+{
+ strcpy(settings.presetName,FFPRESET_DEFAULT);
+ loadReg();
+}
+void TpresetSettings::loadReg(void)
+{
+ char presetRegStr[256];
+ sprintf(presetRegStr,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD"\\%s",settings.presetName);
+ TregOpRegRead t(HKEY_CURRENT_USER,presetRegStr);
+ reg_op(t);
+ sortOrder();
+}
+void TpresetSettings::saveReg(void)
+{
+ char presetRegStr[256];
+ sprintf(presetRegStr,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD"\\%s",settings.presetName);
+ TregOpRegWrite t(HKEY_CURRENT_USER,presetRegStr);
+ reg_op(t);
+}
+void TpresetSettings::loadFile(const char *flnm)
+{
+ char sections[4096]="";
+ GetPrivateProfileSectionNames(sections,4095,flnm);
+ if (sections[0]=='\0') return;
+ _splitpath(flnm,NULL,NULL,settings.presetName,NULL);
+ TregOpFileRead t(flnm,sections);
+ reg_op(t);
+ sortOrder();
+}
+void TpresetSettings::saveFile(const char *flnm)
+{
+ DeleteFile(flnm);
+ TregOpFileWrite t(flnm,"presetSettings");
+ reg_op(t);
+}
+void TpresetSettings::reg_op(TregOp &t)
+{
+ t._REG_OP_N("flip",settings.flip,0);
+ t._REG_OP_N("idct",settings.idct,0);
+ for (unsigned int i=0;i<filters.size();i++)
+  filters[i]->reg_op(t);
+}
+
+static bool filterOrderCompare(Tfilter *fs1,Tfilter *fs2)
+{
+ return fs1->order<fs2->order;
+}
+void TpresetSettings::sortOrder(void)
+{
+ sort(filters.begin(),filters.end(),filterOrderCompare);
+}
+Tfilter* TpresetSettings::getFilter(int filterID)
+{
+ for (vector<Tfilter*>::iterator i=filters.begin();i!=filters.end();i++)
+  if ((*i)->getID()==filterID)
+   return *i;
+ return NULL;  
 }

@@ -128,8 +128,3 @@ HRESULT TcodecsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
   }    
  return FALSE;
 }
-
-TcodecsPage::TcodecsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_CODECS);
-}

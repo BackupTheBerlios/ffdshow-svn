@@ -113,9 +113,6 @@ HRESULT TresizeSettingsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
    case WM_COMMAND:
     switch (LOWORD(wParam))  
      {
-      case IDC_CHB_RESIZE:
-       cfgSet(IDFF_isResize,getCheck(IDC_CHB_RESIZE));
-       return TRUE; 
       case IDC_CBX_RESIZE_METHOD:
        if (HIWORD(wParam)==CBN_SELCHANGE)
         {
@@ -133,9 +130,4 @@ HRESULT TresizeSettingsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 void TresizeSettingsPage::getTip(char *tipS,int len)
 {
  sprintf(tipS,"Algorithm: %s\nLuma gaussian blur:%3.2f, luma sharpen:%3.2f\nChroma gaussian blur:%3.2f, chroma sharpen:%3.2f",algorithmsNames[cfgGet(IDFF_resizeMethod)],float(cfgGet(IDFF_resizeGblurLum)/100.0),float(cfgGet(IDFF_resizeSharpenLum)/100.0),float(cfgGet(IDFF_resizeGblurChrom)/100.0),float(cfgGet(IDFF_resizeSharpenChrom)/100.0));
-}
-
-TresizeSettingsPage::TresizeSettingsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_RESIZESETTINGS);
 }

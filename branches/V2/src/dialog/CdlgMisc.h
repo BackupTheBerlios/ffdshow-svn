@@ -6,7 +6,7 @@
 class TdlgMiscPage :public TconfPage
 {
 public:
- TdlgMiscPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+ virtual int getDialogID(void) {return IDD_DLGMISC;}
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
  virtual void init(void);
  virtual void cfg2dlg(void);

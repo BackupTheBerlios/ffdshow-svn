@@ -9,17 +9,11 @@ private:
  int writeNoiseStrength(int x),writeNoiseStrengthChroma(int x);
  void noise2dlg(void);
 public:
- TnoisePage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
+ virtual int getDialogID(void) {return IDD_NOISE;}
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
  virtual void init(void);
  virtual void cfg2dlg(void);
- virtual void interDlg(void);
- virtual int getInter(void) {return cfgGet(IDFF_isNoise);}
- virtual int invInter(void) {return cfgInv(IDFF_isNoise);}
- virtual int getOrder(void) {return cfgGet(IDFF_orderNoise);}
- virtual void setOrder(int o) {cfgSet(IDFF_orderNoise,o);}
- virtual int  getProcessFull(void) {return cfgGet(IDFF_fullNoise);}
- virtual void setProcessFull(int full) {cfgSet(IDFF_fullNoise,full);} 
+ virtual int getInterDlgID(void) {return IDC_CHB_NOISE;}
  virtual void getTip(char *tipS,int len);
  virtual bool isInPreset(void) {return true;}
 };

@@ -7,7 +7,7 @@
 #define __attribute__(x) 
 #include "mplayer\postproc\swscale.h"
  
-struct TpresetSettings;
+struct Tfilter;
 class Tpostproc 
 {
 private:
@@ -23,7 +23,7 @@ public:
  void init(void);
  void done(void);
  void (*init_mplayer)(void);
- static int getPPmode(const TpresetSettings *cfg,int currentq);
+ static int getPPmode(const Tfilter *cfg,int currentq);
  void (*postprocess)(const unsigned char * src[], int src_stride,
                      unsigned char * dst[], int dst_stride,
                      int horizontal_size,   int vertical_size,

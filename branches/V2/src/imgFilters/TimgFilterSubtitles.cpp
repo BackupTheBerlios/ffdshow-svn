@@ -18,26 +18,61 @@
 
 #include "stdafx.h"
 #include "TimgFilterSubtitles.h"
-#include "TpresetSettings.h"
+#include "TfilterSubtitles.h"
 #include "IffDecoder.h"
+#include "subtitles\Tsubtitles.h"
 
-const int TpresetSettings::subDelayDef=0,TpresetSettings::subSpeedDef=1000;
-
-void TimgFilterSubtitles::process(TffPict2 &pict,const TpresetSettings *cfg)
+TimgFilterSubtitles::TimgFilterSubtitles(void)
 {
- if (deci->getParam2(IDFF_fontChanged))
+ settingsOld.size=-1;
+ subs=new Tsubtitles;
+ oldSubFlnm[0]='\0';
+}
+
+TimgFilterSubtitles::~TimgFilterSubtitles()
+{
+ if (subs) delete subs;
+}
+
+void TimgFilterSubtitles::process(TffPict2 &pict,const Tfilter *cfg0)
+{
+ const TfilterSubtitles *cfg=(const TfilterSubtitles*)cfg0;
+ if (!cfg->is) return;
+ 
+ if (cfg->settings.flnm[0]=='\0') return;
+ if (strcmp(oldSubFlnm,cfg->settings.flnm)!=0)
   {
-   font.init(cfg);
-   deci->putParam(IDFF_fontChanged,0);
+   strcpy(oldSubFlnm,cfg->settings.flnm);
+   __asm emms;
+   double AVIfps=deci->getAVIfps2()/1000.0;
+   subs->init(NULL,oldSubFlnm,AVIfps);
   }
- subtitle *sub;
- deci->getSubtitle(&sub); 
+ 
+ int framesDelay;
+ if (cfg->settings.delay)
+  {
+   __asm emms;
+   double AVIfps=deci->getAVIfps2()/1000.0;
+   framesDelay=(AVIfps==0)?cfg->settings.delay:cfg->settings.delay*AVIfps/1000;
+  }
+ else 
+  framesDelay=0;
+ int t1=deci->getCurrentFrame2(); 
+ int sframe=1000*(int(t1)-framesDelay)/cfg->settings.speed;
+ subtitle *sub=(sframe<1)?NULL:subs->getSubtitle(sframe);
+ if (!sub) return;
+ 
+ if (cfg->fontSettings.settings!=settingsOld)
+  {
+   settingsOld=cfg->fontSettings.settings;
+   font.init(&cfg->fontSettings);
+  }
  if (sub)
   { 
-   Trect *r=init(&pict.rect,cfg->fullSubtitles);
+   Trect *r=init(&pict.rect,cfg->full);
    unsigned char *dstY=getCurNextY(pict)+r->diffY ;
    unsigned char *dstU=getCurNextU(pict)+r->diffUV;
    unsigned char *dstV=getCurNextV(pict)+r->diffUV;
-   font.print(dstY,dstU,dstV,dxY,strideY,dyY,sub,cfg->subPosX,cfg->subPosY);
+   font.print(dstY,dstU,dstV,dxY,strideY,dyY,sub,cfg->settings.posX,cfg->settings.posY);
   }
 }                                  

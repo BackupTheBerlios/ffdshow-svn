@@ -17,7 +17,7 @@
  */
 
 #include "stdafx.h"
-#include "Ctray.h"
+#include "CdlgMisc.h"
 #include "resource.h"
 #include "IffDecoder.h"
 
@@ -53,9 +53,4 @@ HRESULT TdlgMiscPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     break; 
   }    
  return FALSE;
-}
-
-TdlgMiscPage::TdlgMiscPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_DLGMISC);
 }

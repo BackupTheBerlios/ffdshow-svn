@@ -82,7 +82,7 @@ HRESULT TnoisePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (LOWORD(wParam))  
      {
       case IDC_CHB_NOISE:
-       cfgSet(IDFF_isNoise,getCheck(IDC_CHB_NOISE));
+       setInter(getCheck(IDC_CHB_NOISE));
        parent->drawInter();
        return TRUE;
       case IDC_RBT_NOISE_MOJ:
@@ -98,16 +98,7 @@ HRESULT TnoisePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
-void TnoisePage::interDlg(void)
-{
- setCheck(IDC_CHB_NOISE,cfgGet(IDFF_isNoise));
-}
 void TnoisePage::getTip(char *tipS,int len)
 {
  sprintf(tipS,"method:%s, %sluma strength:%i, chroma strength:%i",(cfgGet(IDFF_noiseMethod)==0)?"old":"avih",cfgGet(IDFF_uniformNoise)?"uniform, ":"",cfgGet(IDFF_noiseStrength),cfgGet(IDFF_noiseStrengthChroma));
-}
-
-TnoisePage::TnoisePage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
-{
- createWindow(IDD_NOISE);
 }
