@@ -17,7 +17,10 @@ private:
    } while (c);
   }
 public:
- void loadReg(char *IpresetName),saveReg(void);
+ TpresetSettings(void);
+ TpresetSettings(const char *IpresetName) {strcpy(presetName,IpresetName);};
+ void loadDefault(void);
+ void loadReg(void),saveReg(void);
  void loadFile(const char *flnm),saveFile(const char *flnm);
  int presetShouldBeSaved,autoloadedfromreg;
 

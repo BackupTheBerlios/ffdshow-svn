@@ -19,6 +19,7 @@ void TglobalSettings::load(void)
  REG_GET_N("autoPreset",autoPreset,0);
  REG_GET_N("trayIcon",trayIcon,0);
  REG_GET_N("autoPresetFileFirst",autoPresetFileFirst,0);
+ REG_GET_S("activePreset",activePreset,FFPRESET_DEFAULT);
  RegCloseKey(hKey); 
 }
 
@@ -42,6 +43,7 @@ void TglobalSettings::save(void)
    REG_SET_N("autoPreset",autoPreset,0);
    REG_SET_N("autoPresetFileFirst",autoPresetFileFirst,0);
    REG_SET_N("trayIcon",trayIcon,0);
+   REG_SET_S("activePreset",activePreset);
    RegCloseKey(hKey);
   }; 
 }

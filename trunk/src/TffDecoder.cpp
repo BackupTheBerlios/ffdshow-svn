@@ -379,6 +379,7 @@ void TffDecoder::resizeChanged(void)
 }
 void TffDecoder::trayIconChanged(void)
 {
+ if (!tray) return;
  if (globalSettings.trayIcon) tray->show(); else tray->hide();
 }
 STDMETHODIMP TffDecoder::get_numPresets(unsigned int *value)
@@ -425,7 +426,7 @@ STDMETHODIMP TffDecoder::get_AVIfps(unsigned int *fps)
 }
 STDMETHODIMP TffDecoder::loadPreset(const char *name)
 {
- presetSettings=presets.loadPreset(name);
+ presetSettings=presets.loadPreset((name)?name:presetSettings.presetName);
  notifyParamsChanged();
  return S_OK;
 }
@@ -629,18 +630,18 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  AVIname[0]=AVIfourcc[0]='\0';
  AVIdx=AVIdy=cropLeft=cropTop=cropDx=cropDy=AVIfps=0;
  isDlg=0;inPlayer=1;idctOld=-1;
+ avctx=NULL;resizeCtx=NULL;tray=NULL;
  
+ presets.init();
  fillParams();
  config.init();
- presetSettings.fontChanged=true;
+ loadPreset(globalSettings.activePreset);
+// presetSettings.fontChanged=true;
  //TODO: load active preset
  //cfg.loadActivePreset();
  
  tray=new TtrayIcon(this,g_hInst);
  
- avctx=NULL;
-
- resizeCtx=NULL;
  //TODO: prevent creating of imgFilters and sub in cfg dialog only mode
  imgFilters=new TimgFilters(&presetSettings);
  subs=new Tsubtitles;

@@ -9,6 +9,7 @@ class Tpresets :public std::vector<TpresetSettings>
 private:
  iterator findPreset(const char *presetName);
 public:
+ void init(void);
  TpresetSettings loadPreset(const char *presetName);
  void savePreset(TpresetSettings &preset,const char *presetName);
  void storePreset(const TpresetSettings &preset);

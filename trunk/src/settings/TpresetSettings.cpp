@@ -5,7 +5,16 @@
 
 int TpresetSettings::min_order=1,TpresetSettings::max_order=6;
 
-void TpresetSettings::loadReg (char *IpresetName)
+TpresetSettings::TpresetSettings(void)
+{
+ strcpy(presetName,FFPRESET_DEFAULT);
+};
+void TpresetSettings::loadDefault(void)
+{
+ strcpy(presetName,FFPRESET_DEFAULT);
+ loadReg();
+}
+void TpresetSettings::loadReg(void)
 {
  char presetRegStr[256];
  sprintf(presetRegStr,FFDSHOW_REG_PARENT"\\"FFDSHOW_REG_CHILD"\\%s",presetName);
