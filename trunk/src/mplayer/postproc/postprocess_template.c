@@ -2687,15 +2687,13 @@ static void RENAME(postProcess)(uint8_t src[], int srcStride, uint8_t dst[], int
 
         if(tempBlured[isColor]==NULL && (mode & TEMP_NOISE_FILTER))
         {
-//              printf("%d %d %d\n", isColor, dstStride, height);
-                //FIXME works only as long as the size doesnt increase
-                //Note:the +17*1024 is just there so i dont have to worry about r/w over te end
-                tempBlured[isColor]= (uint8_t*)memalign(8, dstStride*((height+7)&(~7)) + 17*1024);
-                tempBluredPast[isColor]= (uint32_t*)memalign(8, 256*((height+7)&(~7))/2 + 17*1024);
-
-                memset(tempBlured[isColor], 0, dstStride*((height+7)&(~7)) + 17*1024);
-                memset(tempBluredPast[isColor], 0, 256*((height+7)&(~7))/2 + 17*1024);
-        }
+		int height1=1024;
+                tempBlured[isColor]= (uint8_t*)memalign(8, dstStride*((height1+7)&(~7)) + 17*1024);
+                tempBluredPast[isColor]= (uint32_t*)memalign(8, 256*((height1+7)&(~7))/2 + 17*1024);
+	
+                memset(tempBlured[isColor], 0, dstStride*((height1+7)&(~7)) + 17*1024);
+                memset(tempBluredPast[isColor], 0, 256*((height1+7)&(~7))/2 + 17*1024);
+	}
 
         if(!yHistogram)
         {
