@@ -73,27 +73,27 @@ public:
    u->reset(Iu);
    v->reset(Iv);
   }
- unsigned char *getCurY(void) const
+ const unsigned char *getCurY(void)
   {
    return y->getTempCur()+diffY;
   }
- unsigned char *getCurU(void) const
+ const unsigned char *getCurU(void)
   {
    return u->getTempCur()+diffUV;
   }
- unsigned char *getCurV(void) const
+ const unsigned char *getCurV(void)
   {
    return v->getTempCur()+diffUV;
   }
- unsigned char *getNextY(void) const
+ unsigned char *getNextY(void)
   {
    return y->getTempNext()+diffY;
   }
- unsigned char *getNextU(void) const
+ unsigned char *getNextU(void)
   {
    return u->getTempNext()+diffUV;
   }
- unsigned char *getNextV(void) const
+ unsigned char *getNextV(void)
   {
    return v->getTempNext()+diffUV;
   }

@@ -91,7 +91,7 @@ void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSou
    offset.process(tempPict,cfg);
  if (global->showMV && !afterResize)
   showMV.process(tempPict,cfg,movie);
- *dstY=tempPict->getCurY();
- *dstU=tempPict->getCurU();
- *dstV=tempPict->getCurV();
+ *dstY=(unsigned char*)tempPict->getCurY();
+ *dstU=(unsigned char*)tempPict->getCurU();
+ *dstV=(unsigned char*)tempPict->getCurV();
 }

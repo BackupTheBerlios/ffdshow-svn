@@ -23,7 +23,7 @@ public:
  void done(void);
  void (*init_mplayer)(void);
  static int getPPmode(const TpresetSettings *cfg);
- void (*postprocess)(unsigned char * src[], int src_stride,
+ void (*postprocess)(const unsigned char * src[], int src_stride,
                      unsigned char * dst[], int dst_stride,
                      int horizontal_size,   int vertical_size,
                      QP_STORE_T *QP_store,  int QP_stride, int mode);
