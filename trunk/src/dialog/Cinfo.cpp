@@ -25,9 +25,12 @@
 #include "resource.h"
 #include "IffDecoder.h"
 
+#define WM_FFONINFO WM_APP+2
+
 void TinfoPage::init(void)
 {
  cfg2dlg();
+ deci->setOnInfoMsg(m_hwnd,WM_FFONINFO);
 }
 
 void TinfoPage::cfg2dlg(void)
@@ -61,6 +64,16 @@ void TinfoPage::cfg2dlg(void)
 
 HRESULT TinfoPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+ if (uMsg==WM_FFONINFO)
+  {
+   char pomS[256];
+   sprintf(pomS,"Decoder FPS: %i",wParam/1000);
+   SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_DECODERFPS,WM_SETTEXT,0,LPARAM(pomS));
+   sprintf(pomS,"Current frame: %i",lParam);
+   SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_FRAME     ,WM_SETTEXT,0,LPARAM(pomS));
+  }
+ else if (uMsg==WM_DESTROY)
+  deci->setOnInfoMsg(NULL,0);
  return FALSE;
 }
 

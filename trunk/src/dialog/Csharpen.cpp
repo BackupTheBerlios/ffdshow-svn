@@ -25,6 +25,8 @@
 #include "Csharpen.h"
 #include "resource.h"
 #include "TffdshowPage.h"
+#include "Tconfig.h"
+#include "xvid\xvid.h"
 
 void TsharpenPage::init(void)
 {
@@ -34,6 +36,8 @@ void TsharpenPage::init(void)
  SendDlgItemMessage(m_hwnd,IDC_TBR_XSHARPENTHRESH,TBM_SETRANGE,TRUE,MAKELPARAM(0,255));
  SendDlgItemMessage(m_hwnd,IDC_TBR_XSHARPENTHRESH,TBM_SETLINESIZE,0,1);
  SendDlgItemMessage(m_hwnd,IDC_TBR_XSHARPENTHRESH,TBM_SETPAGESIZE,0,16); 
+ if ((config.cpu_flags&XVID_CPU_MMXEXT)==0)
+  SendDlgItemMessage(m_hwnd,IDC_RBT_SHARPEN_XSHARPEN,WM_SETTEXT,0,LPARAM("xsharpen (will be disabled, because of no MMXEXT support)"));
  cfg2dlg();
 }
 

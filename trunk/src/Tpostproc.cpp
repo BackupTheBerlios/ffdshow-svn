@@ -40,6 +40,8 @@ void Tpostproc::init(void)
  postproc_dll->loadFunction((void**)&freeSwsContext,"freeSwsContext");
  postproc_dll->loadFunction((void**)&getSwsContextFromCmdLine,"getSwsContextFromCmdLine");
  postproc_dll->loadFunction((void**)&set_sws_params,"set_sws_params");
+ postproc_dll->loadFunction((void**)&rgb24toyv12,"rgb24toyv12");
+ postproc_dll->loadFunction((void**)&yuy2toyv12,"yuy2toyv12");
  if (postproc_dll->ok)
   { 
    init_mplayer();

@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by ffdshow.rc
 //
 #define VERSION_RES_MINOR_VER           0
@@ -67,6 +67,7 @@
 #define IDC_CHB_MP42                    1023
 #define IDC_TBR_BLUR_STRENGTH           1023
 #define IDC_CHB_MP43                    1024
+#define IDC_TBR_BLUR_TEMPSMOOTH         1024
 #define IDC_LBL_HUE                     1025
 #define IDC_LBL_SATURATION              1026
 #define IDC_RBT_PPPRESETS               1027
@@ -99,6 +100,8 @@
 #define IDC_LBL_NOW_DIMENSIONS          1054
 #define IDC_LBL_NOW_CODEC               1055
 #define IDC_LBL_NOW_FPS                 1057
+#define IDC_LBL_NOW_DECODERFPS          1058
+#define IDC_LBL_NOW_FRAME               1059
 #define IDC_RBT_SHARPEN_XSHARPEN        1063
 #define IDC_RBT_SHARPEN_UNSHARPMASK     1064
 #define IDC_CHB_SHARPEN                 1065
@@ -165,6 +168,7 @@
 #define IDC_CHB_BLUR                    1134
 #define IDC_LBL_BLUR_STRENGTH           1136
 #define IDC_CHB_CROP                    1137
+#define IDC_LBL_BLUR_TEMPSMOOTH         1137
 #define IDC_RBT_ZOOM                    1138
 #define IDC_RBT_CROP                    1139
 #define IDC_CHB_MAGNIFICATION_LOCKED    1140

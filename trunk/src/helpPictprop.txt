@@ -1,5 +1,3 @@
-Luminance gain
-Luminance offset
-Gamma correction
-Hue
-Saturation
+Luminance gain, luminance offset - controls brightness and contrast
+Gamma correction - not assembly optimized, may be slow
+Hue, saturation - controls colors

@@ -51,6 +51,7 @@ void TimgFilters::init(int IdxY,int IstrideY,int Idy,int IdiffX,int IdiffY)
  filters.push_back(&sharpen);sharpen.init(IdxY,IstrideY,Idy);
  filters.push_back(&subtitles);subtitles.init(IdxY,IstrideY,Idy);
  filters.push_back(&offset);offset.init(IdxY,IstrideY,Idy);
+ filters.push_back(&timesmooth);timesmooth.init(IdxY,IstrideY,Idy);
 }
 void TimgFilters::done(void)
 {
@@ -126,8 +127,18 @@ void TimgFilters::process(TpresetSettings *cfg,unsigned char *srcY,unsigned char
    }
   else if (i==cfg->orderBlur && cfg->isBlur)
    {
-    unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
-    blur.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
+    if (cfg->blurStrength)
+     {
+      unsigned char *srcY=tempY->getTempCur()+diffY,*dstY=tempY->getTempNext()+diffY;
+      blur.process(srcY,NULL,NULL,dstY,NULL,NULL,cfg);
+     };
+    if (cfg->tempSmooth)
+     {
+      unsigned char *srcY=tempY->getTempCur()+diffY ,*dstY=tempY->getTempNext()+diffY ;
+      unsigned char *srcU=tempU->getTempCur()+diffUV,*dstU=tempU->getTempNext()+diffUV;
+      unsigned char *srcV=tempV->getTempCur()+diffUV,*dstV=tempV->getTempNext()+diffUV;
+      timesmooth.process(srcY,srcU,srcV,dstY,dstU,dstV,cfg);  
+     }  
    }
   else if (i==cfg->orderSharpen && cfg->isSharpen)
    {

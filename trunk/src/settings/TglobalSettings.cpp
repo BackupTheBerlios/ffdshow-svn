@@ -97,6 +97,7 @@ int TglobalSettings::codecSupported(DWORD fourCC,char *AVIfourCC)
    FF_FOURCC(MP41,mp41,mp41,CODEC_ID_MSMPEG4V1);
    FF_FOURCC(H263,h263,h263,CODEC_ID_H263);
    FF_FOURCC(YUY2,yuy2,rawv,CODEC_ID_YUY2);
+   FF_FOURCC(RGB2,rgb2,rawv,CODEC_ID_RGB2);
    default:return CODEC_ID_NONE;
   }; 
 }

@@ -36,3 +36,8 @@ wishes
 
 - maybe it could play also mpeg1 and mpeg2 (DVD)
 - statically linked
+
+=======================================================================
+emms
+priorities
+dscaler

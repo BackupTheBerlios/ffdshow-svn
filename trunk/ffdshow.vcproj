@@ -681,6 +681,19 @@
 				RelativePath="src\imgFilters\TimgFilterSubtitles.h">
 			</File>
 			<File
+				RelativePath="src\imgFilters\TimgFilterTimesmooth.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AssemblerOutput="4"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="src\imgFilters\TimgFilterTimesmooth.h">
+			</File>
+			<File
 				RelativePath="src\imgFilters\TimgFilters.cpp">
 			</File>
 			<File

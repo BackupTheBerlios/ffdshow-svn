@@ -388,6 +388,27 @@ STDMETHODIMP TffDecoder::setOnChangeMsg(HWND wnd,unsigned int msg)
  onChangeWnd=wnd;onChangeMsg=msg;
  return S_OK;
 }
+STDMETHODIMP TffDecoder::setOnInfoMsg(HWND wnd,unsigned int msg)
+{
+ onInfoWnd=wnd;onInfoMsg=msg;
+ return S_OK;
+}
+STDMETHODIMP TffDecoder::showCfgDlg(void)
+{
+ CAUUID pages;
+ ISpecifyPropertyPages *ispp;
+ QueryInterface(IID_ISpecifyPropertyPages,(void**)&ispp);
+ ispp->GetPages(&pages);
+ IUnknown *ifflist[]={ispp};
+ OleCreatePropertyFrame(NULL,10,10,L"ffdshow",
+                        1,ifflist,
+                        pages.cElems,pages.pElems,
+                        LOCALE_SYSTEM_DEFAULT,
+                        0,0
+                       );
+ ispp->Release();                       
+ return S_OK;
+}
 
 // query interfaces 
 STDMETHODIMP TffDecoder::NonDelegatingQueryInterface(REFIID riid, void **ppv)
@@ -411,13 +432,14 @@ TffDecoder::TffDecoder(LPUNKNOWN punk, HRESULT *phr):CVideoTransformFilter(NAME(
  isDlg=0;inPlayer=1;idctOld=-1;
  avctx=NULL;resizeCtx=NULL;tray=NULL;
  onChangeWnd=NULL;onChangeMsg=0;
+ onInfoWnd=NULL;onInfoMsg=0;
  yuvY=yuvU=yuvV=NULL;
  codecId=CODEC_ID_NONE;
+ lastTime=clock();
  
  presets.init();
  config.init();
  loadPreset(globalSettings.defaultPreset);
-// presetSettings->fontChanged=true;
  
  tray=new TtrayIcon(this,g_hInst);
  
@@ -433,7 +455,7 @@ TffDecoder::~TffDecoder()
  DEBUGS("Destructor");
  if (avctx)
   {
-   if (codecId!=CODEC_ID_YUY2) libavcodec.avcodec_close(avctx);
+   if (codecId<CODEC_ID_YUY2) libavcodec.avcodec_close(avctx);
    free(avctx);
    avctx=NULL;
   }; 
@@ -445,7 +467,6 @@ TffDecoder::~TffDecoder()
   } 
  if (imgFilters) delete imgFilters;
  libavcodec.done();
- //cfg.done(false);
  if (resizeCtx) delete resizeCtx;
  if (subs) delete subs;
  delete tray;
@@ -482,14 +503,25 @@ HRESULT TffDecoder::CheckInputType(const CMediaType * mtIn)
    hdr = &mpeg1info->hdr.bmiHeader;
   } 
  #endif 
+ #ifdef FF__MPEG2
+ else if (formatType==FORMAT_MPEG2Video)
+  {
+   MPEG2VIDEOINFO *mpeg2info=(MPEG2VIDEOINFO*)mtIn->Format();
+   hdr=&mpeg2info->hdr.bmiHeader;
+   codecId=CODEC_ID_MPEG1VIDEO;
+  }
+ #endif 
  else
   {
    return VFW_E_TYPE_NOT_ACCEPTED;
   }
-
  if (hdr->biHeight<0) DEBUGS("colorspace: inverted input format not supported");
 
- codecId=globalSettings.codecSupported(hdr->biCompression,AVIfourcc);
+ if (hdr->biCompression==0)
+  if (hdr->biBitCount==24 || hdr->biBitCount==32)
+   hdr->biCompression=FOURCC_RGB2;
+ if (codecId==CODEC_ID_NONE)  
+  codecId=globalSettings.codecSupported(hdr->biCompression,AVIfourcc);
  if (codecId!=CODEC_ID_NONE)
   {
    AVIdx=hdr->biWidth;
@@ -772,6 +804,14 @@ void TffDecoder::calcCrop(void)
 HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
 {
  CAutoLock cAutolock(&lock);
+ LONGLONG t1=-1,t2=-1;pIn->GetMediaTime(&t1,&t2);
+ if (onInfoMsg)
+  {
+   clock_t t=clock();
+   int fps=(t!=lastTime)?1000*CLOCKS_PER_SEC/(t-lastTime):0;
+   PostMessage(onInfoWnd,onInfoMsg,fps,(int)t1);
+   lastTime=t;
+  }; 
  //DEBUGS("Transform");
  if (!libavcodec.inited) 
   {
@@ -779,11 +819,10 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    if (globalSettings.trayIcon) tray->show();
   }; 
   
- LONGLONG t1,t2;pIn->GetMediaTime(&t1,&t2);
  if (t1==0 && avctx) 
   {
    //char pomS[256];sprintf(pomS,"time: %i\n",int(t1));OutputDebugString(pomS);
-   libavcodec.avcodec_close(avctx);
+   if (codecId<CODEC_ID_YUY2) libavcodec.avcodec_close(avctx);
    free(avctx);
    avctx=NULL;
   }
@@ -800,7 +839,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
    AVCodec *avcodec=libavcodec.avcodec_find_decoder(codecId);
    DEBUGS("avcodec_find_decoder_by_name after");
    DEBUGS("avcodec_open before");
-   if (codecId!=CODEC_ID_YUY2 && libavcodec.avcodec_open(avctx,avcodec)<0) return S_FALSE;
+   if (codecId<CODEC_ID_YUY2 && libavcodec.avcodec_open(avctx,avcodec)<0) return S_FALSE;
    DEBUGS("avcodec_open after");
    firstFrame=true;
   };
@@ -811,9 +850,10 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
     {  
      case 2:libavcodec.set_ff_idct(idct_ref);break;
      case 4:libavcodec.set_ff_idct(xvid_idct_ptr);break;
-     case 3:libavcodec.set_ff_idct((void*)3);break;
+     //case 3:libavcodec.set_ff_idct((void*)3);break;
      case 1:libavcodec.set_ff_idct((void*)2);break;
      case 0:
+     case 3:
      default:libavcodec.set_ff_idct((void*)1);break;
     }
   } 
@@ -852,7 +892,7 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
   }
  avctx->showMV=globalSettings.showMV;
  int ret;
- if (codecId!=CODEC_ID_YUY2)
+ if (codecId<CODEC_ID_YUY2)
   ret=libavcodec.avcodec_decode_video(avctx,&avpict,&got_picture,(UINT8*)m_frame.bitstream,m_frame.length);
  else
   {
@@ -867,7 +907,23 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
     }
    avpict.data[0]=yuvY;avpict.data[1]=yuvU;avpict.data[2]=yuvV;
    IMAGE img={avpict.data[0],avpict.data[1],avpict.data[2]};
-   image_input(&img,avctx->width,avctx->height,avpict.linesize[0],(unsigned char*)m_frame.bitstream,XVID_CSP_YUY2);
+   int csp=0;
+   switch (codecId)
+    {
+     case CODEC_ID_YUY2:csp=XVID_CSP_YUY2;break;
+     case CODEC_ID_RGB2:csp=XVID_CSP_RGB24;break;
+    }
+   image_input(&img,avctx->width,avctx->height,avpict.linesize[0],(unsigned char*)m_frame.bitstream,csp);
+   /*
+   if (codecId==CODEC_ID_YUY2)
+    imgFilters->postproc.yuy2toyv12((const unsigned char*)m_frame.bitstream,avpict.data[0],avpict.data[1],avpict.data[2],
+                                    avctx->width,avctx->height,
+                                    avpict.linesize[0],avpict.linesize[1],avctx->width*2);
+   else if (codecId==CODEC_ID_RGB2)
+    imgFilters->postproc.rgb24toyv12((const unsigned char*)m_frame.bitstream,avpict.data[0]+avpict.linesize[0]*(avctx->height-1),avpict.data[1]+avpict.linesize[1]*(avctx->height-2)/2,avpict.data[2]+avpict.linesize[2]*(avctx->height-2)/2,
+                                     avctx->width,avctx->height,
+                                     -avpict.linesize[0],-avpict.linesize[1],avctx->width*3);
+   */                                     
    ret=m_frame.length;got_picture=24;
   }; 
  //char pomS[256];sprintf(pomS,"framelen:%i ret:%i gotpicture:%i\n",m_frame.length,ret,got_picture);OutputDebugString(pomS);

@@ -20,6 +20,7 @@ _REG_OP_N("saturation",saturation,saturationDef);
 _REG_OP_N("isBlur",isBlur,0);
 _REG_OP_N("orderBlur",orderBlur,orderBlurDef);
 _REG_OP_N("blurStrength",blurStrength,30);
+_REG_OP_N("tempSmooth",tempSmooth,0);
 
 _REG_OP_N("xsharpen",isSharpen,0);
 _REG_OP_N("orderSharpen",orderSharpen,orderSharpenDef);

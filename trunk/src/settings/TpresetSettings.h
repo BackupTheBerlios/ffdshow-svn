@@ -45,7 +45,7 @@ public:
 
  int isBlur,orderBlur;
  static const int orderBlurDef;
- int blurStrength;
+ int blurStrength,tempSmooth;
  
  int isSharpen,orderSharpen;
  static const int orderSharpenDef;

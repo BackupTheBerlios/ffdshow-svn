@@ -71,7 +71,8 @@ _PARAM_OP(IDFF_flip               ,presetSettings->,flip               ,0,0,NULL
 
 _PARAM_OP(IDFF_isBlur             ,presetSettings->,isBlur             ,0,0,NULL)
 _PARAM_OP(IDFF_orderBlur          ,presetSettings->,orderBlur          ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)
-_PARAM_OP(IDFF_blurStrength       ,presetSettings->,blurStrength       ,1,255,NULL)
+_PARAM_OP(IDFF_blurStrength       ,presetSettings->,blurStrength       ,0,255,NULL)
+_PARAM_OP(IDFF_tempSmooth         ,presetSettings->,tempSmooth         ,0,10,NULL)
 
 _PARAM_OP(IDFF_isSharpen          ,presetSettings->,isSharpen          ,0,0,NULL)
 _PARAM_OP(IDFF_orderSharpen       ,presetSettings->,orderSharpen       ,TpresetSettings::min_order,TpresetSettings::max_order,NULL)

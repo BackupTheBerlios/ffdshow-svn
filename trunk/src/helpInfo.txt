@@ -1,1 +1,6 @@
-Info
+Displays basic informations about played file
+
+Now playing - name of played file if it can be determined
+Codec - identification of input data: mostly FOURCC, but can be YUY2 or RGB2 too, meaning uncompressed video
+Dimensions - width and height of input video
+FPS - number of frames per second, can't be determined for ASF

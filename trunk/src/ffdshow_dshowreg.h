@@ -25,6 +25,10 @@ const AMOVIESETUP_MEDIATYPE sudInputPinTypes[] =
   { &MEDIATYPE_Video, &CLSID_MPEG1Payload },
 #endif  
   { &MEDIATYPE_Video, &MEDIASUBTYPE_YUY2 },
+  { &MEDIATYPE_Video, &MEDIASUBTYPE_RGB24},
+#ifdef FF__MPEG2  
+  { &MEDIATYPE_Video, &MEDIASUBTYPE_MPEG2_VIDEO},
+#endif  
  };
 
 const AMOVIESETUP_MEDIATYPE sudOutputPinTypes[] =

@@ -1,1 +1,4 @@
-Font
+TODO: Automatically reduce font size - should reduce font size to prevent wrapping subtitle lines
+Spacing - distance between characters
+Shadow strength - when set to 100, characters will not be transparent
+Weight - most fonts supports only small subset of listed weights

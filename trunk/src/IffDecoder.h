@@ -108,6 +108,7 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_isBlur              901
 #define IDFF_orderBlur           903
 #define IDFF_blurStrength        902
+#define IDFF_tempSmooth          904
 
 #define IDFF_isOffset           1101
 #define IDFF_orderOffset        1102
@@ -168,9 +169,11 @@ DECLARE_INTERFACE_(IffDecoder, IUnknown)
  STDMETHOD (setPresetPtr)(TpresetSettings *preset) PURE;
  STDMETHOD (renameActivePreset)(const char *newName) PURE;
  STDMETHOD (setOnChangeMsg)(HWND wnd,unsigned int msg) PURE;
+ STDMETHOD (setOnInfoMsg)(HWND wnd,unsigned int msg) PURE;
  STDMETHOD (getDefaultPresetName)(char *buf,unsigned int len) PURE;
  STDMETHOD (setDefaultPresetName)(const char *presetName) PURE;
  STDMETHOD (isDefaultPreset)(const char *presetName) PURE;
+ STDMETHOD (showCfgDlg)(void) PURE;
 };
 
 #ifdef __cplusplus

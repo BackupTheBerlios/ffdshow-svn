@@ -1,1 +1,5 @@
-Misc
+Flip video - if the movie is displayed upside-down, check this
+
+IDCT 
+If you see periodically appearing faint horizontal lines in the movie or colors are slightly changing, try to select different IDCT routine
+Reference IDCT is the most precise, but very slow - it is usable only for testing
