@@ -40,6 +40,7 @@
 #include "Csubtitles.h"
 #include "Cfont.h"
 #include "Cresize.h"
+#include "CresizeSettings.h"
 #include "CaspectNcrop.h"
 #include "Cmisc.h"
 #include "Cabout.h"
@@ -187,14 +188,20 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  //addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
  //addTI(tvis,new TfontPage(this,m_hwnd,deci));
  tvis.item.cChildren=1;
- HTREEITEM pageSubtitles=addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
+ HTREEITEM htiSubtitles=addTI(tvis,new TsubtitlesPage(this,m_hwnd,deci));
  tvis.item.cChildren=0;
- tvis.hParent=pageSubtitles;
+ tvis.hParent=htiSubtitles;
  addTI(tvis,new TfontPage(this,m_hwnd,deci));
- TreeView_Expand(htv,pageSubtitles,TVE_EXPAND);
+ TreeView_Expand(htv,htiSubtitles,TVE_EXPAND);
  tvis.hParent=htiPresets;
  sortOrder();
- addTI(tvis,new TresizePage(this,m_hwnd,deci));
+ tvis.item.cChildren=1;
+ HTREEITEM htiResize=addTI(tvis,new TresizePage(this,m_hwnd,deci));
+ tvis.item.cChildren=0;
+ tvis.hParent=htiResize;
+ addTI(tvis,new TresizeSettingsPage(this,m_hwnd,deci));
+ TreeView_Expand(htv,htiResize,TVE_EXPAND);
+ tvis.hParent=htiPresets;
  addTI(tvis,new TaspectNcropPage(this,m_hwnd,deci));
  addTI(tvis,new TmiscPage(this,m_hwnd,deci));
  tvis.hParent=NULL;

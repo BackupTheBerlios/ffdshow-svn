@@ -41,7 +41,6 @@ bool TmovieSourceUncompressed::init(int codecId,int AVIdx,int AVIdy)
   };
  dx=AVIdx;dy=AVIdy;
  stride=(dx/16+4)*16;
- initQuant();
  yuvY=(unsigned char*)xvid_malloc(stride*dy,MCACHE_LINE);
  yuvU=(unsigned char*)xvid_malloc((stride/2)*(dy/2),MCACHE_LINE);
  yuvV=(unsigned char*)xvid_malloc((stride/2)*(dy/2),MCACHE_LINE);

@@ -105,16 +105,13 @@ void TimgFilters::process(TglobalSettings *global,TpresetSettings *cfg,TmovieSou
                                   tempU->getTempNext()+diffUV,
                                   tempV->getTempNext()+diffUV
                                  };
-      if (movie->quant && cfg->deblockStrength!=TpresetSettings::deblockStrengthDef || afterResize)
-       {
-        int *quant=movie->quant;
-        for (int i=0;i<movie->quantDx*movie->quantDy;i++,quant++)
-         {
-          int q=(((afterResize)?16:*quant)*cfg->deblockStrength)/256;
-          if (q<1) q=1;else if (q>31) q=31;
-          *quant=q;
-         }
-       }
+      if (cfg->deblockStrength!=TpresetSettings::deblockStrengthDef || afterResize)
+       for (int i=0;i<movie->quantDx*movie->quantDy;i++)
+        {
+         int q=(((afterResize)?16:movie->quant[i])*cfg->deblockStrength)/256;
+         if (q<1) q=1;else if (q>31) q=31;
+         movie->quant[i]=q;
+        }
       postproc.postprocess(tempPict1,strideY,
                            tempPict2,strideY,
                            dxY,dy,

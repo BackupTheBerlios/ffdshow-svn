@@ -1037,6 +1037,14 @@ SOURCE=.\src\dialog\Cresize.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\dialog\CresizeSettings.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\dialog\CresizeSettings.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\dialog\Csharpen.cpp
 
 !IF  "$(CFG)" == "ffdshow - Win32 Release"
@@ -1245,5 +1253,9 @@ SOURCE=.\src\movie_source\TmovieSourceXviD.h
 SOURCE=.\src\idct\xIdctref.c
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=.\src\helpResizeSettings.txt
+# End Source File
 # End Target
 # End Project

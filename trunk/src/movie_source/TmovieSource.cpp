@@ -56,11 +56,3 @@ TmovieSource::~TmovieSource()
 {
  if (quant) free(quant);
 }
-void TmovieSource::initQuant(void)
-{
- quantDx=128;
- quantDy=96;
- quant=(int*)malloc(quantDx*quantDy*sizeof(int));
- for (int i=0;i<quantDx*quantDy;i++)
-  quant[i]=10;
-}

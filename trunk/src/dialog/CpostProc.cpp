@@ -57,7 +57,8 @@ void TpostProcPage::postProc2dlg(void)
  setCheck(IDC_CHB_LEVELFIX_CHROM,cfgGet(IDFF_levelFixChrom));
  SendDlgItemMessage(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH,TBM_SETPOS,TRUE,cfgGet(IDFF_deblockStrength));
  char pomS[256];
- sprintf(pomS,"Processing strength: %i%%",100*cfgGet(IDFF_deblockStrength)/256);SendDlgItemMessage(m_hwnd,IDC_LBL_DEBLOCKSTRENGTH,WM_SETTEXT,0,LPARAM(pomS));
+ sprintf(pomS,"Processing strength: %i%%",100*cfgGet(IDFF_deblockStrength)/256);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_DEBLOCKSTRENGTH,WM_SETTEXT,0,LPARAM(pomS));
  setPPchbs();
 }
 

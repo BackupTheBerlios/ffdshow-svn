@@ -48,7 +48,6 @@ bool TmovieSourceXviD::init(int codecId,int AVIdx,int AVIdy)
    int xerr=xvid_decore(NULL,XVID_DEC_CREATE,&xparam,NULL);
    if (xerr!=XVID_ERR_OK) return false;
    dx=AVIdx;dy=AVIdy;
-   initQuant();
    stride=(dx/16+4)*16;
    dechandle=xparam.handle;
    return true;

@@ -52,7 +52,6 @@ bool TmovieSourceLibavcodec::init(int codecId,int AVIdx,int AVIdy)
    memset(avctx,0,sizeof(AVCodecContext));
    avctx->width =dx=AVIdx;
    avctx->height=dy=AVIdy;
-   initQuant();
    avctx->quant_store=quant;avctx->qstride=quantDx;
    DEBUGS("avcodec_find_decoder_by_name before");
    AVCodec *avcodec=avcodec_find_decoder(codecId);

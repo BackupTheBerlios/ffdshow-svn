@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
+// Microsoft Developer Studio generated include file.
 // Used by ffdshow.rc
 //
 #define VERSION_RES_MINOR_VER           0
@@ -28,6 +28,7 @@
 #define IDD_ASPECTNCROP                 134
 #define IDD_DLGMISC                     136
 #define IDD_OFFSET                      137
+#define IDD_RESIZESETTINGS              138
 #define IDB_ARROWS                      145
 #define IDB_ARROWS_MASK_UD              146
 #define IDB_ARROWS_MASK_U               147
@@ -201,7 +202,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        151
+#define _APS_NEXT_RESOURCE_VALUE        154
 #define _APS_NEXT_COMMAND_VALUE         40009
 #define _APS_NEXT_CONTROL_VALUE         1160
 #define _APS_NEXT_SYMED_VALUE           101
