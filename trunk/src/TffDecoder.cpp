@@ -408,7 +408,7 @@ STDMETHODIMP TffDecoder::get_AVIfourcc(char *buf,unsigned int len)
 }
 STDMETHODIMP TffDecoder::get_AVIfps(unsigned int *fps)
 {
- if (!fps) return S_FALSE;
+ if (!fps || AVIfps==0) return S_FALSE;
  *fps=1000*AVIfps;
  return S_OK;
 }

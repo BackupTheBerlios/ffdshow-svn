@@ -38,7 +38,12 @@ CUnknown * WINAPI TffdshowPage::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
  return pNewObject;
 }
 
-TffdshowPage::TffdshowPage(LPUNKNOWN pUnk, HRESULT * phr) :CBasePropertyPage(NAME("TffdshowPage"), pUnk, IDD_FFDSHOW_NEW, IDS_FFDSHOW)
+TffdshowPage::TffdshowPage(LPUNKNOWN pUnk, HRESULT * phr) 
+#ifdef _NEWDLG
+ :CBasePropertyPage(NAME("TffdshowPage"), pUnk, IDD_FFDSHOW_NEW, IDS_FFDSHOW)
+#else
+ :CBasePropertyPage(NAME("TffdshowPage"), pUnk, IDD_FFDSHOW, IDS_FFDSHOW)
+#endif
 {
  ASSERT(phr);
  deci=NULL;
@@ -58,10 +63,11 @@ void TffdshowPage::selectPage(TconfPage *Ipage)
  GetWindowRect(GetDlgItem(m_hwnd,IDC_DIVIDER),&rd);
  GetWindowRect(m_hwnd,&rp);
  OffsetRect(&rd,-rp.left,-rp.top);
- if (1)
+ #ifdef _NEWDLG
   SetWindowPos(page->m_hwnd,GetDlgItem(m_hwnd,IDC_HEADER),rd.left+5,rd.top,0,0,SWP_NOSIZE);
- else  
+ #else
   SetWindowPos(page->m_hwnd,GetDlgItem(m_hwnd,IDC_HEADER),rd.left,rd.top+5,0,0,SWP_NOSIZE);
+ #endif
  page->interDlg();
  ShowWindow(page->m_hwnd,SW_SHOW);
  InvalidateRect(m_hwnd,NULL,TRUE);
@@ -78,22 +84,23 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  if (!m_hwnd) return ERROR;
  TCITEM tci;
  tci.mask=TCIF_TEXT;
+ #ifdef _NEWDLG
+ pages[0]=globalPage   =new TglobalPage   (this,m_hwnd,deci,IDD_GLOBAL_NEW);
+ #else
  pages[0]=globalPage   =new TglobalPage   (this,m_hwnd,deci,IDD_GLOBAL   );
+ #endif
  pages[1]=filtersPage  =new TfiltersPage  (this,m_hwnd,deci,IDD_FILTERS  );
  pages[2]=resizePage   =new TresizePage   (this,m_hwnd,deci,IDD_RESIZE   );
  pages[3]=subtitlesPage=new TsubtitlesPage(this,m_hwnd,deci,IDD_SUBTITLES);
  pages[4]=aboutPage    =new TaboutPage    (this,m_hwnd,deci,IDD_ABOUT    );
  RECT r;
- if (1)
-  {
-   GetWindowRect(GetDlgItem(m_hwnd,IDC_HEADER),&r);
-   TabCtrl_SetItemSize(GetDlgItem(m_hwnd,IDC_HEADER),(r.bottom-r.top)/NUMPAGES-3,20);
-  }
- else
-  {
-   GetWindowRect(GetDlgItem(m_hwnd,IDC_HEADER),&r);
-   TabCtrl_SetItemSize(GetDlgItem(m_hwnd,IDC_HEADER),(r.right-r.left)/NUMPAGES-3,20);
-  };
+ #ifdef _NEWDLG
+ GetWindowRect(GetDlgItem(m_hwnd,IDC_HEADER),&r);
+ TabCtrl_SetItemSize(GetDlgItem(m_hwnd,IDC_HEADER),(r.bottom-r.top)/NUMPAGES-2,21);
+ #else
+ GetWindowRect(GetDlgItem(m_hwnd,IDC_HEADER),&r);
+ TabCtrl_SetItemSize(GetDlgItem(m_hwnd,IDC_HEADER),(r.right-r.left)/NUMPAGES-3,20);
+ #endif
  tci.pszText="Generic";
  TabCtrl_InsertItem(GetDlgItem(m_hwnd,IDC_HEADER),0,&tci);
  tci.pszText="Filters";

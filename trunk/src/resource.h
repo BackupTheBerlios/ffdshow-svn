@@ -26,6 +26,7 @@
 #define IDD_RESIZE                      112
 #define IDD_SUBTITLES                   113
 #define IDD_FFDSHOW_NEW                 114
+#define IDD_GLOBAL_NEW                  115
 #define ID_MN_SHARPEN                   120
 #define ID_MN_NOISE                     121
 #define ID_MN_PICTPROP                  122
@@ -112,6 +113,7 @@
 #define IDC_LBL_NOW_DIMENSIONS          1054
 #define IDC_LBL_NOW_CODEC               1055
 #define IDC_BT_PRESET_FILE_LOAD         1056
+#define IDC_LBL_NOW_FPS                 1057
 #define IDC_RBT_SHARPEN_XSHARPEN        1063
 #define IDC_RBT_SHARPEN_UNSHARPMASK     1064
 #define IDC_CHB_SHARPEN                 1065

@@ -63,11 +63,10 @@ BEGIN
 
     IDD_RESIZE, DIALOG
     BEGIN
-        BOTTOMMARGIN, 233
+        BOTTOMMARGIN, 230
         HORZGUIDE, 39
         HORZGUIDE, 93
         HORZGUIDE, 154
-        HORZGUIDE, 231
     END
 
     IDD_SUBTITLES, DIALOG
@@ -77,7 +76,7 @@ BEGIN
         VERTGUIDE, 136
         VERTGUIDE, 164
         VERTGUIDE, 254
-        BOTTOMMARGIN, 233
+        BOTTOMMARGIN, 185
         HORZGUIDE, 85
         HORZGUIDE, 137
     END
@@ -85,11 +84,17 @@ BEGIN
     IDD_FFDSHOW_NEW, DIALOG
     BEGIN
         LEFTMARGIN, 6
-        RIGHTMARGIN, 282
-        VERTGUIDE, 277
+        RIGHTMARGIN, 283
         TOPMARGIN, 7
         BOTTOMMARGIN, 282
         HORZGUIDE, 17
+    END
+
+    IDD_GLOBAL_NEW, DIALOG
+    BEGIN
+        VERTGUIDE, 5
+        VERTGUIDE, 256
+        HORZGUIDE, 145
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -115,7 +120,7 @@ BEGIN
                     WS_VSCROLL
 END
 
-IDD_FILTERS DIALOGEX 0, 0, 259, 234
+IDD_FILTERS DIALOGEX 0, 0, 259, 230
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg"
@@ -213,12 +218,12 @@ BEGIN
                     TBS_NOTICKS | WS_TABSTOP,56,218,67,10
 END
 
-IDD_GLOBAL DIALOGEX 0, 0, 259, 232
+IDD_GLOBAL DIALOGEX 0, 0, 259, 230
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
-    GROUPBOX        "Global settings",IDC_STATIC,0,0,259,80
+    GROUPBOX        "Global settings",IDC_STATIC,0,0,259,91
     CONTROL         "Postprocessing",IDC_CHB_GLOBAL_POSTPROC,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,5,9,251,10
     CONTROL         "Picture properties",IDC_CHB_GLOBAL_PICTPROP,"Button",
@@ -233,47 +238,47 @@ BEGIN
                     BS_AUTOCHECKBOX | WS_TABSTOP,5,59,251,10
     CONTROL         "Subtitles",IDC_CHB_GLOBAL_SUBTITLES,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,5,69,251,10
-    GROUPBOX        "Supported codecs",IDC_STATIC,0,80,259,34
+    GROUPBOX        "Supported codecs",IDC_STATIC,0,91,259,34
     CONTROL         "XVID",IDC_CHB_XVID,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,90,33,10
+                    WS_TABSTOP,5,101,33,10
     CONTROL         "DIVX 3",IDC_CHB_DIV3,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,43,90,39,10
+                    WS_TABSTOP,43,101,39,10
     CONTROL         "DIVX 4",IDC_CHB_DIVX,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,86,90,39,10
+                    WS_TABSTOP,86,101,39,10
     CONTROL         "DIVX 5",IDC_CHB_DX50,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,127,90,37,10
+                    WS_TABSTOP,127,101,37,10
     CONTROL         "MP43",IDC_CHB_MP43,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,165,90,35,10
+                    WS_TABSTOP,165,101,35,10
     CONTROL         "MP42",IDC_CHB_MP42,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,208,90,35,10
+                    WS_TABSTOP,208,101,35,10
     CONTROL         "H.263+",IDC_CHB_H263,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,5,101,37,10
+                    WS_TABSTOP,5,112,37,10
     CONTROL         "MPEG1",IDC_CHB_H264,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,43,101,37,10
+                    WS_DISABLED | WS_TABSTOP,43,112,37,10
     CONTROL         "MPEG2",IDC_CHB_H265,"Button",BS_AUTOCHECKBOX | 
-                    WS_DISABLED | WS_TABSTOP,86,101,37,10
-    GROUPBOX        "Presets",IDC_STATIC,0,114,259,50
-    PUSHBUTTON      "->",IDC_BT_PRESET_PUTFLNM,5,123,15,12
-    COMBOBOX        IDC_CBX_PRESETS,20,123,235,117,CBS_DROPDOWN | 
+                    WS_DISABLED | WS_TABSTOP,86,112,37,10
+    GROUPBOX        "Presets",IDC_STATIC,0,125,259,50
+    PUSHBUTTON      "->",IDC_BT_PRESET_PUTFLNM,5,134,15,12
+    COMBOBOX        IDC_CBX_PRESETS,20,134,235,117,CBS_DROPDOWN | 
                     CBS_AUTOHSCROLL | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "Load",IDC_BT_PRESET_LOAD,5,138,35,12
-    PUSHBUTTON      "Save",IDC_BT_PRESET_SAVE,41,138,35,12
-    PUSHBUTTON      "Remove",IDC_BT_PRESET_REMOVE,77,138,35,12
+    PUSHBUTTON      "Load",IDC_BT_PRESET_LOAD,5,149,35,12
+    PUSHBUTTON      "Save",IDC_BT_PRESET_SAVE,41,149,35,12
+    PUSHBUTTON      "Remove",IDC_BT_PRESET_REMOVE,77,149,35,12
     CONTROL         "Automatic preset loading",IDC_CHB_AUTOPRESET,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,6,152,94,9
-    PUSHBUTTON      "Load from file...",IDC_BT_PRESET_FILE_LOAD,135,138,60,
+                    BS_AUTOCHECKBOX | WS_TABSTOP,6,163,94,9
+    PUSHBUTTON      "Load from file...",IDC_BT_PRESET_FILE_LOAD,135,149,60,
                     12
-    PUSHBUTTON      "Save to file...",IDC_BT_PRESET_FILE_SAVE,195,138,60,12
+    PUSHBUTTON      "Save to file...",IDC_BT_PRESET_FILE_SAVE,195,149,60,12
     CONTROL         "Try to load preset from file first",
                     IDC_CHB_AUTOPRESET_FILEFIRST,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,135,152,117,10
-    GROUPBOX        "Info",IDC_STATIC,0,164,259,42
+                    WS_TABSTOP,135,163,117,10
+    GROUPBOX        "Info",IDC_STATIC,0,175,259,31
     CONTROL         "Now playing",IDC_LBL_NOW_PLAYING,"Static",
                     SS_LEFTNOWORDWRAP | SS_NOPREFIX | SS_PATHELLIPSIS | 
-                    WS_GROUP,5,174,249,8
-    LTEXT           "Dimensions",IDC_LBL_NOW_DIMENSIONS,5,184,249,8
-    LTEXT           "Codec",IDC_LBL_NOW_CODEC,5,194,249,8
-    GROUPBOX        "Miscellaneous",IDC_STATIC,0,206,259,25
+                    WS_GROUP,5,185,249,8
+    LTEXT           "Dimensions",IDC_LBL_NOW_DIMENSIONS,90,195,78,8
+    LTEXT           "Codec",IDC_LBL_NOW_CODEC,5,195,56,8
+    GROUPBOX        "Miscellaneous",IDC_STATIC,0,206,259,24
     CONTROL         "Flip video",IDC_CHB_FLIP,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,6,217,45,10
     CONTROL         "Tray icon",IDC_CHB_TRAYICON,"Button",BS_AUTOCHECKBOX | 
@@ -281,6 +286,7 @@ BEGIN
     LTEXT           "IDCT",IDC_LBL_IDCT,134,218,17,8
     COMBOBOX        IDC_CBX_IDCT,156,215,99,55,CBS_DROPDOWNLIST | WS_VSCROLL | 
                     WS_TABSTOP
+    LTEXT           "FPS",IDC_LBL_NOW_FPS,190,195,64,8
 END
 
 IDD_FFDSHOW DIALOG DISCARDABLE  0, 0, 272, 260
@@ -292,7 +298,7 @@ BEGIN
     CONTROL         "",IDC_DIVIDER,"Static",SS_ETCHEDHORZ,6,18,260,1
 END
 
-IDD_RESIZE DIALOGEX 0, 0, 259, 234
+IDD_RESIZE DIALOGEX 0, 0, 259, 231
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Shell Dlg"
@@ -318,7 +324,7 @@ BEGIN
     CONTROL         "",IDC_TBR_ASPECT_USER,"msctls_trackbar32",TBS_BOTH | 
                     TBS_NOTICKS | WS_TABSTOP,15,79,209,12
     LTEXT           "1:1",IDC_LBL_ASPECT_USER,226,81,27,8
-    GROUPBOX        "Settings",IDC_STATIC,0,154,259,77
+    GROUPBOX        "Settings",IDC_STATIC,0,154,259,76
     CONTROL         "Video is resized before other filters",
                     IDC_CHB_RESIZE_FIRST,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,8,163,127,10
@@ -368,10 +374,10 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,106,132,23,10
 END
 
-IDD_SUBTITLES DIALOGEX 0, 0, 259, 234
+IDD_SUBTITLES DIALOGEX 0, 0, 259, 186
 STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
+FONT 8, "MS Shell Dlg"
 BEGIN
     GROUPBOX        "",IDC_STATIC,0,0,259,85
     CONTROL         "Subtitles",IDC_CHB_SUBTITLES,"Button",BS_AUTOCHECKBOX | 
@@ -421,28 +427,83 @@ BEGIN
                     TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,136,174,119,10
 END
 
-IDD_FFDSHOW_NEW DIALOG DISCARDABLE  0, 0, 286, 286
+IDD_FFDSHOW_NEW DIALOG DISCARDABLE  0, 0, 287, 286
 STYLE DS_CENTER | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN
 FONT 8, "MS Sans Serif"
 BEGIN
-    GROUPBOX        "Presets",IDC_STATIC,6,0,276,50
+    GROUPBOX        "Presets",IDC_STATIC,6,0,280,48
     PUSHBUTTON      "->",IDC_BT_PRESET_PUTFLNM,11,9,15,12
-    COMBOBOX        IDC_CBX_PRESETS,28,9,250,117,CBS_DROPDOWN | 
+    COMBOBOX        IDC_CBX_PRESETS,28,9,253,117,CBS_DROPDOWN | 
                     CBS_AUTOHSCROLL | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "Load",IDC_BT_PRESET_LOAD,11,24,35,12
-    PUSHBUTTON      "Save",IDC_BT_PRESET_SAVE,47,24,35,12
-    PUSHBUTTON      "Remove",IDC_BT_PRESET_REMOVE,83,24,35,12
+    PUSHBUTTON      "Load",IDC_BT_PRESET_LOAD,11,23,35,12
+    PUSHBUTTON      "Save",IDC_BT_PRESET_SAVE,47,23,35,12
+    PUSHBUTTON      "Remove",IDC_BT_PRESET_REMOVE,83,23,35,12
     CONTROL         "Automatic preset loading",IDC_CHB_AUTOPRESET,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,12,38,94,9
-    PUSHBUTTON      "Load from file...",IDC_BT_PRESET_FILE_LOAD,157,24,60,12
-    PUSHBUTTON      "Save to file...",IDC_BT_PRESET_FILE_SAVE,217,24,60,12
+                    BS_AUTOCHECKBOX | WS_TABSTOP,12,37,94,9
+    PUSHBUTTON      "Load from file...",IDC_BT_PRESET_FILE_LOAD,160,23,60,12
+    PUSHBUTTON      "Save to file...",IDC_BT_PRESET_FILE_SAVE,220,23,60,12
     CONTROL         "Try to load preset from file first",
                     IDC_CHB_AUTOPRESET_FILEFIRST,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,157,38,117,10
+                    WS_TABSTOP,160,37,117,10
     CONTROL         "",IDC_HEADER,"SysTabControl32",TCS_VERTICAL | 
-                    TCS_BUTTONS | TCS_FIXEDWIDTH | WS_TABSTOP,6,52,15,232
+                    TCS_FIXEDWIDTH | WS_TABSTOP,6,50,279,234
     CONTROL         "",IDC_DIVIDER,"Static",SS_ETCHEDVERT | NOT WS_VISIBLE,
                     20,51,1,242
+END
+
+IDD_GLOBAL_NEW DIALOGEX 0, 0, 259, 230
+STYLE DS_FIXEDSYS | DS_CONTROL | DS_CENTER | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Shell Dlg"
+BEGIN
+    GROUPBOX        "Global settings",-1,0,0,259,129
+    CONTROL         "Postprocessing",IDC_CHB_GLOBAL_POSTPROC,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,9,251,10
+    CONTROL         "Picture properties",IDC_CHB_GLOBAL_PICTPROP,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,19,251,10
+    CONTROL         "Noise",IDC_CHB_GLOBAL_NOISE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,29,251,10
+    CONTROL         "Blur",IDC_CHB_GLOBAL_BLUR,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,39,251,10
+    CONTROL         "Sharpen",IDC_CHB_GLOBAL_SHARPEN,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,49,251,10
+    CONTROL         "Crop && zoom",IDC_CHB_GLOBAL_CROP,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,59,251,10
+    CONTROL         "Subtitles",IDC_CHB_GLOBAL_SUBTITLES,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,5,69,251,10
+    GROUPBOX        "Supported codecs",-1,0,130,259,34
+    CONTROL         "XVID",IDC_CHB_XVID,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,140,33,10
+    CONTROL         "DIVX 3",IDC_CHB_DIV3,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,43,140,39,10
+    CONTROL         "DIVX 4",IDC_CHB_DIVX,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,86,140,39,10
+    CONTROL         "DIVX 5",IDC_CHB_DX50,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,127,140,37,10
+    CONTROL         "MP43",IDC_CHB_MP43,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,165,140,35,10
+    CONTROL         "MP42",IDC_CHB_MP42,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,208,140,35,10
+    CONTROL         "H.263+",IDC_CHB_H263,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,5,151,37,10
+    CONTROL         "MPEG1",IDC_CHB_H264,"Button",BS_AUTOCHECKBOX | 
+                    WS_DISABLED | WS_TABSTOP,43,151,37,10
+    CONTROL         "MPEG2",IDC_CHB_H265,"Button",BS_AUTOCHECKBOX | 
+                    WS_DISABLED | WS_TABSTOP,86,151,37,10
+    GROUPBOX        "Info",-1,0,164,259,42
+    CONTROL         "Now playing",IDC_LBL_NOW_PLAYING,"Static",
+                    SS_LEFTNOWORDWRAP | SS_NOPREFIX | SS_PATHELLIPSIS | 
+                    WS_GROUP,5,174,249,8
+    LTEXT           "Dimensions",IDC_LBL_NOW_DIMENSIONS,5,184,249,8
+    LTEXT           "Codec",IDC_LBL_NOW_CODEC,5,194,249,8
+    GROUPBOX        "Miscellaneous",-1,0,206,259,24
+    CONTROL         "Flip video",IDC_CHB_FLIP,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,6,217,45,10
+    CONTROL         "Tray icon",IDC_CHB_TRAYICON,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,65,218,45,8
+    LTEXT           "IDCT",IDC_LBL_IDCT,134,218,17,8
+    COMBOBOX        IDC_CBX_IDCT,156,215,99,55,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
 END
 
 

@@ -46,6 +46,14 @@ void TglobalPage::now2dlg(void)
    sprintf(pomS,"Dimensions: %i x %i",x,y);
    SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_DIMENSIONS,WM_SETTEXT,0,LPARAM(pomS));
   } 
+ if (deci->get_AVIfps(&x)!=S_OK)
+  SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_FPS,WM_SETTEXT,0,LPARAM("FPS:"));
+ else
+  {
+   __asm emms;
+   sprintf(pomS,"FPS: %6.2f",float(x/1000.0));
+   SendDlgItemMessage(m_hwnd,IDC_LBL_NOW_FPS,WM_SETTEXT,0,LPARAM(pomS));
+  } 
 }
 void TglobalPage::interDlg(void)
 {
