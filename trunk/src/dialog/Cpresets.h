@@ -14,7 +14,7 @@ private:
  void updateCbx(void);
  HWND hlv;
  WNDPROC lvOldWndProc;
- friend static LRESULT CALLBACK lvWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam) ;
+ friend static LRESULT CALLBACK lvWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam);
  char fileDlgFlnm[MAX_PATH];
  HFONT italicFont,boldFont;
 public:

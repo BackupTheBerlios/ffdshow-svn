@@ -20,6 +20,7 @@ public:
  TconfPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
  virtual ~TconfPage();
  HWND m_hwnd,hwndParent;
+ HTREEITEM hti;
  int dialogId;char dialogName[256];
  virtual void init(void)=0;
  virtual void cfg2dlg(void)=0;

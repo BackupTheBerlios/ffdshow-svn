@@ -12,10 +12,13 @@ class TconfPage;
 class TpresetsPage;
 class TffdshowPage : public CBasePropertyPage
 {
-private:
+private:                  
  HIMAGELIST hil;
  int ilClear,ilChecked,ilArrowUD,ilArrowU,ilArrowD;
  HWND htv;
+ WNDPROC tvOldWndProc;
+ bool isShift;
+ friend static LRESULT CALLBACK tvWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam);
  HTREEITEM htiPresets;
  HWND findParentDlg(void);
  HWND dlg;char caption[256];
@@ -24,6 +27,8 @@ private:
  IffDecoder *deci;
  TconfPage  *page;
  TpresetsPage *pagePresets;
+ void invInter(TconfPage *page=NULL,RECT *r=NULL);
+ void swap(int direction);
  void sortOrder(void);
  void selectPage(int i),selectPage(TconfPage *Ipage);
  std::vector<TconfPage*> pages;

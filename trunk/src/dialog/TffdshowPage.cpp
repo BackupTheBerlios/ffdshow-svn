@@ -47,6 +47,48 @@ using namespace std;
 
 #define WM_FFONCHANGE WM_APP+1
 
+static LRESULT CALLBACK tvWndProc(HWND hwnd,UINT msg,WPARAM wParam,LPARAM lParam) 
+{ 
+ TffdshowPage *pages=(TffdshowPage*)GetWindowLong(hwnd,GWL_USERDATA);
+ switch (msg) 
+  { 
+   case WM_KEYDOWN: 
+    switch (wParam) 
+     { 
+      case VK_SHIFT:
+       pages->isShift=true;
+       break;
+      case VK_UP:
+      case VK_DOWN:
+       if (pages->isShift)
+        {
+         pages->swap(wParam==VK_UP?-1:1);
+         return 0;
+        }    
+       else break;
+      case VK_SPACE:
+       pages->invInter();
+       return 0; 
+     } 
+    break; 
+   case WM_KEYUP: 
+    switch (wParam) 
+     { 
+      case VK_SHIFT:
+       pages->isShift=false;
+       break;
+      case VK_SPACE:
+       return 0;
+      case VK_UP:
+      case VK_DOWN:
+       if (pages->isShift) return 0; 
+       else break;
+     } 
+    break; 
+  } 
+ return CallWindowProc(pages->tvOldWndProc,hwnd,msg,wParam,lParam); 
+} 
+
 CUnknown * WINAPI TffdshowPage::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
  TffdshowPage * pNewObject=new TffdshowPage(punk,phr);
@@ -62,6 +104,7 @@ TffdshowPage::TffdshowPage(LPUNKNOWN pUnk, HRESULT * phr):CBasePropertyPage(NAME
  deci=NULL;
  page=NULL;
  applying=false;
+ isShift=false;
 }
 TffdshowPage::~TffdshowPage()
 {
@@ -92,6 +135,7 @@ HTREEITEM TffdshowPage::addTI(TVINSERTSTRUCT &tvis,TconfPage *page,bool push)
  tvis.item.lParam=(LPARAM)page;if (push) pages.push_back(page);
  tvis.item.pszText=page->dialogName;;
  HTREEITEM hti=TreeView_InsertItem(htv,&tvis);
+ page->hti=hti;
  return hti;
 }
 TconfPage* TffdshowPage::hti2page(HTREEITEM hti)
@@ -150,6 +194,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
 {
  CBasePropertyPage::Activate(hwndParent,prect,fModal);
  if (!m_hwnd) return ERROR;
+
  dlg=findParentDlg();
  if (IsWindow(dlg))
   {
@@ -167,7 +212,11 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
   }
  else
   caption[0]='\0';
+
  htv=GetDlgItem(m_hwnd,IDC_TV_TREE);
+ SetWindowLong(htv,GWL_USERDATA,LONG(this));
+ tvOldWndProc=(WNDPROC)SetWindowLong(htv,GWL_WNDPROC,LONG(tvWndProc));
+
  hil=ImageList_Create(16,16,ILC_COLOR|ILC_MASK,2,2);
  HINSTANCE hi=(HMODULE)GetWindowLong(m_hwnd,GWL_HINSTANCE);
  ilClear  =ImageList_Add(hil,LoadBitmap(hi,MAKEINTRESOURCE(IDB_CLEAR  )),LoadBitmap(hi,MAKEINTRESOURCE(IDB_CHB_MASK)));
@@ -328,7 +377,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
         return TRUE;
        }
      }
-    break; 
+    break;
    case WM_NOTIFY:
     {
      NMHDR *nmhdr=LPNMHDR(lParam);
@@ -416,10 +465,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
           ps.y-=r.top;
           if (ps.x>=8 && ps.x<=16+8 && ps.y>=iconTop+2 && ps.y<=iconTop+13) 
            {
-            TconfPage *page=hti2page(hti);
-            page->invInter();
-            InvalidateRect(htv,&r,FALSE);
-            SetWindowLong(m_hwnd,DWL_MSGRESULT,TRUE);
+            invInter(hti2page(hti),&r);
             return TRUE;
            }
           else if (ps.x>=2 && ps.x<=7 && TreeView_GetSelection(htv)==tvhti.hItem)
@@ -427,20 +473,12 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
             int center=(r.bottom-r.top)/2;
             if (ps.y>center-6 && ps.y<center-1 && page->getOrder()>deci->getMinOrder2())
              {
-              HTREEITEM hti0=TreeView_GetPrevSibling(htv,hti);
-              int o1=hti2page(hti0)->getOrder(),o2=hti2page(hti)->getOrder();
-              hti2page(hti0)->setOrder(o2);hti2page(hti)->setOrder(o1);
-              sortOrder(); //swap(hti,hti0);
-              SetWindowLong(m_hwnd,DWL_MSGRESULT,TRUE);
+              swap(-1);
               return TRUE;
              }
             else if (ps.y>center+1 && ps.y<center+6 && page->getOrder()<deci->getMaxOrder2())
              {
-              HTREEITEM hti0=TreeView_GetNextSibling(htv,hti);
-              int o1=hti2page(hti0)->getOrder(),o2=hti2page(hti)->getOrder();
-              hti2page(hti0)->setOrder(o2);hti2page(hti)->setOrder(o1);
-              sortOrder();//swap(hti,hti0);
-              SetWindowLong(m_hwnd,DWL_MSGRESULT,TRUE);
+              swap(1);
               return TRUE;
              }
            }
@@ -471,6 +509,32 @@ void TffdshowPage::showHelp(const char *flnm)
 void TffdshowPage::setChange(void)
 {
  m_bDirty=true;m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
+}
+void TffdshowPage::invInter(TconfPage *page,RECT *r)
+{
+ if (!page) page=this->page;
+ page->invInter();
+ InvalidateRect(htv,r,FALSE);
+ SetWindowLong(m_hwnd,DWL_MSGRESULT,TRUE);
+ return;
+}
+void TffdshowPage::swap(int direction)
+{
+ if (page->getOrder()==-1) return;
+ HTREEITEM hti0;
+ switch (direction)
+  {
+   case -1:if (page->getOrder()<=deci->getMinOrder2()) return;
+           hti0=TreeView_GetPrevSibling(htv,page->hti);
+           break;
+   case  1:if (page->getOrder()>=deci->getMaxOrder2()) return;
+           hti0=TreeView_GetNextSibling(htv,page->hti);
+           break;
+   default:return;
+  }
+ int o1=hti2page(hti0)->getOrder(),o2=hti2page(page->hti)->getOrder();
+ hti2page(hti0)->setOrder(o2);hti2page(page->hti)->setOrder(o1);
+ sortOrder();
 }
 
 #ifdef DEBUG

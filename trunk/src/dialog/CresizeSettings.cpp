@@ -31,6 +31,10 @@ const char *TresizeSettingsPage::algorithmsNames[]=
  "Point",
  "Area",
  "Bicublin",
+ "Gauss",
+ "Sinc",
+ "Lanczos",
+ "Spline",
  "None"
 };
 
