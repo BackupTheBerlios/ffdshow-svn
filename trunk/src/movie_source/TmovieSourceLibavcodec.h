@@ -2,9 +2,11 @@
 #define _TMOVIESOURCELIBAVCODEC_H_
 
 #include "TmovieSource.h"
+#include "inttypes.h"
 
 class Tdll;
 struct AVCodecContext;
+struct AVCodec;
 class TmovieSourceLibavcodec :public TmovieSource
 {
 private:
@@ -27,7 +29,6 @@ public:
  virtual void done(void);
  virtual int  getFrame(const TglobalSettings *global,const TpresetSettings *cfg,const unsigned char *src,unsigned int srcLen, AVPicture *avpict,int &got_picture);
  static  bool getVersion(char **vers);
- virtual int* getQuant(void) {return (avctx)?avctx->quant_store:NULL;};
  virtual TmotionVectors getMV(void);
 };
 

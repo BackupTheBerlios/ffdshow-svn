@@ -8,7 +8,7 @@ class TmovieSourceUncompressed :public TmovieSource
 private:
  int csp;
  unsigned char *yuvY,*yuvU,*yuvV;
- int dx,dy,stride;
+ int stride;
 public:
  TmovieSourceUncompressed(void);
  virtual ~TmovieSourceUncompressed() {done();};

@@ -21,6 +21,7 @@
 #include "Tdll.h"
 #include "TmovieSourceXviD.h"
 #include "xvid\xvid.h"
+#include "ffmpeg\libavcodec\avcodec.h"
 
 #define XVID_PATH "C:\\mydocuments\\ffdshow\\src\\ffmpeg\\xvid\\xvid.dll"
 
@@ -47,6 +48,7 @@ bool TmovieSourceXviD::init(int codecId,int AVIdx,int AVIdy)
    int xerr=xvid_decore(NULL,XVID_DEC_CREATE,&xparam,NULL);
    if (xerr!=XVID_ERR_OK) return false;
    dx=AVIdx;dy=AVIdy;
+   initQuant();
    stride=(dx/16+4)*16;
    dechandle=xparam.handle;
    return true;
@@ -112,7 +114,7 @@ bool TmovieSourceXviD::getVersion(char **vers)
    XVID_INIT_PARAM xinit;
    xinit.cpu_flags=0;
    xvid_init(NULL,0,&xinit,NULL);
-   sprintf(ver,"xvid: API version %i.%i",xinit.api_version>>16,xinit.api_version&0xffff);
+   sprintf(ver,"XviD: API version %i.%i",xinit.api_version>>16,xinit.api_version&0xffff);
   };
  delete dl;  
  return res;

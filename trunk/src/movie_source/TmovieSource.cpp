@@ -16,11 +16,12 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <stddef.h>
+#include <stdlib.h>
 #include "TmovieSource.h"
 #include "TmovieSourceLibavcodec.h"
 #include "TmovieSourceUncompressed.h"
 #include "TmovieSourceXvid.h"
+#include "ffmpeg\libavcodec\avcodec.h"
 
 #define TESTSOURCE(Tsource)            \
  movie=new Tsource;                    \
@@ -49,22 +50,17 @@ TmovieSource* TmovieSource::initSource(int codecId,int AVIdx,int AVIdy)
    TESTSOURCE(TmovieSourceXviD)
   };
  TESTSOURCE(TmovieSourceUncompressed)
-/*  
- movie=new TmovieSourceLibavcodec;
- if (movie->init(codecId,AVIdx,AVIdy))
-  return movie;
- else 
-  delete movie; 
- movie=new TmovieSourceUncompressed;
- if (movie->init(codecId,AVIdx,AVIdy))
-  return movie;
- else
-  delete movie; 
- movie=new TmovieSourceXviD;
- if (movie->init(codecId,AVIdx,AVIdy))
-  return movie;
- else
-  delete movie; 
-*/  
  return NULL; 
+}
+TmovieSource::~TmovieSource()
+{
+ if (quant) free(quant);
+}
+void TmovieSource::initQuant(void)
+{
+ quantDx=dx/8+1;
+ quantDy=dy/8+1;
+ quant=(int*)malloc(quantDx*quantDy*sizeof(int));
+ for (int i=0;i<quantDx*quantDy;i++)
+  quant[i]=10;
 }

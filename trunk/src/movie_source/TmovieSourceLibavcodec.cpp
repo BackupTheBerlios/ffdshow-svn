@@ -25,6 +25,7 @@
 #include "TglobalSettings.h"
 #include "TpresetSettings.h"
 #include "xvid\dct\idct.h"
+#include "ffmpeg\libavcodec\avcodec.h"
 
 #define AVCODEC_PATH "C:\\mydocuments\\ffdshow\\src\\ffmpeg\\libavcodec.dll"
 
@@ -49,10 +50,10 @@ bool TmovieSourceLibavcodec::init(int codecId,int AVIdx,int AVIdy)
    set_ff_idct((void*)1);
    avctx=(AVCodecContext*)malloc(sizeof(AVCodecContext));
    memset(avctx,0,sizeof(AVCodecContext));
-   avctx->quant_store=(int*)calloc((MBC+1)*(MBR+1),sizeof(int));avctx->qstride=MBC+1;
-   //for (int i=0;i<MBC+1;i++) for (int j=0;j<MBR+1,j++) quant_store
-   avctx->width =AVIdx;
-   avctx->height=AVIdy;
+   avctx->width =dx=AVIdx;
+   avctx->height=dy=AVIdy;
+   initQuant();
+   avctx->quant_store=quant;avctx->qstride=quantDx;
    DEBUGS("avcodec_find_decoder_by_name before");
    AVCodec *avcodec=avcodec_find_decoder(codecId);
    if (!avcodec) return false;
@@ -69,7 +70,6 @@ void TmovieSourceLibavcodec::done(void)
  if (avctx)
   {
    avcodec_close(avctx);
-   free(avctx->quant_store);
    free(avctx);
    avctx=NULL;  
   };

@@ -11,7 +11,7 @@ private:
  int (*xvid_init  )(void *handle, int opt, void *param1, void *param2);
  int (*xvid_decore)(void * handle, int opt, void * param1, void * param2);
  void *dechandle;
- int dx,dy,stride;
+ int stride;
 public:
  TmovieSourceXviD(void);
  virtual ~TmovieSourceXviD() {done();};
