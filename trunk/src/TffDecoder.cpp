@@ -764,7 +764,7 @@ void TffDecoder::calcCrop(void)
    cropDy=AVIdy-(presetSettings->cropTop +presetSettings->cropBottom);
    cropLeft=presetSettings->cropLeft;cropTop=presetSettings->cropTop;
   }; 
- cropDx&=~7;cropDy&=~7;if (cropDx==0) cropDx=8;if (cropDy==0) cropDy=8;
+ cropDx&=~7;cropDy&=~7;if (cropDx<=0) cropDx=8;if (cropDy<=0) cropDy=8;
  if (cropLeft+cropDx>=AVIdx) cropLeft=AVIdx-cropDx;if (cropTop+cropDy>=AVIdy) cropTop=AVIdy-cropDy;
  if (cropLeft>=AVIdx-8) cropLeft=AVIdx-8;if (cropTop>=AVIdy-8) cropTop=AVIdy-8;
 }
@@ -932,14 +932,20 @@ HRESULT TffDecoder::Transform(IMediaSample *pIn, IMediaSample *pOut)
        resizeCtx->diffX=(resizeCtx->FFdx-resizeCtx->imgDx)/2;resizeCtx->diffX&=~3;
        resizeCtx->diffY=(resizeCtx->FFdy-resizeCtx->imgDy)/2;resizeCtx->diffY&=~3;
       }
-      
+     DEBUGS("imgFilters->init before"); 
      if (presetSettings->resizeFirst)
       imgFilters->init(resizeCtx->FFdx,resizeCtx->strideY,resizeCtx->FFdy,resizeCtx->diffX,resizeCtx->diffY);
      else
       imgFilters->init(cropDx,avpict.linesize[0],cropDy,0,0);
+     DEBUGS("imgFilters->init after"); 
+     DEBUGS("initResize before");
+     DEBUGS2("cropDx, cropDy",cropDx,cropDy);
      if (imgFilters->postproc.ok)
-      resizeCtx->initResize(&imgFilters->postproc,cropDx,cropDy);
+      resizeCtx->initResize(&imgFilters->postproc,cropDx,cropDy,presetSettings);
+     DEBUGS("initResize after");
+     DEBUGS("resizeCtx->clear before");
      resizeCtx->clear(); 
+     DEBUGS("resizeCtx->clear after");
     }  
    else 
     imgFilters->init(AVIdx,avpict.linesize[0],AVIdy,0,0);

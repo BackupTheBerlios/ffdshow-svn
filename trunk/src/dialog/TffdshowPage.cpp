@@ -282,7 +282,7 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
     if (!applying)
      {
       DEBUGS("onChangeParam");
-      m_bDirty=true;m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
+      setChange();
      }; 
     return TRUE;
    case WM_NOTIFY:
@@ -422,7 +422,10 @@ void TffdshowPage::showHelp(const char *flnm)
  if (GetFileAttributes(fullflnm)!=INVALID_FILE_ATTRIBUTES)
   ShellExecute(m_hwnd,"open",fullflnm,NULL,".",SW_SHOWNORMAL);
 }
-
+void TffdshowPage::setChange(void)
+{
+ m_bDirty=true;m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
+}
 
 #ifdef DEBUG
 static int refcnt=0;

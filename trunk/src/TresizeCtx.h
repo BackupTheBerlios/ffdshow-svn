@@ -5,12 +5,10 @@ struct SwsContext;
 class TresizeCtx
 {
 private:
- TpresetSettings *cfg;
  int sizeY,sizeUV;
 public:
- TresizeCtx(TpresetSettings *Icfg)
+ TresizeCtx(TpresetSettings *cfg)
   {
-   cfg=Icfg;
    isResize=cfg->isResize;
    resizeChanged=true;
    swsc=NULL;
@@ -31,7 +29,7 @@ public:
    if (imgResizeU) xvid_free(imgResizeU);
    if (imgResizeV) xvid_free(imgResizeV);
   };
- inline void initResize(Tpostproc *postproc,int AVIdx,int AVIdy)
+ inline void initResize(Tpostproc *postproc,int AVIdx,int AVIdy,TpresetSettings *cfg)
   {
    if (swsc) {postproc->freeSwsContext(swsc);swsc=NULL;};
    __asm emms;

@@ -7,6 +7,8 @@ class TaspectNcropPage : public TconfPage
 {
  private:
   void aspect2dlg(void),crop2dlg(void);
+  bool cropOK(HWND hed);
+  HBRUSH red;
  public:
   TaspectNcropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);

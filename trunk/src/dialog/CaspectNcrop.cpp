@@ -28,6 +28,7 @@
 
 void TaspectNcropPage::init(void)
 {
+ red=NULL;
  SendDlgItemMessage(m_hwnd,IDC_TBR_ASPECT_USER,TBM_SETRANGE,TRUE,MAKELPARAM(0.1*256,5*256));
  SendDlgItemMessage(m_hwnd,IDC_TBR_ASPECT_USER,TBM_SETLINESIZE,0,0.1*256);
  SendDlgItemMessage(m_hwnd,IDC_TBR_ASPECT_USER,TBM_SETPAGESIZE,0,1.6*256); 
@@ -86,14 +87,10 @@ void TaspectNcropPage::crop2dlg(void)
  sprintf(s,"Vertical magnification:  %i",x);
  SendDlgItemMessage(m_hwnd,IDC_LBL_ZOOMY,WM_SETTEXT,0,LPARAM(s));
  SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMY,TBM_SETPOS,TRUE,x);
- /*
- int left,top,right,bottom;
- deci->getRealCrop(&left,&top,&right,&bottom);
- SetDlgItemInt(m_hwnd,IDC_ED_CROP_LEFT  ,left  ,0);
- SetDlgItemInt(m_hwnd,IDC_ED_CROP_TOP   ,top   ,0);
- SetDlgItemInt(m_hwnd,IDC_ED_CROP_RIGHT ,right ,0);
- SetDlgItemInt(m_hwnd,IDC_ED_CROP_BOTTOM,bottom,0);
- */
+ SetDlgItemInt(m_hwnd,IDC_ED_CROP_LEFT  ,cfgGet(IDFF_cropLeft  ),0);
+ SetDlgItemInt(m_hwnd,IDC_ED_CROP_TOP   ,cfgGet(IDFF_cropTop   ),0);
+ SetDlgItemInt(m_hwnd,IDC_ED_CROP_RIGHT ,cfgGet(IDFF_cropRight ),0);
+ SetDlgItemInt(m_hwnd,IDC_ED_CROP_BOTTOM,cfgGet(IDFF_cropBottom),0);
 }
 
 void TaspectNcropPage::interDlg(void)
@@ -101,10 +98,24 @@ void TaspectNcropPage::interDlg(void)
  setCheck(IDC_CHB_CROP,cfgGet(IDFF_isCropNzoom));
 }
 
+bool TaspectNcropPage::cropOK(HWND hed)
+{
+ char pomS[256];
+ SendMessage(hed,WM_GETTEXT,255,LPARAM(pomS));
+ if (pomS[0]=='\0') return false;
+ char *stop=NULL;
+ int x=strtoul(pomS,&stop,10);
+ if (*stop || x<0 || x>2048) return false;
+ return true;
+}
+
 HRESULT TaspectNcropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
+   case WM_DESTROY:
+    if (red) DeleteObject(red);
+    return TRUE;
    case WM_HSCROLL:
     if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_ASPECT_USER))
      {
@@ -149,8 +160,36 @@ HRESULT TaspectNcropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        cfgSet(IDFF_magnificationLocked,getCheck(IDC_CHB_MAGNIFICATION_LOCKED));
        crop2dlg();
        return TRUE;
+      case IDC_ED_CROP_LEFT:
+      case IDC_ED_CROP_RIGHT:
+      case IDC_ED_CROP_TOP:
+      case IDC_ED_CROP_BOTTOM:
+       if (HIWORD(wParam)==EN_CHANGE) 
+        {
+         InvalidateRect(GetDlgItem(m_hwnd,LOWORD(wParam)),NULL,TRUE);
+         BOOL ok;
+         if (cropOK(GetDlgItem(m_hwnd,IDC_ED_CROP_LEFT  ))) cfgSet(IDFF_cropLeft  ,GetDlgItemInt(m_hwnd,IDC_ED_CROP_LEFT  ,&ok,FALSE));
+         if (cropOK(GetDlgItem(m_hwnd,IDC_ED_CROP_RIGHT ))) cfgSet(IDFF_cropRight ,GetDlgItemInt(m_hwnd,IDC_ED_CROP_RIGHT ,&ok,FALSE));
+         if (cropOK(GetDlgItem(m_hwnd,IDC_ED_CROP_TOP   ))) cfgSet(IDFF_cropTop   ,GetDlgItemInt(m_hwnd,IDC_ED_CROP_TOP   ,&ok,FALSE));
+         if (cropOK(GetDlgItem(m_hwnd,IDC_ED_CROP_BOTTOM))) cfgSet(IDFF_cropBottom,GetDlgItemInt(m_hwnd,IDC_ED_CROP_BOTTOM,&ok,FALSE));
+         return TRUE;  
+        }; 
+       break;
      }
     break; 
+   case WM_CTLCOLOREDIT:
+    {
+     HWND hwnd=HWND(lParam);
+     if (hwnd!=GetDlgItem(m_hwnd,IDC_ED_CROP_LEFT) && hwnd!=GetDlgItem(m_hwnd,IDC_ED_CROP_RIGHT) && hwnd!=GetDlgItem(m_hwnd,IDC_ED_CROP_TOP) && hwnd!=GetDlgItem(m_hwnd,IDC_ED_CROP_BOTTOM)) return FALSE;
+     if (!red) red=CreateSolidBrush(RGB(255,0,0));
+     if (!cropOK(hwnd))
+      {
+       HDC dc=HDC(wParam);
+       SetBkColor(dc,RGB(255,0,0));
+       return HRESULT(red); 
+      }
+     else return FALSE;  
+    }; 
   }   
  return FALSE;
 }

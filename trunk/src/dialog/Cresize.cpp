@@ -24,9 +24,11 @@
 #include "Cresize.h"
 #include "resource.h"
 #include "IffDecoder.h"
+#include "TffdshowPage.h"
 
 void TresizePage::init(void)
 {
+ red=NULL;
  SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("FAST_BILINEAR"));
  SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("BILINEAR"));
  SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_ADDSTRING,0,LPARAM("BICUBIC"));
@@ -86,6 +88,16 @@ bool TresizePage::applyResizeXY(bool checkOnly)
    cfgSet(IDFF_resizeDx,x);
    cfgSet(IDFF_resizeDy,y);
   };
+ parent->setChange(); 
+ return true;
+}
+bool TresizePage::sizeOK(HWND hed)
+{
+ char pomS[256];
+ SendMessage(hed,WM_GETTEXT,255,LPARAM(pomS));
+ char *stop=NULL;
+ int x=strtoul(pomS,&stop,10);
+ if (*stop || x<8 || x>2048 || (x&15)) return false;
  return true;
 }
 
@@ -93,6 +105,9 @@ HRESULT TresizePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch (uMsg)
   {
+   case WM_DESTROY:
+    if (red) DeleteObject(red);
+    return TRUE;
    case WM_HSCROLL:
     if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_RESIZE_GBLUR_LUM))
      {
@@ -140,22 +155,28 @@ HRESULT TresizePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       case IDC_ED_RESIZEDY:
        if (HIWORD(wParam)==EN_CHANGE) 
         {
-         //enableWindow(IDC_BT_RESIZE_SET,applyResizeXY(true));
+         InvalidateRect(GetDlgItem(m_hwnd,LOWORD(wParam)),NULL,TRUE);
+         applyResizeXY(false);
          return TRUE;  
         };
        break;
-      //case IDC_BT_RESIZE_SET:
-      // applyResizeXY(false);
-      // return TRUE;
      }   
     break;
+   case WM_CTLCOLOREDIT:
+    {
+     HWND hwnd=HWND(lParam);
+     if (hwnd!=GetDlgItem(m_hwnd,IDC_ED_RESIZEDX) && hwnd!=GetDlgItem(m_hwnd,IDC_ED_RESIZEDY)) return FALSE;
+     if (!red) red=CreateSolidBrush(RGB(255,0,0));
+     if (!sizeOK(hwnd))
+      {
+       HDC dc=HDC(wParam);
+       SetBkColor(dc,RGB(255,0,0));
+       return HRESULT(red); 
+      }
+     else return FALSE;  
+    }; 
    }; 
  return FALSE;
-}
-
-void TresizePage::applySettings(void)
-{
- applyResizeXY(false);
 }
 
 TresizePage::TresizePage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
