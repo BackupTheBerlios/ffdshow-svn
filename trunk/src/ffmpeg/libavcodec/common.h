@@ -58,22 +58,13 @@ typedef signed __int64 INT64;
 #define M_PI    3.14159265358979323846
 #define M_SQRT2 1.41421356237309504880  /* sqrt(2) */
 
-// code from bits/byteswap.h (C) 1997, 1998 Free Software Foundation, Inc.
-#define bswap_32(x) \
-     ((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >>  8) | \
-      (((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24))
-#define be2me_32(x) bswap_32(x)
+#ifdef _DEBUG
+#define DEBUG
+#endif
 
 #define snprintf _snprintf
 
-#ifndef __MINGW32__
-/* no config.h with VC */
-#define CONFIG_ENCODERS 1
-#define CONFIG_DECODERS 1
-#define CONFIG_AC3      1
-#endif
-
-#else
+#else /* CONFIG_WIN32 */
 
 /* unix */
 
@@ -103,8 +94,6 @@ typedef signed long long INT64;
 #define UINT64_C(c)    (c ## ULL)
 #endif
 
-#include "bswap.h"
-
 #ifdef USE_FASTMEMCPY
 #include "fastmemcpy.h"
 #endif
@@ -113,9 +102,18 @@ typedef signed long long INT64;
 
 #endif /* !CONFIG_WIN32 */
 
+#ifdef HAVE_AV_CONFIG_H
+
+#include "bswap.h"
+
+#if defined(__MINGW32__) || defined(__CYGWIN__) || \
+    defined(__OS2__) || defined (__OpenBSD__)
+#define MANGLE(a) "_" #a
+#else
+#define MANGLE(a) #a
+#endif
 
 /* debug stuff */
-#ifdef HAVE_AV_CONFIG_H
 
 #ifndef DEBUG
 #define NDEBUG
@@ -137,11 +135,13 @@ inline void dprintf(const char* fmt,...) {}
 
 #endif /* !CONFIG_WIN32 */
 
-#endif /* HAVE_AV_CONFIG_H */
+#define av_abort()      do { fprintf(stderr, "Abort at %s:%d\n", __FILE__, __LINE__); abort(); } while (0)
 
 /* assume b>0 */
 #define ROUNDED_DIV(a,b) (((a)>0 ? (a) + ((b)>>1) : (a) - ((b)>>1))/(b))
 #define ABS(a) ((a) >= 0 ? (a) : (-(a)))
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
+#define MIN(a,b) ((a) > (b) ? (b) : (a))
 
 /* bit output */
 
@@ -221,7 +221,6 @@ static inline uint32_t unaligned32(const void *v) {
 #endif //!ARCH_X86
 
 #ifndef ALT_BITSTREAM_WRITER
-#include <assert.h>
 static inline void put_bits(PutBitContext *s, int n, unsigned int value)
 {
     unsigned int bit_buf;
@@ -411,7 +410,6 @@ static inline void jput_bits(PutBitContext *s, int n, int value)
     s->index= index;
  }
 #endif
-
 
 static inline uint8_t* pbBufPtr(PutBitContext *s)
 {
@@ -879,16 +877,45 @@ static inline int clip(int a, int amin, int amax)
         return a;
 }
 
-/* memory */
-void *av_malloc(int size);
-void *av_mallocz(int size);
-void av_free(void *ptr);
-void __av_freep(void **ptr);
-#define av_freep(p) __av_freep((void **)(p))
-
 /* math */
 int ff_gcd(int a, int b);
 
+static inline int ff_sqrt(int a)
+{
+    int ret=0;
+    int s;
+    int ret_sq=0;
+
+    for(s=15; s>=0; s--){
+        int b= ret_sq + (1<<(s*2)) + (ret<<s)*2;
+        if(b<=a){
+            ret_sq=b;
+            ret+= 1<<s;
+        }
+    }
+    return ret;
+}
+#if __CPU__ >= 686 && !defined(RUNTIME_CPUDETECT)
+#define COPY3_IF_LT(x,y,a,b,c,d)\
+asm volatile (\
+    "cmpl %0, %3	\n\t"\
+    "cmovl %3, %0	\n\t"\
+    "cmovl %4, %1	\n\t"\
+    "cmovl %5, %2	\n\t"\
+    : "+r" (x), "+r" (a), "+r" (c)\
+    : "r" (y), "r" (b), "r" (d)\
+);
+#else
+#define COPY3_IF_LT(x,y,a,b,c,d)\
+if((y)<(x)){\
+     (x)=(y);\
+     (a)=(b);\
+     (c)=(d);\
+}
+#endif
+
 #define CLAMP_TO_8BIT(d) ((d > 0xff) ? 0xff : (d < 0) ? 0 : d)
 
-#endif
+#endif /* HAVE_AV_CONFIG_H */
+
+#endif /* COMMON_H */

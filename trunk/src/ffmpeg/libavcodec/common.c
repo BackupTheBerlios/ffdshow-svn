@@ -1,20 +1,20 @@
 /*
  * Common bit i/o utils
- * Copyright (c) 2000, 2001 Gerard Lantau.
+ * Copyright (c) 2000, 2001 Fabrice Bellard.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * alternative bitstream reader & writer by Michael Niedermayer <michaelni@gmx.at>
  */
@@ -174,6 +174,9 @@ unsigned int get_bits_long(GetBitContext *s, int n)
                 (buf_ptr[-2] << 8) |
                 (buf_ptr[-1]);	    
 #endif
+            val |= bit_buf >> (32 + bit_cnt);
+            bit_buf <<= - bit_cnt;
+            bit_cnt += 32;
         } else {
             buf_ptr -= 4;
             bit_buf = 0;
@@ -185,11 +188,13 @@ unsigned int get_bits_long(GetBitContext *s, int n)
                 bit_buf |= *buf_ptr++ << 8;
             if (buf_ptr < s->buf_end)
                 bit_buf |= *buf_ptr++;
+
+            val |= bit_buf >> (32 + bit_cnt);
+            bit_buf <<= - bit_cnt;
+            bit_cnt += 8*(buf_ptr - s->buf_ptr);
+            if(bit_cnt<0) bit_cnt=0;
         }
         s->buf_ptr = buf_ptr;
-        val |= bit_buf >> (32 + bit_cnt);
-        bit_buf <<= - bit_cnt;
-        bit_cnt += 32;
     }
     s->bit_buf = bit_buf;
     s->bit_cnt = bit_cnt;

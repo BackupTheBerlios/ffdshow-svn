@@ -12,8 +12,8 @@ extern "C" {
 
 #define LIBAVCODEC_VERSION_INT 0x000406
 #define LIBAVCODEC_VERSION     "0.4.6"
-#define LIBAVCODEC_BUILD       4610
-#define LIBAVCODEC_BUILD_STR   "4610"
+#define LIBAVCODEC_BUILD       4614
+#define LIBAVCODEC_BUILD_STR   "4614"
 
 #define CODEC_ID_NONE       0
 #define CODEC_ID_MPEG1VIDEO 1
@@ -37,8 +37,6 @@ extern "C" {
 
 #define CODEC_ID_YUY2      100
 #define CODEC_ID_RGB2      101
-
-#define FF_POSTPROCESS 1
 
 enum CodecType {
     CODEC_TYPE_UNKNOWN = -1,
@@ -92,12 +90,14 @@ static const int Motion_Est_QTab[] = { ME_ZERO, ME_PHODS, ME_LOG,
 #define CODEC_FLAG_QPEL   0x0010 /* use qpel MC */
 #define CODEC_FLAG_GMC    0x0020 /* use GMC */
 #define CODEC_FLAG_TYPE   0x0040 /* fixed I/P frame type, from avctx->key_frame */
+#define CODEC_FLAG_PART   0x0080 /* use data partitioning */
 /* parent program gurantees that the input for b-frame containing streams is not written to 
    for at least s->max_b_frames+1 frames, if this is not set than the input will be copied */
 #define CODEC_FLAG_INPUT_PRESERVED 0x0100 
 #define CODEC_FLAG_PASS1 0x0200  /* use internal 2pass ratecontrol in first  pass mode */
 #define CODEC_FLAG_PASS2 0x0400  /* use internal 2pass ratecontrol in second pass mode */
 #define CODEC_FLAG_EXTERN_HUFF 0x1000 /* use external huffman table (for mjpeg) */
+#define CODEC_FLAG_GRAY  0x2000 /* only decode/encode grayscale */
 
 /* codec capabilities */
 
@@ -185,15 +185,16 @@ typedef struct AVCodecContext {
 
     int hurry_up;     /* when set to 1 during decoding, b frames will be skiped
                          when set to 2 idct/dequant will be skipped too */
+    
     int showMV;
     int mb_width,mb_height;
     char *motion_vectors;
-    
+
     struct AVCodec *codec;
     void *priv_data;
 
     /* The following data is for RTP friendly coding */
-    /* By now only H.263/H.263+ coder honours this   */
+    /* By now only H.263/H.263+/MPEG4 coder honours this   */
     int rtp_mode;   /* 1 for activate RTP friendly-mode           */
                     /* highers numbers represent more error-prone */
                     /* enviroments, by now just "1" exist         */
@@ -238,6 +239,18 @@ typedef struct AVCodecContext {
     unsigned int codec_tag;  /* codec tag, only used if unknown codec */
     
     int workaround_bugs;       /* workaround bugs in encoders which cannot be detected automatically */
+    int luma_elim_threshold;
+    int chroma_elim_threshold;
+    int strict_std_compliance; /* strictly follow the std (MPEG4, ...) */
+    float b_quant_offset;/* qscale offset between ips and b frames, not implemented yet */
+    int error_resilience;
+    
+#ifndef MBC
+#define MBC 128
+#define MBR 96
+#endif
+    int *quant_store; /* field for communicating with external postprocessing */
+    unsigned qstride;
 } AVCodecContext;
 
 typedef struct AVCodec {
@@ -252,6 +265,14 @@ typedef struct AVCodec {
                   uint8_t *buf, int buf_size);
     int capabilities;
     struct AVCodec *next;
+    /*
+	Note: Below are located reserved fields for further usage
+	It requires for ABI !!!
+	If you'll perform some changes then borrow new space from these fields
+	(void * can be safety replaced with struct * ;)
+	P L E A S E ! ! !
+	IMPORTANT: Never change order of already declared fields!!!
+    */
 } AVCodec;
 
 /* three components are given, that's all */
@@ -359,7 +380,6 @@ void avcodec_set_bit_exact(void);
 
 void register_avcodec(AVCodec *format);
 AVCodec *avcodec_find_decoder(int id);
-AVCodec *avcodec_find_decoder_by_name(const char *name);
 void avcodec_string(char *buf, int buf_size, AVCodecContext *enc, int encode);
 
 int avcodec_open(AVCodecContext *avctx, AVCodec *codec);
@@ -373,90 +393,12 @@ void avcodec_register_all(void);
 
 void avcodec_flush_buffers(AVCodecContext *avctx);
 
-#ifdef FF_POSTPROCESS
-#ifndef MBC
-#define MBC 128
-#define MBR 96
-#endif
-extern int quant_store[MBR+1][MBC+1]; // [Review]
-#endif
-
-
-/**
- * Interface for 0.5.0 version
- *
- * do not even think about it's usage for this moment
- */
-
-typedef struct {
-    // compressed size used from given memory buffer
-    int size;
-    /// I/P/B frame type
-    int frame_type;
-} avc_enc_result_t;
-
-/**
- * Commands
- * order can't be changed - once it was defined
- */
-typedef enum {
-    // general commands
-    AVC_OPEN_BY_NAME = 0xACA000,
-    AVC_OPEN_BY_CODEC_ID,
-    AVC_OPEN_BY_FOURCC,
-    AVC_CLOSE,
-
-    AVC_FLUSH,
-    // pin - struct { uint8_t* src, uint_t src_size }
-    // pout - struct { AVPicture* img, consumed_bytes,
-    AVC_DECODE,
-    // pin - struct { AVPicture* img, uint8_t* dest, uint_t dest_size }
-    // pout - uint_t used_from_dest_size
-    AVC_ENCODE, 
-
-    // query/get video commands
-    AVC_GET_VERSION = 0xACB000,
-    AVC_GET_WIDTH,
-    AVC_GET_HEIGHT,
-    AVC_GET_DELAY,
-    AVC_GET_QUANT_TABLE,
-    // ...
-
-    // query/get audio commands
-    AVC_GET_FRAME_SIZE = 0xABC000,
-
-    // maybe define some simple structure which
-    // might be passed to the user - but they can't
-    // contain any codec specific parts and these
-    // calls are usualy necessary only few times
-
-    // set video commands
-    AVC_SET_WIDTH = 0xACD000,
-    AVC_SET_HEIGHT,
-
-    // set video encoding commands
-    AVC_SET_FRAME_RATE = 0xACD800,
-    AVC_SET_QUALITY,
-    AVC_SET_HURRY_UP,
-
-    // set audio commands
-    AVC_SET_SAMPLE_RATE = 0xACE000,
-    AVC_SET_CHANNELS,
-
-} avc_cmd_t;
-
-/**
- * \param handle  allocated private structure by libavcodec
- *                for initialization pass NULL - will be returned pout
- *                user is supposed to know nothing about its structure
- * \param cmd     type of operation to be performed
- * \param pint    input parameter
- * \param pout    output parameter
- *
- * \returns  command status - eventually for query command it might return
- * integer resulting value
- */
-int avcodec(void* handle, avc_cmd_t cmd, void* pin, void* pout);
+/* memory */
+void *av_malloc(int size);
+void *av_mallocz(int size);
+void av_free(void *ptr);
+void __av_freep(void **ptr);
+#define av_freep(p) __av_freep((void **)(p))
 
 #ifdef __cpluplus
 }

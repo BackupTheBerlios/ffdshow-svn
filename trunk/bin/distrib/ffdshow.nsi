@@ -38,7 +38,7 @@ Section "DirectShow Filter (required)"
   SetOutPath $INSTDIR
   ; Put file there
   File "..\ffdshow.ax"
-  File "..\..\src\ffmpeg\libavcodec\libavcodec.dll"
+  File "..\..\src\ffmpeg\libavcodec.dll"
   UnRegDll $INSTDIR\ffdshow.ax
   RegDll $INSTDIR\ffdshow.ax
   ; Write the installation path into the registry

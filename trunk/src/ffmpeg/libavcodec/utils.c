@@ -1,20 +1,20 @@
 /*
  * utils for libavcodec
- * Copyright (c) 2001 Gerard Lantau.
+ * Copyright (c) 2001 Fabrice Bellard.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 #include "avcodec.h"
 #include "dsputil.h"
@@ -255,17 +255,6 @@ AVCodec *avcodec_find_decoder_by_name(const char *name)
     return NULL;
 }
 
-AVCodec *avcodec_find(int id)
-{
-    AVCodec *p;
-    p = first_avcodec;
-    while (p) {
-        if (p->id == id)
-            return p;
-        p = p->next;
-    }
-    return NULL;
-}
 
 const char *pix_fmt_str[] = {
     "??",
@@ -439,25 +428,6 @@ void avcodec_init(void)
     dsputil_init(1,1);
 }
 
-/* simple call to use all the codecs */
-void avcodec_register_all(void)
-{
-    static int inited = 0;
-    
-    if (inited != 0)
-	return;
-    inited = 1;
-
-    register_avcodec(&h263_decoder);
-    register_avcodec(&mpeg4_decoder);
-    register_avcodec(&msmpeg4v1_decoder);
-    register_avcodec(&msmpeg4v2_decoder);
-    register_avcodec(&msmpeg4v3_decoder);
-    register_avcodec(&wmv1_decoder);
-    register_avcodec(&mpeg_decoder);
-    register_avcodec(&h263i_decoder);
-}
-
 /* this should be called after seeking and before trying to decode the next frame */
 void avcodec_flush_buffers(AVCodecContext *avctx)
 {
@@ -466,19 +436,19 @@ void avcodec_flush_buffers(AVCodecContext *avctx)
 }
 
 
-static int encode_init(AVCodecContext *s)
+static int raw_encode_init(AVCodecContext *s)
 {
     return 0;
 }
 
-static int decode_frame(AVCodecContext *avctx, 
+static int raw_decode_frame(AVCodecContext *avctx,
                         void *data, int *data_size,
                         UINT8 *buf, int buf_size)
 {
     return -1;
 }
 
-static int encode_frame(AVCodecContext *avctx,
+static int raw_encode_frame(AVCodecContext *avctx,
                         unsigned char *frame, int buf_size, void *data)
 {
     return -1;
@@ -489,8 +459,8 @@ AVCodec rawvideo_codec = {
     CODEC_TYPE_VIDEO,
     CODEC_ID_RAWVIDEO,
     0,
-    encode_init,
-    encode_frame,
+    raw_encode_init,
+    raw_encode_frame,
     NULL,
-    decode_frame,
+    raw_decode_frame,
 };

@@ -4,7 +4,6 @@
 #define CONFIG_DECODERS 1
 #define HAVE_MALLOC_H 1
 #undef  HAVE_MEMALIGN
-#define FF_POSTPROCESS 1
 #define printf(...) /**/
 #define fprintf(...) /**/
 #define snprintf(...) /**/

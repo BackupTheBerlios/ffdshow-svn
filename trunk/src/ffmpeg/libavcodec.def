@@ -5,6 +5,5 @@ avcodec_open
 avcodec_decode_video
 avcodec_flush_buffers
 avcodec_close
-get_quant_store
 set_ff_idct
 getVersion

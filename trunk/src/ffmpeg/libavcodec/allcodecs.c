@@ -1,7 +1,6 @@
 /*
- * Simple IDCT
- *
- * Copyright (c) 2001 Michael Niedermayer <michaelni@gmx.at>
+ * Utils for libavcodec
+ * Copyright (c) 2002 Fabrice Bellard.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,8 +15,31 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+#include "avcodec.h"
 
-void simple_idct_put(UINT8 *dest, int line_size, INT16 *block);
-void simple_idct_add(UINT8 *dest, int line_size, INT16 *block);
-void simple_idct_mmx(short *block);
+/* If you do not call this function, then you can select exactly which
+   formats you want to support */
+
+/**
+ * simple call to register all the codecs. 
+ */
+void avcodec_register_all(void)
+{
+    static int inited = 0;
+    
+    if (inited != 0)
+	return;
+    inited = 1;
+
+    /* decoders */
+    register_avcodec(&h263_decoder);
+    register_avcodec(&mpeg4_decoder);
+    register_avcodec(&msmpeg4v1_decoder);
+    register_avcodec(&msmpeg4v2_decoder);
+    register_avcodec(&msmpeg4v3_decoder);
+    register_avcodec(&wmv1_decoder);
+    register_avcodec(&mpeg_decoder);
+    register_avcodec(&h263i_decoder);
+}
+

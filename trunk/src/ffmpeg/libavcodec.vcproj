@@ -17,8 +17,8 @@
 			ConfigurationType="0">
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="make -C libavcodec"
-				ReBuildCommandLine="make -C libavcodec clean &amp;&amp; make -C libavcodec"
+				BuildCommandLine="make"
+				ReBuildCommandLine="make clean &amp;&amp; make"
 				CleanCommandLine="make -C libavcodec clean"
 				Output="$(InputDir)\libavcodec\libavcodec.dll"/>
 		</Configuration>
@@ -29,16 +29,19 @@
 			ConfigurationType="0">
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="make -C libavcodec"
-				ReBuildCommandLine="make -C libavcodec clean &amp;&amp; make -C libavcodec"
-				CleanCommandLine="make -C libavcodec clean"
-				Output="$(InputDir)\libavcodec\libavcodec.dll"/>
+				BuildCommandLine="make"
+				ReBuildCommandLine="make clean &amp;&amp; make"
+				CleanCommandLine="make clean"
+				Output="$(InputDir)\libavcodec.dll"/>
 		</Configuration>
 	</Configurations>
 	<Files>
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
+			<File
+				RelativePath="libavcodec\allcodecs.c">
+			</File>
 			<File
 				RelativePath="libavcodec\common.c">
 			</File>
@@ -94,12 +97,6 @@
 				RelativePath="libavcodec\i386\simple_idct_mmx.c">
 			</File>
 			<File
-				RelativePath="libavcodec\i386\simple_idct_mmx16383.c">
-			</File>
-			<File
-				RelativePath="libavcodec\i386\simple_idct_mmx16384.c">
-			</File>
-			<File
 				RelativePath="libavcodec\utils.c">
 			</File>
 		</Filter>
@@ -125,13 +122,10 @@
 				RelativePath="libavcodec\i386\dsputil_mmx_avg.h">
 			</File>
 			<File
+				RelativePath="libavcodec\i386\dsputil_mmx_rnd.h">
+			</File>
+			<File
 				RelativePath="libavcodec\h263data.h">
-			</File>
-			<File
-				RelativePath="libavcodec\mangle.h">
-			</File>
-			<File
-				RelativePath="mangle.h">
 			</File>
 			<File
 				RelativePath="libavcodec\i386\mmx.h">

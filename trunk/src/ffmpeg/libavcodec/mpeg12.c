@@ -1,20 +1,20 @@
 /*
  * MPEG1 encoder / MPEG2 decoder
- * Copyright (c) 2000,2001 Gerard Lantau.
+ * Copyright (c) 2000,2001 Fabrice Bellard.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 //#define DEBUG
 #include "avcodec.h"
@@ -32,8 +32,6 @@
 #define SLICE_MAX_START_CODE	0x000001af
 #define EXT_START_CODE		0x000001b5
 #define USER_START_CODE		0x000001b2
-
-//#define ABS(a) ((a)<0 ? -(a) : (a))
 
 static int mpeg1_decode_block(MpegEncContext *s, 
                               DCTELEM *block, 
@@ -72,6 +70,7 @@ void mpeg1_init_vlc(MpegEncContext *s)
     static int done = 0;
 
     if (!done) {
+        done = 1;
 
         init_vlc(&dc_lum_vlc, 9, 12, 
                  vlc_dc_lum_bits, 1, 1,
@@ -731,6 +730,7 @@ static int mpeg_decode_init(AVCodecContext *avctx)
     s->repeat_field = 0;
     s->mpeg_enc_ctx.codec_id= avctx->codec->id;
     avctx->mbskip_table= s->mpeg_enc_ctx.mbskip_table;
+    s->mpeg_enc_ctx.flags= avctx->flags;
     return 0;
 }
 

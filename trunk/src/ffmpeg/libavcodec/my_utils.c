@@ -10,13 +10,6 @@ void getVersion(char **version,char **build,char **datetime)
  if (datetime) *datetime=av_datetime;
 }
 
-int quant_store[MBR+1][MBC+1]; // [Review]
-
-int* get_quant_store(void)
-{
- return &quant_store[0][0];//[MBR+1][MBC+1]; // [Review]
-};
-
 //tabulky pre povodne hodnoty
 
 static UINT8 zigzag_direct0[64];
@@ -73,3 +66,4 @@ void set_ff_idct(void *idct)
    ff_idct=idct;
   };
 }
+

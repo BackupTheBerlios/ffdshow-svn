@@ -1,3 +1,21 @@
+/*
+ * DSP utils
+ * Copyright (c) 2000, 2001, 2002 Fabrice Bellard.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 #ifndef DSPUTIL_H
 #define DSPUTIL_H
 
@@ -8,13 +26,13 @@
 /* dct code */
 typedef short DCTELEM;
 
-void jpeg_fdct_ifast (DCTELEM *data);
+void fdct_ifast (DCTELEM *data);
 
 void j_rev_dct (DCTELEM *data);
 
 void fdct_mmx(DCTELEM *block);
 
-void (*av_fdct)(DCTELEM *block);
+extern void (*av_fdct)(DCTELEM *block);
 
 /* encoding scans */
 extern UINT8 ff_alternate_horizontal_scan[64];
@@ -36,6 +54,8 @@ void dsputil_init(int use_permuted_idct,int use_simple_idct);
 /* pixel ops : interface with DCT */
 
 extern void (*ff_idct)(DCTELEM *block);
+extern void (*ff_idct_put)(UINT8 *dest, int line_size, DCTELEM *block);
+extern void (*ff_idct_add)(UINT8 *dest, int line_size, DCTELEM *block);
 extern void (*get_pixels)(DCTELEM *block, const UINT8 *pixels, int line_size);
 extern void (*diff_pixels)(DCTELEM *block, const UINT8 *s1, const UINT8 *s2, int stride);
 extern void (*put_pixels_clamped)(const DCTELEM *block, UINT8 *pixels, int line_size);
@@ -147,6 +167,25 @@ void dsputil_init_alpha(void);
 #define __align8
 
 #endif
+
+#ifdef __GNUC__
+
+struct unaligned_64 { uint64_t l; } __attribute__((packed));
+struct unaligned_32 { uint32_t l; } __attribute__((packed));
+
+#define LD32(a) (((const struct unaligned_32 *) (a))->l)
+#define LD64(a) (((const struct unaligned_64 *) (a))->l)
+
+#define ST32(a, b) (((struct unaligned_32 *) (a))->l) = (b)
+
+#else /* __GNUC__ */
+
+#define LD32(a) (*((uint32_t*)(a)))
+#define LD64(a) (*((uint64_t*)(a)))
+
+#define ST32(a, b) *((uint32_t*)(a)) = (b)
+
+#endif /* !__GNUC__ */
 
 /* PSNR */
 void get_psnr(UINT8 *orig_image[3], UINT8 *coded_image[3],

@@ -1,20 +1,20 @@
 /*
  * DSP utils
- * Copyright (c) 2000, 2001 Gerard Lantau.
+ * Copyright (c) 2000, 2001 Fabrice Bellard.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * gmc & q-pel & 32/64 bit based MC by Michael Niedermayer <michaelni@gmx.at>
  */
@@ -23,6 +23,9 @@
 #include "simple_idct.h"
 
 void (*ff_idct)(DCTELEM *block);
+void (*ff_idct_put)(UINT8 *dest, int line_size, DCTELEM *block);
+void (*ff_idct_add)(UINT8 *dest, int line_size, DCTELEM *block);
+void (*av_fdct)(DCTELEM *block);
 void (*get_pixels)(DCTELEM *block, const UINT8 *pixels, int line_size);
 void (*diff_pixels)(DCTELEM *block, const UINT8 *s1, const UINT8 *s2, int stride);
 void (*put_pixels_clamped)(const DCTELEM *block, UINT8 *pixels, int line_size);
@@ -43,10 +46,10 @@ op_pixels_abs_func pix_abs8x8_xy2;
 UINT8 cropTbl[256 + 2 * MAX_NEG_CROP];
 UINT32 squareTbl[512];
 
-extern UINT16 default_intra_matrix[64];
-extern UINT16 default_non_intra_matrix[64];
-extern UINT16 ff_mpeg4_default_intra_matrix[64];
-extern UINT16 ff_mpeg4_default_non_intra_matrix[64];
+extern INT16 default_intra_matrix[64];
+extern INT16 default_non_intra_matrix[64];
+extern INT16 ff_mpeg4_default_intra_matrix[64];
+extern INT16 ff_mpeg4_default_non_intra_matrix[64];
 
 UINT8 zigzag_direct[64] = {
     0, 1, 8, 16, 9, 2, 3, 10,
@@ -142,7 +145,7 @@ UINT8 zigzag_end[64];
 UINT8 permutation[64];
 //UINT8 invPermutation[64];
 
-static void build_zigzag_end()
+static void build_zigzag_end(void)
 {
     int lastIndex;
     int lastIndexAfterPerm=0;
@@ -246,21 +249,6 @@ void add_pixels_clamped_c(const DCTELEM *block, UINT8 *pixels, int line_size)
         p += 8;
     }
 }
-
-#ifdef __GNUC__
-
-struct unaligned_64 { uint64_t l; } __attribute__((packed));
-struct unaligned_32 { uint32_t l; } __attribute__((packed));
-
-#define LD32(a) (((const struct unaligned_32 *) (a))->l)
-#define LD64(a) (((const struct unaligned_64 *) (a))->l)
-
-#else /* __GNUC__ */
-
-#define LD32(a) (*((uint32_t*)(a)))
-#define LD64(a) (*((uint64_t*)(a)))
-
-#endif /* !__GNUC__ */
 
 #if 0
 
@@ -1238,6 +1226,20 @@ void clear_blocks_c(DCTELEM *blocks)
     memset(blocks, 0, sizeof(DCTELEM)*6*64);
 }
 
+/* XXX: those functions should be suppressed ASAP when all IDCTs are
+   converted */
+void gen_idct_put(UINT8 *dest, int line_size, DCTELEM *block)
+{
+    ff_idct (block);
+    put_pixels_clamped(block, dest, line_size);
+}
+
+void gen_idct_add(UINT8 *dest, int line_size, DCTELEM *block)
+{
+    ff_idct (block);
+    add_pixels_clamped(block, dest, line_size);
+}
+
 //use simple idct = 0 - normal idct
 //		    4 - simple16384
 //                  3 - simple16383
@@ -1257,7 +1259,7 @@ void dsputil_init(int use_permuted_idct,int use_simple_idct)
     }
 
     if (use_simple_idct)
-        ff_idct = simple_idct;
+        ff_idct = NULL;
     else
         ff_idct = j_rev_dct;
     get_pixels = get_pixels_c;
@@ -1293,7 +1295,15 @@ void dsputil_init(int use_permuted_idct,int use_simple_idct)
     use_permuted_idct = 0;
 #endif
 
-    if (use_simple_idct && ff_idct == simple_idct) use_permuted_idct=0;
+    if (use_simple_idct)
+      if (ff_idct == NULL) {
+          ff_idct_put = simple_idct_put;
+          ff_idct_add = simple_idct_add;
+          use_permuted_idct=0;
+      } else {
+          ff_idct_put = gen_idct_put;
+          ff_idct_add = gen_idct_add;
+      }
 
     if(use_permuted_idct)
         if (use_simple_idct)
