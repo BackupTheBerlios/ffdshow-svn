@@ -53,15 +53,14 @@ HRESULT TshowMVpage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
-void TshowMVpage::interDlg(void)
-{
- setCheck(IDC_CHB_SHOWMV,cfgGet(IDFF_isShowMV));
-}
 void TshowMVpage::getTip(char *tipS,int len)
 {
  sprintf(tipS,"%sshow motion vectors",cfgGet(IDFF_isShowMV)?"":"do not ");
 }
 TshowMVpage::TshowMVpage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_SHOWMV);
+ dialogId=IDD_SHOWMV;
+ idffInter=IDFF_isShowMV;resInter=IDC_CHB_SHOWMV;
+ inPreset=1;
+ createWindow();
 }

@@ -24,17 +24,17 @@
 
 const char *TresizeSettingsPage::algorithmsNames[]=
 {
- "Fast bilinear",
- "Bilinear",
- "Bicubic",
- "Experimental",
- "Point",
- "Area",
- "Bicublin",
- "Gauss",
- "Sinc",
- "Lanczos",
- "Spline",
+ "Fast bilinear", //0
+ "Bilinear",      //1
+ "Bicubic",       //2
+ "Experimental",  //3
+ "Point",         //4
+ "Area",          //5
+ "Bicublin",      //6
+ "Gauss",         //7
+ "Sinc",          //8
+ "Lanczos",       //9
+ "Spline",        //10
  "None"
 };
 
@@ -63,6 +63,49 @@ void TresizeSettingsPage::cfg2dlg(void)
  resizeSettings2dlg();
 }
 
+void TresizeSettingsPage::param2dlg(void)
+{
+ int max,step1,step2,pos;
+ char pomS[256];
+ __asm emms;
+ float realPos;
+ switch (cfgGet(IDFF_resizeMethod))
+  {
+   //bicubic
+   case 2:max=400;step1=10;step2=40;pos=cfgGet(IDFF_resizeBicubicParam);
+          realPos=-0.01*pos;
+          pos=400-pos;
+          break;
+   //experimental
+   case 3:max=100;step1=5 ;step2=20;pos=cfgGet(IDFF_resizeXparam);
+          realPos=0.1*pos;
+          break;
+   //gauss
+   case 7:max=100;step1=5 ;step2=20;pos=cfgGet(IDFF_resizeGaussParam);
+          realPos=0.1*pos;
+          break;
+   //lanczos
+   case 9:max=10 ;step1=1 ;step2=2 ;pos=cfgGet(IDFF_resizeLanczosParam);
+          realPos=pos;
+          break;
+   default:enableWindow(IDC_TBR_RESIZE_PARAM,0);
+           enableWindow(IDC_LBL_RESIZE_PARAM,0);
+           SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_PARAM,TBM_SETPOS,TRUE,0);
+           SendDlgItemMessage(m_hwnd,IDC_LBL_RESIZE_PARAM,WM_SETTEXT,0,LPARAM("Parameter:"));
+           return;
+  };
+ enableWindow(IDC_TBR_RESIZE_PARAM,1);
+ enableWindow(IDC_LBL_RESIZE_PARAM,1);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_PARAM,TBM_SETRANGE,TRUE,MAKELPARAM(0,max));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_PARAM,TBM_SETLINESIZE,0,step1);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_PARAM,TBM_SETPAGESIZE,0,step2); 
+ SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_PARAM,TBM_SETPOS,TRUE,pos);
+ if (realPos==0)
+  strcpy(pomS,"Parameter: default");
+ else
+  sprintf(pomS,"Parameter: %3.2f",realPos);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_RESIZE_PARAM,WM_SETTEXT,0,LPARAM(pomS));
+}
 void TresizeSettingsPage::resizeSettings2dlg(void)
 {
  char pomS[256];
@@ -77,6 +120,7 @@ void TresizeSettingsPage::resizeSettings2dlg(void)
  SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_SHARPEN_CHROM,TBM_SETPOS,TRUE,cfgGet(IDFF_resizeSharpenChrom));
 
  SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_SETCURSEL,cfgGet(IDFF_resizeMethod),0);
+ param2dlg();
 }
 
 HRESULT TresizeSettingsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -108,6 +152,26 @@ HRESULT TresizeSettingsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       resizeSettings2dlg();
       return TRUE;
      }    
+    else if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_RESIZE_PARAM))
+     {
+      int pos=SendDlgItemMessage(m_hwnd,IDC_TBR_RESIZE_PARAM,TBM_GETPOS,0,0);
+      int id;
+      switch (cfgGet(IDFF_resizeMethod))
+       {
+        //bicubic
+        case 2:id=IDFF_resizeBicubicParam;pos=400-pos;break;
+        //experimental
+        case 3:id=IDFF_resizeXparam;break;
+        //gauss
+        case 7:id=IDFF_resizeGaussParam;break;
+        //lanczos
+        case 9:id=IDFF_resizeLanczosParam;break;
+        default:return TRUE;
+       };
+      cfgSet(id,pos);
+      param2dlg();
+      return TRUE;
+     }    
     else 
      break; 
    case WM_COMMAND:
@@ -121,6 +185,7 @@ HRESULT TresizeSettingsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
          int i=SendDlgItemMessage(m_hwnd,IDC_CBX_RESIZE_METHOD,CB_GETCURSEL,0,0);
          cfgSet(IDFF_resizeMethod,i);
+         param2dlg();
          return TRUE;
         }
        break;
@@ -137,5 +202,7 @@ void TresizeSettingsPage::getTip(char *tipS,int len)
 
 TresizeSettingsPage::TresizeSettingsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_RESIZESETTINGS);
+ dialogId=IDD_RESIZESETTINGS;
+ inPreset=1;
+ createWindow();
 }

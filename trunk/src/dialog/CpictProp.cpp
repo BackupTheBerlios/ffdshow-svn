@@ -129,10 +129,6 @@ HRESULT TpictPropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
-void TpictPropPage::interDlg(void)
-{
- setCheck(IDC_CHB_PICTPROP,cfgGet(IDFF_isPictProp));
-}
 void TpictPropPage::getTip(char *tipS,int len)
 {
  sprintf(tipS,"luma gain:%i, luma offset:%i, gamma:%5.2f, hue:%i, saturation:%i",cfgGet(IDFF_lumGain),cfgGet(IDFF_lumOffset),float(cfgGet(IDFF_gammaCorrection)/100.0),cfgGet(IDFF_hue),cfgGet(IDFF_saturation));
@@ -150,5 +146,9 @@ bool TpictPropPage::reset(bool testOnly)
 
 TpictPropPage::TpictPropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_PICTPROP);
+ dialogId=IDD_PICTPROP;
+ idffInter=IDFF_isPictProp;resInter=IDC_CHB_PICTPROP;
+ idffFull=IDFF_fullPictProp;
+ inPreset=1;
+ createWindow();
 }

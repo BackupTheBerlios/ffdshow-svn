@@ -115,10 +115,6 @@ HRESULT TsharpenPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
-void TsharpenPage::interDlg(void)
-{
- setCheck(IDC_CHB_SHARPEN,cfgGet(IDFF_isSharpen));
-}
 void TsharpenPage::getTip(char *tipS,int len)
 {
  char tstr[256];
@@ -127,5 +123,9 @@ void TsharpenPage::getTip(char *tipS,int len)
 }
 TsharpenPage::TsharpenPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_SHARPEN);
+ dialogId=IDD_SHARPEN;
+ idffInter=IDFF_isSharpen;resInter=IDC_CHB_SHARPEN;
+ idffFull=IDFF_fullSharpen;
+ inPreset=1;
+ createWindow();
 }

@@ -80,15 +80,15 @@ HRESULT TblurPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
-void TblurPage::interDlg(void)
-{
- setCheck(IDC_CHB_BLUR,cfgGet(IDFF_isBlur));
-}
 void TblurPage::getTip(char *tipS,int len)
 {
  sprintf(tipS,"blur: %i, temporal smooth: %i",cfgGet(IDFF_blurStrength),cfgGet(IDFF_tempSmooth));
 }
 TblurPage::TblurPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_BLUR);
+ dialogId=IDD_BLUR;
+ idffInter=IDFF_isBlur;resInter=IDC_CHB_BLUR;
+ idffFull=IDFF_fullBlur;
+ inPreset=1;
+ createWindow();
 }

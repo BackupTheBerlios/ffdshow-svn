@@ -131,5 +131,6 @@ HRESULT TcodecsPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 TcodecsPage::TcodecsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_CODECS);
+ dialogId=IDD_CODECS;
+ createWindow();
 }

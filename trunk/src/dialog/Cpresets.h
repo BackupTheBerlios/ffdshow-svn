@@ -25,8 +25,6 @@ public:
  virtual void cfg2dlg(void);
  virtual void applySettings(void);
  virtual const char* getHelpURL(void) {return "presets.html";}
-// virtual bool isInPreset(void) {return true;}
-
  void lvSelectPreset(const char *presetName);
 };
 

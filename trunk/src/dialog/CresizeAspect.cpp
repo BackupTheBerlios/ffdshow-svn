@@ -176,6 +176,9 @@ void TresizeAspectPage::getTip(char *tipS,int len)
 
 TresizeAspectPage::TresizeAspectPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_RESIZEASPECT);
+ dialogId=IDD_RESIZEASPECT;
+ idffFull=IDFF_fullResize;
+ inPreset=1;
+ createWindow();
 }
 

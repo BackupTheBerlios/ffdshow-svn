@@ -409,5 +409,6 @@ TpresetsPage::~TpresetsPage()
 
 TpresetsPage::TpresetsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_PRESETS);
+ dialogId=IDD_PRESETS;
+ createWindow();
 }

@@ -42,6 +42,7 @@
 #include "Cabout.h"
 #include "Coffset.h"
 #include "CshowMV.h"
+#include "Cdeinterlace.h"
 
 using namespace std;
 
@@ -124,7 +125,7 @@ void TffdshowPage::selectPage(TconfPage *Ipage)
  ShowWindow(page->m_hwnd,SW_SHOW);
  EnableWindow(GetDlgItem(m_hwnd,IDC_BT_HELP),page->getHelpURL()!=NULL);
  EnableWindow(GetDlgItem(m_hwnd,IDC_BT_RESET),page->reset(true));
- EnableWindow(GetDlgItem(m_hwnd,IDC_CBX_PRESETS),page->isInPreset());
+ EnableWindow(GetDlgItem(m_hwnd,IDC_CBX_PRESETS),page->inPreset);
  int processFull=page->getProcessFull();
  EnableWindow(GetDlgItem(m_hwnd,IDC_CHB_PROCESSFULL),processFull!=-1);
  SendDlgItemMessage(m_hwnd,IDC_CHB_PROCESSFULL,BM_SETCHECK,(processFull==1)?BST_CHECKED:BST_UNCHECKED,0);
@@ -261,6 +262,7 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  TreeView_Expand(htv,htiResizeAspect,TVE_EXPAND);
  tvis.hParent=htiPresets;
  addTI(tvis,new TcropPage(this,m_hwnd,deci));
+ addTI(tvis,new TdeinterlacePage(this,m_hwnd,deci));
  addTI(tvis,new TmiscPage(this,m_hwnd,deci));
  sortOrder();
  tvis.hParent=NULL;

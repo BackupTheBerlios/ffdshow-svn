@@ -43,5 +43,6 @@ void TaboutPage::init(void)
 
 TaboutPage::TaboutPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_ABOUT);
+ dialogId=IDD_ABOUT;
+ createWindow();
 }

@@ -43,11 +43,6 @@ void TsubtitlesPage::cfg2dlg(void)
  sub2dlg();
 }
 
-void TsubtitlesPage::interDlg(void)
-{
- setCheck(IDC_CHB_SUBTITLES,cfgGet(IDFF_isSubtitles));
-}
-
 void TsubtitlesPage::getPosHoriz(int x,char *s)
 {
  char *posS;
@@ -87,8 +82,7 @@ void TsubtitlesPage::sub2dlg(void)
 
 void TsubtitlesPage::applySettings(void)
 {
- if (cfgGet(IDFF_inPlayer))
-  loadSubtitles();
+ if (cfgGet(IDFF_inPlayer)) loadSubtitles();
 }
 
 void TsubtitlesPage::loadSubtitles(void)
@@ -198,5 +192,9 @@ void TsubtitlesPage::getTip(char *tipS,int len)
 
 TsubtitlesPage::TsubtitlesPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_SUBTITLES);
+ dialogId=IDD_SUBTITLES;
+ idffInter=IDFF_isSubtitles;resInter=IDC_CHB_SUBTITLES;
+ idffFull=IDFF_fullSubtitles;
+ inPreset=1;
+ createWindow();
 }

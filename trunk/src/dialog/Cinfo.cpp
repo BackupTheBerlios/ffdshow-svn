@@ -116,5 +116,6 @@ HRESULT TinfoPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 TinfoPage::TinfoPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_INFO);
+ dialogId=IDD_INFO;
+ createWindow();
 }

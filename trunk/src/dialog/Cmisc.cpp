@@ -78,5 +78,7 @@ void TmiscPage::getTip(char *tipS,int len)
 
 TmiscPage::TmiscPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_MISC);
+ dialogId=IDD_MISC;
+ inPreset=1;
+ createWindow();
 }

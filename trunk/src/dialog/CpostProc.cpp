@@ -33,7 +33,7 @@ void TpostProcPage::init(void)
  SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_SETSELSTART,TRUE,0);
  SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_SETSELEND,TRUE,0);
  SendDlgItemMessage(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH,TBM_SETRANGE,TRUE,MAKELPARAM(0,512));
- SendDlgItemMessage(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH,TBM_SETLINESIZE,0,8);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH,TBM_SETLINESIZE,0,1);
  SendDlgItemMessage(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH,TBM_SETPAGESIZE,0,32); 
  cfg2dlg();
 }
@@ -51,11 +51,12 @@ void TpostProcPage::postProc2dlg(void)
  setCheck(IDC_RBT_PPCUSTOM , cfgGet(IDFF_ppIsCustom));
  setCheck(IDC_CHB_LEVELFIX_LUM  ,cfgGet(IDFF_levelFixLum));
  setCheck(IDC_CHB_LEVELFIX_CHROM,cfgGet(IDFF_levelFixChrom));
+ setCheck(IDC_CHB_FULLYRANGE,cfgGet(IDFF_fullYrange));
  SendDlgItemMessage(m_hwnd,IDC_TBR_DEBLOCKSTRENGTH,TBM_SETPOS,TRUE,cfgGet(IDFF_deblockStrength));
  char pomS[256];
  sprintf(pomS,"Processing strength: %i%%",100*cfgGet(IDFF_deblockStrength)/256);
  SendDlgItemMessage(m_hwnd,IDC_LBL_DEBLOCKSTRENGTH,WM_SETTEXT,0,LPARAM(pomS));
- setCheck(IDC_CHB_DEINTERLACE,cfgGet(IDFF_isDeinterlace));
+ setCheck(IDC_CHB_TEMPNOISE,cfgGet(IDFF_tempNoiseFilter));
  setPPchbs();
 }
 
@@ -97,8 +98,9 @@ HRESULT TpostProcPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
    case WM_HSCROLL:
     if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_PPQUAL))
      {
-      cfgSet(IDFF_ppqual,SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_GETPOS,0,0));
-      cfgSet(IDFF_currentq,cfgGet(IDFF_ppqual));
+      int ppqual=SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_GETPOS,0,0);
+      cfgSet(IDFF_ppqual,ppqual);
+      cfgSet(IDFF_currentq,ppqual);
       setPPchbs();
       return TRUE;
      }
@@ -151,8 +153,13 @@ HRESULT TpostProcPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
         cfgSet(IDFF_levelFixChrom,getCheck(IDC_CHB_LEVELFIX_CHROM));
         return TRUE;
        }
-      case IDC_CHB_DEINTERLACE:
-       cfgSet(IDFF_isDeinterlace,getCheck(IDC_CHB_DEINTERLACE));
+      case IDC_CHB_FULLYRANGE:
+       {
+        cfgSet(IDFF_fullYrange,getCheck(IDC_CHB_FULLYRANGE));
+        return TRUE;
+       }
+      case IDC_CHB_TEMPNOISE:
+       cfgSet(IDFF_tempNoiseFilter,getCheck(IDC_CHB_TEMPNOISE));
        return TRUE;
      }  
     break; 
@@ -162,7 +169,7 @@ HRESULT TpostProcPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
       //if (!cfgGet(IDFF_autoq)) cfgSet(IDFF_currentq,cfgGet(IDFF_ppqual));
       SendDlgItemMessage(m_hwnd,IDC_TBR_PPQUAL,TBM_SETSELEND,TRUE,cfgGet(IDFF_currentq));
       setPPchbs();
-      return TRUE;
+      return TRUE;              
      }
     break;
    case WM_DESTROY:
@@ -172,10 +179,6 @@ HRESULT TpostProcPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 }
 
-void TpostProcPage::interDlg(void)
-{
- setCheck(IDC_CHB_POSTPROC,cfgGet(IDFF_isPostproc));
-}
 void TpostProcPage::getTip(char *tipS,int len)
 {
  char pomS[256];
@@ -194,5 +197,9 @@ void TpostProcPage::getTip(char *tipS,int len)
 }
 TpostProcPage::TpostProcPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_POSTPROC);
+ dialogId=IDD_POSTPROC;
+ idffInter=IDFF_isPostproc;resInter=IDC_CHB_POSTPROC;
+ idffFull=IDFF_fullPostproc;
+ inPreset=1;
+ createWindow();
 }

@@ -64,11 +64,6 @@ void TcropPage::crop2dlg(void)
  SetDlgItemInt(m_hwnd,IDC_ED_CROP_BOTTOM,cfgGet(IDFF_cropBottom),0);
 }
 
-void TcropPage::interDlg(void)
-{
- setCheck(IDC_CHB_CROP,cfgGet(IDFF_isCropNzoom));
-}
-
 bool TcropPage::cropOK(HWND hed)
 {
  char pomS[256];
@@ -91,7 +86,7 @@ HRESULT TcropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
     if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_ZOOMX) || HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_ZOOMY))
      {
       cfgSet(IDFF_magnificationX,SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMX,TBM_GETPOS,0,0));
-      cfgSet(IDFF_magnificationY,SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMY,TBM_GETPOS,0,0));
+      cfgSet(IDFF_magnificationY,SendDlgItemMessage(m_hwnd,cfgGet(IDFF_magnificationLocked)?IDC_TBR_ZOOMX:IDC_TBR_ZOOMY,TBM_GETPOS,0,0));
       crop2dlg();
       return TRUE;
      }
@@ -110,6 +105,7 @@ HRESULT TcropPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
        return TRUE; 
       case IDC_CHB_MAGNIFICATION_LOCKED:
        cfgSet(IDFF_magnificationLocked,getCheck(IDC_CHB_MAGNIFICATION_LOCKED));
+       cfgSet(IDFF_magnificationY,cfgGet(IDFF_magnificationX));
        crop2dlg();
        return TRUE;
       case IDC_ED_CROP_LEFT:
@@ -159,5 +155,8 @@ void TcropPage::getTip(char *tipS,int len)
 }
 TcropPage::TcropPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_CROP);
+ dialogId=IDD_CROP;
+ idffInter=IDFF_isCropNzoom;resInter=IDC_CHB_CROP;
+ inPreset=1;
+ createWindow();
 }

@@ -300,5 +300,7 @@ void TfontPage::getTip(char *tipS,int len)
 
 TfontPage::TfontPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_FONT);
+ dialogId=IDD_FONT;
+ inPreset=1;
+ createWindow();
 }

@@ -6,7 +6,7 @@
 class TresizeSettingsPage :public TconfPage
 {
 private:
- void resizeSettings2dlg(void);
+ void param2dlg(void),resizeSettings2dlg(void);
  static const char *algorithmsNames[];
 public:
  TresizeSettingsPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
@@ -14,7 +14,6 @@ public:
  virtual void init(void);
  virtual void cfg2dlg(void);
  virtual void getTip(char *tipS,int len);
- virtual bool isInPreset(void) {return true;}
 };
 
 #endif 

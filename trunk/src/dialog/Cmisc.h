@@ -13,7 +13,6 @@ public:
  virtual void init(void);
  virtual void cfg2dlg(void);
  virtual void getTip(char *tipS,int len);
- virtual bool isInPreset(void) {return true;}
 };
 
 #endif 

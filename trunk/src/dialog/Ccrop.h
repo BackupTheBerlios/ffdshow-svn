@@ -14,12 +14,8 @@ public:
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
  virtual void init(void);
  virtual void cfg2dlg(void);
- virtual void interDlg(void);
- virtual int getInter(void) {return cfgGet(IDFF_isCropNzoom);}
- virtual int invInter(void) {return cfgInv(IDFF_isCropNzoom);}
  virtual int getOrder(void) {return 0;}
  virtual void getTip(char *tipS,int len);
- virtual bool isInPreset(void) {return true;}
 };
 
 #endif 

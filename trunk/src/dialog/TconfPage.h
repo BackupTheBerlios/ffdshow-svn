@@ -11,7 +11,8 @@ protected:
  TffdshowPage *parent;
  IffDecoder *deci;
  HINSTANCE hi;
- void createWindow(int IdialogId);
+ int idffInter,idffFull;int resInter;
+ void createWindow(void);
  int  cfgGet(unsigned int i),cfgSet(unsigned int i,int val),cfgInv(unsigned int i);
  void enableWindow(int id,int enable);
  void setCheck(int id,int set);
@@ -24,17 +25,16 @@ public:
  int dialogId;char dialogName[256];
  virtual void init(void)=0;
  virtual void cfg2dlg(void)=0;
- virtual void interDlg(void) {}
- virtual int  getInter(void) {return -1;}
- virtual int  invInter(void) {return -1;}
+ int inPreset;
+ int getInter(void),invInter(void);
+ void interDlg(void);
+ virtual void setOrder(int o) {}
  virtual int  getOrder(void) {return -1;}
+ int  getProcessFull(void);
+ void setProcessFull(int full);
  virtual void getTip(char *tipS,int len) {tipS[0]='\0';}
  virtual const char* getHelpURL(void) {return NULL;}
  virtual bool reset(bool testOnly) {return false;}
- virtual int  getProcessFull(void) {return -1;}
- virtual void setProcessFull(int full) {} 
- virtual void setOrder(int o) {}
- virtual bool isInPreset(void) {return false;}
  virtual void applySettings(void) {}
  virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)=0;
 };

@@ -43,9 +43,8 @@ static INT_PTR CALLBACK dlgWndProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lPar
   }
 }
 
-void TconfPage::createWindow(int IdialogId)
+void TconfPage::createWindow(void)
 {
- dialogId=IdialogId;
  hi=(HINSTANCE)GetWindowLong(hwndParent,GWL_HINSTANCE);
  m_hwnd=CreateDialogParam(hi,MAKEINTRESOURCE(dialogId),hwndParent,dlgWndProc,LPARAM(this));
  dialogName[0]='\0';
@@ -72,12 +71,39 @@ TconfPage::TconfPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci)
  parent=Iparent;
  hwndParent=IhwndParent;
  helpStr=NULL;
+ dialogId=0;
+ idffInter=idffFull=0;resInter=0;
+ inPreset=0;
 }
 
 TconfPage::~TconfPage()
 {
  DestroyWindow(m_hwnd);
  if (helpStr) free(helpStr);
+}
+
+int TconfPage::getInter(void)
+{
+ if (!idffInter) return -1;
+ else return cfgGet(idffInter);
+}
+int TconfPage::invInter(void)
+{
+ if (!idffInter) return -1;
+ else return cfgInv(idffInter);
+}
+int TconfPage::getProcessFull(void)
+{
+ if (!idffFull) return -1;
+ return cfgGet(idffFull);
+} 
+void TconfPage::setProcessFull(int full)
+{
+ if (idffFull) cfgSet(idffFull,full);
+}
+void TconfPage::interDlg(void)
+{
+ if (resInter) setCheck(resInter,cfgGet(idffInter));
 }
 
 int TconfPage::cfgGet(unsigned int i)

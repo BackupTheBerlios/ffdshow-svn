@@ -57,5 +57,6 @@ HRESULT TdlgMiscPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 TdlgMiscPage::TdlgMiscPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci) :TconfPage(Iparent,IhwndParent,Ideci)
 {
- createWindow(IDD_DLGMISC);
+ dialogId=IDD_DLGMISC;
+ createWindow();
 }
