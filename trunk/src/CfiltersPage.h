@@ -13,7 +13,7 @@ class TfiltersPage :public TconfPage
   void setPPchbs(void);
   void postProc2dlg(void),noise2dlg(void),pictProp2dlg(void),sharpen2dlg(void),blur2dlg(void);
  public:
-  TfiltersPage(HWND IhwndParent,IffDecoder *Ideci,int dialogId);
+  TfiltersPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci,int dialogId);
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
   virtual void createConfig(void);
   virtual void cfg2dlg(void);

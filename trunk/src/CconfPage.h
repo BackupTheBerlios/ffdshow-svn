@@ -2,10 +2,11 @@
 #define _CCONFPAGE_H_
 
 struct IffDecoder;
-
+class TffdshowPage;
 class TconfPage
 {
  protected:
+  TffdshowPage *parent;
   IffDecoder *deci;
   void createWindow(int dialogId);
   int cfgGet(int i),cfgSet(int i,int val);
@@ -14,7 +15,7 @@ class TconfPage
   void setCheck(int id,int set);
   bool getCheck(int id);
  public:  
-  TconfPage(HWND IhwndParent,IffDecoder *Ideci);
+  TconfPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci);
   virtual ~TconfPage();
   
   HWND m_hwnd,hwndParent;

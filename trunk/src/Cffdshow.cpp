@@ -28,6 +28,7 @@
 #include "CresizePage.h"
 #include "CsubtitlesPage.h"
 #include "CaboutPage.h"
+#include "ffdebug.h"
 
 CUnknown * WINAPI TffdshowPage::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
@@ -74,11 +75,11 @@ HRESULT TffdshowPage::Activate(HWND hwndParent,LPCRECT prect, BOOL fModal)
  if (!m_hwnd) return ERROR;
  TCITEM tci;
  tci.mask=TCIF_TEXT;
- pages[0]=globalPage   =new TglobalPage   (m_hwnd,deci,IDD_GLOBAL   );
- pages[1]=filtersPage  =new TfiltersPage  (m_hwnd,deci,IDD_FILTERS  );
- pages[2]=resizePage   =new TresizePage   (m_hwnd,deci,IDD_RESIZE   );
- pages[3]=subtitlesPage=new TsubtitlesPage(m_hwnd,deci,IDD_SUBTITLES);
- pages[4]=aboutPage    =new TaboutPage    (m_hwnd,deci,IDD_ABOUT    );
+ pages[0]=globalPage   =new TglobalPage   (this,m_hwnd,deci,IDD_GLOBAL   );
+ pages[1]=filtersPage  =new TfiltersPage  (this,m_hwnd,deci,IDD_FILTERS  );
+ pages[2]=resizePage   =new TresizePage   (this,m_hwnd,deci,IDD_RESIZE   );
+ pages[3]=subtitlesPage=new TsubtitlesPage(this,m_hwnd,deci,IDD_SUBTITLES);
+ pages[4]=aboutPage    =new TaboutPage    (this,m_hwnd,deci,IDD_ABOUT    );
  RECT r;
  GetWindowRect(GetDlgItem(m_hwnd,IDC_HEADER),&r);
  TabCtrl_SetItemSize(GetDlgItem(m_hwnd,IDC_HEADER),(r.right-r.left)/NUMPAGES-3,20);
@@ -119,7 +120,7 @@ STDMETHODIMP TffdshowPage::Deactivate(void)
 
 HRESULT TffdshowPage::OnApplyChanges(void)
 {
- for (int i=0;i<NUMPAGES;i++) pages[i]->applySettings();
+ applySettings();
  //deci->put_Param(IDFF_presetShouldBeSaved,1);
  globalPage->savePreset();
  return CBasePropertyPage::OnApplyChanges();
@@ -127,19 +128,22 @@ HRESULT TffdshowPage::OnApplyChanges(void)
 
 HRESULT TffdshowPage::OnConnect(IUnknown *pUnk)
 {
+ DEBUGS("On connect 1");
  ASSERT(deci==NULL); 
  HRESULT hr=pUnk->QueryInterface(IID_IffDecoder,(void **)&deci);
- if (FAILED(hr))
-  return E_NOINTERFACE;
+ if (FAILED(hr)) return E_NOINTERFACE;
  ASSERT(deci);
+ DEBUGS("On connect 2");
  return S_OK;
 }
 
 HRESULT TffdshowPage::OnDisconnect(void)
 {
+ DEBUGS("On disconnect 1");
  if (deci==NULL) 
   return E_UNEXPECTED;
  deci->Release();
+ DEBUGS("On disconnect 2");
  deci=NULL;
  //cfg=NULL;
  return S_OK;
@@ -163,6 +167,26 @@ BOOL TffdshowPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
   }
  return CBasePropertyPage::OnReceiveMessage(hwnd, uMsg, wParam, lParam);
 }
+void TffdshowPage::applySettings(void)
+{
+ for (int i=0;i<NUMPAGES;i++) pages[i]->applySettings();
+}
+
+#ifdef DEBUG
+static int refcnt=0;
+STDMETHODIMP_(ULONG) TffdshowPage::AddRef()
+{
+ refcnt++;
+ DEBUGS1("TffdshowPage::AddRef",refcnt);
+ return CBasePropertyPage::AddRef();
+}
+STDMETHODIMP_(ULONG) TffdshowPage::Release()
+{
+ refcnt--;
+ DEBUGS1("TffdshowPage::Release",refcnt);
+ return CBasePropertyPage::Release();
+}
+#endif
 
 /* -------------------- configure ---------------------- */
 void CALLBACK configure(HWND hwnd,HINSTANCE hinst,LPTSTR lpCmdLine,int nCmdShow)

@@ -15,7 +15,15 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
  public:
   static CUnknown * WINAPI CreateInstance(LPUNKNOWN punk, HRESULT *phr);
   STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
+  #ifdef DEBUG
+  STDMETHODIMP_(ULONG) AddRef();                              
+  STDMETHODIMP_(ULONG) Release();
+  STDMETHODIMP QueryInterface(REFIID riid, void **ppv) {      \
+      return GetOwner()->QueryInterface(riid,ppv);            \
+  };                                                          
+  #else
   DECLARE_IUNKNOWN;
+  #endif
 
   TffDecoder(LPUNKNOWN punk, HRESULT *phr);
   virtual ~TffDecoder();
@@ -108,6 +116,7 @@ class TffDecoder : public CVideoTransformFilter, public IffDecoder, public ISpec
   TimgFilters *imgFilters;
   Tsubtitles *sub;
   char *codecName;
+
 };
 
 #endif 

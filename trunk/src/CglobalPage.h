@@ -13,7 +13,7 @@ class TglobalPage :public TconfPage
   void savePresetToFile(void);
   void loadPresetFromFile(void);
  public:
-  TglobalPage(HWND IhwndParent,IffDecoder *Ideci,int dialogId);
+  TglobalPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci,int dialogId);
   virtual void createConfig(void);
   virtual void cfg2dlg(void);
   virtual void interDlg(void);

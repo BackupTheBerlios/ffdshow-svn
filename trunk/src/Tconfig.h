@@ -85,7 +85,7 @@ public:
  int resizeSharpenLum,resizeSharpenChrom;
  int isCropNzoom;
  int isZoom;
- int magnification;
+ int magnificationX,magnificationY;
  int cropTop,cropBottom,cropLeft,cropRight;
  int autocrop;
  void getCropDescription(char *buf);

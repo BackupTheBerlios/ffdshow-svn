@@ -47,7 +47,7 @@ void TaboutPage::createConfig(void)
  SendDlgItemMessage(m_hwnd,IDC_LBL_FFDSHOWVERSION,WM_SETTEXT,0,LPARAM(vers));
 }
 
-TaboutPage::TaboutPage(HWND IhwndParent,IffDecoder *Ideci,int dialogId) :TconfPage(IhwndParent,Ideci)
+TaboutPage::TaboutPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci,int dialogId) :TconfPage(Iparent,IhwndParent,Ideci)
 {
  createWindow(dialogId);
 }

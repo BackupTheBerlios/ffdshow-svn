@@ -52,10 +52,11 @@ void TconfPage::createWindow(int dialogId)
  assert(m_hwnd);
 }
 
-TconfPage::TconfPage(HWND IhwndParent,IffDecoder *Ideci)
+TconfPage::TconfPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci)
 {
  assert(Ideci);
  deci=Ideci;
+ parent=Iparent;
  hwndParent=IhwndParent;
 }
 

@@ -36,18 +36,23 @@ extern INT16 default_non_intra_matrix[64];
 extern INT16 ff_mpeg4_default_intra_matrix[64];
 extern INT16 ff_mpeg4_default_non_intra_matrix[64];
 
+static int inited=0;
 void libavcodec_init(void)
 {
- //skopiruje do tabuliek pre povodne hodnoty tie, ktore boli na zaciatku
- memcpy(ff_alternate_horizontal_scan0,ff_alternate_horizontal_scan,64);
- memcpy(ff_alternate_vertical_scan0,ff_alternate_vertical_scan,64);
- memcpy(zigzag_direct0,zigzag_direct,64);
- memcpy(default_intra_matrix0,default_intra_matrix,128);
- memcpy(default_non_intra_matrix0,default_non_intra_matrix,128);
- memcpy(ff_mpeg4_default_intra_matrix0,ff_mpeg4_default_intra_matrix,128);
- memcpy(ff_mpeg4_default_non_intra_matrix0,ff_mpeg4_default_non_intra_matrix,128);
- avcodec_init();
- avcodec_register_all();
+ if (!inited)
+  {
+   inited=1;
+   //skopiruje do tabuliek pre povodne hodnoty tie, ktore boli na zaciatku
+   memcpy(ff_alternate_horizontal_scan0,ff_alternate_horizontal_scan,64);
+   memcpy(ff_alternate_vertical_scan0,ff_alternate_vertical_scan,64);
+   memcpy(zigzag_direct0,zigzag_direct,64);
+   memcpy(default_intra_matrix0,default_intra_matrix,128);
+   memcpy(default_non_intra_matrix0,default_non_intra_matrix,128);
+   memcpy(ff_mpeg4_default_intra_matrix0,ff_mpeg4_default_intra_matrix,128);
+   memcpy(ff_mpeg4_default_non_intra_matrix0,ff_mpeg4_default_non_intra_matrix,128);
+   avcodec_init();
+   avcodec_register_all();
+  };
 }
 
 //1 = simple16383

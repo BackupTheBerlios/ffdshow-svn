@@ -18,6 +18,7 @@
 
 #include <windows.h>
 #include "CglobalPage.h"
+#include "Cffdshow.h"
 #include "resource.h"
 #include <commctrl.h>
 #include <stdio.h>
@@ -140,6 +141,7 @@ void TglobalPage::removePreset(void)
 
 void TglobalPage::savePreset(void)
 {
+ parent->applySettings();
  char presetName[256];
  SendDlgItemMessage(m_hwnd,IDC_CBX_PRESETS,WM_GETTEXT,255,LPARAM(presetName));
  int ok=deci->savePreset(presetName);
@@ -179,7 +181,10 @@ void TglobalPage::savePresetToFile(void)
  ofn.nMaxFile       =MAX_PATH;
  ofn.Flags          =OFN_PATHMUSTEXIST|OFN_ENABLESIZING;
  if (GetSaveFileName(&ofn))
-  deci->savePresetToFile(presetFlnm);
+  {
+   parent->applySettings();
+   deci->savePresetToFile(presetFlnm);
+  };
 }
 
 void TglobalPage::loadPresetFromFile(void)
@@ -317,7 +322,7 @@ HRESULT TglobalPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 };
 
-TglobalPage::TglobalPage(HWND IhwndParent,IffDecoder *Ideci,int dialogId) :TconfPage(IhwndParent,Ideci)
+TglobalPage::TglobalPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci,int dialogId) :TconfPage(Iparent,IhwndParent,Ideci)
 {
  createWindow(dialogId);
 }

@@ -9,7 +9,7 @@ class TresizePage :public TconfPage
   void resize2dlg(void),aspect2dlg(void),crop2dlg(void);
   bool applyResizeXY(bool checkOnly);
  public:
-  TresizePage(HWND IhwndParent,IffDecoder *Ideci,int dialogId);
+  TresizePage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci,int dialogId);
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
   virtual void createConfig(void);
   virtual void cfg2dlg(void);

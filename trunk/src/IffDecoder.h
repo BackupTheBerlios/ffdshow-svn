@@ -66,12 +66,13 @@ DEFINE_GUID(CLSID_FFDSHOW , 0x04fe9017, 0xf873, 0x410e, 0x87, 0x1e, 0xab, 0x91, 
 #define IDFF_resizeSharpenChrom  711 // *100
 #define IDFF_isCropNzoom         712
 #define IDFF_isZoom              713
-#define IDFF_magnification       714 
+#define IDFF_magnificationX      714 
 #define IDFF_cropLeft            715
 #define IDFF_cropRight           716
 #define IDFF_cropTop             717
 #define IDFF_cropBottom          718
 #define IDFF_autocrop            719
+#define IDFF_magnificationY      720
 
 #define IDFF_isSubtitles         801
 #define IDFF_fontCharset         802

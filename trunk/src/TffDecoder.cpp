@@ -282,7 +282,8 @@ void TffDecoder::fillParams(void)
  params[IDFF_resizeSharpenChrom ]=Tparam(&cfg.resizeSharpenChrom ,0,200,&TffDecoder::resizeChanged);
  params[IDFF_isCropNzoom        ]=Tparam(&cfg.isCropNzoom        ,0,0,&TffDecoder::resizeChanged);
  params[IDFF_isZoom             ]=Tparam(&cfg.isZoom             ,0,0,&TffDecoder::resizeChanged);
- params[IDFF_magnification      ]=Tparam(&cfg.magnification      ,0,100,&TffDecoder::resizeChanged);
+ params[IDFF_magnificationX     ]=Tparam(&cfg.magnificationX     ,0,100,&TffDecoder::resizeChanged);
+ params[IDFF_magnificationY     ]=Tparam(&cfg.magnificationY     ,0,100,&TffDecoder::resizeChanged);
  params[IDFF_cropLeft           ]=Tparam(&cfg.cropLeft           ,0,2048,&TffDecoder::resizeChanged);
  params[IDFF_cropRight          ]=Tparam(&cfg.cropRight          ,0,2048,&TffDecoder::resizeChanged);
  params[IDFF_cropTop            ]=Tparam(&cfg.cropTop            ,0,2048,&TffDecoder::resizeChanged);
@@ -986,8 +987,8 @@ void TffDecoder::calcCrop(void)
 {
  if (cfg.isZoom)
   {
-   cropDx=((100-cfg.magnification)*AVIdx)/100;
-   cropDy=((100-cfg.magnification)*AVIdy)/100;
+   cropDx=((100-cfg.magnificationX)*AVIdx)/100;
+   cropDy=((100-cfg.magnificationY)*AVIdy)/100;
    cropLeft=(AVIdx-cropDx)/2;
    cropTop =(AVIdy-cropDy)/2;
   }
@@ -1222,3 +1223,19 @@ STDMETHODIMP TffDecoder::FreePages(CAUUID * pPages)
  CoTaskMemFree(pPages->pElems);
  return S_OK;
 }
+
+#ifdef DEBUG
+static int refcnt=0;
+STDMETHODIMP_(ULONG) TffDecoder::AddRef()
+{
+ refcnt++;
+ DEBUGS1("TffDecoder::AddRef",refcnt);
+ return GetOwner()->AddRef();
+}
+STDMETHODIMP_(ULONG) TffDecoder::Release()
+{
+ refcnt--;
+ DEBUGS1("TffDecoder::Release",refcnt);
+ return GetOwner()->Release();
+}
+#endif

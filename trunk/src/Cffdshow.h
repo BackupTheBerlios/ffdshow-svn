@@ -30,13 +30,19 @@ class TffdshowPage : public CBasePropertyPage
   static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT * phr);
   TffdshowPage(LPUNKNOWN pUnk, HRESULT * phr);
   ~TffdshowPage();
+  void applySettings(void);
   
   STDMETHODIMP Activate(HWND hwndParent,LPCRECT prect, BOOL fModal);
-  HRESULT OnApplyChanges(void);
   STDMETHODIMP Deactivate(void);
-  HRESULT OnConnect(IUnknown *pUnk);
-  HRESULT OnDisconnect(void);
-  BOOL OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+  virtual HRESULT OnApplyChanges(void);
+  virtual HRESULT OnConnect(IUnknown *pUnk);
+  virtual HRESULT OnDisconnect(void);
+  virtual INT_PTR OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+  #ifdef DEBUG
+  STDMETHODIMP_(ULONG) AddRef();                              
+  STDMETHODIMP_(ULONG) Release();
+  #endif
 };
 
 #endif 

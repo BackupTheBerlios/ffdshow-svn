@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
+// Microsoft Developer Studio generated include file.
 // Used by ffdshow.rc
 //
 #define VERSION_RES_MINOR_VER           0
@@ -156,9 +156,11 @@
 #define IDC_TBR_RESIZE_GBLUR_LUM        1103
 #define IDC_TBR_RESIZE_GBLUR_CHROM      1104
 #define IDC_CHB_SUBTITLES               1105
-#define IDC_LBL_ZOOM                    1105
-#define IDC_TBR_ZOOM                    1106
+#define IDC_LBL_ZOOMX                   1105
+#define IDC_TBR_ZOOMX                   1106
+#define IDC_LBL_ZOOMY                   1107
 #define IDC_LBL_FONT_WEIGHT             1108
+#define IDC_TBR_ZOOMY                   1108
 #define IDC_CBX_FONT_WEIGHT             1109
 #define IDC_LBL_FONT_SIZE               1110
 #define IDC_TBR_FONT_SIZE               1111
@@ -194,6 +196,7 @@
 #define IDC_RBT_ZOOM                    1138
 #define IDC_RBT_ZOOM2                   1139
 #define IDC_RBT_CROP                    1139
+#define IDC_CHECK1                      1140
 #define VERSION_RES_CHARSET             1252
 #define IDC_STATIC                      -1
 
@@ -203,7 +206,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        125
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1139
+#define _APS_NEXT_CONTROL_VALUE         1141
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -69,11 +69,15 @@ void TresizePage::crop2dlg(void)
 {
  setCheck(IDC_RBT_ZOOM,cfgGet(IDFF_isZoom));
  setCheck(IDC_RBT_CROP,!cfgGet(IDFF_isZoom));
- int x=cfgGet(IDFF_magnification);
+ int x=cfgGet(IDFF_magnificationX);
  char s[256];
- sprintf(s,"Magnification:  %i",x);
- SendDlgItemMessage(m_hwnd,IDC_LBL_ZOOM,WM_SETTEXT,0,LPARAM(s));
- SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOM,TBM_SETPOS,TRUE,x);
+ sprintf(s,"Horizontal magnification:  %i",x);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_ZOOMX,WM_SETTEXT,0,LPARAM(s));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMX,TBM_SETPOS,TRUE,x);
+ x=cfgGet(IDFF_magnificationY);
+ sprintf(s,"Vertical magnification:  %i",x);
+ SendDlgItemMessage(m_hwnd,IDC_LBL_ZOOMY,WM_SETTEXT,0,LPARAM(s));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMY,TBM_SETPOS,TRUE,x);
  /*
  int left,top,right,bottom;
  deci->getRealCrop(&left,&top,&right,&bottom);
@@ -135,9 +139,12 @@ void TresizePage::createConfig(void)
  SendDlgItemMessage(m_hwnd,IDC_TBR_ASPECT_USER,TBM_SETLINESIZE,0,0.1*256);
  SendDlgItemMessage(m_hwnd,IDC_TBR_ASPECT_USER,TBM_SETPAGESIZE,0,1.6*256); 
 
- SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOM,TBM_SETRANGE,TRUE,MAKELPARAM(0,100));
- SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOM,TBM_SETLINESIZE,0,1);
- SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOM,TBM_SETPAGESIZE,0,8); 
+ SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMX,TBM_SETRANGE,TRUE,MAKELPARAM(0,100));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMX,TBM_SETLINESIZE,0,1);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMX,TBM_SETPAGESIZE,0,8); 
+ SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMY,TBM_SETRANGE,TRUE,MAKELPARAM(0,100));
+ SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMY,TBM_SETLINESIZE,0,1);
+ SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMY,TBM_SETPAGESIZE,0,8); 
 
  cfg2dlg();
 }
@@ -182,9 +189,10 @@ HRESULT TresizePage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
      resize2dlg();
      return TRUE;
     } 
-   else if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_ZOOM))
+   else if (HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_ZOOMX) || HWND(lParam)==GetDlgItem(m_hwnd,IDC_TBR_ZOOMY))
     {
-     cfgSet(IDFF_magnification,SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOM,TBM_GETPOS,0,0));
+     cfgSet(IDFF_magnificationX,SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMX,TBM_GETPOS,0,0));
+     cfgSet(IDFF_magnificationY,SendDlgItemMessage(m_hwnd,IDC_TBR_ZOOMY,TBM_GETPOS,0,0));
      crop2dlg();
      return TRUE;
     }
@@ -249,7 +257,7 @@ void TresizePage::applySettings(void)
  applyResizeXY(false);
 }
 
-TresizePage::TresizePage(HWND IhwndParent,IffDecoder *Ideci,int dialogId) :TconfPage(IhwndParent,Ideci)
+TresizePage::TresizePage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci,int dialogId) :TconfPage(Iparent,IhwndParent,Ideci)
 {
  createWindow(dialogId);
 }

@@ -12,7 +12,7 @@ class TsubtitlesPage :public TconfPage
   COLORREF custColors[16];
   void loadSubtitles(void);
  public:
-  TsubtitlesPage(HWND IhwndParent,IffDecoder *Ideci,int dialogId);
+  TsubtitlesPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci,int dialogId);
   virtual HRESULT msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
   virtual void createConfig(void);
   virtual void cfg2dlg(void);

@@ -358,7 +358,7 @@ HRESULT TsubtitlesPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 };
 
-TsubtitlesPage::TsubtitlesPage(HWND IhwndParent,IffDecoder *Ideci,int dialogId) :TconfPage(IhwndParent,Ideci)
+TsubtitlesPage::TsubtitlesPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci,int dialogId) :TconfPage(Iparent,IhwndParent,Ideci)
 {
  createWindow(dialogId);
 }

@@ -405,7 +405,7 @@ HRESULT TfiltersPage::msgProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
  return FALSE;
 };
 
-TfiltersPage::TfiltersPage(HWND IhwndParent,IffDecoder *Ideci,int dialogId) :TconfPage(IhwndParent,Ideci)
+TfiltersPage::TfiltersPage(TffdshowPage *Iparent,HWND IhwndParent,IffDecoder *Ideci,int dialogId) :TconfPage(Iparent,IhwndParent,Ideci)
 {
  createWindow(dialogId);
 }
