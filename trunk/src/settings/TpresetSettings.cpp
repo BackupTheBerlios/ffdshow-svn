@@ -91,6 +91,7 @@ void TpresetSettings::saveFile(const char *flnm)
 {
  char pomS[256];
 
+ DeleteFile(flnm);
  #undef _REG_OP_N
  #undef _REG_OP_S
  #define _REG_OP_N REG_SET_N_FILE
